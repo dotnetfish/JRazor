@@ -10,8 +10,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="commons" />
-    <orderEntry type="module" module-name="web" />
-    <orderEntry type="library" name="Maven: javax.servlet:javax.servlet-api:3.0.1" level="project" />
-    <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />
+    <orderEntry type="library" name="Maven: com.superstudio.web:web:0.0.1-SNAPSHOT" level="project" />
   </component>
 </module>

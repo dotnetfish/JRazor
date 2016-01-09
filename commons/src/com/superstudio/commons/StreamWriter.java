@@ -1,10 +1,10 @@
 package com.superstudio.commons;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import com.superstudio.commons.io.FileStream;
 import com.superstudio.commons.io.TextWriter;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class StreamWriter extends TextWriter implements AutoCloseable{
 
@@ -38,9 +38,14 @@ public class StreamWriter extends TextWriter implements AutoCloseable{
 	}
 
 	@Override
-	public void close() throws Exception {
+	public void close() throws IOException {
 		// TODO Auto-generated method stub
-		fileStream.close();
+		try {
+
+			fileStream.close();
+		}catch (Exception ex){
+
+		}
 	}
 
 	

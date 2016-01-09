@@ -1,9 +1,9 @@
 package com.superstudio.template.templatepages;
 
+import com.superstudio.template.mvc.context.HostContext;
+
 import java.util.List;
 
-import com.superstudio.template.mvc.context.HostContext;
-import com.superstudio.web.HttpContextBase;
 
 public class WebPageHttpHandler {
 

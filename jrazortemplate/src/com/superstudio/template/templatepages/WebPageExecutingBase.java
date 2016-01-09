@@ -4,8 +4,7 @@ import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.HttpException;
 import com.superstudio.template.mvc.context.HostContext;
-import com.superstudio.web.HttpApplicationStateBase;
-import com.superstudio.web.HttpUtility;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -45,23 +44,9 @@ public abstract class WebPageExecutingBase
 		_instrumentationService = value;
 	}
 
-	public HttpApplicationStateBase getAppState()
-	{
-		if (getContext() != null)
-		{
-			return getContext().getApplication();
-		}
-		return null;
-	}
 
-	public Object getApp()
-	{
-		if (_dynamicAppState == null && getAppState() != null)
-		{
-			_dynamicAppState = new DynamicHttpApplicationState();
-		}
-		return _dynamicAppState;
-	}
+
+
 
 	private HostContext Context;
 	public HostContext getContext()
@@ -302,7 +287,8 @@ public abstract class WebPageExecutingBase
 	public static void writeTo(Writer writer, Object content) throws IOException
 	{
 		if(content==null)return;
-		writer.write(HttpUtility.HtmlEncode(content.toString()));
+
+		writer.write(StringEscapeUtils.escapeHtml4(content.toString()));
 	}
 
 	// This method is called by generated code and needs to stay in sync with the parser

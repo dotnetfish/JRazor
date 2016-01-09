@@ -1,25 +1,22 @@
 package com.superstudio.template.mvc;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import com.superstudio.commons.CollectionHelper;
-import com.superstudio.commons.CultureInfo;
-import com.superstudio.commons.MvcResources;
-import com.superstudio.commons.VirtualPathProvider;
-import com.superstudio.commons.VirtualPathUtility;
+import com.superstudio.commons.*;
 import com.superstudio.commons.csharpbridge.RefObject;
 import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.web.HttpContext;
 import com.superstudio.template.mvc.actionresult.ITemplateEngine;
 import com.superstudio.template.mvc.actionresult.TemplateEngineResult;
+import com.superstudio.template.mvc.context.HostContext;
 import com.superstudio.template.mvc.context.RenderContext;
 import com.superstudio.template.templatepages.DisplayInfo;
 import com.superstudio.template.templatepages.DisplayModeProvider;
 import com.superstudio.template.templatepages.IDisplayMode;
-import com.superstudio.commons.HostingEnvironment;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public abstract class VirtualPathProviderTemplateEngine implements ITemplateEngine {
 	// format is
@@ -101,7 +98,7 @@ public abstract class VirtualPathProviderTemplateEngine implements ITemplateEngi
 	public final ITemplateLocationCache getTemplateLocationCache() {
 		if (_templateLocationCache == null) {
 			try {
-				if (HttpContext.getCurrent() == null || HttpContext.getCurrent().isDebuggingEnabled()) {
+				if (HostContext.getCurrent() == null || HostContext.getCurrent().isDebuggingEnabled()) {
 					_templateLocationCache = DefaultTemplateLocationCache.Null;
 				} else {
 					_templateLocationCache = new DefaultTemplateLocationCache();

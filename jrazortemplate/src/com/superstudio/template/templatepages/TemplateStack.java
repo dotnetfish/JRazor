@@ -1,10 +1,10 @@
 package com.superstudio.template.templatepages;
 
-import java.util.Stack;
-
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.template.mvc.context.HostContext;
-import com.superstudio.web.HttpContextBase;
+
+import java.util.Stack;
+
 
 public class TemplateStack
 {

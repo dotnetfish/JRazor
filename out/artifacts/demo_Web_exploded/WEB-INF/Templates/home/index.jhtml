@@ -1,0 +1,33 @@
+﻿@import java.util.Date;
+@{
+       setLayout("~/Templates/shared/_layout.jhtml");
+      String  title="test page";
+}
+
+@section scripts{
+  <script type="text/javascript">
+  function sayHello(){
+
+  }
+  </script>
+}
+<font style="color:red">this is from templates/index.jhtml  getViewBag.get("variantName") </font>
+@{
+	String name="superstudio89";
+	int lineCount=10;
+	Date date = new Date();
+
+}<br/>
+data from variant:@getTemplateData().get("myVariant")
+
+<br/>
+@date
+<br/>
+@name
+<ul>
+@while(lineCount>0){
+	lineCount--;
+	<li>@lineCount</li>
+}
+</ul>
+<input type="button" value="sayHello" onclick="sayHello();"/>

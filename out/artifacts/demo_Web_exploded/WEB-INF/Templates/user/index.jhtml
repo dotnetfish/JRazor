@@ -1,0 +1,139 @@
+@model Beyondbit.ProductBusiness.Models.User
+@{
+    ViewBag.Title = "我的账号";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="banner banner_line">
+    &nbsp;
+</div>
+
+<div class="register_page" style="background:url('/Content/img/regist_title3.jpg') no-repeat scroll center 36px #FFFFFF;">
+    @using (Html.BeginForm("Update", "account", FormMethod.Post, new { id = "regForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+                   
+        <table border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="type"><span>*</span> 用户邮箱</td>
+                <td class="input_area">@Model.EMail
+                  
+                </td>
+                <td class="note">请填写您的真实姓名</td>
+            </tr>
+            <tr>
+                <td class="type"><span>*</span> 用户姓名</td>
+                <td class="input_area">@Html.TextBoxFor(m => m.Name, new { @class = "input" })
+                    @Html.HiddenFor(i=>i.ID)
+                </td>
+                <td class="note">请填写您的真实姓名</td>
+            </tr>
+          
+            <tr>
+                <td class="type">联系电话</td>
+                <td class="input_area">@Html.TextBoxFor(i => i.Phone, new { @class = "input" })</td>
+                <td class="note">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="type">联系地址</td>
+                <td class="input_area">@Html.TextBoxFor(i => i.Address, new { @class = "input" })</td>
+                <td class="note">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="type">所在城市</td>
+                <td class="input_area">@Html.TextBoxFor(i => i.City, new { @class = "input" })</td>
+                <td class="note">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="type"><span>*</span> 用户类型</td>
+                <td class="input_area">
+                    @Html.DropDownListFor(i => i.UserType, new List<SelectListItem>(){
+    new SelectListItem(){
+     Text="单位",
+     Value="0"   
+    }, new SelectListItem(){
+     Text="个人",
+     Value="0"   
+    }
+})
+                </td>
+                <td class="note">请选择您的用户类型以便享受我们的后续服务</td>
+            </tr>
+        </table>
+    }
+</div>
+
+@section foot{
+    <div class="btn_area"><a href="#" class="btn float_left margin_right" onclick="formDataHandle();"><span>更新</span></a> <a href="/" class="norlink">返回首页</a></div>
+}
+
+<script type="text/javascript">
+    validateForm();
+
+    function validateForm() {
+        $.validator.addMethod(
+  "regex",
+  function (value, element, regexp) {
+      var check = false;
+      var re = new RegExp(regexp);
+      return this.optional(element) || re.test(value);
+  },
+  "格式不正确"
+);
+
+        $("#regForm").validate({
+            rules: {
+                Password: {
+                    required: true
+                },
+                ConfirmPassword: {
+                    equalTo: "#pwd"
+                },
+                Name: {
+                    required: true
+                }
+            },
+            messages: {
+               
+                Account: {
+                    required: "请输入账号",
+                    remote: "账号已被注册。",
+                    regex: "账号只能数字、字母和“.”,“—”，“_”的组合。"
+                },
+                Password: {
+                    required: "密码不能为空"
+                },
+                ConfirmPassword: {
+                    equalTo: "密码不一致。"
+                },
+                Name: {
+                    required: "请输入姓名"
+                }
+            },
+            errorPlacement: function (error, element) {
+
+                error.html(error.html() + "<br/>");
+                error.prependTo($(element).parent().parent().find(".note").html(""));
+            }
+
+        });
+    }
+
+    function formDataHandle() {
+        if ($("#regForm").valid()) {
+
+            $.post('@Url.Action("Update","Account")', $("#regForm").serialize(), function (data) {
+                if (data.success) {
+                    alert("更新成功。");
+
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+
+        return true;
+
+    }
+</script>

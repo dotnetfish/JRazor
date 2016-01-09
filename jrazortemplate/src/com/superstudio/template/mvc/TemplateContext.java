@@ -1,18 +1,16 @@
 package com.superstudio.template.mvc;
 
-import java.io.Writer;
-import java.util.Map;
-import java.util.function.Supplier;
-
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.template.mvc.actionresult.TemplateDataDictionary;
 import com.superstudio.template.mvc.context.HostContext;
-import com.superstudio.template.mvc.context.RenderContext;
-import com.superstudio.template.templatepages.ScopeStorage;
-import com.superstudio.web.HttpContext;
-import com.superstudio.web.HttpContextBase;
 import com.superstudio.template.mvc.context.HttpContextWrapper;
+import com.superstudio.template.mvc.context.RenderContext;
 import com.superstudio.template.templatepages.FormContext;
+import com.superstudio.template.templatepages.ScopeStorage;
+
+import java.io.Writer;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public class TemplateContext extends RenderContext {
 
@@ -340,7 +338,7 @@ public class TemplateContext extends RenderContext {
 		 */
 
 		public static ScopeCache Get(Map<Object, Object> scope, HostContext httpContext) throws Exception {
-			if (httpContext == null && HttpContext.getCurrent() != null) {
+			if (httpContext == null && HostContext.getCurrent() != null) {
 				httpContext = new HttpContextWrapper(HostContext.getCurrent());
 			}
 
