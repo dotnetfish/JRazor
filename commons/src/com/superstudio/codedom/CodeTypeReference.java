@@ -1,18 +1,20 @@
 package com.superstudio.codedom;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.*;
 
+import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.csharpbridge.StringHelper;
 
- 
+
 //ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeTypeReference : CodeObject
 public class CodeTypeReference extends CodeObject implements Serializable
 {
 	private String baseType;
 
- 
+
 //ORIGINAL LINE: [OptionalField] private bool isInterface;
 	private boolean isInterface;
 
@@ -20,15 +22,15 @@ public class CodeTypeReference extends CodeObject implements Serializable
 
 	private CodeTypeReference arrayElementType;
 
- 
+
 //ORIGINAL LINE: [OptionalField] private CodeTypeReferenceCollection typeArguments;
 	private CodeTypeReferenceCollection typeArguments;
 
- 
+
 //ORIGINAL LINE: [OptionalField] private CodeTypeReferenceOptions referenceOptions;
 	private CodeTypeReferenceOptions referenceOptions = CodeTypeReferenceOptions.forValue(1);
 
- 
+
 //ORIGINAL LINE: [OptionalField] private bool needsFixup;
 	private boolean needsFixup;
 
@@ -82,7 +84,7 @@ public class CodeTypeReference extends CodeObject implements Serializable
 		this.Initialize(this.baseType);
 	}
 
- 
+
 //ORIGINAL LINE: [ComVisible(false)] public CodeTypeReferenceOptions Options
 	public final CodeTypeReferenceOptions getOptions()
 	{
@@ -93,7 +95,7 @@ public class CodeTypeReference extends CodeObject implements Serializable
 		this.referenceOptions = value;
 	}
 
- 
+
 //ORIGINAL LINE: [ComVisible(false)] public CodeTypeReferenceCollection TypeArguments
 	public final CodeTypeReferenceCollection getTypeArguments()
 	{
@@ -298,10 +300,10 @@ public class CodeTypeReference extends CodeObject implements Serializable
 			}
 			while (queue.size() > 1)
 			{
-				codeTypeReference = new CodeTypeReference(codeTypeReference, (int)queue.poll());
+				codeTypeReference = new CodeTypeReference(codeTypeReference, queue.poll());
 			}
 			this.baseType = null;
-			this.arrayRank = (int)queue.poll();
+			this.arrayRank = queue.poll();
 			this.arrayElementType = codeTypeReference;
 		}
 		else if (arrayList.size() > 0)

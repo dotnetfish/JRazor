@@ -13,4 +13,8 @@ public class MvcResources {
 	public static final String CshtmlView_WrongViewBase = "Common_PropertyCannotBeNullOrEmpty";
 	public static final String ViewStartPage_RequiresMvcRazorView = "Common_PropertyCannotBeNullOrEmpty";
 
+	public static final String Common_TemplateNotFound ="template ({0}) not found ，already search for locations:{1}";
+	public static String CshtmlTemplate_TemplateCouldNotBeCreated="CshtmlTemplate_TemplateCouldNotBeCreated.{0}";
+	public static String TemplateStartPage_RequiresMvcRazorTemplate="TemplateStartPage_RequiresMvcRazorTemplate";
+	public static String CshtmlTemplate_WrongTemplateBase="TemplateStartPage_RequiresMvcRazorTemplate";
 }

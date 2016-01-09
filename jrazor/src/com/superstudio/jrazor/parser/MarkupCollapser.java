@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser;
+package com.superstudio.jrazor.parser;
 
 import com.superstudio.commons.CollectionHelper;
 import com.superstudio.commons.csharpbridge.action.ActionThree;

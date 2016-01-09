@@ -1,12 +1,12 @@
 package com.superstudio.codedom.compiler;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.superstudio.commons.Assembly;
 import com.superstudio.commons.AssemblyName;
 import com.superstudio.commons.Evidence;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CompilerResults implements Serializable {
 	/**
@@ -41,7 +41,7 @@ public class CompilerResults implements Serializable {
 	private Evidence getEvidence() {
 		Evidence result = null;
 		if (this.evidence != null) {
-			result = (Evidence) this.evidence.clone();
+			result = this.evidence.clone();
 		}
 		return result;
 	}
@@ -92,8 +92,8 @@ public class CompilerResults implements Serializable {
 		this.nativeCompilerReturnValue = value;
 	}
 
-	 
-	 
+
+	// .NET attributes:
 	// ORIGINAL LINE: [PermissionSet(SecurityAction.LinkDemand, Name =
 	// "FullTrust")] public CompilerResults(TempFileCollection tempFiles)
 	public CompilerResults(TempFileCollection tempFiles) {

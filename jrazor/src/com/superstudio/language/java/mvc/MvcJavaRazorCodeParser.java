@@ -3,9 +3,9 @@ package com.superstudio.language.java.mvc;
 import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.MvcResources;
 import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.jrazor.generator.SpanCodeGenerator;
-import com.superstudio.jrazor.text.SourceLocation;
 import com.superstudio.language.java.parser.JavaCodeParser;
+import com.superstudio.web.razor.generator.SpanCodeGenerator;
+import com.superstudio.web.razor.text.SourceLocation;
 public class MvcJavaRazorCodeParser extends JavaCodeParser
 {
 	//private static final String ModelKeyword = "model";
@@ -14,12 +14,12 @@ public class MvcJavaRazorCodeParser extends JavaCodeParser
 	private boolean _modelStatementFound;
 	public MvcJavaRazorCodeParser()
 	{
-		super.mapDirectives(()->this.modelDirective(), new String[] {"model"});
+		super.mapDirectives(()->this.modelDirective(), "model");
 	}
 	@Override
 	protected void inheritsDirective()
 	{
-		super.acceptAndMoveNext();
+		super.AcceptAndMoveNext();
 		this._endInheritsLocation = new SourceLocation(super.getCurrentLocation());
 		super.inheritsDirectiveCore();
 		this.checkForInheritsAndModelStatements();
@@ -28,19 +28,19 @@ public class MvcJavaRazorCodeParser extends JavaCodeParser
 	{
 		if (this._modelStatementFound && this._endInheritsLocation != null)
 		{
-			this.getContext().onError(this._endInheritsLocation, String.format(CultureInfo.CurrentCulture,
+			this.getContext().OnError(this._endInheritsLocation, String.format(CultureInfo.CurrentCulture,
 					MvcResources.MvcRazorCodeParser_CannotHaveModelAndInheritsKeyword, new Object[] {"model"}));
 		}
 	}
 	protected void modelDirective()
 	{
-		super.acceptAndMoveNext();
+		super.AcceptAndMoveNext();
 		SourceLocation currentLocation = super.getCurrentLocation();
-		super.baseTypeDirective(StringHelper.format(CultureInfo.CurrentCulture, MvcResources.MvcRazorCodeParser_ModelKeywordMustBeFollowedByTypeName, new Object[] {"model"}), 
+		super.baseTypeDirective(StringHelper.format(CultureInfo.CurrentCulture, MvcResources.MvcRazorCodeParser_ModelKeywordMustBeFollowedByTypeName, new Object[] {"model"}),
 				(a)->this.createModelCodeGenerator(a));
 		if (this._modelStatementFound)
 		{
-			this.getContext().onError(currentLocation, String.format(CultureInfo.CurrentCulture, MvcResources.MvcRazorCodeParser_OnlyOneModelStatementIsAllowed, new Object[] {"model"}));
+			this.getContext().OnError(currentLocation, String.format(CultureInfo.CurrentCulture, MvcResources.MvcRazorCodeParser_OnlyOneModelStatementIsAllowed, new Object[] {"model"}));
 		}
 		this._modelStatementFound = true;
 		this.checkForInheritsAndModelStatements();

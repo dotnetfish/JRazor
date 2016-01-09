@@ -2,7 +2,7 @@ package com.superstudio.language.java;
 
 import com.superstudio.commons.Environment;
 import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.jrazor.generator.BaseCodeWriter;
+import com.superstudio.web.razor.generator.BaseCodeWriter;
 
 public class JavaCodeWriter extends BaseCodeWriter {
 
@@ -46,12 +46,12 @@ public class JavaCodeWriter extends BaseCodeWriter {
 			// throw new ArgumentNullException("literal");
 		}
 
-		// From CSharpCodeProvider in CodeDOM
+		// From JavaCodeProvider in CodeDOM
 		// If the string is short, use C style quoting (e.g "\r\n")
 		// Also do it if it is too long to fit in one line
 		// If the string contains '\0', verbatim style won't work.
 		/*if (literal.length() >= 256 && literal.length() <= 1500 && literal.indexOf('\0') == -1) {
-			WriteVerbatimStringLiteral(literal);
+			writeVerbatimStringLiteral(literal);
 		} else {*/
 			writeCStyleStringLiteral(literal);
 		/*}*/
@@ -71,7 +71,7 @@ public class JavaCodeWriter extends BaseCodeWriter {
 	}
 
 	private void writeCStyleStringLiteral(String literal) {
-		// From CSharpCodeGenerator.QuoteSnippetStringCStyle in CodeDOM
+		// From JavaCodeGenerator.QuoteSnippetStringCStyle in CodeDOM
 		getInnerWriter().write("\"");
 		for (int i = 0; i < literal.length(); i++) {
 			// switch (literal[i])
@@ -144,12 +144,9 @@ public class JavaCodeWriter extends BaseCodeWriter {
 		getInnerWriter().write("@" + identifier);
 	}
 
-	 
-	 
-	// [SuppressMessage("Microsoft.Globalization",
-	// "CA1308:NormalizeStringsToUppercase", Justification = "Lowercase is
-	// intended here. C# boolean literals are all lowercase")]
-	@Override
+
+
+		@Override
 	public void writeBooleanLiteral(boolean value) {
 		writeSnippet((new Boolean(value)).toString().toLowerCase());
 	}
@@ -211,7 +208,7 @@ public class JavaCodeWriter extends BaseCodeWriter {
 			getInnerWriter().write(fileName);
 			getInnerWriter().write("\"");
 			getInnerWriter().write("\r\n");
-			// getInnerWriter().WriteLine();
+			// getInnerWriter().writeLine();
 		} else {
 			// getInnerWriter().write("\r\n");
 			getInnerWriter().write("//#line default");

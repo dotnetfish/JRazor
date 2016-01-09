@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Date;
+
 
 import com.superstudio.commons.io.CacheDependency;
 
@@ -107,9 +109,9 @@ import com.superstudio.commons.io.CacheDependency;
 		//String relative
 		Trace.WriteLine(url);
 		Trace.WriteLine("----------------------------");
-		//Trace.WriteLine(" virtualpath="+getClass().getResource("/").getPath().+ "  result="+result);
-		//Trace.WriteLine(" virtualpath="+result+"  result"+Paths.get("./jua/WEB-INF/views/home/index.jhtml").toFile().exists());
-		//Trace.WriteLine(" virtualpath=/jua/WEB-INF/views/home/index.jhtml  result"+Paths.get("/jua/WEB-INF/views/home/index.jhtml").toFile().exists());
+		//Trace.writeLine(" virtualpath="+getClass().getResource("/").getPath().+ "  result="+result);
+		//Trace.writeLine(" virtualpath="+result+"  result"+Paths.get("./jua/WEB-INF/views/home/index.jhtml").toFile().exists());
+		//Trace.writeLine(" virtualpath=/jua/WEB-INF/views/home/index.jhtml  result"+Paths.get("/jua/WEB-INF/views/home/index.jhtml").toFile().exists());
 		
 		return result;
 	}
@@ -200,7 +202,7 @@ import com.superstudio.commons.io.CacheDependency;
 	//
 	// 返回结果:
 	// A hash of the specified virtual paths.
-	public String getFileHash(String virtualPath, Iterable virtualPathDependencies) {
+	public String GetFileHash(String virtualPath, Iterable virtualPathDependencies) {
 		return String.valueOf(Paths.get(virtualPath).toFile().hashCode());
 	}
 

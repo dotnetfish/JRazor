@@ -5,7 +5,10 @@ import com.superstudio.commons.IntPtr;
 import com.superstudio.commons.RuntimeEnvironment;
 import com.superstudio.commons.SafeUserTokenHandle;
 import com.superstudio.commons.csharpbridge.RefObject;
-import com.superstudio.commons.io.*;
+import com.superstudio.commons.io.FileAccess;
+import com.superstudio.commons.io.FileMode;
+import com.superstudio.commons.io.FileShare;
+import com.superstudio.commons.io.FileStream;
 
 public final class Executor
 {
@@ -80,7 +83,7 @@ public final class Executor
 		return result;
 	}
 
-//C# TO JAVA CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to Java Converter:
+
 	/*private  static int ExecWaitWithCaptureUnimpersonated(SafeUserTokenHandle userToken, 
 			String cmd, String currentDir, 
 			TempFileCollection tempFiles, 
@@ -93,11 +96,11 @@ public final class Executor
 			int result = 0;
 			if (outputName.getRefObj() == null || outputName.getRefObj().length() == 0)
 			{
-				outputName.setRefObj(tempFiles.AddExtension("out"));
+				outputName.setRefObj(tempFiles.addExtension("out"));
 			}
 			if (errorName.getRefObj() == null || errorName.getRefObj().length() == 0)
 			{
-				errorName.setRefObj(tempFiles.AddExtension("err")) ;
+				errorName.setRefObj(tempFiles.addExtension("err")) ;
 			}
 			FileStream fileStream = Executor.CreateInheritedFile(outputName.getRefObj());
 			FileStream fileStream2 = Executor.CreateInheritedFile(errorName.getRefObj());
@@ -109,12 +112,12 @@ public final class Executor
 			try
 			{
 				StreamWriter expr_7D = new StreamWriter(fileStream, Encoding.UTF8);
-				expr_7D.Write(currentDir);
-				expr_7D.Write("> ");
-				//expr_7D.WriteLine(((trueCmdLine != null) ? trueCmdLine : cmd));
-				expr_7D.WriteLine();
-				expr_7D.WriteLine();
-				expr_7D.Flush();
+				expr_7D.write(currentDir);
+				expr_7D.write("> ");
+				//expr_7D.writeLine(((trueCmdLine != null) ? trueCmdLine : cmd));
+				expr_7D.writeLine();
+				expr_7D.writeLine();
+				expr_7D.flush();
 				//NativeMethods.STARTUPINFO sTARTUPINFO = new NativeMethods.STARTUPINFO();
 				sTARTUPINFO.cb = Marshal.SizeOf(sTARTUPINFO);
 				sTARTUPINFO.dwFlags = 257;
@@ -185,11 +188,11 @@ public final class Executor
 			{
 				if (!flag && safeUserTokenHandle != null && !safeUserTokenHandle.IsInvalid)
 				{
-					safeUserTokenHandle.Close();
+					safeUserTokenHandle.close();
 					safeUserTokenHandle = null;
 				}
-				fileStream.Close();
-				fileStream2.Close();
+				fileStream.close();
+				fileStream2.close();
 			}
 			IL_31A:
 			if (flag)
@@ -207,7 +210,7 @@ public final class Executor
 					{
 						if (processWaitHandle != null)
 						{
-							processWaitHandle.Close();
+							processWaitHandle.close();
 						}
 					}
 					if (!flag2)
@@ -224,11 +227,11 @@ public final class Executor
 				}
 				finally
 				{
-					safeProcessHandle.Close();
-					safeThreadHandle.Close();
+					safeProcessHandle.close();
+					safeThreadHandle.close();
 					if (safeUserTokenHandle != null && !safeUserTokenHandle.IsInvalid)
 					{
-						safeUserTokenHandle.Close();
+						safeUserTokenHandle.close();
 					}
 				}
 			}
@@ -241,7 +244,7 @@ public final class Executor
 			throw new ExternalException(SR.GetString("ExecCantExec", new object[] { cmd }), inner);
 		}
 */
- 
+
 //ORIGINAL LINE: [SecurityPermission(SecurityAction.Assert, ControlPrincipal = true, UnmanagedCode = true), PermissionSet(SecurityAction.LinkDemand, Unrestricted = true)] internal static WindowsImpersonationContext RevertImpersonation()
 	/*public static WindowsImpersonationContext RevertImpersonation()
 	{

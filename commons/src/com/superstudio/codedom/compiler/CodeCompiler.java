@@ -1,18 +1,13 @@
 package com.superstudio.codedom.compiler;
 
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import com.superstudio.codedom.*;
-import com.superstudio.commons.Assembly;
-import com.superstudio.commons.Encoding;
-import com.superstudio.commons.Environment;
-import com.superstudio.commons.SR;
-import com.superstudio.commons.StreamReader;
-import com.superstudio.commons.StreamWriter;
+import com.superstudio.codedom.CodeCompileUnit;
+import com.superstudio.commons.*;
 import com.superstudio.commons.csharpbridge.RefObject;
 import com.superstudio.commons.io.*;
-import com.superstudio.commons.io.FileMode;
+import com.superstudio.commons.io.Path;
+
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
 
 public abstract class CodeCompiler extends CodeGenerator implements ICodeCompiler {
 	protected abstract String getFileExtension();
@@ -25,22 +20,22 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 		CompilerResults result;
 		try {
-			result = this.FromDom(options, e);
+			result = this.fromDom(options, e);
 		} finally {
-			options.getTempFiles().SafeDelete();
+			options.getTempFiles().safeDelete();
 		}
 		return result;
 	}
 
-	public final CompilerResults compileAssemblyFromFile(CompilerParameters options, String fileName) throws FileNotFoundException, Exception {
+	public final CompilerResults compileAssemblyFromFile(CompilerParameters options, String fileName) throws Exception {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
 		CompilerResults result;
 		try {
-			result = this.FromFile(options, fileName);
+			result = this.fromFile(options, fileName);
 		} finally {
-			options.getTempFiles().SafeDelete();
+			options.getTempFiles().safeDelete();
 		}
 		return result;
 	}
@@ -51,9 +46,9 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 		CompilerResults result;
 		try {
-			result = this.FromSource(options, source);
+			result = this.fromSource(options, source);
 		} finally {
-			options.getTempFiles().SafeDelete();
+			options.getTempFiles().safeDelete();
 		}
 		return result;
 	}
@@ -66,13 +61,13 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		try {
 			result = this.fromSourceBatch(options, sources);
 		} finally {
-			options.getTempFiles().SafeDelete();
+			options.getTempFiles().safeDelete();
 		}
 		return result;
 	}
 
 	public final CompilerResults compileAssemblyFromFileBatch(CompilerParameters options, String[] fileNames)
-			throws FileNotFoundException, Exception {
+			throws Exception {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
@@ -81,16 +76,13 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 		CompilerResults result;
 		try {
-			/*
-			 * for (int i = 0; i < fileNames.length; i++) { try (
-			 * FileInputStream stream=File.OpenRead(fileNames[i])); { } }
-			 */
+
 			try (AutoCloseable closeable = com.superstudio.commons.io.File.OpenRead(fileNames)) {
 
 			}
-			result = this.FromFileBatch(options, fileNames);
+			result = this.fromFileBatch(options, fileNames);
 		} finally {
-			options.getTempFiles().SafeDelete();
+			options.getTempFiles().safeDelete();
 		}
 		return result;
 	}
@@ -101,18 +93,18 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 		CompilerResults result;
 		try {
-			result = this.FromDomBatch(options, ea);
+			result = this.fromDomBatch(options, ea);
 		} finally {
-			options.getTempFiles().SafeDelete();
+			options.getTempFiles().safeDelete();
 		}
 		return result;
 	}
 
-	public final void Compile(CompilerParameters options, String compilerDirectory, String compilerExe,
-			String arguments, RefObject<String> outputFile, RefObject<Integer> nativeReturnValue,
-			String trueArgs) throws Exception {
+	public final void compile(CompilerParameters options, String compilerDirectory, String compilerExe,
+							  String arguments, RefObject<String> outputFile, RefObject<Integer> nativeReturnValue,
+							  String trueArgs) throws Exception {
 		String text = null;
-		outputFile.setRefObj (options.getTempFiles().AddExtension("out"));
+		outputFile.setRefObj (options.getTempFiles().addExtension("out"));
 		String text2 = Path.Combine(compilerDirectory, compilerExe);
 		if ((new java.io.File(text2)).isFile()) {
 			String trueCmdLine = null;
@@ -129,17 +121,17 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		throw new IllegalStateException(SR.GetString("CompilerNotFound", new Object[] { text2 }));
 	}
 
-	protected CompilerResults FromDom(CompilerParameters options, CodeCompileUnit e) {
+	protected CompilerResults fromDom(CompilerParameters options, CodeCompileUnit e) {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
 		// (new
 		// SecurityPermission(SecurityPermissionFlag.UnmanagedCode)).Demand();
-		return this.FromDomBatch(options, new CodeCompileUnit[] { e });
+		return this.fromDomBatch(options, new CodeCompileUnit[] { e });
 	}
 
-	protected CompilerResults FromFile(CompilerParameters options, String fileName)
-			throws FileNotFoundException, Exception {
+	protected CompilerResults fromFile(CompilerParameters options, String fileName)
+			throws Exception {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
@@ -154,10 +146,10 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		try (AutoCloseable closeable = File.OpenRead(fileName)) {
 
 		}
-		return this.FromFileBatch(options, new String[] { fileName });
+		return this.fromFileBatch(options, new String[] { fileName });
 	}
 
-	protected CompilerResults FromSource(CompilerParameters options, String source) throws Exception {
+	protected CompilerResults fromSource(CompilerParameters options, String source) throws Exception {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
@@ -166,7 +158,7 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		return this.fromSourceBatch(options, new String[] { source });
 	}
 
-	protected CompilerResults FromDomBatch(CompilerParameters options, CodeCompileUnit[] ea) {
+	protected CompilerResults fromDomBatch(CompilerParameters options, CodeCompileUnit[] ea) {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
@@ -183,14 +175,14 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 			try {
 				for (int i = 0; i < ea.length; i++) {
 					if (ea[i] != null) {
-						this.ResolveReferencedAssemblies(options, ea[i]);
-						array[i] = options.getTempFiles().AddExtension(i + this.getFileExtension());
+						this.resolveReferencedAssemblies(options, ea[i]);
+						array[i] = options.getTempFiles().addExtension(i + this.getFileExtension());
 						FileStream stream = new FileStream(array[i], FileMode.Create, FileAccess.Write, FileShare.Read);
 						try {
 							try (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8)) {
-								((ICodeGenerator) this).generateCodeFromCompileUnit(ea[i], streamWriter,
+								this.generateCodeFromCompileUnit(ea[i], streamWriter,
 										super.getOptions());
-								streamWriter.Flush();
+								streamWriter.flush();
 							}catch(Exception ex){
 								ex.printStackTrace();
 							}
@@ -199,7 +191,7 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 						}
 					}
 				}
-				result = this.FromFileBatch(options, array);
+				result = this.fromFileBatch(options, array);
 			} catch (Exception ex) {
 
 			} finally {
@@ -211,7 +203,7 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		return result;
 	}
 
-	private void ResolveReferencedAssemblies(CompilerParameters options, CodeCompileUnit e) {
+	private void resolveReferencedAssemblies(CompilerParameters options, CodeCompileUnit e) {
 		if (e.getReferencedAssemblies().size() > 0) {
 			for (String current : e.getReferencedAssemblies()) {
 				if (!options.getReferencedAssemblies().contains(current)) {
@@ -221,7 +213,7 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 	}
 
-	protected CompilerResults FromFileBatch(CompilerParameters options, String[] fileNames) throws Exception {
+	protected CompilerResults fromFileBatch(CompilerParameters options, String[] fileNames) throws Exception {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
@@ -245,13 +237,13 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		if (options.getOutputAssembly() == null || options.getOutputAssembly().length() == 0) {
 			String fileExtension = options.getGenerateExecutable() ? "exe" : "dll";
 			options.setOutputAssembly(
-					compilerResults.getTempFiles().AddExtension(fileExtension, !options.getGenerateInMemory()));
+					compilerResults.getTempFiles().addExtension(fileExtension, !options.getGenerateInMemory()));
 			(new FileStream(options.getOutputAssembly(), FileMode.Create, FileAccess.ReadAndWrite)).close();
 			flag = true;
 		}
-		compilerResults.getTempFiles().AddExtension("pdb");
-		String text = this.CmdArgsFromParameters(options) + " " + CodeCompiler.joinStringArray(fileNames, " ");
-		String responseFileCmdArgs = this.GetResponseFileCmdArgs(options, text);
+		compilerResults.getTempFiles().addExtension("pdb");
+		String text = this.cmdArgsFromParameters(options) + " " + CodeCompiler.joinStringArray(fileNames, " ");
+		String responseFileCmdArgs = this.getResponseFileCmdArgs(options, text);
 		String trueArgs = null;
 		if (responseFileCmdArgs != null) {
 			trueArgs = text;
@@ -259,7 +251,7 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 		RefObject<String> tempRef_path = new RefObject<String>(path);
 		RefObject<Integer> tempRef_num = new RefObject<Integer>(num);
-		this.Compile(options, Executor.GetRuntimeInstallDirectory(), this.getCompilerName(), text, tempRef_path,
+		this.compile(options, Executor.GetRuntimeInstallDirectory(), this.getCompilerName(), text, tempRef_path,
 				tempRef_num, trueArgs);
 		path = tempRef_path.getRefObj();
 		num = tempRef_num.getRefObj();
@@ -274,10 +266,9 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 						text2 = streamReader.ReadLine();
 						if (text2 != null) {
 							compilerResults.getOutput().add(text2);
-							this.ProcessCompilerOutputLine(compilerResults, text2);
+							this.processCompilerOutputLine(compilerResults, text2);
 						}
 					} while (text2 != null);
-					streamReader.close();
 				}
 			} finally {
 				fileStream.Close();
@@ -293,10 +284,8 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 
 			FileInputStream fileStream2 = new FileInputStream(FileDescriptor.in);
 			try {
-				int num2 = (int) fileStream2.available();
-				 
-				
-				
+				int num2 = fileStream2.available();
+
 				byte[] array = new byte[num2];
 				fileStream2.read(array, 0, num2);
 				// (new
@@ -317,17 +306,17 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		return compilerResults;
 	}
 
-	protected abstract void ProcessCompilerOutputLine(CompilerResults results, String line);
+	protected abstract void processCompilerOutputLine(CompilerResults results, String line);
 
-	protected abstract String CmdArgsFromParameters(CompilerParameters options);
+	protected abstract String cmdArgsFromParameters(CompilerParameters options);
 
-	protected String GetResponseFileCmdArgs(CompilerParameters options, String cmdArgs) throws Exception {
-		String text = options.getTempFiles().AddExtension("cmdline");
+	protected String getResponseFileCmdArgs(CompilerParameters options, String cmdArgs) throws Exception {
+		String text = options.getTempFiles().addExtension("cmdline");
 		FileStream stream = new FileStream(text, FileMode.Create, FileAccess.Write, FileShare.Read);
 		try {
 			try (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8)) {
-				streamWriter.Write(cmdArgs);
-				streamWriter.Flush();
+				streamWriter.write(cmdArgs);
+				streamWriter.flush();
 			}
 		} finally {
 			stream.close();
@@ -351,19 +340,19 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 			// Executor.RevertImpersonation();
 			try {
 				for (int i = 0; i < sources.length; i++) {
-					String text = options.getTempFiles().AddExtension(i + this.getFileExtension());
+					String text = options.getTempFiles().addExtension(i + this.getFileExtension());
 					FileStream stream = new FileStream(text, FileMode.Create, FileAccess.Write, FileShare.Read);
 					try {
 						try (StreamWriter streamWriter = new StreamWriter(stream, "")) {
-							streamWriter.Write(sources[i]);
-							streamWriter.Flush();
+							streamWriter.write(sources[i]);
+							streamWriter.flush();
 						}
 					} finally {
 						stream.close();
 					}
 					array[i] = text;
 				}
-				result = this.FromFileBatch(options, array);
+				result = this.fromFileBatch(options, array);
 			} finally {
 				//TODO
 				//Executor.ReImpersonate(impersonation);

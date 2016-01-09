@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.tokenizer.symbols;
+package com.superstudio.jrazor.tokenizer.symbols;
 
 
 // Centralized all the supressions for the CSharpSymbolType and VBSymbolType enum members here for clarity. They are

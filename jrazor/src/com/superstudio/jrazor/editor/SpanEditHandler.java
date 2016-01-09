@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.editor;
+package com.superstudio.jrazor.editor;
 
 import java.util.Collections;
 import java.util.function.Function;
@@ -21,15 +21,13 @@ import com.superstudio.jrazor.tokenizer.symbols.ISymbol;
 public class SpanEditHandler
 {
  
-	//[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Func<T> is the recommended delegate type and requires this level of nesting.")]
 	public SpanEditHandler(Function<String, Iterable<? extends ISymbol>> tokenizer)
 	{
 		this(tokenizer, AcceptedCharacters.Any);
 	}
 
  
-	//[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Func<T> is the recommended delegate type and requires this level of nesting.")]
-	public SpanEditHandler(Function<String, Iterable<? extends ISymbol>> tokenizer, AcceptedCharacters accepted)
+		public SpanEditHandler(Function<String, Iterable<? extends ISymbol>> tokenizer, AcceptedCharacters accepted)
 	{
 		setAcceptedCharacters(accepted);
 		setTokenizer(tokenizer);
@@ -60,8 +58,7 @@ public class SpanEditHandler
 	}
 
  
-	//[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Func<T> is the recommended delegate type and requires this level of nesting.")]
-	private Function<String, Iterable<? extends ISymbol>> privateTokenizer;
+		private Function<String, Iterable<? extends ISymbol>> privateTokenizer;
 	public final Function<String, Iterable<? extends ISymbol>> getTokenizer()
 	{
 		return privateTokenizer;
@@ -78,8 +75,7 @@ public class SpanEditHandler
 	}
 
  
-	//[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Func<T> is the recommended delegate type and requires this level of nesting.")]
-	public static SpanEditHandler createDefault(Function<String, Iterable<? extends ISymbol>> tokenizer)
+		public static SpanEditHandler createDefault(Function<String, Iterable<? extends ISymbol>> tokenizer)
 	{
 		return new SpanEditHandler(tokenizer);
 	}

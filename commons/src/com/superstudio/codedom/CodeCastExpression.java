@@ -2,8 +2,7 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
- 
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeCastExpression : CodeExpression
+
 public class CodeCastExpression extends CodeExpression implements Serializable {
 	private CodeTypeReference targetType;
 

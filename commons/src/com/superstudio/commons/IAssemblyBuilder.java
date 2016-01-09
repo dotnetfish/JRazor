@@ -5,6 +5,6 @@ import com.superstudio.commons.compilation.BuildProvider;
 
 public interface IAssemblyBuilder
 {
-	void AddCodeCompileUnit(BuildProvider buildProvider, CodeCompileUnit compileUnit);
-	void GenerateTypeFactory(String typeName);
+	void addCodeCompileUnit(BuildProvider buildProvider, CodeCompileUnit compileUnit);
+	void generateTypeFactory(String typeName);
 }

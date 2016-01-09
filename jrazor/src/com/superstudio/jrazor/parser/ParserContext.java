@@ -1,7 +1,6 @@
-﻿package com.superstudio.jrazor.parser;
+package com.superstudio.jrazor.parser;
 
 import com.superstudio.commons.CollectionHelper;
-import com.superstudio.commons.IDisposable;
 import com.superstudio.commons.exception.InvalidOperationException;
 import com.superstudio.jrazor.ParserResults;
 import com.superstudio.jrazor.parser.syntaxTree.AcceptedCharacters;

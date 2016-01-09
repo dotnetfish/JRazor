@@ -1,13 +1,13 @@
 package com.superstudio.codedom.compiler;
 
 
-import java.util.*;
-
 import com.superstudio.commons.Environment;
 import com.superstudio.commons.Registry;
 import com.superstudio.commons.SR;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.io.Path;
+
+import java.util.Map;
 
 public final class RedistVersionInfo
 {
@@ -27,7 +27,7 @@ public final class RedistVersionInfo
 
 	private static final String dotNetFrameworkRegistryPath = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\MSBuild\\ToolsVersions\\";
 
-	public static String GetCompilerPath(Map<String, String> provOptions, String compilerExecutable)
+	public static String getCompilerPath(Map<String, String> provOptions, String compilerExecutable)
 	{
 		String text = Executor.GetRuntimeInstallDirectory();
 		if (provOptions != null)
@@ -54,12 +54,12 @@ public final class RedistVersionInfo
 					}
 					else
 					{
-						text = RedistVersionInfo.GetCompilerPathFromRegistry(text2);
+						text = RedistVersionInfo.getCompilerPathFromRegistry(text2);
 					}
 				}
 				else
 				{
-					text = RedistVersionInfo.GetCompilerPathFromRegistry(text2);
+					text = RedistVersionInfo.getCompilerPathFromRegistry(text2);
 				}
 			}
 		}
@@ -70,7 +70,7 @@ public final class RedistVersionInfo
 		return text;
 	}
 
-	private static String GetCompilerPathFromRegistry(String versionVal)
+	private static String getCompilerPathFromRegistry(String versionVal)
 	{
 		String environmentVariable = Environment.GetEnvironmentVariable("COMPLUS_InstallRoot");
 		String environmentVariable2 = Environment.GetEnvironmentVariable("COMPLUS_Version");

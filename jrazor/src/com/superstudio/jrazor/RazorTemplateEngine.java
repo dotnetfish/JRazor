@@ -1,7 +1,8 @@
-﻿package com.superstudio.jrazor;
+package com.superstudio.jrazor;
 
 import com.superstudio.commons.CancellationToken;
 import com.superstudio.commons.TextReader;
+import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.jrazor.generator.GeneratedCodeMapping;
 import com.superstudio.jrazor.generator.RazorCodeGenerator;
 import com.superstudio.jrazor.parser.ParserBase;
@@ -30,7 +31,7 @@ public class RazorTemplateEngine {
 	 */
 	public RazorTemplateEngine(RazorEngineHost host) throws Exception {
 		if (host == null) {
-			//throw new ArgumentNullException("host");
+			throw new ArgumentNullException("host");
 		}
 
 		setHost(host);
@@ -76,10 +77,7 @@ public class RazorTemplateEngine {
 	 */
 	 
 	 
-	// [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before
-	// losing scope", Justification = "Input object would be disposed if we
-	// dispose the wrapper. We don't own the input so we don't want to dispose
-	// it")]
+
 	public final ParserResults parseTemplate(ITextBuffer input, CancellationToken cancelToken) throws Exception {
 		return parseTemplateCore(input.toDocument(), cancelToken);
 	}
@@ -93,10 +91,7 @@ public class RazorTemplateEngine {
 
 	 
 	 
-	// [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before
-	// losing scope", Justification = "Input object would be disposed if we
-	// dispose the wrapper. We don't own the input so we don't want to dispose
-	// it")]
+
 	public final ParserResults parseTemplate(TextReader input, CancellationToken cancelToken) throws Exception {
 		return parseTemplateCore(new SeekableTextReader(input), cancelToken);
 	}
@@ -162,17 +157,13 @@ public class RazorTemplateEngine {
 	 */
 	 
 	 
-	// [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before
-	// losing scope", Justification = "Input object would be disposed if we
-	// dispose the wrapper. We don't own the input so we don't want to dispose
-	// it")]
+
 	public final GeneratorResults generateCode(ITextBuffer input, String className, String rootNamespace,
 			String sourceFileName, CancellationToken cancelToken) throws Exception {
 		return generateCodeCore(input.toDocument(), className, rootNamespace, sourceFileName, cancelToken);
 	}
 
-	// See GenerateCode override which takes ITextBuffer, and
-	// BufferingTextReader for details.
+
 	public final GeneratorResults generateCode(TextReader input) throws Exception {
 		
 		return generateCode(input, null, null, null, null);

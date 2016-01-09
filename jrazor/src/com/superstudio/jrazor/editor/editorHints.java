@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.editor;
+package com.superstudio.jrazor.editor;
 
 
 
@@ -7,7 +7,7 @@
  
 */
  
-//[Flags]
+
 public enum editorHints
 {
 	/** 
@@ -42,7 +42,7 @@ public enum editorHints
 		return mappings;
 	}
 
-	private editorHints(int value)
+	editorHints(int value)
 	{
 		intValue = value;
 		editorHints.getMappings().put(value, this);

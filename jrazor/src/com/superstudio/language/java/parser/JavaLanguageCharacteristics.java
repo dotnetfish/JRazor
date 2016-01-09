@@ -1,16 +1,16 @@
-﻿package com.superstudio.language.java.parser;
+package com.superstudio.language.java.parser;
 
 import com.superstudio.commons.exception.ArgumentNullException;
-import com.superstudio.jrazor.parser.LanguageCharacteristics;
-import com.superstudio.jrazor.parser.syntaxTree.*;
-import com.superstudio.jrazor.resources.RazorResources;
-import com.superstudio.jrazor.text.*;
-import com.superstudio.jrazor.tokenizer.symbols.KnownSymbolType;
 import com.superstudio.language.java.symbols.JavaKeyword;
 import com.superstudio.language.java.symbols.JavaSymbol;
 import com.superstudio.language.java.symbols.JavaSymbolType;
 import com.superstudio.language.java.tokenizer.JavaTokenizer;
-import com.superstudio.web.*;
+import com.superstudio.web.RazorResources;
+import com.superstudio.web.razor.parser.LanguageCharacteristics;
+import com.superstudio.web.razor.parser.syntaxTree.RazorError;
+import com.superstudio.web.razor.text.ITextDocument;
+import com.superstudio.web.razor.text.SourceLocation;
+import com.superstudio.web.razor.tokenizer.symbols.KnownSymbolType;
 
 
 public class JavaLanguageCharacteristics extends LanguageCharacteristics<JavaTokenizer, JavaSymbol, JavaSymbolType>
@@ -171,13 +171,12 @@ public class JavaLanguageCharacteristics extends LanguageCharacteristics<JavaTok
 			case GreaterThan:
 				return JavaSymbolType.LessThan;
 			default:
-				//Debug.Fail("FlipBracket must be called with a bracket character");
+				//Debug.Fail("flipBracket must be called with a bracket character");
 				return JavaSymbolType.Unknown;
 		}
 	}
 
- 
-	//[SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "C# Keywords are lower-case")]
+
 	public static String getKeyword(JavaKeyword keyword)
 	{
 		return keyword.toString().toLowerCase();

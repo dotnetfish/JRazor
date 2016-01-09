@@ -3,8 +3,8 @@ package com.superstudio.language.java.mvc;
 import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.HashCodeCombiner;
 import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.jrazor.generator.CodeGeneratorContext;
-import com.superstudio.jrazor.generator.SetBaseTypeCodeGenerator;
+import com.superstudio.web.razor.generator.CodeGeneratorContext;
+import com.superstudio.web.razor.generator.SetBaseTypeCodeGenerator;
 
 
 public class SetModelTypeCodeGenerator extends SetBaseTypeCodeGenerator

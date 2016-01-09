@@ -11,7 +11,7 @@ public final class PreApplicationStartCode
 			return;
 		}
 		PreApplicationStartCode._startWasCalled = true;
-		//BuildProvider.RegisterBuildProvider(".cshtml", RazorBuildProvider.class);
-		//BuildProvider.RegisterBuildProvider(".vbhtml", RazorBuildProvider.class);
+		//BuildProvider.registerBuildProvider(".cshtml", RazorBuildProvider.class);
+		//BuildProvider.registerBuildProvider(".vbhtml", RazorBuildProvider.class);
 	}
 }

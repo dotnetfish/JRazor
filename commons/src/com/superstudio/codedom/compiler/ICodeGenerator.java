@@ -23,9 +23,9 @@ public interface ICodeGenerator
 
 	void generateCodeFromStatement(CodeStatement e, TextWriter w, CodeGeneratorOptions o) throws Exception;
 
-	void generateCodeFromNamespace(CodeNamespace e, TextWriter w, CodeGeneratorOptions o)throws  Exception, InvalidOperationException;
+	void generateCodeFromNamespace(CodeNamespace e, TextWriter w, CodeGeneratorOptions o)throws  Exception;
 
-	void generateCodeFromCompileUnit(CodeCompileUnit e, TextWriter w, CodeGeneratorOptions o)throws   Exception;;
+	void generateCodeFromCompileUnit(CodeCompileUnit e, TextWriter w, CodeGeneratorOptions o)throws   Exception;
 
-	void generateCodeFromType(CodeTypeDeclaration e, TextWriter w, CodeGeneratorOptions o) throws Exception, InvalidOperationException;
+	void generateCodeFromType(CodeTypeDeclaration e, TextWriter w, CodeGeneratorOptions o) throws Exception;
 }

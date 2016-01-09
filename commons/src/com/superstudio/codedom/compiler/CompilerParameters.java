@@ -6,21 +6,21 @@ import java.util.List;
 
 import com.superstudio.commons.*;
 
- 
+
 //ORIGINAL LINE: [PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust"), PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")][Serializable] public class CompilerParameters
 public class CompilerParameters implements Serializable
 {
- 
+
 //ORIGINAL LINE: [OptionalField] private string coreAssemblyFileName = string.Empty;
 	private String coreAssemblyFileName = "";
 
 	private List<String> assemblyNames = new ArrayList<String>();
 
- 
+
 //ORIGINAL LINE: [OptionalField] private List<String> embeddedResources = new List<String>();
 	private List<String> embeddedResources = new ArrayList<String>();
 
- 
+
 //ORIGINAL LINE: [OptionalField] private List<String> linkedResources = new List<String>();
 	private List<String> linkedResources = new ArrayList<String>();
 
@@ -156,7 +156,7 @@ public class CompilerParameters implements Serializable
 		this.win32Resource = value;
 	}
 
- 
+
 //ORIGINAL LINE: [ComVisible(false)] public List<String> EmbeddedResources
 	public final List<String> getEmbeddedResources()
 	{

@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.tokenizer;
+package com.superstudio.jrazor.tokenizer;
 
 import java.util.Iterator;
 
@@ -55,7 +55,7 @@ public class HtmlTokenizer extends Tokenizer<HtmlSymbol, HtmlSymbolType> {
 					@Override
 					public boolean hasNext() {
 
-						boolean result = (current = (HtmlSymbol) tok.nextSymbol()) != null;
+						boolean result = (current = tok.nextSymbol()) != null;
 						if (!result)
 							reader.close();
 						return result;

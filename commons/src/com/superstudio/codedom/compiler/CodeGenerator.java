@@ -1,17 +1,15 @@
 package com.superstudio.codedom.compiler;
 
-import java.io.FileNotFoundException;
-
-import java.util.*;
-
 import com.superstudio.codedom.*;
 import com.superstudio.commons.SR;
 import com.superstudio.commons.TypeAttributes;
 import com.superstudio.commons.csharpbridge.RefObject;
-import com.superstudio.commons.exception.InvalidOperationException;
 import com.superstudio.commons.io.TextWriter;
 
- 
+import java.io.FileNotFoundException;
+import java.util.Iterator;
+
+
 //ORIGINAL LINE: [PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust"), PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")] public abstract class CodeGenerator : ICodeGenerator
 public abstract class CodeGenerator implements ICodeGenerator
 {
@@ -101,18 +99,18 @@ public abstract class CodeGenerator implements ICodeGenerator
 		return this.options;
 	}
 
-	private void GenerateType(CodeTypeDeclaration e) throws Exception {
+	private void generateType(CodeTypeDeclaration e) throws Exception {
 		this.currentClass = e;
 		if (e.getStartDirectives().size() > 0)
 		{
-			this.GenerateDirectives(e.getStartDirectives());
+			this.generateDirectives(e.getStartDirectives());
 		}
-		this.GenerateCommentStatements(e.getComments());
+		this.generateCommentStatements(e.getComments());
 		if (e.getLinePragma() != null)
 		{
-			this.GenerateLinePragmaStart(e.getLinePragma());
+			this.generateLinePragmaStart(e.getLinePragma());
 		}
-		this.GenerateTypeStart(e);
+		this.generateTypeStart(e);
 		if (this.getOptions().getVerbatimOrder())
 		{
 			Iterator enumerator = e.getMembers().iterator();
@@ -121,18 +119,18 @@ public abstract class CodeGenerator implements ICodeGenerator
 				while (enumerator.hasNext())
 				{
 					CodeTypeMember member = (CodeTypeMember)enumerator.next();
-					this.GenerateTypeMember(member, e);
+					this.generateTypeMember(member, e);
 				}
- 
+
 				this.currentClass = e;
-				this.GenerateTypeEnd(e);
+				this.generateTypeEnd(e);
 				if (e.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaEnd(e.getLinePragma());
+					this.generateLinePragmaEnd(e.getLinePragma());
 				}
 				if (e.getEndDirectives().size() > 0)
 				{
-					this.GenerateDirectives(e.getEndDirectives());
+					this.generateDirectives(e.getEndDirectives());
 				}
 				return;
 			}
@@ -145,27 +143,27 @@ public abstract class CodeGenerator implements ICodeGenerator
 				}
 			}
 		}
-		this.GenerateFields(e);
-		this.GenerateSnippetMembers(e);
-		this.GenerateTypeConstructors(e);
-		this.GenerateConstructors(e);
-		this.GenerateProperties(e);
-		this.GenerateEvents(e);
-		this.GenerateMethods(e);
-		this.GenerateNestedTypes(e);
+		this.generateFields(e);
+		this.generateSnippetMembers(e);
+		this.generateTypeConstructors(e);
+		this.generateConstructors(e);
+		this.generateProperties(e);
+		this.generateEvents(e);
+		this.generateMethods(e);
+		this.generateNestedTypes(e);
 
 
 	}
 
-	protected void GenerateDirectives(CodeDirectiveCollection directives)
+	protected void generateDirectives(CodeDirectiveCollection directives)
 	{
 	}
 
-	private void GenerateTypeMember(CodeTypeMember member, CodeTypeDeclaration declaredType) throws Exception
+	private void generateTypeMember(CodeTypeMember member, CodeTypeDeclaration declaredType) throws Exception
 	{
 		if (this.options.getBlankLinesBetweenMembers())
 		{
-			this.getOutput().WriteLine();
+			this.getOutput().writeLine();
 		}
 		if (member instanceof CodeTypeDeclaration)
 		{
@@ -175,63 +173,63 @@ public abstract class CodeGenerator implements ICodeGenerator
 		}
 		if (member.getStartDirectives().size() > 0)
 		{
-			this.GenerateDirectives(member.getStartDirectives());
+			this.generateDirectives(member.getStartDirectives());
 		}
-		this.GenerateCommentStatements(member.getComments());
+		this.generateCommentStatements(member.getComments());
 		if (member.getLinePragma() != null)
 		{
-			this.GenerateLinePragmaStart(member.getLinePragma());
+			this.generateLinePragmaStart(member.getLinePragma());
 		}
 		if (member instanceof CodeMemberField)
 		{
-			this.GenerateField((CodeMemberField)member);
+			this.generateField((CodeMemberField)member);
 		}
 		else if (member instanceof CodeMemberProperty)
 		{
-			this.GenerateProperty((CodeMemberProperty)member, declaredType);
+			this.generateProperty((CodeMemberProperty)member, declaredType);
 		}
 		else if (member instanceof CodeMemberMethod)
 		{
 			if (member instanceof CodeConstructor)
 			{
-				this.GenerateConstructor((CodeConstructor)member, declaredType);
+				this.generateConstructor((CodeConstructor)member, declaredType);
 			}
 			else if (member instanceof CodeTypeConstructor)
 			{
-				this.GenerateTypeConstructor((CodeTypeConstructor)member);
+				this.generateTypeConstructor((CodeTypeConstructor)member);
 			}
 			else if (member instanceof CodeEntryPointMethod)
 			{
-				this.GenerateEntryPointMethod((CodeEntryPointMethod)member, declaredType);
+				this.generateEntryPointMethod((CodeEntryPointMethod)member, declaredType);
 			}
 			else
 			{
-				this.GenerateMethod((CodeMemberMethod)member, declaredType);
+				this.generateMethod((CodeMemberMethod)member, declaredType);
 			}
 		}
 		else if (member instanceof CodeMemberEvent)
 		{
-			this.GenerateEvent((CodeMemberEvent)member, declaredType);
+			this.generateEvent((CodeMemberEvent)member, declaredType);
 		}
 		else if (member instanceof CodeSnippetTypeMember)
 		{
 			int indent = this.getIndent();
 			this.setIndent(0);
-			this.GenerateSnippetMember((CodeSnippetTypeMember)member);
+			this.generateSnippetMember((CodeSnippetTypeMember)member);
 			this.setIndent(indent);
-			output.WriteLine();
+			output.writeLine();
 		}
 		if (member.getLinePragma() != null)
 		{
-			this.GenerateLinePragmaEnd(member.getLinePragma());
+			this.generateLinePragmaEnd(member.getLinePragma());
 		}
 		if (member.getEndDirectives().size() > 0)
 		{
-			this.GenerateDirectives(member.getEndDirectives());
+			this.generateDirectives(member.getEndDirectives());
 		}
 	}
 
-	private void GenerateTypeConstructors(CodeTypeDeclaration e) throws Exception
+	private void generateTypeConstructors(CodeTypeDeclaration e) throws Exception
 	{
 		Iterator<CodeTypeMember> enumerator = e.getMembers().iterator();
 		while (enumerator.hasNext())
@@ -242,54 +240,54 @@ public abstract class CodeGenerator implements ICodeGenerator
 				this.currentMember = (CodeTypeMember)current;
 				if (this.options.getBlankLinesBetweenMembers())
 				{
-					this.output.WriteLine();
+					this.output.writeLine();
 				}
 				if (this.currentMember.getStartDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getStartDirectives());
+					this.generateDirectives(this.currentMember.getStartDirectives());
 				}
-				this.GenerateCommentStatements(this.currentMember.getComments());
+				this.generateCommentStatements(this.currentMember.getComments());
 				CodeTypeConstructor codeTypeConstructor = (CodeTypeConstructor)current;
 				if (codeTypeConstructor.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaStart(codeTypeConstructor.getLinePragma());
+					this.generateLinePragmaStart(codeTypeConstructor.getLinePragma());
 				}
-				this.GenerateTypeConstructor(codeTypeConstructor);
+				this.generateTypeConstructor(codeTypeConstructor);
 				if (codeTypeConstructor.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaEnd(codeTypeConstructor.getLinePragma());
+					this.generateLinePragmaEnd(codeTypeConstructor.getLinePragma());
 				}
 				if (this.currentMember.getEndDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getEndDirectives());
+					this.generateDirectives(this.currentMember.getEndDirectives());
 				}
 			}
 		}
 	}
 
-	protected final void GenerateNamespaces(CodeCompileUnit e) throws Exception, Exception
+	protected final void generateNamespaces(CodeCompileUnit e) throws Exception
 	{
 		for (Object e2 : e.getNamespaces())
 		{
-			((ICodeGenerator)this).generateCodeFromNamespace((CodeNamespace)e2, this.output.getInnerWriter(), this.options);
+			this.generateCodeFromNamespace((CodeNamespace)e2, this.output.getInnerWriter(), this.options);
 		}
 	}
 
-	protected final void GenerateTypes(CodeNamespace e) throws Exception, Exception
+	protected final void generateTypes(CodeNamespace e) throws Exception
 	{
 		for (Object e2 : e.getTypes())
 		{
 			if (this.options.getBlankLinesBetweenMembers())
 			{
-				this.output.WriteLine();
+				this.output.writeLine();
 			}
 			((ICodeGenerator)this).generateCodeFromType((CodeTypeDeclaration)e2, this.output.getInnerWriter(), this.options);
 		}
 	}
 
-	/*public final boolean Supports(GeneratorSupport support)
+	/*public final boolean supports(GeneratorSupport support)
 	{
-		return this.Supports(support);
+		return this.supports(support);
 	}*/
 
 	public final void generateCodeFromType(CodeTypeDeclaration e, TextWriter w, CodeGeneratorOptions o) throws FileNotFoundException
@@ -307,7 +305,7 @@ public abstract class CodeGenerator implements ICodeGenerator
 		}
 		try
 		{
-			this.GenerateType(e);
+			this.generateType(e);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		} finally
@@ -335,7 +333,7 @@ public abstract class CodeGenerator implements ICodeGenerator
 		}
 		try
 		{
-			this.GenerateExpression(e);
+			this.generateExpression(e);
 		}
 		finally
 		{
@@ -364,11 +362,11 @@ public abstract class CodeGenerator implements ICodeGenerator
 		{
 			if (e instanceof CodeSnippetCompileUnit)
 			{
-				this.GenerateSnippetCompileUnit((CodeSnippetCompileUnit)e);
+				this.generateSnippetCompileUnit((CodeSnippetCompileUnit)e);
 			}
 			else
 			{
-				this.GenerateCompileUnit(e);
+				this.generateCompileUnit(e);
 			}
 		}
 		finally
@@ -396,7 +394,7 @@ public abstract class CodeGenerator implements ICodeGenerator
 		}
 		try
 		{
-			this.GenerateNamespace(e);
+			this.generateNamespace(e);
 		}
 		finally
 		{
@@ -424,7 +422,7 @@ public abstract class CodeGenerator implements ICodeGenerator
 		}
 		try
 		{
-			this.GenerateStatement(e);
+			this.generateStatement(e);
 		}
 		finally
 		{
@@ -436,7 +434,7 @@ public abstract class CodeGenerator implements ICodeGenerator
 		}
 	}
 
-	public void GenerateCodeFromMember(CodeTypeMember member, TextWriter writer, CodeGeneratorOptions options) throws Exception
+	public void generateCodeFromMember(CodeTypeMember member, TextWriter writer, CodeGeneratorOptions options) throws Exception
 	{
 		if (this.output != null)
 		{
@@ -448,7 +446,7 @@ public abstract class CodeGenerator implements ICodeGenerator
 		{
 			CodeTypeDeclaration declaredType = new CodeTypeDeclaration();
 			this.currentClass = declaredType;
-			this.GenerateTypeMember(member, declaredType);
+			this.generateTypeMember(member, declaredType);
 		}
 		finally
 		{
@@ -458,32 +456,32 @@ public abstract class CodeGenerator implements ICodeGenerator
 		}
 	}
 
-	/*public final boolean IsValidIdentifier(String value)
+	/*public final boolean isValidIdentifier(String value)
 	{
-		return this.IsValidIdentifier(value);
+		return this.isValidIdentifier(value);
 	}
 
-	public final void ValidateIdentifier(String value)
+	public final void validateIdentifier(String value)
 	{
-		this.ValidateIdentifier(value);
+		this.validateIdentifier(value);
 	}*/
 
-	/*public final String CreateEscapedIdentifier(String value)
+	/*public final String createEscapedIdentifier(String value)
 	{
-		return this.CreateEscapedIdentifier(value);
+		return this.createEscapedIdentifier(value);
 	}
 */
-/*	public final String CreateValidIdentifier(String value)
+/*	public final String createValidIdentifier(String value)
 	{
-		return this.CreateValidIdentifier(value);
+		return this.createValidIdentifier(value);
 	}*/
 
-/*	public final String GetTypeOutput(CodeTypeReference type)
+/*	public final String getTypeOutput(CodeTypeReference type)
 	{
-		return this.GetTypeOutput(type);
+		return this.getTypeOutput(type);
 	}
 */
-	private void GenerateConstructors(CodeTypeDeclaration e) throws Exception
+	private void generateConstructors(CodeTypeDeclaration e) throws Exception
 	{
 		Iterator enumerator = e.getMembers().iterator();
 		while (enumerator.hasNext())
@@ -494,32 +492,32 @@ public abstract class CodeGenerator implements ICodeGenerator
 				this.currentMember = (CodeTypeMember)current;
 				if (this.options.getBlankLinesBetweenMembers())
 				{
-					this.getOutput().WriteLine();
+					this.getOutput().writeLine();
 				}
 				if (this.currentMember.getStartDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getStartDirectives());
+					this.generateDirectives(this.currentMember.getStartDirectives());
 				}
-				this.GenerateCommentStatements(this.currentMember.getComments());
+				this.generateCommentStatements(this.currentMember.getComments());
 				CodeConstructor codeConstructor = (CodeConstructor)current;
 				if (codeConstructor.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaStart(codeConstructor.getLinePragma());
+					this.generateLinePragmaStart(codeConstructor.getLinePragma());
 				}
-				this.GenerateConstructor(codeConstructor, e);
+				this.generateConstructor(codeConstructor, e);
 				if (codeConstructor.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaEnd(codeConstructor.getLinePragma());
+					this.generateLinePragmaEnd(codeConstructor.getLinePragma());
 				}
 				if (this.currentMember.getEndDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getEndDirectives());
+					this.generateDirectives(this.currentMember.getEndDirectives());
 				}
 			}
 		}
 	}
 
-	private void GenerateEvents(CodeTypeDeclaration e) throws Exception
+	private void generateEvents(CodeTypeDeclaration e) throws Exception
 	{
 		Iterator enumerator = e.getMembers().iterator();
 		while (enumerator.hasNext())
@@ -530,156 +528,156 @@ public abstract class CodeGenerator implements ICodeGenerator
 				this.currentMember = (CodeTypeMember)current;
 				if (this.options.getBlankLinesBetweenMembers())
 				{
-					this.getOutput().WriteLine();
+					this.getOutput().writeLine();
 				}
 				if (this.currentMember.getStartDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getStartDirectives());
+					this.generateDirectives(this.currentMember.getStartDirectives());
 				}
-				this.GenerateCommentStatements(this.currentMember.getComments());
+				this.generateCommentStatements(this.currentMember.getComments());
 				CodeMemberEvent codeMemberEvent = (CodeMemberEvent)current;
 				if (codeMemberEvent.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaStart(codeMemberEvent.getLinePragma());
+					this.generateLinePragmaStart(codeMemberEvent.getLinePragma());
 				}
-				this.GenerateEvent(codeMemberEvent, e);
+				this.generateEvent(codeMemberEvent, e);
 				if (codeMemberEvent.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaEnd(codeMemberEvent.getLinePragma());
+					this.generateLinePragmaEnd(codeMemberEvent.getLinePragma());
 				}
 				if (this.currentMember.getEndDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getEndDirectives());
+					this.generateDirectives(this.currentMember.getEndDirectives());
 				}
 			}
 		}
 	}
 
-	protected final void GenerateExpression(CodeExpression e) throws Exception
+	protected final void generateExpression(CodeExpression e) throws Exception
 	{
 		if (e instanceof CodeArrayCreateExpression)
 		{
-			this.GenerateArrayCreateExpression((CodeArrayCreateExpression)e);
+			this.generateArrayCreateExpression((CodeArrayCreateExpression)e);
 			return;
 		}
 		if (e instanceof CodeBaseReferenceExpression)
 		{
-			this.GenerateBaseReferenceExpression((CodeBaseReferenceExpression)e);
+			this.generateBaseReferenceExpression((CodeBaseReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeBinaryOperatorExpression)
 		{
-			this.GenerateBinaryOperatorExpression((CodeBinaryOperatorExpression)e);
+			this.generateBinaryOperatorExpression((CodeBinaryOperatorExpression)e);
 			return;
 		}
 		if (e instanceof CodeCastExpression)
 		{
-			this.GenerateCastExpression((CodeCastExpression)e);
+			this.generateCastExpression((CodeCastExpression)e);
 			return;
 		}
 		if (e instanceof CodeDelegateCreateExpression)
 		{
-			this.GenerateDelegateCreateExpression((CodeDelegateCreateExpression)e);
+			this.generateDelegateCreateExpression((CodeDelegateCreateExpression)e);
 			return;
 		}
 		if (e instanceof CodeFieldReferenceExpression)
 		{
-			this.GenerateFieldReferenceExpression((CodeFieldReferenceExpression)e);
+			this.generateFieldReferenceExpression((CodeFieldReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeArgumentReferenceExpression)
 		{
-			this.GenerateArgumentReferenceExpression((CodeArgumentReferenceExpression)e);
+			this.generateArgumentReferenceExpression((CodeArgumentReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeVariableReferenceExpression)
 		{
-			this.GenerateVariableReferenceExpression((CodeVariableReferenceExpression)e);
+			this.generateVariableReferenceExpression((CodeVariableReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeIndexerExpression)
 		{
-			this.GenerateIndexerExpression((CodeIndexerExpression)e);
+			this.generateIndexerExpression((CodeIndexerExpression)e);
 			return;
 		}
 		if (e instanceof CodeArrayIndexerExpression)
 		{
-			this.GenerateArrayIndexerExpression((CodeArrayIndexerExpression)e);
+			this.generateArrayIndexerExpression((CodeArrayIndexerExpression)e);
 			return;
 		}
 		if (e instanceof CodeSnippetExpression)
 		{
-			this.GenerateSnippetExpression((CodeSnippetExpression)e);
+			this.generateSnippetExpression((CodeSnippetExpression)e);
 			return;
 		}
 		if (e instanceof CodeMethodInvokeExpression)
 		{
-			this.GenerateMethodInvokeExpression((CodeMethodInvokeExpression)e);
+			this.generateMethodInvokeExpression((CodeMethodInvokeExpression)e);
 			return;
 		}
 		if (e instanceof CodeMethodReferenceExpression)
 		{
-			this.GenerateMethodReferenceExpression((CodeMethodReferenceExpression)e);
+			this.generateMethodReferenceExpression((CodeMethodReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeEventReferenceExpression)
 		{
-			this.GenerateEventReferenceExpression((CodeEventReferenceExpression)e);
+			this.generateEventReferenceExpression((CodeEventReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeDelegateInvokeExpression)
 		{
-			this.GenerateDelegateInvokeExpression((CodeDelegateInvokeExpression)e);
+			this.generateDelegateInvokeExpression((CodeDelegateInvokeExpression)e);
 			return;
 		}
 		if (e instanceof CodeObjectCreateExpression)
 		{
-			this.GenerateObjectCreateExpression((CodeObjectCreateExpression)e);
+			this.generateObjectCreateExpression((CodeObjectCreateExpression)e);
 			return;
 		}
 		if (e instanceof CodeParameterDeclarationExpression)
 		{
-			this.GenerateParameterDeclarationExpression((CodeParameterDeclarationExpression)e);
+			this.generateParameterDeclarationExpression((CodeParameterDeclarationExpression)e);
 			return;
 		}
 		if (e instanceof CodeDirectionExpression)
 		{
-			this.GenerateDirectionExpression((CodeDirectionExpression)e);
+			this.generateDirectionExpression((CodeDirectionExpression)e);
 			return;
 		}
 		if (e instanceof CodePrimitiveExpression)
 		{
-			this.GeneratePrimitiveExpression((CodePrimitiveExpression)e);
+			this.generatePrimitiveExpression((CodePrimitiveExpression)e);
 			return;
 		}
 		if (e instanceof CodePropertyReferenceExpression)
 		{
-			this.GeneratePropertyReferenceExpression((CodePropertyReferenceExpression)e);
+			this.generatePropertyReferenceExpression((CodePropertyReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodePropertySetValueReferenceExpression)
 		{
-			this.GeneratePropertySetValueReferenceExpression((CodePropertySetValueReferenceExpression)e);
+			this.generatePropertySetValueReferenceExpression((CodePropertySetValueReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeThisReferenceExpression)
 		{
-			this.GenerateThisReferenceExpression((CodeThisReferenceExpression)e);
+			this.generateThisReferenceExpression((CodeThisReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeTypeReferenceExpression)
 		{
-			this.GenerateTypeReferenceExpression((CodeTypeReferenceExpression)e);
+			this.generateTypeReferenceExpression((CodeTypeReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeTypeOfExpression)
 		{
-			this.GenerateTypeOfExpression((CodeTypeOfExpression)e);
+			this.generateTypeOfExpression((CodeTypeOfExpression)e);
 			return;
 		}
 		if (e instanceof CodeDefaultValueExpression)
 		{
-			this.GenerateDefaultValueExpression((CodeDefaultValueExpression)e);
+			this.generateDefaultValueExpression((CodeDefaultValueExpression)e);
 			return;
 		}
 		if (e == null)
@@ -689,7 +687,7 @@ public abstract class CodeGenerator implements ICodeGenerator
 		//throw new IllegalArgumentException(SR.GetString("InvalidElementType", new Object[] {e.getClass().getName()}), "e");
 	}
 
-	private void GenerateFields(CodeTypeDeclaration e) throws Exception
+	private void generateFields(CodeTypeDeclaration e) throws Exception
 	{
 		Iterator enumerator = e.getMembers().iterator();
 		while (enumerator.hasNext())
@@ -700,32 +698,32 @@ public abstract class CodeGenerator implements ICodeGenerator
 				this.currentMember = (CodeTypeMember)current;
 				if (this.options.getBlankLinesBetweenMembers())
 				{
-					this.getOutput().WriteLine();
+					this.getOutput().writeLine();
 				}
 				if (this.currentMember.getStartDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getStartDirectives());
+					this.generateDirectives(this.currentMember.getStartDirectives());
 				}
-				this.GenerateCommentStatements(this.currentMember.getComments());
+				this.generateCommentStatements(this.currentMember.getComments());
 				CodeMemberField codeMemberField = (CodeMemberField)current;
 				if (codeMemberField.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaStart(codeMemberField.getLinePragma());
+					this.generateLinePragmaStart(codeMemberField.getLinePragma());
 				}
-				this.GenerateField(codeMemberField);
+				this.generateField(codeMemberField);
 				if (codeMemberField.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaEnd(codeMemberField.getLinePragma());
+					this.generateLinePragmaEnd(codeMemberField.getLinePragma());
 				}
 				if (this.currentMember.getEndDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getEndDirectives());
+					this.generateDirectives(this.currentMember.getEndDirectives());
 				}
 			}
 		}
 	}
 
-	private void GenerateSnippetMembers(CodeTypeDeclaration e) throws Exception
+	private void generateSnippetMembers(CodeTypeDeclaration e) throws Exception
 	{
 		Iterator enumerator = e.getMembers().iterator();
 		boolean flag = false;
@@ -739,7 +737,7 @@ public abstract class CodeGenerator implements ICodeGenerator
 				if (this.options.getBlankLinesBetweenMembers())
 				{
 					try {
-						this.getOutput().WriteLine();
+						this.getOutput().writeLine();
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -747,53 +745,53 @@ public abstract class CodeGenerator implements ICodeGenerator
 				}
 				if (this.currentMember.getStartDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getStartDirectives());
+					this.generateDirectives(this.currentMember.getStartDirectives());
 				}
-				this.GenerateCommentStatements(this.currentMember.getComments());
+				this.generateCommentStatements(this.currentMember.getComments());
 				CodeSnippetTypeMember codeSnippetTypeMember = (CodeSnippetTypeMember)current;
 				if (codeSnippetTypeMember.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaStart(codeSnippetTypeMember.getLinePragma());
+					this.generateLinePragmaStart(codeSnippetTypeMember.getLinePragma());
 				}
 				int indent = this.getIndent();
 				this.setIndent(0);
-				this.GenerateSnippetMember(codeSnippetTypeMember);
+				this.generateSnippetMember(codeSnippetTypeMember);
 				this.setIndent(indent);
 				if (codeSnippetTypeMember.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaEnd(codeSnippetTypeMember.getLinePragma());
+					this.generateLinePragmaEnd(codeSnippetTypeMember.getLinePragma());
 				}
 				if (this.currentMember.getEndDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getEndDirectives());
+					this.generateDirectives(this.currentMember.getEndDirectives());
 				}
 			}
 		}
 		if (flag)
 		{
-			this.getOutput().WriteLine();
+			this.getOutput().writeLine();
 		}
 	}
 
-	protected void GenerateSnippetCompileUnit(CodeSnippetCompileUnit e) throws Exception
+	protected void generateSnippetCompileUnit(CodeSnippetCompileUnit e) throws Exception
 	{
-		this.GenerateDirectives(e.getStartDirectives());
+		this.generateDirectives(e.getStartDirectives());
 		if (e.getLinePragma() != null)
 		{
-			this.GenerateLinePragmaStart(e.getLinePragma());
+			this.generateLinePragmaStart(e.getLinePragma());
 		}
-		this.getOutput().WriteLine(e.getValue());
+		this.getOutput().writeLine(e.getValue());
 		if (e.getLinePragma() != null)
 		{
-			this.GenerateLinePragmaEnd(e.getLinePragma());
+			this.generateLinePragmaEnd(e.getLinePragma());
 		}
 		if (e.getEndDirectives().size() > 0)
 		{
-			this.GenerateDirectives(e.getEndDirectives());
+			this.generateDirectives(e.getEndDirectives());
 		}
 	}
 
-	private void GenerateMethods(CodeTypeDeclaration e) throws Exception
+	private void generateMethods(CodeTypeDeclaration e) throws Exception
 	{
 		Iterator enumerator = e.getMembers().iterator();
 		while (enumerator.hasNext())
@@ -804,40 +802,39 @@ public abstract class CodeGenerator implements ICodeGenerator
 				this.currentMember = (CodeTypeMember)current;
 				if (this.options.getBlankLinesBetweenMembers())
 				{
-					this.getOutput().WriteLine();
+					this.getOutput().writeLine();
 				}
 				if (this.currentMember.getStartDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getStartDirectives());
+					this.generateDirectives(this.currentMember.getStartDirectives());
 				}
-				this.GenerateCommentStatements(this.currentMember.getComments());
+				this.generateCommentStatements(this.currentMember.getComments());
 				CodeMemberMethod codeMemberMethod = (CodeMemberMethod)current;
 				if (codeMemberMethod.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaStart(codeMemberMethod.getLinePragma());
+					this.generateLinePragmaStart(codeMemberMethod.getLinePragma());
 				}
 				if (current instanceof CodeEntryPointMethod)
 				{
-					this.GenerateEntryPointMethod((CodeEntryPointMethod)current, e);
+					this.generateEntryPointMethod((CodeEntryPointMethod)current, e);
 				}
 				else
 				{
-					this.GenerateMethod(codeMemberMethod, e);
+					this.generateMethod(codeMemberMethod, e);
 				}
 				if (codeMemberMethod.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaEnd(codeMemberMethod.getLinePragma());
+					this.generateLinePragmaEnd(codeMemberMethod.getLinePragma());
 				}
 				if (this.currentMember.getEndDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getEndDirectives());
+					this.generateDirectives(this.currentMember.getEndDirectives());
 				}
 			}
 		}
 	}
 
-	private void GenerateNestedTypes(CodeTypeDeclaration e) throws Exception, InvalidOperationException
-	{
+	private void generateNestedTypes(CodeTypeDeclaration e) throws Exception {
 		Iterator enumerator = e.getMembers().iterator();
 		while (enumerator.hasNext())
 		{
@@ -846,7 +843,7 @@ public abstract class CodeGenerator implements ICodeGenerator
 			{
 				if (this.options.getBlankLinesBetweenMembers())
 				{
-					this.getOutput().WriteLine();
+					this.getOutput().writeLine();
 				}
 				CodeTypeDeclaration e2 = (CodeTypeDeclaration)current;
 				((ICodeGenerator)this).generateCodeFromType(e2, this.output.getInnerWriter(), this.options);
@@ -854,42 +851,42 @@ public abstract class CodeGenerator implements ICodeGenerator
 		}
 	}
 
-	protected void GenerateCompileUnit(CodeCompileUnit e) throws Exception
+	protected void generateCompileUnit(CodeCompileUnit e) throws Exception
 	{
-		this.GenerateCompileUnitStart(e);
-		this.GenerateNamespaces(e);
-		this.GenerateCompileUnitEnd(e);
+		this.generateCompileUnitStart(e);
+		this.generateNamespaces(e);
+		this.generateCompileUnitEnd(e);
 	}
 
-	protected void GenerateNamespace(CodeNamespace e) throws Exception
+	protected void generateNamespace(CodeNamespace e) throws Exception
 	{
-		this.GenerateCommentStatements(e.getComments());
-		this.GenerateNamespaceStart(e);
-		this.GenerateNamespaceImports(e);
-		this.getOutput().WriteLine("");
-		this.GenerateTypes(e);
-		this.GenerateNamespaceEnd(e);
+		this.generateCommentStatements(e.getComments());
+		this.generateNamespaceStart(e);
+		this.generateNamespaceImports(e);
+		this.getOutput().writeLine("");
+		this.generateTypes(e);
+		this.generateNamespaceEnd(e);
 	}
 
-	protected final void GenerateNamespaceImports(CodeNamespace e)
+	protected final void generateNamespaceImports(CodeNamespace e)
 	{
-		Iterator<CodeNamespaceImport> enumerator = e.getImports().iterator();
+		Iterator enumerator = e.getImports().iterator();
 		while (enumerator.hasNext())
 		{
-			CodeNamespaceImport codeNamespaceImport = enumerator.next();
+			CodeNamespaceImport codeNamespaceImport = (CodeNamespaceImport)enumerator.next();
 			if (codeNamespaceImport.getLinePragma() != null)
 			{
-				this.GenerateLinePragmaStart(codeNamespaceImport.getLinePragma());
+				this.generateLinePragmaStart(codeNamespaceImport.getLinePragma());
 			}
-			this.GenerateNamespaceImport(codeNamespaceImport);
+			this.generateNamespaceImport(codeNamespaceImport);
 			if (codeNamespaceImport.getLinePragma() != null)
 			{
-				this.GenerateLinePragmaEnd(codeNamespaceImport.getLinePragma());
+				this.generateLinePragmaEnd(codeNamespaceImport.getLinePragma());
 			}
 		}
 	}
 
-	private void GenerateProperties(CodeTypeDeclaration e) throws Exception
+	private void generateProperties(CodeTypeDeclaration e) throws Exception
 	{
 		Iterator enumerator = e.getMembers().iterator();
 		while (enumerator.hasNext())
@@ -900,95 +897,95 @@ public abstract class CodeGenerator implements ICodeGenerator
 				this.currentMember = (CodeTypeMember)current;
 				if (this.options.getBlankLinesBetweenMembers())
 				{
-					this.getOutput().WriteLine();
+					this.getOutput().writeLine();
 				}
 				if (this.currentMember.getStartDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getStartDirectives());
+					this.generateDirectives(this.currentMember.getStartDirectives());
 				}
-				this.GenerateCommentStatements(this.currentMember.getComments());
+				this.generateCommentStatements(this.currentMember.getComments());
 				CodeMemberProperty codeMemberProperty = (CodeMemberProperty)current;
 				if (codeMemberProperty.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaStart(codeMemberProperty.getLinePragma());
+					this.generateLinePragmaStart(codeMemberProperty.getLinePragma());
 				}
-				this.GenerateProperty(codeMemberProperty, e);
+				this.generateProperty(codeMemberProperty, e);
 				if (codeMemberProperty.getLinePragma() != null)
 				{
-					this.GenerateLinePragmaEnd(codeMemberProperty.getLinePragma());
+					this.generateLinePragmaEnd(codeMemberProperty.getLinePragma());
 				}
 				if (this.currentMember.getEndDirectives().size() > 0)
 				{
-					this.GenerateDirectives(this.currentMember.getEndDirectives());
+					this.generateDirectives(this.currentMember.getEndDirectives());
 				}
 			}
 		}
 	}
 	
-	protected final void GenerateStatement(CodeStatement e) throws Exception
+	protected final void generateStatement(CodeStatement e) throws Exception
 	{
 		if (e.getStartDirectives().size() > 0)
 		{
-			this.GenerateDirectives(e.getStartDirectives());
+			this.generateDirectives(e.getStartDirectives());
 		}
 		if (e.getLinePragma() != null)
 		{
-			this.GenerateLinePragmaStart(e.getLinePragma());
+			this.generateLinePragmaStart(e.getLinePragma());
 		}
 		if (e instanceof CodeCommentStatement)
 		{
-			this.GenerateCommentStatement((CodeCommentStatement)e);
+			this.generateCommentStatement((CodeCommentStatement)e);
 		}
 		else if (e instanceof CodeMethodReturnStatement)
 		{
-			this.GenerateMethodReturnStatement((CodeMethodReturnStatement)e);
+			this.generateMethodReturnStatement((CodeMethodReturnStatement)e);
 		}
 		else if (e instanceof CodeConditionStatement)
 		{
-			this.GenerateConditionStatement((CodeConditionStatement)e);
+			this.generateConditionStatement((CodeConditionStatement)e);
 		}
 		else if (e instanceof CodeTryCatchFinallyStatement)
 		{
-			this.GenerateTryCatchFinallyStatement((CodeTryCatchFinallyStatement)e);
+			this.generateTryCatchFinallyStatement((CodeTryCatchFinallyStatement)e);
 		}
 		else if (e instanceof CodeAssignStatement)
 		{
-			this.GenerateAssignStatement((CodeAssignStatement)e);
+			this.generateAssignStatement((CodeAssignStatement)e);
 		}
 		else if (e instanceof CodeExpressionStatement)
 		{
-			this.GenerateExpressionStatement((CodeExpressionStatement)e);
+			this.generateExpressionStatement((CodeExpressionStatement)e);
 		}
 		else if (e instanceof CodeIterationStatement)
 		{
-			this.GenerateIterationStatement((CodeIterationStatement)e);
+			this.generateIterationStatement((CodeIterationStatement)e);
 		}
 		else if (e instanceof CodeThrowExceptionStatement)
 		{
-			this.GenerateThrowExceptionStatement((CodeThrowExceptionStatement)e);
+			this.generateThrowExceptionStatement((CodeThrowExceptionStatement)e);
 		}
 		else if (e instanceof CodeSnippetStatement)
 		{
 			int indent = this.getIndent();
 			this.setIndent(0);// = 0;
-			this.GenerateSnippetStatement((CodeSnippetStatement)e);
+			this.generateSnippetStatement((CodeSnippetStatement)e);
 			this.setIndent(indent);// = indent;
 		}
 		else if (e instanceof CodeVariableDeclarationStatement)
 		{
-			this.GenerateVariableDeclarationStatement((CodeVariableDeclarationStatement)e);
+			this.generateVariableDeclarationStatement((CodeVariableDeclarationStatement)e);
 		}
 		else if (e instanceof CodeAttachEventStatement)
 		{
-			this.GenerateAttachEventStatement((CodeAttachEventStatement)e);
+			this.generateAttachEventStatement((CodeAttachEventStatement)e);
 		}
 		else if (e instanceof CodeRemoveEventStatement)
 		{
-			this.GenerateRemoveEventStatement((CodeRemoveEventStatement)e);
+			this.generateRemoveEventStatement((CodeRemoveEventStatement)e);
 		}
 		else if (e instanceof CodeGotoStatement)
 		{
-			this.GenerateGotoStatement((CodeGotoStatement)e);
+			this.generateGotoStatement((CodeGotoStatement)e);
 		}
 		else
 		{
@@ -996,36 +993,36 @@ public abstract class CodeGenerator implements ICodeGenerator
 			{
 				//throw new IllegalArgumentException(SR.GetString("InvalidElementType", new Object[] {e.getClass().getName()}), "e");
 			}
-			this.GenerateLabeledStatement((CodeLabeledStatement)e);
+			this.generateLabeledStatement((CodeLabeledStatement)e);
 		}
 		if (e.getLinePragma() != null)
 		{
-			this.GenerateLinePragmaEnd(e.getLinePragma());
+			this.generateLinePragmaEnd(e.getLinePragma());
 		}
 		if (e.getEndDirectives().size() > 0)
 		{
-			this.GenerateDirectives(e.getEndDirectives());
+			this.generateDirectives(e.getEndDirectives());
 		}
 	}
 
-	protected final void GenerateStatements(CodeStatementCollection stms) throws Exception
+	protected final void generateStatements(CodeStatementCollection stms) throws Exception
 	{
-		Iterator<CodeStatement> enumerator = stms.iterator();
+		Iterator enumerator = stms.iterator();
 		while (enumerator.hasNext())
 		{
-			((ICodeGenerator)this).generateCodeFromStatement(enumerator.next(), this.output.getInnerWriter(), this.options);
+			this.generateCodeFromStatement((CodeStatement)enumerator.next(), this.output.getInnerWriter(), this.options);
 		}
 	}
 
-	protected void OutputAttributeDeclarations(CodeAttributeDeclarationCollection attributes) throws Exception
+	protected void outputAttributeDeclarations(CodeAttributeDeclarationCollection attributes) throws Exception
 	{
 		if (attributes.size() == 0)
 		{
 			return;
 		}
-		this.GenerateAttributeDeclarationsStart(attributes);
+		this.generateAttributeDeclarationsStart(attributes);
 		boolean flag = true;
-		Iterator<CodeAttributeDeclaration> enumerator = attributes.iterator();
+		Iterator enumerator = attributes.iterator();
 		while (enumerator.hasNext())
 		{
 			if (flag)
@@ -1034,11 +1031,11 @@ public abstract class CodeGenerator implements ICodeGenerator
 			}
 			else
 			{
-				this.ContinueOnNewLine(", ");
+				this.continueOnNewLine(", ");
 			}
-			CodeAttributeDeclaration codeAttributeDeclaration = enumerator.next();
-			this.output.Write(codeAttributeDeclaration.getName());
-			this.output.Write("(");
+			CodeAttributeDeclaration codeAttributeDeclaration = (CodeAttributeDeclaration)enumerator.next();
+			this.output.write(codeAttributeDeclaration.getName());
+			this.output.write("(");
 			boolean flag2 = true;
 			for (Object arg : codeAttributeDeclaration.getArguments())
 			{
@@ -1048,48 +1045,48 @@ public abstract class CodeGenerator implements ICodeGenerator
 				}
 				else
 				{
-					this.output.Write(", ");
+					this.output.write(", ");
 				}
-				this.OutputAttributeArgument((CodeAttributeArgument)arg);
+				this.outputAttributeArgument((CodeAttributeArgument)arg);
 			}
-			this.output.Write(")");
+			this.output.write(")");
 		}
-		this.GenerateAttributeDeclarationsEnd(attributes);
+		this.generateAttributeDeclarationsEnd(attributes);
 	}
 
-	protected void OutputAttributeArgument(CodeAttributeArgument arg) throws Exception
+	protected void outputAttributeArgument(CodeAttributeArgument arg) throws Exception
 	{
 		if (arg.getName() != null && arg.getName().length() > 0)
 		{
-			OutputIdentifier(arg.getName());
-			this.output.Write("=");
+			outputIdentifier(arg.getName());
+			this.output.write("=");
 		}
-		((ICodeGenerator)this).generateCodeFromExpression(arg.getValue(), this.output.getInnerWriter(), this.options);
+		this.generateCodeFromExpression(arg.getValue(), this.output.getInnerWriter(), this.options);
 	}
 
-	protected void OutputDirection(FieldDirection dir) throws Exception
+	protected void outputDirection(FieldDirection dir) throws Exception
 	{
 		switch (dir)
 		{
 			case In:
 				break;
 			case Out:
-				this.output.Write("out ");
+				this.output.write("out ");
 				return;
 			case Ref:
-				this.output.Write("ref ");
+				this.output.write("ref ");
 				break;
 			default:
 				return;
 		}
 	}
 
-	protected void OutputFieldScopeModifier(MemberAttributes attributes) throws Exception
+	protected void outputFieldScopeModifier(MemberAttributes attributes) throws Exception
 	{
 		MemberAttributes memberAttributes = MemberAttributes.forValue(attributes.getValue() & MemberAttributes.VTableMask);
 		if (memberAttributes.getValue() == MemberAttributes.New)
 		{
-			this.output.Write("new ");
+			this.output.write("new ");
 		}
 		switch ((attributes.getValue() & MemberAttributes.ScopeMask))
 		{
@@ -1097,112 +1094,112 @@ public abstract class CodeGenerator implements ICodeGenerator
 			case MemberAttributes.Override:
 				break;
 			case MemberAttributes.Static:
-				this.output.Write("static ");
+				this.output.write("static ");
 				return;
 			case MemberAttributes.Const:
-				this.output.Write("const ");
+				this.output.write("const ");
 				break;
 			default:
 				return;
 		}
 	}
 
-	protected void OutputMemberAccessModifier(MemberAttributes attributes) throws Exception
+	protected void outputMemberAccessModifier(MemberAttributes attributes) throws Exception
 	{
 		MemberAttributes memberAttributes = MemberAttributes.forValue(attributes.getValue() & MemberAttributes.AccessMask);
 		if (memberAttributes.getValue() <= MemberAttributes.Family)
 		{
 			if (memberAttributes.getValue() == MemberAttributes.Assembly)
 			{
-				this.output.Write("internal ");
+				this.output.write("internal ");
 				return;
 			}
 			if (memberAttributes.getValue() == MemberAttributes.FamilyAndAssembly)
 			{
-				this.output.Write("internal ");
+				this.output.write("internal ");
 				return;
 			}
 			if (memberAttributes.getValue() != MemberAttributes.Family)
 			{
 				return;
 			}
-			this.output.Write("protected ");
+			this.output.write("protected ");
 			return;
 		}
 		else
 		{
 			if (memberAttributes.getValue() == MemberAttributes.FamilyOrAssembly)
 			{
-				this.output.Write("protected internal ");
+				this.output.write("protected internal ");
 				return;
 			}
 			if (memberAttributes.getValue() == MemberAttributes.Private)
 			{
-				this.output.Write("private ");
+				this.output.write("private ");
 				return;
 			}
 			if (memberAttributes.getValue() != MemberAttributes.Public)
 			{
 				return;
 			}
-			this.output.Write("public ");
+			this.output.write("public ");
 			return;
 		}
 	}
 
-	protected void OutputMemberScopeModifier(MemberAttributes attributes) throws Exception
+	protected void outputMemberScopeModifier(MemberAttributes attributes) throws Exception
 	{
 		MemberAttributes memberAttributes = MemberAttributes.forValue(attributes.getValue() & MemberAttributes.VTableMask);
 		if (memberAttributes.getValue() == MemberAttributes.New)
 		{
-			this.output.Write("new ");
+			this.output.write("new ");
 		}
 		switch (attributes.getValue() & MemberAttributes.ScopeMask)
 		{
 			case MemberAttributes.Abstract:
-				this.output.Write("abstract ");
+				this.output.write("abstract ");
 				return;
 			case MemberAttributes.Final:
-				this.output.Write("");
+				this.output.write("");
 				return;
 			case MemberAttributes.Static:
-				this.output.Write("static ");
+				this.output.write("static ");
 				return;
 			case MemberAttributes.Override:
-				this.output.Write("override ");
+				this.output.write("override ");
 				return;
 			default:
 				memberAttributes = MemberAttributes.forValue(attributes.getValue() & MemberAttributes.AccessMask);
 				if (memberAttributes.getValue() == MemberAttributes.Family || memberAttributes.getValue() == MemberAttributes.Public)
 				{
-					this.output.Write("virtual ");
+					this.output.write("virtual ");
 				}
 				return;
 		}
 	}
 
-	protected abstract void OutputType(CodeTypeReference typeRef);
+	protected abstract void outputType(CodeTypeReference typeRef);
 
-	protected void OutputTypeAttributes(TypeAttributes attributes, boolean isStruct, boolean isEnum) throws Exception
+	protected void outputTypeAttributes(TypeAttributes attributes, boolean isStruct, boolean isEnum) throws Exception
 	{
 		switch ((attributes.getValue() & TypeAttributes.VisibilityMask))
 		{
 			case TypeAttributes.Public:
 			case TypeAttributes.NestedPublic:
-				this.output.Write("public ");
+				this.output.write("public ");
 				break;
 			case TypeAttributes.NestedPrivate:
-				this.output.Write("private ");
+				this.output.write("private ");
 				break;
 		}
 		if (isStruct)
 		{
-			this.output.Write("struct ");
+			this.output.write("struct ");
 			return;
 		}
 		if (isEnum)
 		{
-			this.output.Write("enum ");
+			this.output.write("enum ");
 			return;
 		}
 		TypeAttributes typeAttributes = TypeAttributes.forValue(attributes.getValue() & TypeAttributes.ClassSemanticsMask);
@@ -1210,43 +1207,43 @@ public abstract class CodeGenerator implements ICodeGenerator
 		{
 			if ((attributes.getValue() & TypeAttributes.Sealed) == TypeAttributes.Sealed)
 			{
-				this.output.Write("sealed ");
+				this.output.write("sealed ");
 			}
 			if ((attributes.getValue() & TypeAttributes.Abstract) == TypeAttributes.Abstract)
 			{
-				this.output.Write("abstract ");
+				this.output.write("abstract ");
 			}
-			this.output.Write("class ");
+			this.output.write("class ");
 			return;
 		}
 		if (typeAttributes.getValue() != TypeAttributes.ClassSemanticsMask)
 		{
 			return;
 		}
-		this.output.Write("interface ");
+		this.output.write("interface ");
 	}
 
-	protected void OutputTypeNamePair(CodeTypeReference typeRef, String name) throws Exception
+	protected void outputTypeNamePair(CodeTypeReference typeRef, String name) throws Exception
 	{
-		this.OutputType(typeRef);
-		this.output.Write(" ");
-		this.OutputIdentifier(name);
+		this.outputType(typeRef);
+		this.output.write(" ");
+		this.outputIdentifier(name);
 	}
 
-	protected void OutputIdentifier(String ident) throws Exception
+	protected void outputIdentifier(String ident) throws Exception
 	{
-		this.output.Write(ident);
+		this.output.write(ident);
 	}
 
-	protected void OutputExpressionList(CodeExpressionCollection expressions) throws Exception
+	protected void outputExpressionList(CodeExpressionCollection expressions) throws Exception
 	{
-		this.OutputExpressionList(expressions, false);
+		this.outputExpressionList(expressions, false);
 	}
 
-	protected void OutputExpressionList(CodeExpressionCollection expressions, boolean newlineBetweenItems) throws Exception
+	protected void outputExpressionList(CodeExpressionCollection expressions, boolean newlineBetweenItems) throws Exception
 	{
 		boolean flag = true;
-		Iterator<CodeExpression> enumerator = expressions.iterator();
+		Iterator enumerator = expressions.iterator();
 		int indent = this.getIndent();
 		this.setIndent(indent + 1) ;
 		while (enumerator.hasNext())
@@ -1257,79 +1254,79 @@ public abstract class CodeGenerator implements ICodeGenerator
 			}
 			else if (newlineBetweenItems)
 			{
-				this.ContinueOnNewLine(",");
+				this.continueOnNewLine(",");
 			}
 			else
 			{
-				this.output.Write(", ");
+				this.output.write(", ");
 			}
-			((ICodeGenerator)this).generateCodeFromExpression(enumerator.next(), this.output.getInnerWriter(), this.options);
+			this.generateCodeFromExpression((CodeExpression)enumerator.next(), this.output.getInnerWriter(), this.options);
 		}
 		indent = this.getIndent();
 		this.setIndent(indent - 1)  ;
 	}
 
-	protected void OutputOperator(CodeBinaryOperatorType op) throws Exception
+	protected void outputOperator(CodeBinaryOperatorType op) throws Exception
 	{
 		switch (op)
 		{
 			case Add:
-				this.output.Write("+");
+				this.output.write("+");
 				return;
 			case Subtract:
-				this.output.Write("-");
+				this.output.write("-");
 				return;
 			case Multiply:
-				this.output.Write("*");
+				this.output.write("*");
 				return;
 			case Divide:
-				this.output.Write("/");
+				this.output.write("/");
 				return;
 			case Modulus:
-				this.output.Write("%");
+				this.output.write("%");
 				return;
 			case Assign:
-				this.output.Write("=");
+				this.output.write("=");
 				return;
 			case IdentityInequality:
-				this.output.Write("!=");
+				this.output.write("!=");
 				return;
 			case IdentityEquality:
-				this.output.Write("==");
+				this.output.write("==");
 				return;
 			case ValueEquality:
-				this.output.Write("==");
+				this.output.write("==");
 				return;
 			case BitwiseOr:
-				this.output.Write("|");
+				this.output.write("|");
 				return;
 			case BitwiseAnd:
-				this.output.Write("&");
+				this.output.write("&");
 				return;
 			case BooleanOr:
-				this.output.Write("||");
+				this.output.write("||");
 				return;
 			case BooleanAnd:
-				this.output.Write("&&");
+				this.output.write("&&");
 				return;
 			case LessThan:
-				this.output.Write("<");
+				this.output.write("<");
 				return;
 			case LessThanOrEqual:
-				this.output.Write("<=");
+				this.output.write("<=");
 				return;
 			case GreaterThan:
-				this.output.Write(">");
+				this.output.write(">");
 				return;
 			case GreaterThanOrEqual:
-				this.output.Write(">=");
+				this.output.write(">=");
 				return;
 			default:
 				return;
 		}
 	}
 
-	protected void OutputParameters(CodeParameterDeclarationExpressionCollection parameters) throws Exception
+	protected void outputParameters(CodeParameterDeclarationExpressionCollection parameters) throws Exception
 	{
 		boolean flag = true;
 		boolean flag2 = parameters.size() > 15;
@@ -1347,13 +1344,13 @@ public abstract class CodeGenerator implements ICodeGenerator
 			}
 			else
 			{
-				this.output.Write(", ");
+				this.output.write(", ");
 			}
 			if (flag2)
 			{
-				this.ContinueOnNewLine("");
+				this.continueOnNewLine("");
 			}
-			this.GenerateExpression(e);
+			this.generateExpression(e);
 		}
 		if (flag2)
 		{
@@ -1361,16 +1358,16 @@ public abstract class CodeGenerator implements ICodeGenerator
 		}
 	}
 
-	protected abstract void GenerateArrayCreateExpression(CodeArrayCreateExpression e);
+	protected abstract void generateArrayCreateExpression(CodeArrayCreateExpression e);
 
-	protected abstract void GenerateBaseReferenceExpression(CodeBaseReferenceExpression e);
+	protected abstract void generateBaseReferenceExpression(CodeBaseReferenceExpression e);
 
-	protected void GenerateBinaryOperatorExpression(CodeBinaryOperatorExpression e) throws Exception
+	protected void generateBinaryOperatorExpression(CodeBinaryOperatorExpression e) throws Exception
 	{
 		boolean flag = false;
-		this.output.Write("(");
-		this.GenerateExpression(e.getLeft());
-		this.output.Write(" ");
+		this.output.write("(");
+		this.generateExpression(e.getLeft());
+		this.output.write(" ");
 		if (e.getLeft() instanceof CodeBinaryOperatorExpression || e.getRight() instanceof CodeBinaryOperatorExpression)
 		{
 			if (!this.inNestedBinary)
@@ -1379,12 +1376,12 @@ public abstract class CodeGenerator implements ICodeGenerator
 				this.inNestedBinary = true;
 				this.setIndent(this.getIndent()+3);
 			}
-			this.ContinueOnNewLine("");
+			this.continueOnNewLine("");
 		}
-		this.OutputOperator(e.getOperator());
-		this.output.Write(" ");
-		this.GenerateExpression(e.getRight());
-		this.output.Write(")");
+		this.outputOperator(e.getOperator());
+		this.output.write(" ");
+		this.generateExpression(e.getRight());
+		this.output.write(")");
 		if (flag)
 		{
 			this.setIndent(this.getIndent()-3);
@@ -1392,108 +1389,107 @@ public abstract class CodeGenerator implements ICodeGenerator
 		}
 	}
 
-	protected void ContinueOnNewLine(String st) throws Exception
+	protected void continueOnNewLine(String st) throws Exception
 	{
-		this.output.WriteLine(st);
+		this.output.writeLine(st);
 	}
 
-	protected abstract void GenerateCastExpression(CodeCastExpression e);
+	protected abstract void generateCastExpression(CodeCastExpression e);
 
-	protected abstract void GenerateDelegateCreateExpression(CodeDelegateCreateExpression e);
+	protected abstract void generateDelegateCreateExpression(CodeDelegateCreateExpression e);
 
-	protected abstract void GenerateFieldReferenceExpression(CodeFieldReferenceExpression e);
+	protected abstract void generateFieldReferenceExpression(CodeFieldReferenceExpression e);
 
-	protected abstract void GenerateArgumentReferenceExpression(CodeArgumentReferenceExpression e);
+	protected abstract void generateArgumentReferenceExpression(CodeArgumentReferenceExpression e);
 
-	protected abstract void GenerateVariableReferenceExpression(CodeVariableReferenceExpression e);
+	protected abstract void generateVariableReferenceExpression(CodeVariableReferenceExpression e);
 
-	protected abstract void GenerateIndexerExpression(CodeIndexerExpression e);
+	protected abstract void generateIndexerExpression(CodeIndexerExpression e);
 
-	protected abstract void GenerateArrayIndexerExpression(CodeArrayIndexerExpression e);
+	protected abstract void generateArrayIndexerExpression(CodeArrayIndexerExpression e);
 
-	protected abstract void GenerateSnippetExpression(CodeSnippetExpression e);
+	protected abstract void generateSnippetExpression(CodeSnippetExpression e);
 
-	protected abstract void GenerateMethodInvokeExpression(CodeMethodInvokeExpression e);
+	protected abstract void generateMethodInvokeExpression(CodeMethodInvokeExpression e);
 
-	protected abstract void GenerateMethodReferenceExpression(CodeMethodReferenceExpression e);
+	protected abstract void generateMethodReferenceExpression(CodeMethodReferenceExpression e);
 
-	protected abstract void GenerateEventReferenceExpression(CodeEventReferenceExpression e);
+	protected abstract void generateEventReferenceExpression(CodeEventReferenceExpression e);
 
-	protected abstract void GenerateDelegateInvokeExpression(CodeDelegateInvokeExpression e);
+	protected abstract void generateDelegateInvokeExpression(CodeDelegateInvokeExpression e);
 
-	protected abstract void GenerateObjectCreateExpression(CodeObjectCreateExpression e);
+	protected abstract void generateObjectCreateExpression(CodeObjectCreateExpression e);
 
-	protected void GenerateParameterDeclarationExpression(CodeParameterDeclarationExpression e) throws Exception
+	protected void generateParameterDeclarationExpression(CodeParameterDeclarationExpression e) throws Exception
 	{
 		if (e.getCustomAttributes().size() > 0)
 		{
-			this.OutputAttributeDeclarations(e.getCustomAttributes());
-			this.output.Write(" ");
+			this.outputAttributeDeclarations(e.getCustomAttributes());
+			this.output.write(" ");
 		}
-		this.OutputDirection(e.getDirection());
-		this.OutputTypeNamePair(e.getType(), e.getName());
+		this.outputDirection(e.getDirection());
+		this.outputTypeNamePair(e.getType(), e.getName());
 	}
 
-	protected void GenerateDirectionExpression(CodeDirectionExpression e) throws Exception
+	protected void generateDirectionExpression(CodeDirectionExpression e) throws Exception
 	{
-		this.OutputDirection(e.getDirection());
-		this.GenerateExpression(e.getExpression());
+		this.outputDirection(e.getDirection());
+		this.generateExpression(e.getExpression());
 	}
 
-	protected void GeneratePrimitiveExpression(CodePrimitiveExpression e) throws Exception
+	protected void generatePrimitiveExpression(CodePrimitiveExpression e) throws Exception
 	{
 		if (e.getValue() == null)
 		{
-			this.output.Write(this.getNullToken());
+			this.output.write(this.getNullToken());
 			return;
 		}
 		if (e.getValue() instanceof String)
 		{
-			this.output.Write(this.QuoteSnippetString((String)e.getValue()));
+			this.output.write(this.QuoteSnippetString((String)e.getValue()));
 			return;
 		}
 		if (e.getValue() instanceof Character)
 		{
-			this.output.Write("'" + e.getValue().toString() + "'");
+			this.output.write("'" + e.getValue().toString() + "'");
 			return;
 		}
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
-//ORIGINAL LINE: if (e.getValue() is byte)
+
+
 		if (e.getValue() instanceof Byte)
 		{
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
-//ORIGINAL LINE: this.output.Write(((byte)e.getValue()).ToString(CultureInfo.InvariantCulture));
-			this.output.Write((new Byte((byte)e.getValue())).toString());
+
+			this.output.write((new Byte((byte)e.getValue())).toString());
 			return;
 		}
 		if (e.getValue() instanceof Short)
 		{
-			this.output.Write((new Short((short)e.getValue())).toString());
+			this.output.write((new Short((short)e.getValue())).toString());
 			return;
 		}
 		if (e.getValue() instanceof Integer)
 		{
-			this.output.Write((new Integer((int)e.getValue())).toString());
+			this.output.write((new Integer((int)e.getValue())).toString());
 			return;
 		}
 		if (e.getValue() instanceof Long)
 		{
-			this.output.Write(String.valueOf((new Long((long)e.getValue()))));
+			this.output.write(String.valueOf((new Long((long)e.getValue()))));
 			return;
 		}
 		if (e.getValue() instanceof Float)
 		{
-			this.GenerateSingleFloatValue((float)e.getValue());
+			this.generateSingleFloatValue((float)e.getValue());
 			return;
 		}
 		if (e.getValue() instanceof Double)
 		{
-			this.GenerateDoubleValue((double)e.getValue());
+			this.generateDoubleValue((double)e.getValue());
 			return;
 		}
 		if (e.getValue() instanceof java.math.BigDecimal)
 		{
-			this.GenerateDecimalValue((java.math.BigDecimal)e.getValue());
+			this.generateDecimalValue((java.math.BigDecimal)e.getValue());
 			return;
 		}
 		if (!(e.getValue() instanceof Boolean))
@@ -1502,149 +1498,149 @@ public abstract class CodeGenerator implements ICodeGenerator
 		}
 		if ((boolean)e.getValue())
 		{
-			this.output.Write("true");
+			this.output.write("true");
 			return;
 		}
-		this.output.Write("false");
+		this.output.write("false");
 	}
 
-	protected void GenerateSingleFloatValue(float s) throws Exception
+	protected void generateSingleFloatValue(float s) throws Exception
 	{
-		//this.output.Write((new Float(s)).toString("R"));
-		this.output.Write((new Float(s)).toString());
+		//this.output.write((new Float(s)).toString("R"));
+		this.output.write((new Float(s)).toString());
 	}
 
-	protected void GenerateDoubleValue(double d) throws Exception
+	protected void generateDoubleValue(double d) throws Exception
 	{
-		//this.output.Write((new Double(d)).toString("R"));
-		this.output.Write((new Float(d)).toString());
+		//this.output.write((new Double(d)).toString("R"));
+		this.output.write((new Float(d)).toString());
 	}
 
-	protected void GenerateDecimalValue(java.math.BigDecimal d) throws Exception
+	protected void generateDecimalValue(java.math.BigDecimal d) throws Exception
 	{
-		this.output.Write(d.toString());
+		this.output.write(d.toString());
 	}
 
-	protected void GenerateDefaultValueExpression(CodeDefaultValueExpression e)
+	protected void generateDefaultValueExpression(CodeDefaultValueExpression e)
 	{
 	}
 
-	protected abstract void GeneratePropertyReferenceExpression(CodePropertyReferenceExpression e);
+	protected abstract void generatePropertyReferenceExpression(CodePropertyReferenceExpression e);
 
-	protected abstract void GeneratePropertySetValueReferenceExpression(CodePropertySetValueReferenceExpression e);
+	protected abstract void generatePropertySetValueReferenceExpression(CodePropertySetValueReferenceExpression e);
 
-	protected abstract void GenerateThisReferenceExpression(CodeThisReferenceExpression e);
+	protected abstract void generateThisReferenceExpression(CodeThisReferenceExpression e);
 
-	protected void GenerateTypeReferenceExpression(CodeTypeReferenceExpression e)
+	protected void generateTypeReferenceExpression(CodeTypeReferenceExpression e)
 	{
 		
-		this.OutputType(e.getType());
+		this.outputType(e.getType());
 	}
 
-	protected void GenerateTypeOfExpression(CodeTypeOfExpression e) throws Exception
+	protected void generateTypeOfExpression(CodeTypeOfExpression e) throws Exception
 	{
-		this.output.Write("typeof(");
-		this.OutputType(e.getType());
-		this.output.Write(")");
+		this.output.write("typeof(");
+		this.outputType(e.getType());
+		this.output.write(")");
 	}
 
-	protected abstract void GenerateExpressionStatement(CodeExpressionStatement e);
+	protected abstract void generateExpressionStatement(CodeExpressionStatement e);
 
-	protected abstract void GenerateIterationStatement(CodeIterationStatement e);
+	protected abstract void generateIterationStatement(CodeIterationStatement e);
 
-	protected abstract void GenerateThrowExceptionStatement(CodeThrowExceptionStatement e);
+	protected abstract void generateThrowExceptionStatement(CodeThrowExceptionStatement e);
 
-	protected void GenerateCommentStatement(CodeCommentStatement e)
+	protected void generateCommentStatement(CodeCommentStatement e)
 	{
 		if (e.getComment() == null)
 		{
 			//throw new IllegalArgumentException(SR.GetString("Argument_NullComment", new Object[] {"e"}), "e");
 		}
-		this.GenerateComment(e.getComment());
+		this.generateComment(e.getComment());
 	}
 
-	protected void GenerateCommentStatements(CodeCommentStatementCollection e)
+	protected void generateCommentStatements(CodeCommentStatementCollection e)
 	{
 		for (Object e2 : e)
 		{
-			this.GenerateCommentStatement((CodeCommentStatement)e2);
+			this.generateCommentStatement((CodeCommentStatement)e2);
 		}
 	}
 
-	protected abstract void GenerateComment(CodeComment e);
+	protected abstract void generateComment(CodeComment e);
 
-	protected abstract void GenerateMethodReturnStatement(CodeMethodReturnStatement e);
+	protected abstract void generateMethodReturnStatement(CodeMethodReturnStatement e);
 
-	protected abstract void GenerateConditionStatement(CodeConditionStatement e);
+	protected abstract void generateConditionStatement(CodeConditionStatement e);
 
-	protected abstract void GenerateTryCatchFinallyStatement(CodeTryCatchFinallyStatement e);
+	protected abstract void generateTryCatchFinallyStatement(CodeTryCatchFinallyStatement e);
 
-	protected abstract void GenerateAssignStatement(CodeAssignStatement e);
+	protected abstract void generateAssignStatement(CodeAssignStatement e);
 
-	protected abstract void GenerateAttachEventStatement(CodeAttachEventStatement e);
+	protected abstract void generateAttachEventStatement(CodeAttachEventStatement e);
 
-	protected abstract void GenerateRemoveEventStatement(CodeRemoveEventStatement e);
+	protected abstract void generateRemoveEventStatement(CodeRemoveEventStatement e);
 
-	protected abstract void GenerateGotoStatement(CodeGotoStatement e);
+	protected abstract void generateGotoStatement(CodeGotoStatement e);
 
-	protected abstract void GenerateLabeledStatement(CodeLabeledStatement e);
+	protected abstract void generateLabeledStatement(CodeLabeledStatement e);
 
-	protected void GenerateSnippetStatement(CodeSnippetStatement e) throws Exception
+	protected void generateSnippetStatement(CodeSnippetStatement e) throws Exception
 	{
-		this.output.WriteLine(e.getValue());
+		this.output.writeLine(e.getValue());
 	}
 
-	protected abstract void GenerateVariableDeclarationStatement(CodeVariableDeclarationStatement e);
+	protected abstract void generateVariableDeclarationStatement(CodeVariableDeclarationStatement e);
 
-	protected abstract void GenerateLinePragmaStart(CodeLinePragma e);
+	protected abstract void generateLinePragmaStart(CodeLinePragma e);
 
-	protected abstract void GenerateLinePragmaEnd(CodeLinePragma e);
+	protected abstract void generateLinePragmaEnd(CodeLinePragma e);
 
-	protected abstract void GenerateEvent(CodeMemberEvent e, CodeTypeDeclaration c);
+	protected abstract void generateEvent(CodeMemberEvent e, CodeTypeDeclaration c);
 
-	protected abstract void GenerateField(CodeMemberField e);
+	protected abstract void generateField(CodeMemberField e);
 
-	protected abstract void GenerateSnippetMember(CodeSnippetTypeMember e);
+	protected abstract void generateSnippetMember(CodeSnippetTypeMember e);
 
-	protected abstract void GenerateEntryPointMethod(CodeEntryPointMethod e, CodeTypeDeclaration c);
+	protected abstract void generateEntryPointMethod(CodeEntryPointMethod e, CodeTypeDeclaration c);
 
-	protected abstract void GenerateMethod(CodeMemberMethod e, CodeTypeDeclaration c);
+	protected abstract void generateMethod(CodeMemberMethod e, CodeTypeDeclaration c);
 
-	protected abstract void GenerateProperty(CodeMemberProperty e, CodeTypeDeclaration c);
+	protected abstract void generateProperty(CodeMemberProperty e, CodeTypeDeclaration c);
 
-	protected abstract void GenerateConstructor(CodeConstructor e, CodeTypeDeclaration c);
+	protected abstract void generateConstructor(CodeConstructor e, CodeTypeDeclaration c);
 
-	protected abstract void GenerateTypeConstructor(CodeTypeConstructor e);
+	protected abstract void generateTypeConstructor(CodeTypeConstructor e);
 
-	protected abstract void GenerateTypeStart(CodeTypeDeclaration e);
+	protected abstract void generateTypeStart(CodeTypeDeclaration e);
 
-	protected abstract void GenerateTypeEnd(CodeTypeDeclaration e);
+	protected abstract void generateTypeEnd(CodeTypeDeclaration e);
 
-	protected void GenerateCompileUnitStart(CodeCompileUnit e)
+	protected void generateCompileUnitStart(CodeCompileUnit e)
 	{
 		if (e.getStartDirectives().size() > 0)
 		{
-			this.GenerateDirectives(e.getStartDirectives());
+			this.generateDirectives(e.getStartDirectives());
 		}
 	}
 
-	protected void GenerateCompileUnitEnd(CodeCompileUnit e)
+	protected void generateCompileUnitEnd(CodeCompileUnit e)
 	{
 		if (e.getEndDirectives().size() > 0)
 		{
-			this.GenerateDirectives(e.getEndDirectives());
+			this.generateDirectives(e.getEndDirectives());
 		}
 	}
 
-	protected abstract void GenerateNamespaceStart(CodeNamespace e);
+	protected abstract void generateNamespaceStart(CodeNamespace e);
 
-	protected abstract void GenerateNamespaceEnd(CodeNamespace e);
+	protected abstract void generateNamespaceEnd(CodeNamespace e);
 
-	protected abstract void GenerateNamespaceImport(CodeNamespaceImport e);
+	protected abstract void generateNamespaceImport(CodeNamespaceImport e);
 
-	protected abstract void GenerateAttributeDeclarationsStart(CodeAttributeDeclarationCollection attributes);
+	protected abstract void generateAttributeDeclarationsStart(CodeAttributeDeclarationCollection attributes);
 
-	protected abstract void GenerateAttributeDeclarationsEnd(CodeAttributeDeclarationCollection attributes);
+	protected abstract void generateAttributeDeclarationsEnd(CodeAttributeDeclarationCollection attributes);
 
 	public abstract boolean supports(GeneratorSupport support);
 
@@ -1666,17 +1662,17 @@ public abstract class CodeGenerator implements ICodeGenerator
 
 	protected abstract String QuoteSnippetString(String value);
 
-	public static boolean IsValidLanguageIndependentIdentifier(String value)
+	public static boolean isValidLanguageIndependentIdentifier(String value)
 	{
-		return CodeGenerator.IsValidTypeNameOrIdentifier(value, false);
+		return CodeGenerator.isValidTypeNameOrIdentifier(value, false);
 	}
 
-	public static boolean IsValidLanguageIndependentTypeName(String value)
+	public static boolean isValidLanguageIndependentTypeName(String value)
 	{
-		return CodeGenerator.IsValidTypeNameOrIdentifier(value, true);
+		return CodeGenerator.isValidTypeNameOrIdentifier(value, true);
 	}
 
-	private static boolean IsValidTypeNameOrIdentifier(String value, boolean isTypeName)
+	private static boolean isValidTypeNameOrIdentifier(String value, boolean isTypeName)
 	{
 		boolean flag = true;
 		if (value.length() == 0)
@@ -1718,18 +1714,18 @@ public abstract class CodeGenerator implements ICodeGenerator
 				case Character.FORMAT://Format:
 				case Character.SURROGATE://Surrogate:
 				case Character.PRIVATE_USE://PrivateUse:
- 
+
 					
-						tempVar = !isTypeName || !CodeGenerator.IsSpecialTypeChar(c, tempRef_flag);
+						tempVar = !isTypeName || !CodeGenerator.isSpecialTypeChar(c, tempRef_flag);
 						flag = tempRef_flag.getRefObj();
 					if (tempVar)
 					{
 						return false;
 					}
 				default:
- 
+
 					//RefObject<Boolean> tempRef_flag = new RefObject<Boolean>(flag);
-					 tempVar = !isTypeName || !CodeGenerator.IsSpecialTypeChar(c, tempRef_flag);
+					 tempVar = !isTypeName || !CodeGenerator.isSpecialTypeChar(c, tempRef_flag);
 						flag = tempRef_flag.getRefObj();
 					if (tempVar)
 					{
@@ -1744,7 +1740,7 @@ public abstract class CodeGenerator implements ICodeGenerator
 		return true;
 	}
 
-	private static boolean IsSpecialTypeChar(char ch, RefObject<Boolean> nextMustBeStartChar)
+	private static boolean isSpecialTypeChar(char ch, RefObject<Boolean> nextMustBeStartChar)
 	{
 		if (ch <= '>')
 		{
@@ -1781,19 +1777,15 @@ public abstract class CodeGenerator implements ICodeGenerator
 		}
 		else if (ch != '[' && ch != ']')
 		{
-			if (ch != '`')
-			{
-				return false;
-			}
-			return true;
+			return ch == '`';
 		}
 		nextMustBeStartChar.setRefObj(true); //= true;
 		return true;
 	}
 
-	public static void ValidateIdentifiers(CodeObject e)
+	public static void validateIdentifiers(CodeObject e)
 	{
-		(new CodeValidator()).ValidateIdentifiers(e);
+		(new CodeValidator()).validateIdentifiers(e);
 	}
 
 

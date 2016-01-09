@@ -2,14 +2,9 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
- 
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeNamespaceCollection : CollectionBase
-public class CodeNamespaceCollection extends CollectionBase<CodeNamespace> implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8024467959258041040L;
 
+//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeNamespaceCollection : CollectionBase
+public class CodeNamespaceCollection extends CollectionBase implements Serializable, Iterable {
 	public final CodeNamespace getItem(int index)
 	{
 		return (CodeNamespace)get(index);

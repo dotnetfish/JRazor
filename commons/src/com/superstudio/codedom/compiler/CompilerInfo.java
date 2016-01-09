@@ -3,6 +3,7 @@ package com.superstudio.codedom.compiler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+import com.superstudio.codedom.*;
 import com.superstudio.commons.SR;
 import com.superstudio.commons.exception.ConfigurationErrorsException;
 
@@ -95,7 +96,7 @@ public final class CompilerInfo
 			if (constructor != null)
 			{
 				try {
-					return (CodeDomProvider)constructor.newInstance(new Object[] {this._providerOptions});
+					return (CodeDomProvider)constructor.newInstance(this._providerOptions);
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException e) {
 					// TODO Auto-generated catch block
@@ -121,10 +122,10 @@ public final class CompilerInfo
 			throw new IllegalArgumentException("providerOptions");
 		}
 		java.lang.reflect.Constructor constructor = 
-				this.getCodeDomProviderType().getConstructor(new java.lang.Class[] {Map.class});
+				this.getCodeDomProviderType().getConstructor(Map.class);
 		if (constructor != null)
 		{
-			return (CodeDomProvider)constructor.newInstance(new Object[] {providerOptions});
+			return (CodeDomProvider)constructor.newInstance(providerOptions);
 		}
 		throw new IllegalStateException(SR.GetString("Provider_does_not_support_options", new Object[] {this.getCodeDomProviderType().toString()}));
 	}

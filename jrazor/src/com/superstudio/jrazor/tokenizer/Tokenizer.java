@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.tokenizer;
+package com.superstudio.jrazor.tokenizer;
 
 import java.util.function.Function;
 import java.util.function.Predicate;

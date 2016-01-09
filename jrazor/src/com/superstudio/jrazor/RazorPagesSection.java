@@ -2,7 +2,7 @@ package com.superstudio.jrazor;
 
 import java.util.List;
 
-import com.superstudio.commons.ConfigurationSection;
+import com.superstudio.configuration.ConfigurationSection;
 
 public class RazorPagesSection extends ConfigurationSection
 {

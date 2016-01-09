@@ -18,7 +18,7 @@ public enum FileShare {
 		return mappings;
 	}
 
-	private FileShare(int value) {
+	FileShare(int value) {
 		intValue = value;
 		getMappings().put(value, this);
 	}

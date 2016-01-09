@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.editor;
+package com.superstudio.jrazor.editor;
 
 import com.superstudio.jrazor.*;
 import com.superstudio.jrazor.parser.syntaxTree.*;

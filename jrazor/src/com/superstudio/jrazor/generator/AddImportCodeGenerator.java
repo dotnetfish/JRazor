@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.generator;
+package com.superstudio.jrazor.generator;
 
 import com.superstudio.codedom.CodeNamespaceImport;
 import com.superstudio.commons.CollectionHelper;
@@ -49,7 +49,7 @@ public class AddImportCodeGenerator extends SpanCodeGenerator {
 		}
 		final String tempNS = ns;
 		Object obj=CollectionHelper.firstOrDefault(context.getNamespace().getImports(),
-				i -> ((CodeNamespaceImport)i).getNamespace().equals(tempNS.trim()));
+				i -> i.getNamespace().equals(tempNS.trim()));
 		
 		CodeNamespaceImport importNamespace = null;
 

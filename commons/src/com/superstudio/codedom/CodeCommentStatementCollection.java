@@ -2,14 +2,8 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
- 
-public class CodeCommentStatementCollection extends CollectionBase<CodeCommentStatement> implements Serializable
+public class CodeCommentStatementCollection extends CollectionBase implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7233337266530400948L;
-
 	public final CodeCommentStatement getItem(int index)
 	{
 		return (CodeCommentStatement)get(index);

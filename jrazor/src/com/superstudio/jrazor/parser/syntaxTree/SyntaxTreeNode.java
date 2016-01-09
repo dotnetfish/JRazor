@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser.syntaxTree;
+package com.superstudio.jrazor.parser.syntaxTree;
 
 import com.superstudio.commons.IEquatable;
 import com.superstudio.commons.exception.OperationCanceledException;
@@ -45,7 +45,7 @@ public abstract class SyntaxTreeNode implements IEquatable<Object>
 	 * @throws OperationCanceledException 
 	 * @throws Exception 
 	*/
-	public abstract void accept(ParserVisitor visitor) throws OperationCanceledException, Exception;
+	public abstract void accept(ParserVisitor visitor) throws Exception;
 
 	/** 
 	 Determines if the specified node is equivalent to this node

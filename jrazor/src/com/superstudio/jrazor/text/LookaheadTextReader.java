@@ -1,6 +1,5 @@
-﻿package com.superstudio.jrazor.text;
+package com.superstudio.jrazor.text;
 
-import com.superstudio.commons.IDisposable;
 import com.superstudio.commons.TextReader;
 
 

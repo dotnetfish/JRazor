@@ -1,12 +1,11 @@
 package com.superstudio.commons;
 
 
-import java.io.IOException;
-import java.io.StringReader;
+import com.superstudio.commons.exception.ArgumentNullException;
+
+import java.io.*;
 import java.util.Arrays;
 import java.util.function.Predicate;
-
-import com.superstudio.commons.exception.ArgumentNullException;
 
 
 
@@ -15,16 +14,54 @@ public class TextReader extends StringReader {
 	public TextReader(){
 		this("");
 	}
+	private  String source="";
 	public TextReader(String in) {
 		super(in);
+		source=in;
 		// TODO Auto-generated constructor stub
 	}
 	
 	
 
-	public String ReadToEnd()  {
-		
-		StringBuilder builder = new StringBuilder();
+	public String readToEnd()  {
+		return  source;
+
+		/*StringBuffer sb = new StringBuffer();
+
+		try {
+
+			FileInputStream fis = new FileInputStream(fileName);
+
+			InputStreamReader isr = new InputStreamReader(fis, encoding);
+
+			BufferedReader br = new BufferedReader(isr);
+
+			String line = null;
+
+			while ((line = br.readLine()) != null) {
+
+				sb.append(line);
+
+				sb.append(SEP);
+
+			}
+
+			br.close();
+
+			isr.close();
+
+			fis.close();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+		return sb.toString();*/
+
+
+	/*	StringBuilder builder = new StringBuilder();
 		int ch = 0;
 		
 		//super.read
@@ -39,7 +76,7 @@ public class TextReader extends StringReader {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return builder.toString();
+		return new String(builder.toString(),"UTF-8");*/
 	}
 	public  String readUntil( char terminator) 
 	{
@@ -146,7 +183,11 @@ public class TextReader extends StringReader {
 	
 	public int peek() {
 		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return super.read();
+		} catch (IOException e) {
+			return  0;
+		}
 	}
 
 }

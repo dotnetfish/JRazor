@@ -15,24 +15,24 @@ public class StreamWriter extends TextWriter implements AutoCloseable{
 		this.fileStream=fileStream;
 	}
 
-	public void Write(String content) throws IOException {
+	public void write(String content) throws IOException {
 		// TODO Auto-generated method stub
 		fileStream.Write(content);
 		
 	}
 
-	/*public void WriteLine(String object) {
+	/*public void writeLine(String object) {
 		// TODO Auto-generated method stub
 		
 	}*/
 
-	public void WriteLine() throws IOException {
+	public void writeLine() throws IOException {
 		// TODO Auto-generated method stub
 		fileStream.Write("\r\n");
 		
 	}
 
-	public void Flush() throws IOException {
+	public void flush() throws IOException {
 		// TODO Auto-generated method stub
 		fileStream.Flush();
 	}

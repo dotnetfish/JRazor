@@ -3,7 +3,7 @@ package com.superstudio.codedom;
 import java.io.Serializable;
 import java.util.*;
 
- 
+
 //ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeObject
 public class CodeObject implements Serializable
 {

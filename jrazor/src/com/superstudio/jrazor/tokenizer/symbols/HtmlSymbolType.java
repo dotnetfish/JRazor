@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.tokenizer.symbols;
+package com.superstudio.jrazor.tokenizer.symbols;
 
 
 
@@ -36,7 +36,7 @@ public enum HtmlSymbolType
 		return mappings;
 	}
 
-	private HtmlSymbolType(int value)
+	HtmlSymbolType(int value)
 	{
 		intValue = value;
 		HtmlSymbolType.getMappings().put(value, this);

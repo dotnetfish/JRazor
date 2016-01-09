@@ -1,9 +1,6 @@
 package com.superstudio.commons.io;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class File {
 
@@ -47,20 +44,59 @@ public class File {
 		// TODO Auto-generated method stub
 		return new FileStream(file);
 	}
-	
+    public  static  String readAll(String path,String encoding)throws  IOException{
+        StringBuffer sbread = new StringBuffer();
+        try(InputStreamReader isr = new InputStreamReader(new FileInputStream(path), encoding)){
+            while (isr.ready()) {
+                sbread.append((char) isr.read());
+            }
+            isr.close();
+        }
+
+
+
+        return  sbread.toString();
+    }
+    public  static  String readAll(String path)throws  IOException{
+       return  readAll(path,"UTF-8");
+    }
 	public static byte[] ReadAllBytes(String path) throws IOException{
-		
-		try(FileInputStream stream=new FileInputStream(path)){
+		StringBuffer sbread = new StringBuffer();
+		try(InputStreamReader isr = new InputStreamReader(new FileInputStream(path), "UTF-8")){
+			while (isr.ready()) {
+				sbread.append((char) isr.read());
+			}
+			isr.close();
+		}
+
+
+
+return  sbread.toString().getBytes();
+		/*try(FileInputStream stream=new FileInputStream(path)){
 			byte[] bytes=new byte[stream.available()];
 			
 			stream.read(bytes);
 			return bytes;
-		}
+		}*/
 		//return new byte[1];
 			
 		
 	}
 
+	public static byte[] ReadAllBytes(java.io.File file) throws IOException{
+
+		try(FileInputStream stream=new FileInputStream(file)){
+			byte[] bytes=new byte[stream.available()];
+
+			stream.read(bytes);
+			return bytes;
+		}
+		//return new byte[1];
+
+
+	}
+
+	//public  static byte
 	public static boolean Exists(String text2) {
 		// TODO Auto-generated method stub
 		java.io.File  file=new java.io.File(text2);

@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser;
+package com.superstudio.jrazor.parser;
 
 import com.superstudio.commons.CollectionHelper;
 import com.superstudio.commons.csharpbridge.StringHelper;
@@ -40,6 +40,7 @@ public class ConditionalAttributeCollapser extends MarkupRewriter {
 				.concat(CollectionHelper.select(block.getChildren(), (p) -> ((Span) p).getContent()));// (block.getChildren().Select(s
 																										// ->
 																										// s.Content));
+		//block.getChildren().stream().collect(()->{ return })
 
 		// Create a new span containing this content
 		SpanBuilder span = new SpanBuilder();

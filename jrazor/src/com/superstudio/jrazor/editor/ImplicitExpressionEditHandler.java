@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.editor;
+package com.superstudio.jrazor.editor;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -19,14 +19,11 @@ import com.superstudio.jrazor.tokenizer.symbols.ISymbol;
 public class ImplicitExpressionEditHandler extends SpanEditHandler {
 	 
 	 
-	// [SuppressMessage("Microsoft.Design",
-	// "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification =
-	// "Func<T> is the recommended delegate type and requires this level of
-	// nesting.")]
+
 	public ImplicitExpressionEditHandler(Function<String, Iterable<? extends ISymbol>> tokenizer, Set<String> keywords,
 			boolean acceptTrailingDot) {
 		super(tokenizer);
-		Initialize(keywords, acceptTrailingDot);
+		initialize(keywords, acceptTrailingDot);
 	}
 
 	private boolean privateAcceptTrailingDot;
@@ -87,7 +84,7 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 		// 2. '@foobaz..' -> '@foobaz.bar.'. Includes Sub-cases '@foobaz()..' ->
 		// '@foobaz().bar.' etc.
 		// The key distinction being the double '.' in the second case.
-		if (IsDotlessCommitInsertion(target, normalizedChange)) {
+		if (isDotlessCommitInsertion(target, normalizedChange)) {
 			return handleDotlessCommitInsertion(target);
 		}
 
@@ -121,20 +118,20 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 		return PartialParseResult.Rejected;
 	}
 
-	private void Initialize(Set<String> keywords, boolean acceptTrailingDot) {
+	private void initialize(Set<String> keywords, boolean acceptTrailingDot) {
 		setKeywords((keywords != null) ? keywords : new java.util.HashSet<String>());
 		setAcceptTrailingDot(acceptTrailingDot);
 	}
 
 	// A dotless commit is the process of inserting a '.' with an intellisense
 	// selection.
-	private static boolean IsDotlessCommitInsertion(Span target, TextChange change) {
-		return IsNewDotlessCommitInsertion(target, change) || IsSecondaryDotlessCommitInsertion(target, change);
+	private static boolean isDotlessCommitInsertion(Span target, TextChange change) {
+		return isNewDotlessCommitInsertion(target, change) || isSecondaryDotlessCommitInsertion(target, change);
 	}
 
 	// Completing 'DateTime' in intellisense with a '.' could result in:
 	// '@DateT' -> '@DateT.' -> '@DateTime.' which is accepted.
-	private static boolean IsNewDotlessCommitInsertion(Span target, TextChange change) {
+	private static boolean isNewDotlessCommitInsertion(Span target, TextChange change) {
 		return !isAtEndOfSpan(target, change) && change.getNewPosition() > 0 && change.getNewLength() > 0
 				&& target.getContent().endsWith(".") && ParserHelpers.isIdentifier(change.getNewText(), false)
 				&& (change.getOldLength() == 0 || ParserHelpers.isIdentifier(change.getOldText(), false));
@@ -146,7 +143,7 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 	// textchange with '..'. Completing 'DateTime.Now'
 	// in intellisense with a '.' could result in: '@DateTime.' -> '@DateTime..'
 	// -> '@DateTime.Now.' which is accepted.
-	private static boolean IsSecondaryDotlessCommitInsertion(Span target, TextChange change) {
+	private static boolean isSecondaryDotlessCommitInsertion(Span target, TextChange change) {
 		// Do not need to worry about other punctuation, just looking for double
 		// '.' (after change)
 		return change.getNewLength() == 1 && !StringHelper.isNullOrEmpty(target.getContent())
@@ -289,8 +286,7 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 		return PartialParseResult.Rejected;
 	}
 
-	// C# TO JAVA CONVERTER TODO TASK: C# optional parameters are not converted
-	// to Java:
+
 	// ORIGINAL LINE: private PartialParseResult TryAcceptChange(Span target,
 	// TextChange change, PartialParseResult acceptResult =
 	// PartialParseResult.Accepted)

@@ -1,6 +1,6 @@
 package com.superstudio.codedom;
 import java.io.Serializable;
- 
+
 //ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeAttributeDeclaration
 public class CodeAttributeDeclaration implements Serializable
 {
@@ -8,7 +8,7 @@ public class CodeAttributeDeclaration implements Serializable
 
 	private CodeAttributeArgumentCollection arguments = new CodeAttributeArgumentCollection();
 
- 
+
 //ORIGINAL LINE: [OptionalField] private CodeTypeReference attributeType;
 	private CodeTypeReference attributeType;
 
@@ -48,7 +48,7 @@ public class CodeAttributeDeclaration implements Serializable
 	public CodeAttributeDeclaration(String name, CodeAttributeArgument... arguments)
 	{
 		this.setName(name);
-		this.getArguments().AddRange(arguments);
+		this.getArguments().addRange(arguments);
 	}
 
 	public CodeAttributeDeclaration(CodeTypeReference attributeType)
@@ -65,7 +65,7 @@ public class CodeAttributeDeclaration implements Serializable
 		}
 		if (arguments != null)
 		{
-			this.getArguments().AddRange(arguments);
+			this.getArguments().addRange(arguments);
 		}
 	}
 }

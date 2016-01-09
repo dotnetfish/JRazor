@@ -1,7 +1,5 @@
 package com.superstudio.codedom;
 
- 
-//ORIGINAL LINE: [ComVisible(true)][Serializable] public enum CodeBinaryOperatorType
 public enum CodeBinaryOperatorType
 {
 	Add,

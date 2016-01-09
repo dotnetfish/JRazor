@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor;
+package com.superstudio.jrazor;
 
 import com.superstudio.codedom.CodeCompileUnit;
 import com.superstudio.jrazor.generator.GeneratedCodeMapping;

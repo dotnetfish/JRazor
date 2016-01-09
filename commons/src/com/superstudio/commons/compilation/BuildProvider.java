@@ -1,14 +1,14 @@
 package com.superstudio.commons.compilation;
 
-import java.util.*;
 import com.superstudio.codedom.compiler.CompilerResults;
-import com.superstudio.commons.AssemblyBuilder;
-import com.superstudio.commons.CompilerType;
-import com.superstudio.commons.SimpleBitVector32;
-import com.superstudio.commons.TextReader;
-import com.superstudio.commons.VirtualPath;
+import com.superstudio.commons.*;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.HttpException;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 public abstract class BuildProvider
 {
@@ -103,7 +103,7 @@ public abstract class BuildProvider
 	{
 		return null;
 	}
-	public String GetCustomString(CompilerResults results)
+	public String getCustomString(CompilerResults results)
 	{
 		return null;
 	}
@@ -111,10 +111,10 @@ public abstract class BuildProvider
 	{
 		return BuildProviderResultFlags.Default;
 	}*/
-	public void ProcessCompileErrors(CompilerResults results)
+	public void processCompileErrors(CompilerResults results)
 	{
 	}
-	public Collection GetBuildResultVirtualPathDependencies()
+	public Collection getBuildResultVirtualPathDependencies()
 	{
 		return null;
 	}
@@ -133,20 +133,20 @@ public abstract class BuildProvider
 	}
 	
 	*/
-	/*public final TextReader OpenReader(VirtualPath virtualPath)
+	/*public final TextReader openReader(VirtualPath virtualPath)
 	{
 		return Util.ReaderFromStream(this.OpenStream(virtualPath), virtualPath);
 	}*/
-	protected final TextReader OpenReader(String virtualPath)
+	protected final TextReader openReader(String virtualPath)
 	{
 		return new TextReader(virtualPath);
-		//return this.OpenReader(VirtualPath.Create(virtualPath));
+		//return this.openReader(VirtualPath.create(virtualPath));
 	}
-	protected final TextReader OpenReader() throws HttpException
+	protected final TextReader openReader()
 	{
-		return this.OpenReader(this.getVirtualPathObject().getVirtualPathString());
+		return this.openReader(this.getVirtualPathObject().getVirtualPathString());
 	}
-	public static void RegisterBuildProvider(String extension, java.lang.Class providerType) throws Exception
+	public static void registerBuildProvider(String extension, java.lang.Class providerType) throws Exception
 	{
 		if (StringHelper.isNullOrEmpty(extension))
 		{
@@ -174,7 +174,7 @@ public abstract class BuildProvider
 		result = BuildProvider.s_dynamicallyRegisteredProviders.get(extension);
 		return result;
 	}*/
-	protected final CompilerType GetDefaultCompilerTypeForLanguage(String language)
+	protected final CompilerType getDefaultCompilerTypeForLanguage(String language)
 	{
 		return null;
 		//return CompilationUtil.GetCompilerInfoFromLanguage(this.getVirtualPathObject(), language);
@@ -184,23 +184,23 @@ public abstract class BuildProvider
 	{
 		return CompilationUtil.GetDefaultLanguageCompilerInfo(null, this.getVirtualPathObject());
 	}*/
-	public final void SetNoBuildResult()
+	public final void setNoBuildResult()
 	{
 		this.flags.set(2,true);//[2] = true;
 	}
-	public final void SetContributedCode()
+	public final void setContributedCode()
 	{
 		this.flags.set(32,true);// = true;
 	}
-	public final void SetVirtualPath(VirtualPath virtualPath)
+	public final void setVirtualPath(VirtualPath virtualPath)
 	{
 		this._virtualPath = virtualPath;
 	}
-	public final void SetReferencedAssemblies(List referencedAssemblies)
+	public final void setReferencedAssemblies(List referencedAssemblies)
 	{
 		this._referencedAssemblies = referencedAssemblies;
 	}
-	public final void AddBuildProviderDependency(BuildProvider dependentBuildProvider)
+	public final void addBuildProviderDependency(BuildProvider dependentBuildProvider)
 	{
 		if (this._buildProviderDependencies == null)
 		{
@@ -235,7 +235,7 @@ public abstract class BuildProvider
 		{
 			Assembly arg_20_0 = results.CompiledAssembly;
 		}
-		java.lang.Class generatedType = this.GetGeneratedType(results);
+		java.lang.Class generatedType = this.getGeneratedType(results);
 		BuildResult buildResult;
 		if (generatedType != null)
 		{
@@ -248,7 +248,7 @@ public abstract class BuildProvider
 		}
 		else
 		{
-			String customString = this.GetCustomString(results);
+			String customString = this.getCustomString(results);
 			if (customString != null)
 			{
 				buildResult = new BuildResultCustomString(this.flags[32] ? results.CompiledAssembly : null, customString);

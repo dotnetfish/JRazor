@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.editor;
+package com.superstudio.jrazor.editor;
 
 
 
@@ -13,7 +13,7 @@ public final class RazorEditorTrace
 {
 	private static Boolean _enabled;
 
-	private static boolean IsEnabled()
+	private static boolean isEnabled()
 	{
 		if (_enabled == null)
 		{
@@ -35,7 +35,7 @@ public final class RazorEditorTrace
 	//[Conditional("EDITOR_TRACING")]
 	public static void traceLine(String format, Object... args)
 	{
-		if (IsEnabled())
+		if (isEnabled())
 		{
 			Trace.WriteLine(String.format( RazorResources.getTrace_Format(), String.format( format, args)));
 		}

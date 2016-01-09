@@ -1,5 +1,4 @@
-﻿package com.superstudio.language.java;
-
+package com.superstudio.language.java;
 
 
 public final class JavaHelpers {

@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser;
+package com.superstudio.jrazor.parser;
 
 
 
@@ -23,7 +23,7 @@ public enum BalancingModes
 		return mappings;
 	}
 
-	private BalancingModes(int value)
+	BalancingModes(int value)
 	{
 		intValue = value;
 		BalancingModes.getMappings().put(value, this);

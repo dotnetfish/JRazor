@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.text;
+package com.superstudio.jrazor.text;
 
 
 

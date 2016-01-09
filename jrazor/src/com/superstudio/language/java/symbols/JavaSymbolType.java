@@ -1,5 +1,4 @@
-﻿package com.superstudio.language.java.symbols;
-
+package com.superstudio.language.java.symbols;
 
 
 public enum JavaSymbolType

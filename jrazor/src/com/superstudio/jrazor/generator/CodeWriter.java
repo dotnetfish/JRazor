@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.generator;
+package com.superstudio.jrazor.generator;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -6,7 +6,6 @@ import java.io.StringWriter;
 import com.superstudio.codedom.CodeLinePragma;
 import com.superstudio.codedom.CodeSnippetStatement;
 import com.superstudio.codedom.CodeSnippetTypeMember;
-import com.superstudio.commons.IDisposable;
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.jrazor.text.LocationTagged;
 

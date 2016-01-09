@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser.syntaxTree;
+package com.superstudio.jrazor.parser.syntaxTree;
 
 
 import java.util.function.Function;

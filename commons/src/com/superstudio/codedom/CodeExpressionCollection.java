@@ -2,13 +2,8 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
-public class CodeExpressionCollection extends CollectionBase<CodeExpression> implements Serializable
+public class CodeExpressionCollection extends CollectionBase implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6746544984516483002L;
-
 	public final CodeExpression getItem(int index)
 	{
 		return (CodeExpression)get(index);

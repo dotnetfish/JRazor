@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser;
+package com.superstudio.jrazor.parser;
 
 import com.superstudio.commons.CancellationToken;
 import com.superstudio.commons.exception.OperationCanceledException;
@@ -23,7 +23,7 @@ public abstract class ParserVisitor
 		privateCancelToken = value;
 	}
 
-	public void visitBlock(Block block) throws OperationCanceledException, Exception
+	public void visitBlock(Block block) throws Exception
 	{
 		visitStartBlock(block);
 		for (SyntaxTreeNode node : block.getChildren())
@@ -33,32 +33,32 @@ public abstract class ParserVisitor
 		visitEndBlock(block);
 	}
 
-	public void visitStartBlock(Block block) throws OperationCanceledException, Exception
+	public void visitStartBlock(Block block) throws Exception
 	{
 		throwIfCanceled();
 	}
 
-	public void visitSpan(Span span) throws OperationCanceledException, Exception
+	public void visitSpan(Span span) throws Exception
 	{
 		throwIfCanceled();
 	}
 
-	public void visitEndBlock(Block block) throws OperationCanceledException, Exception
+	public void visitEndBlock(Block block) throws Exception
 	{
 		throwIfCanceled();
 	}
 
-	public void visitError(RazorError err) throws OperationCanceledException, Exception
+	public void visitError(RazorError err) throws Exception
 	{
 		throwIfCanceled();
 	}
 
-	public void onComplete() throws OperationCanceledException, Exception
+	public void onComplete() throws Exception
 	{
 		throwIfCanceled();
 	}
 
-	public void throwIfCanceled() throws OperationCanceledException, Exception
+	public void throwIfCanceled() throws Exception
 	{
 		if (getCancelToken() != null && getCancelToken().isCancellationRequested())
 		{

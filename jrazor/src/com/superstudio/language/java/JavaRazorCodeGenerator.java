@@ -2,10 +2,10 @@ package com.superstudio.language.java;
 
 import com.superstudio.codedom.CodeSnippetTypeMember;
 import com.superstudio.commons.csharpbridge.action.Func;
-import com.superstudio.jrazor.RazorEngineHost;
-import com.superstudio.jrazor.generator.CodeGeneratorContext;
-import com.superstudio.jrazor.generator.CodeWriter;
-import com.superstudio.jrazor.generator.RazorCodeGenerator;
+import com.superstudio.web.razor.RazorEngineHost;
+import com.superstudio.web.razor.generator.CodeGeneratorContext;
+import com.superstudio.web.razor.generator.CodeWriter;
+import com.superstudio.web.razor.generator.RazorCodeGenerator;
 
 public class JavaRazorCodeGenerator extends RazorCodeGenerator {
 	private static final String HiddenLinePragma = "//#line hidden";

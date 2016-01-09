@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser;
+package com.superstudio.jrazor.parser;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import com.superstudio.commons.IDisposable;
 import com.superstudio.commons.Tuple;
 import com.superstudio.commons.csharpbridge.StringComparison;
 import com.superstudio.commons.csharpbridge.StringHelper;
@@ -20,7 +19,6 @@ import com.superstudio.jrazor.resources.RazorResources;
 import com.superstudio.jrazor.text.*;
 import com.superstudio.jrazor.tokenizer.*;
 import com.superstudio.jrazor.tokenizer.symbols.*;
-import com.superstudio.web.*;
 
 public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlSymbol, HtmlSymbolType> {
 	private SourceLocation _lastTagStart = SourceLocation.Zero;

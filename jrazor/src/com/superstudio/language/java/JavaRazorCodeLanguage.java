@@ -1,11 +1,10 @@
-﻿package com.superstudio.language.java;
+package com.superstudio.language.java;
 
-import com.superstudio.jrazor.RazorCodeLanguage;
-import com.superstudio.jrazor.RazorEngineHost;
-import com.superstudio.jrazor.generator.RazorCodeGenerator;
-import com.superstudio.jrazor.parser.*;
 import com.superstudio.language.java.parser.JavaCodeParser;
-
+import com.superstudio.web.razor.RazorCodeLanguage;
+import com.superstudio.web.razor.RazorEngineHost;
+import com.superstudio.web.razor.generator.RazorCodeGenerator;
+import com.superstudio.web.razor.parser.*;
 
 
 
@@ -35,7 +34,7 @@ public class JavaRazorCodeLanguage extends RazorCodeLanguage
 	@Override
 	public java.lang.Class<?> getCodeDomProviderType()
 	{
-		//return CSharpCodeProvider.class;
+
 		return JavaCodeProvider.class;
 	}
 

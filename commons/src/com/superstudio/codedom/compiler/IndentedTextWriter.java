@@ -1,11 +1,10 @@
 package com.superstudio.codedom.compiler;
 
+import com.superstudio.commons.CultureInfo;
+import com.superstudio.commons.io.TextWriter;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import com.superstudio.commons.CultureInfo;
-import com.superstudio.commons.Encoding;
-import com.superstudio.commons.io.TextWriter;
 
 public class IndentedTextWriter extends TextWriter {
 	private TextWriter writer;
@@ -19,7 +18,7 @@ public class IndentedTextWriter extends TextWriter {
 	public static final String DefaultTabString = "    ";
 
 	@Override
-	public Encoding getEncoding() {
+	public String getEncoding() {
 		return this.writer.getEncoding();
 	}
 
@@ -66,20 +65,20 @@ public class IndentedTextWriter extends TextWriter {
 	}
 
 	@Override
-	public void Close() throws IOException {
-		this.writer.Close();
+	public void close() throws IOException {
+		this.writer.close();
 	}
 
 	@Override
-	public void Flush() throws IOException {
-		this.writer.Flush();
+	public void flush() throws IOException {
+		this.writer.flush();
 	}
 
-	protected void OutputTabs() {
+	protected void outputTabs() {
 		if (this.tabsPending) {
 			for (int i = 0; i < this.indentLevel; i++) {
 				try {
-					this.writer.Write(this.tabString);
+					this.writer.write(this.tabString);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -90,188 +89,186 @@ public class IndentedTextWriter extends TextWriter {
 	}
 
 	@Override
-	public void Write(String s) throws IOException {
-		this.OutputTabs();
+	public void write(String s) throws IOException {
+		this.outputTabs();
 		if (s != null)
-			this.writer.Write(s);
+			this.writer.write(s);
 	}
 
 	@Override
-	public void Write(boolean value) throws IOException {
-		this.OutputTabs();
-		this.writer.Write(value);
+	public void write(boolean value) throws IOException {
+		this.outputTabs();
+		this.writer.write(value);
 	}
 
 	@Override
-	public void Write(char value) throws IOException {
-		this.OutputTabs();
-		this.writer.Write(value);
+	public void write(char value) throws IOException {
+		this.outputTabs();
+		this.writer.write(value);
 	}
 
 	@Override
-	public void Write(char[] buffer) throws IOException {
-		this.OutputTabs();
-		this.writer.Write(buffer);
+	public void write(char[] buffer) throws IOException {
+		this.outputTabs();
+		this.writer.write(buffer);
 	}
 
 	@Override
-	public void Write(char[] buffer, int index, int count) throws IOException {
-		this.OutputTabs();
-		this.writer.Write(buffer, index, count);
+	public void write(char[] buffer, int index, int count) throws IOException {
+		this.outputTabs();
+		this.writer.write(buffer, index, count);
 	}
 
 	@Override
-	public void Write(double value) throws IOException {
-		this.OutputTabs();
-		this.writer.Write(value);
+	public void write(double value) throws IOException {
+		this.outputTabs();
+		this.writer.write(value);
 	}
 
 	@Override
-	public void Write(float value) throws IOException {
-		this.OutputTabs();
-		this.writer.Write(value);
+	public void write(float value) throws IOException {
+		this.outputTabs();
+		this.writer.write(value);
 	}
 
 	@Override
-	public void Write(int value) throws IOException {
-		this.OutputTabs();
-		this.writer.Write(value);
+	public void write(int value) throws IOException {
+		this.outputTabs();
+		this.writer.write(value);
 	}
 
 	@Override
-	public void Write(long value) throws IOException {
-		this.OutputTabs();
-		this.writer.Write(value);
+	public void write(long value) throws IOException {
+		this.outputTabs();
+		this.writer.write(value);
 	}
 
 	@Override
-	public void Write(Object value) throws IOException {
-		this.OutputTabs();
-		this.writer.Write(value);
+	public void write(Object value) throws IOException {
+		this.outputTabs();
+		this.writer.write(value);
 	}
 
 	/*
-	 * @Override public void Write(String format, Object arg0) {
-	 * this.OutputTabs(); this.writer.Write(format, arg0); }
+	 * @Override public void write(String format, Object arg0) {
+	 * this.outputTabs(); this.writer.write(format, arg0); }
 	 * 
-	 * @Override public void Write(String format, Object arg0, Object arg1) {
-	 * this.OutputTabs(); this.writer.Write(format, arg0, arg1); }
+	 * @Override public void write(String format, Object arg0, Object arg1) {
+	 * this.outputTabs(); this.writer.write(format, arg0, arg1); }
 	 */
 
 	@Override
-	public void Write(String format, Object... arg) throws IOException {
-		this.OutputTabs();
-		this.writer.Write(format, arg);
+	public void write(String format, Object... arg) throws IOException {
+		this.outputTabs();
+		this.writer.write(format, arg);
 	}
 
-	public final void WriteLineNoTabs(String s) throws IOException {
-		this.writer.WriteLine(s);
+	public final void writeLineNoTabs(String s) throws IOException {
+		this.writer.writeLine(s);
 	}
 
 	@Override
-	public void WriteLine(String s) throws IOException {
-		this.OutputTabs();
-		this.writer.WriteLine(s);
+	public void writeLine(String s) throws IOException {
+		this.outputTabs();
+		this.writer.writeLine(s);
 		this.tabsPending = true;
 	}
 
 	@Override
-	public void WriteLine() throws IOException {
-		this.OutputTabs();
-		this.writer.WriteLine();
+	public void writeLine() throws IOException {
+		this.outputTabs();
+		this.writer.writeLine();
 		this.tabsPending = true;
 	}
 
 	@Override
-	public void WriteLine(boolean value) throws IOException {
-		this.OutputTabs();
-		this.writer.WriteLine(value);
+	public void writeLine(boolean value) throws IOException {
+		this.outputTabs();
+		this.writer.writeLine(value);
 		this.tabsPending = true;
 	}
 
 	@Override
-	public void WriteLine(char value) throws IOException {
-		this.OutputTabs();
-		this.writer.WriteLine(value);
+	public void writeLine(char value) throws IOException {
+		this.outputTabs();
+		this.writer.writeLine(value);
 		this.tabsPending = true;
 	}
 
 	@Override
-	public void WriteLine(char[] buffer) throws IOException {
-		this.OutputTabs();
-		this.writer.WriteLine(buffer);
+	public void writeLine(char[] buffer) throws IOException {
+		this.outputTabs();
+		this.writer.writeLine(buffer);
 		this.tabsPending = true;
 	}
 
 	@Override
-	public void WriteLine(char[] buffer, int index, int count) throws IOException {
-		this.OutputTabs();
-		this.writer.WriteLine(buffer, index, count);
+	public void writeLine(char[] buffer, int index, int count) throws IOException {
+		this.outputTabs();
+		this.writer.writeLine(buffer, index, count);
 		this.tabsPending = true;
 	}
 
 	@Override
-	public void WriteLine(double value) throws IOException {
-		this.OutputTabs();
-		this.writer.WriteLine(value);
+	public void writeLine(double value) throws IOException {
+		this.outputTabs();
+		this.writer.writeLine(value);
 		this.tabsPending = true;
 	}
 
 	@Override
-	public void WriteLine(float value) throws IOException {
-		this.OutputTabs();
-		this.writer.WriteLine(value);
+	public void writeLine(float value) throws IOException {
+		this.outputTabs();
+		this.writer.writeLine(value);
 		this.tabsPending = true;
 	}
 
 	/*
-	 * @Override public void WriteLine(int value) { this.OutputTabs();
-	 * this.writer.WriteLine(value); this.tabsPending = true; }
+	 * @Override public void writeLine(int value) { this.outputTabs();
+	 * this.writer.writeLine(value); this.tabsPending = true; }
 	 * 
-	 * @Override public void WriteLine(long value) { this.OutputTabs();
-	 * this.writer.WriteLine(value); this.tabsPending = true; }
+	 * @Override public void writeLine(long value) { this.outputTabs();
+	 * this.writer.writeLine(value); this.tabsPending = true; }
 	 */
 
 	@Override
-	public void WriteLine(Object value) throws IOException {
-		this.OutputTabs();
-		this.writer.WriteLine(value);
+	public void writeLine(Object value) throws IOException {
+		this.outputTabs();
+		this.writer.writeLine(value);
 		this.tabsPending = true;
 	}
 
 	@Override
-	public void WriteLine(String format, Object arg0) throws IOException {
-		this.OutputTabs();
-		this.writer.WriteLine(format, arg0);
+	public void writeLine(String format, Object arg0) throws IOException {
+		this.outputTabs();
+		this.writer.writeLine(format, arg0);
 		this.tabsPending = true;
 	}
 
 	/*
-	 * @Override public void WriteLine(String format, Object arg0, Object arg1)
-	 * { this.OutputTabs(); this.writer.WriteLine(format, arg0, arg1);
+	 * @Override public void writeLine(String format, Object arg0, Object arg1)
+	 * { this.outputTabs(); this.writer.writeLine(format, arg0, arg1);
 	 * this.tabsPending = true; }
 	 */
 
 	@Override
 	public void writeLine(String format, Object... arg) throws IOException {
-		this.OutputTabs();
+		this.outputTabs();
 		this.writer.writeLine(format, arg);
 		this.tabsPending = true;
 	}
 
-	
-	
-	 
+
 	@Override
-	public void WriteLine(int value) throws IOException {
-		this.OutputTabs();
-		this.writer.WriteLine(value);
+	public void writeLine(int value) throws IOException {
+		this.outputTabs();
+		this.writer.writeLine(value);
 		this.tabsPending = true;
 	}
 
-	public final void InternalOutputTabs() throws IOException {
+	public final void internalOutputTabs() throws IOException {
 		for (int i = 0; i < this.indentLevel; i++) {
-			this.writer.Write(this.tabString);
+			this.writer.write(this.tabString);
 		}
 	}
 }

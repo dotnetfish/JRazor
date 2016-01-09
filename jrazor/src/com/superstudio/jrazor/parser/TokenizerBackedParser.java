@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser;
+package com.superstudio.jrazor.parser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +10,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.superstudio.commons.CollectionHelper;
-import com.superstudio.commons.IDisposable;
 import com.superstudio.commons.IEquatable;
 import com.superstudio.commons.Tuple;
 import com.superstudio.commons.csharpbridge.action.ActionTwo;

@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser.syntaxTree;
+package com.superstudio.jrazor.parser.syntaxTree;
 
 
 
@@ -33,7 +33,7 @@ public enum AcceptedCharacters
 		return mappings;
 	}
 
-	private AcceptedCharacters(int value)
+	AcceptedCharacters(int value)
 	{
 		intValue = value;
 		AcceptedCharacters.getMappings().put(value, this);

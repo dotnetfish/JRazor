@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor;
+package com.superstudio.jrazor;
 
 
 
@@ -21,7 +21,6 @@
  
 */
  
-//[Flags, SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "The singular name is more appropriate here")]
 public enum PartialParseResult
 {
 	/** 
@@ -72,7 +71,7 @@ public enum PartialParseResult
 		return mappings;
 	}
 
-	private PartialParseResult(int value)
+	PartialParseResult(int value)
 	{
 		intValue = value;
 		PartialParseResult.getMappings().put(value, this);

@@ -1,35 +1,32 @@
 package com.superstudio.commons.io;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Paths;
-import java.nio.file.attribute.FileAttribute;
-
 import com.superstudio.commons.Encoding;
 import com.superstudio.commons.csharpbridge.StringHelper;
 
+import java.io.*;
+import java.nio.file.Paths;
+
 public class TextWriter {
 
-	private OutputStream writer;
+	private OutputStreamWriter writer;
 	
-	private Encoding encoding;
+	private String encoding;
 	
 	private String newLine="\r\n";
 	
 	
 	
-	public TextWriter(String fileName,String info) throws FileNotFoundException{
+	public TextWriter(String fileName,String encoding) throws Exception{
 		if(!File.Exists(fileName)){
 			try {
-				java.nio.file.Files.createFile(Paths.get(fileName), new FileAttribute[]{});
+				java.nio.file.Files.createFile(Paths.get(fileName));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		writer=new FileOutputStream(fileName);
+		writer=new OutputStreamWriter(new FileOutputStream(fileName),encoding);
+		this.encoding=Encoding.UTF8;
 	}
 	
 	public TextWriter(String info ) throws FileNotFoundException{
@@ -41,7 +38,7 @@ public class TextWriter {
 		return null;
 	}*/
 	
-	public Encoding getEncoding()
+	public String getEncoding()
 	{
 		return encoding;
 	}
@@ -85,13 +82,13 @@ public class TextWriter {
 	
 
 	
-	public void Close() throws IOException
+	public void close() throws IOException
 	{
 		writer.close();
 	}
 
 	
-	public void Flush() throws IOException
+	public void flush() throws IOException
 	{
 		this.writer.flush();
 	}
@@ -99,28 +96,28 @@ public class TextWriter {
 	
 
 	
-	public void Write(String s) throws IOException
+	public void write(String s) throws IOException
 	{
 		
-		this.writer.write(s.getBytes());
+		this.writer.write(s);
 	}
 
 	
-	public void Write(boolean value) throws IOException
+	public void write(boolean value) throws IOException
 	{
 		
-		this.writer.write(String.valueOf(value).getBytes());
+		this.writer.write(String.valueOf(value));
 	}
 
 	
-	public void Write(char value) throws IOException
+	public void write(char value) throws IOException
 	{
 		
 		this.writer.write(value);
 	}
 
 	
-	public void Write(char[] buffer) throws IOException
+	public void write(char[] buffer) throws IOException
 	{
 		for(char ch:buffer){
 			this.writer.write(ch);
@@ -131,7 +128,7 @@ public class TextWriter {
 	}
 
 	
-	public void Write(char[] buffer, int index, int count) throws IOException
+	public void write(char[] buffer, int index, int count) throws IOException
 	{
 		int start=0;
 		for(char ch:buffer){
@@ -145,180 +142,180 @@ public class TextWriter {
 	}
 
 	
-	public void Write(double value)throws IOException
+	public void write(double value)throws IOException
 	{
 		
-		this.writer.write(String.valueOf(value).getBytes());
+		this.writer.write(String.valueOf(value));
 	}
 
 	
-	public void Write(float value) throws IOException
+	public void write(float value) throws IOException
 	{
 		
-		this.writer.write(String.valueOf(value).getBytes());
+		this.writer.write(String.valueOf(value));
 	}
 
 	
-	public void Write(int value) throws IOException
+	public void write(int value) throws IOException
 	{
 		
 		this.writer.write(value);
 	}
 
 	
-	public void Write(long value) throws IOException
+	public void write(long value) throws IOException
 	{
 		
-		this.writer.write(String.valueOf(value).getBytes());
+		this.writer.write(String.valueOf(value));
 	}
 
 	
-	public void Write(Object value) throws IOException
+	public void write(Object value) throws IOException
 	{
 		
-		this.writer.write(value.toString().getBytes());
+		this.writer.write(value.toString());
 	}
 
 	
-	/*public void Write(String format, Object arg0)
+	/*public void write(String format, Object arg0)
 	{
 		
 		this.writer.write(format, arg0);
 	}
 
 	
-	public void Write(String format, Object arg0, Object arg1)
+	public void write(String format, Object arg0, Object arg1)
 	{
 		this.writer.write(format, arg0, arg1);
 	}
 */
 	
-	public void Write(String format, Object... arg) throws IOException
+	public void write(String format, Object... arg) throws IOException
 	{
 		
-		this.writer.write(StringHelper.format(format, arg).getBytes());
+		this.writer.write(StringHelper.format(format, arg));
 	}
 
 	
 
 	
-	public void WriteLine(String s) throws IOException
+	public void writeLine(String s) throws IOException
 	{
 		
 		//this.writer.write("\r\n".getBytes());
 		if(s!=null){
-			this.writer.write(s.getBytes());
+			this.writer.write(s);
 		}
 		
-		this.writer.write("\r\n".getBytes());
+		this.writer.write("\r\n");
 		
 	}
 
 	
-	public void WriteLine() throws IOException
+	public void writeLine() throws IOException
 	{
 		
 		//this.writer.write("\r\n".getBytes());
 	
-		this.writer.write("\r\n".getBytes());
+		this.writer.write("\r\n");
 		
 	}
 
 	
-	public void WriteLine(boolean value) throws IOException
+	public void writeLine(boolean value) throws IOException
 	{
 		
 		//this.writer.write("\r\n".getBytes());
-		this.writer.write(String.valueOf(value).getBytes());
-		this.writer.write("\r\n".getBytes());
+		this.writer.write(String.valueOf(value));
+		this.writer.write("\r\n");
 		
 	}
 
 	
-	public void WriteLine(char value) throws IOException
+	public void writeLine(char value) throws IOException
 	{
 		
 		//this.writer.write("\r\n".getBytes());
 		this.writer.write(value);
-		this.writer.write("\r\n".getBytes());
+		this.writer.write("\r\n");
 	
 	}
 
 	
-	public void WriteLine(char[] buffer) throws IOException
+	public void writeLine(char[] buffer) throws IOException
 	{
 		
 		//this.writer.write("\r\n".getBytes());
-		Write(buffer);
-		this.writer.write("\r\n".getBytes());
+		write(buffer);
+		this.writer.write("\r\n");
 		
 	}
 
 	
-	public void WriteLine(char[] buffer, int index, int count) throws IOException
+	public void writeLine(char[] buffer, int index, int count) throws IOException
 	{
 		
-		//this.writer.WriteLine(buffer, index, count);
+		//this.writer.writeLine(buffer, index, count);
 		//this.writer.write("\r\n".getBytes());
-		Write(buffer);
-		this.writer.write("\r\n".getBytes());
+		write(buffer);
+		this.writer.write("\r\n");
 		
 	}
 
 	
-	public void WriteLine(double value) throws IOException
+	public void writeLine(double value) throws IOException
 	{
 		
-		//this.writer.WriteLine(value);
+		//this.writer.writeLine(value);
 		//this.writer.write("\r\n".getBytes());
-		this.writer.write(String.valueOf(value).getBytes());
-		this.writer.write("\r\n".getBytes());
+		this.writer.write(String.valueOf(value));
+		this.writer.write("\r\n");
 		
 	}
 
 	
-	public void WriteLine(float value) throws IOException
+	public void writeLine(float value) throws IOException
 	{
 		//this.writer.write("\r\n".getBytes());
-		this.writer.write(String.valueOf(value).getBytes());
-		this.writer.write("\r\n".getBytes());
-		//this.writer.WriteLine(value);
+		this.writer.write(String.valueOf(value));
+		this.writer.write("\r\n");
+		//this.writer.writeLine(value);
 		
 	}
 
 	/*
-	public void WriteLine(int value)
+	public void writeLine(int value)
 	{
-		this.OutputTabs();
-		this.writer.WriteLine(value);
+		this.outputTabs();
+		this.writer.writeLine(value);
 		this.tabsPending = true;
 	}
 
 	
-	public void WriteLine(long value)
+	public void writeLine(long value)
 	{
-		this.OutputTabs();
-		this.writer.WriteLine(value);
+		this.outputTabs();
+		this.writer.writeLine(value);
 		this.tabsPending = true;
 	}*/
 
 	
-	public void WriteLine(Object value) throws IOException
+	public void writeLine(Object value) throws IOException
 	{
-		//this.writer.write("\r\n".getBytes());
-		this.writer.write(value.toString().getBytes());
-		this.writer.write("\r\n".getBytes());
-		//this.writer.WriteLine(value);
+		//this.writer.write("\r\n");
+		this.writer.write(value.toString());
+		this.writer.write("\r\n");
+		//this.writer.writeLine(value);
 		
 	}
 
 	
-	public void WriteLine(String format, Object arg0) throws IOException
+	public void writeLine(String format, Object arg0) throws IOException
 	{
-		//this.writer.write("\r\n".getBytes());
-		this.writer.write(StringHelper.format(format,arg0).getBytes());
-		this.writer.write("\r\n".getBytes());
-		//this.writer.WriteLine(format, arg0);
+		//this.writer.write("\r\n");
+		this.writer.write(StringHelper.format(format,arg0));
+		this.writer.write("\r\n");
+		//this.writer.writeLine(format, arg0);
 		
 	}
 
@@ -328,24 +325,24 @@ public class TextWriter {
 	
 	public void writeLine(String format, Object... arg) throws IOException
 	{
-		//this.writer.write("\r\n".getBytes());
-		this.writer.write(StringHelper.format(format,arg).getBytes());
-		this.writer.write("\r\n".getBytes());
+		//this.writer.write("\r\n");
+		this.writer.write(StringHelper.format(format,arg));
+		this.writer.write("\r\n");
 	}
 
 	
-	public void WriteLine(int value) throws IOException
+	public void writeLine(int value) throws IOException
 	{
 		
-		//this.writer.write("\r\n".getBytes());
+		//this.writer.write("\r\n");
 		this.writer.write(value);
-		this.writer.write("\r\n".getBytes());
+		this.writer.write("\r\n");
 		
 	}
 
-	public OutputStream asOutpuStream() {
+	/*public OutputStream asOutpuStream() {
 		// TODO Auto-generated method stub
-		return this.writer;
-	}
+		return null;
+	}*/
 
 }

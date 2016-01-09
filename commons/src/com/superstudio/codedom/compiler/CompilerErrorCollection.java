@@ -1,18 +1,12 @@
 package com.superstudio.codedom.compiler;
 
+import com.superstudio.codedom.CollectionBase;
+
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Iterator;
 
-import com.superstudio.codedom.*;
-
- 
-public class CompilerErrorCollection extends CollectionBase<CompilerError> implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2406246001640652572L;
-
+public class CompilerErrorCollection extends CollectionBase implements Serializable {
 	public final CompilerError getItem(int index) {
 		return (CompilerError) get(index);
 	}
@@ -23,10 +17,10 @@ public class CompilerErrorCollection extends CollectionBase<CompilerError> imple
 
 	public final boolean getHasErrors() throws IOException {
 		if (super.size() > 0) {
-			Iterator<CompilerError> enumerator = super.iterator();
+			Iterator enumerator = super.iterator();
 			try {
 				while (enumerator.hasNext()) {
-					if (!(enumerator.next()).getIsWarning()) {
+					if (!((CompilerError) enumerator.next()).getIsWarning()) {
 						return true;
 					}
 				}
@@ -44,7 +38,7 @@ public class CompilerErrorCollection extends CollectionBase<CompilerError> imple
 
 	public final boolean getHasWarnings() throws IOException {
 		if (super.size() > 0) {
-			Iterator<CompilerError> enumerator = super.iterator();
+			Iterator enumerator = super.iterator();
 			try {
 				while (enumerator.hasNext()) {
 					if (((CompilerError) enumerator.next()).getIsWarning()) {
@@ -74,7 +68,7 @@ public class CompilerErrorCollection extends CollectionBase<CompilerError> imple
 		this.addAll(value);
 	}
 
-	public final int Add(CompilerError value) {
+	public final int add(CompilerError value) {
 		add(value);
 		return size();
 	}
@@ -84,7 +78,7 @@ public class CompilerErrorCollection extends CollectionBase<CompilerError> imple
 			throw new IllegalArgumentException("value");
 		}
 		for (int i = 0; i < value.length; i++) {
-			this.Add(value[i]);
+			this.add(value[i]);
 		}
 	}
 
@@ -94,15 +88,15 @@ public class CompilerErrorCollection extends CollectionBase<CompilerError> imple
 		}
 		int count = value.size();
 		for (int i = 0; i < count; i++) {
-			this.Add(value.getItem(i));
+			this.add(value.getItem(i));
 		}
 	}
 
-	public final boolean Contains(CompilerError value) {
+	public final boolean contains(CompilerError value) {
 		return contains(value);
 	}
 
-	public final void CopyTo(CompilerError[] array, int index) {
+	public final void copyTo(CompilerError[] array, int index) {
 		subList(index, size() - index - 1).toArray(array);
 	}
 
@@ -110,11 +104,11 @@ public class CompilerErrorCollection extends CollectionBase<CompilerError> imple
 	 * public final int indexOf(CompilerError value) { return
 	 * super.List.indexOf(value); }
 	 */
-	public final void Insert(int index, CompilerError value) {
+	public final void insert(int index, CompilerError value) {
 		add(index, value);
 	}
 
-	public final void Remove(CompilerError value) {
+	public final void remove(CompilerError value) {
 		remove(value);
 	}
 }

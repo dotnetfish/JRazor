@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.text;
+package com.superstudio.jrazor.text;
 
 import com.superstudio.commons.HashCodeCombiner;
 import com.superstudio.commons.csharpbridge.StringHelper;

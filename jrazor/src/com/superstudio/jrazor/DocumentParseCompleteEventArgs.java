@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor;
+package com.superstudio.jrazor;
 
 import com.superstudio.commons.EventArgs;
 import com.superstudio.jrazor.text.TextChange;

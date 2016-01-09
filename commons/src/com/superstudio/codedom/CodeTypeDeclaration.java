@@ -5,14 +5,10 @@ import com.superstudio.commons.EmptyEventArgs;
 import com.superstudio.commons.EventArgs;
 import com.superstudio.commons.EventHandler;
 import com.superstudio.commons.TypeAttributes;
- 
+
+//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeTypeDeclaration : CodeTypeMember
 public class CodeTypeDeclaration extends CodeTypeMember implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8273948089033307708L;
-
 	private TypeAttributes attributes = TypeAttributes.forValue(TypeAttributes.Public);
 
 	private CodeTypeReferenceCollection baseTypes = new CodeTypeReferenceCollection();
@@ -25,12 +21,17 @@ public class CodeTypeDeclaration extends CodeTypeMember implements Serializable
 
 	private int populated;
 
+
+//ORIGINAL LINE: [OptionalField] private CodeTypeParameterCollection typeParameters;
 	private CodeTypeParameterCollection typeParameters;
 
- 	private boolean isPartial;
 
- 
- 
+//ORIGINAL LINE: [OptionalField] private bool isPartial;
+	private boolean isPartial;
+
+
+
+//ORIGINAL LINE: [method: CompilerGenerated][CompilerGenerated] public event EventHandler PopulateBaseTypes;
 	private  EventHandler<EmptyEventArgs> populateBaseTypes;
 
 public final TypeAttributes getTypeAttributes()
@@ -49,7 +50,7 @@ public final TypeAttributes getTypeAttributes()
 			this.populated |= 1;
 			if (this.getPopulateBaseTypes() != null)
 			{
-				this.getPopulateBaseTypes().execute((Object)this, EventArgs.Empty);
+				this.getPopulateBaseTypes().execute(this, EventArgs.Empty);
 			}
 		}
 		return this.baseTypes;
@@ -141,7 +142,7 @@ public final TypeAttributes getTypeAttributes()
 		return this.members;
 	}
 
- 
+
 //ORIGINAL LINE: [ComVisible(false)] public CodeTypeParameterCollection TypeParameters
 	public final CodeTypeParameterCollection getTypeParameters()
 	{

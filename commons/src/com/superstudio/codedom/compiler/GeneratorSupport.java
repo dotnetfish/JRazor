@@ -1,5 +1,7 @@
 package com.superstudio.codedom.compiler;
 
+
+
 public class GeneratorSupport
 {
 	public static final GeneratorSupport ArraysOfArrays = new GeneratorSupport(1);

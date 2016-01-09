@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.tokenizer;
+package com.superstudio.jrazor.tokenizer;
 
 import com.superstudio.jrazor.text.*;
 import com.superstudio.jrazor.tokenizer.symbols.*;

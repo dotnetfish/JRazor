@@ -1,6 +1,6 @@
 package com.superstudio.codedom;
 import java.io.Serializable;
- 
+
 //ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeAttachEventStatement : CodeStatement
 public class CodeAttachEventStatement extends CodeStatement implements Serializable
 {

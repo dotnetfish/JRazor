@@ -8,7 +8,7 @@ import com.superstudio.commons.csharpbridge.StringHelper;
 
 public final class HandlerBase
 {
-	private static Node GetAndRemoveAttribute(Node node, String attrib, boolean fRequired)
+	private static Node getAndRemoveAttribute(Node node, String attrib, boolean fRequired)
 	{
 		Node xmlNode = node.getAttributes().removeNamedItem(attrib);
 		if (fRequired && xmlNode == null)
@@ -18,9 +18,9 @@ public final class HandlerBase
 		return xmlNode;
 	}
 
-	private static Node GetAndRemoveStringAttributeInternal(Node node, String attrib, boolean fRequired, RefObject<String> val)
+	private static Node getAndRemoveStringAttributeInternal(Node node, String attrib, boolean fRequired, RefObject<String> val)
 	{
-		Node andRemoveAttribute = HandlerBase.GetAndRemoveAttribute(node, attrib, fRequired);
+		Node andRemoveAttribute = HandlerBase.getAndRemoveAttribute(node, attrib, fRequired);
 		if (andRemoveAttribute != null)
 		{
 			val.setRefObj(andRemoveAttribute.getNodeValue()); 
@@ -28,19 +28,19 @@ public final class HandlerBase
 		return andRemoveAttribute;
 	}
 
-	public static Node GetAndRemoveStringAttribute(Node node, String attrib, RefObject<String> val)
+	public static Node getAndRemoveStringAttribute(Node node, String attrib, RefObject<String> val)
 	{
-		return HandlerBase.GetAndRemoveStringAttributeInternal(node, attrib, false, val);
+		return HandlerBase.getAndRemoveStringAttributeInternal(node, attrib, false, val);
 	}
 
-	public static Node GetAndRemoveRequiredNonEmptyStringAttribute(Node node, String attrib, RefObject<String> val)
+	public static Node getAndRemoveRequiredNonEmptyStringAttribute(Node node, String attrib, RefObject<String> val)
 	{
-		return HandlerBase.GetAndRemoveNonEmptyStringAttributeInternal(node, attrib, true, val);
+		return HandlerBase.getAndRemoveNonEmptyStringAttributeInternal(node, attrib, true, val);
 	}
 
-	private static Node GetAndRemoveNonEmptyStringAttributeInternal(Node node, String attrib, boolean fRequired, RefObject<String> val)
+	private static Node getAndRemoveNonEmptyStringAttributeInternal(Node node, String attrib, boolean fRequired, RefObject<String> val)
 	{
-		Node andRemoveStringAttributeInternal = HandlerBase.GetAndRemoveStringAttributeInternal(node, attrib, fRequired, val);
+		Node andRemoveStringAttributeInternal = HandlerBase.getAndRemoveStringAttributeInternal(node, attrib, fRequired, val);
 		if (andRemoveStringAttributeInternal != null && val.getRefObj().length() == 0)
 		{
 			//throw new ConfigurationErrorsException(SR.GetString("Empty_attribute", new Object[] {attrib}), andRemoveStringAttributeInternal);
@@ -48,9 +48,9 @@ public final class HandlerBase
 		return andRemoveStringAttributeInternal;
 	}
 
-	private static Node GetAndRemoveIntegerAttributeInternal(Node node, String attrib, boolean fRequired, RefObject<Integer> val)
+	private static Node getAndRemoveIntegerAttributeInternal(Node node, String attrib, boolean fRequired, RefObject<Integer> val)
 	{
-		Node andRemoveAttribute = HandlerBase.GetAndRemoveAttribute(node, attrib, fRequired);
+		Node andRemoveAttribute = HandlerBase.getAndRemoveAttribute(node, attrib, fRequired);
 		if (andRemoveAttribute != null)
 		{
 			if (!andRemoveAttribute.getNodeValue().trim().equals(andRemoveAttribute.getNodeValue()))
@@ -69,9 +69,9 @@ public final class HandlerBase
 		return andRemoveAttribute;
 	}
 
-	private static Node GetAndRemoveNonNegativeAttributeInternal(Node node, String attrib, boolean fRequired, RefObject<Integer> val)
+	private static Node getAndRemoveNonNegativeAttributeInternal(Node node, String attrib, boolean fRequired, RefObject<Integer> val)
 	{
-		Node andRemoveIntegerAttributeInternal = HandlerBase.GetAndRemoveIntegerAttributeInternal(node, attrib, fRequired, val);
+		Node andRemoveIntegerAttributeInternal = HandlerBase.getAndRemoveIntegerAttributeInternal(node, attrib, fRequired, val);
 		if (andRemoveIntegerAttributeInternal != null && val.getRefObj() < 0)
 		{
 			//throw new ConfigurationErrorsException(SR.GetString("Invalid_nonnegative_integer_attribute", new Object[] {attrib}), andRemoveIntegerAttributeInternal);
@@ -79,12 +79,12 @@ public final class HandlerBase
 		return andRemoveIntegerAttributeInternal;
 	}
 
-	public static Node GetAndRemoveNonNegativeIntegerAttribute(Node node, String attrib, RefObject<Integer> val)
+	public static Node getAndRemoveNonNegativeIntegerAttribute(Node node, String attrib, RefObject<Integer> val)
 	{
-		return HandlerBase.GetAndRemoveNonNegativeAttributeInternal(node, attrib, false, val);
+		return HandlerBase.getAndRemoveNonNegativeAttributeInternal(node, attrib, false, val);
 	}
 
-	public static void CheckForUnrecognizedAttributes(Node node)
+	public static void checkForUnrecognizedAttributes(Node node)
 	{
 		if (node.getAttributes().getLength() != 0)
 		{
@@ -92,7 +92,7 @@ public final class HandlerBase
 		}
 	}
 
-	public static void CheckForNonElement(Node node)
+	public static void checkForNonElement(Node node)
 	{
 		if (node.getNodeType() != Node.ELEMENT_NODE)
 		{
@@ -100,7 +100,7 @@ public final class HandlerBase
 		}
 	}
 
-	public static boolean IsIgnorableAlsoCheckForNonElement(Node node)
+	public static boolean isIgnorableAlsoCheckForNonElement(Node node)
 	{
 		
 		//if (node.getNodeType() == Node.getComment()_NODE || node.NodeType == NodeType.Whitespace)
@@ -108,11 +108,11 @@ public final class HandlerBase
 		{
 			return true;
 		}
-		HandlerBase.CheckForNonElement(node);
+		HandlerBase.checkForNonElement(node);
 		return false;
 	}
 
-	public static void CheckForChildNodes(Node node)
+	public static void checkForChildNodes(Node node)
 	{
 		if (node.hasChildNodes())
 		{
@@ -120,7 +120,7 @@ public final class HandlerBase
 		}
 	}
 
-	public static void ThrowUnrecognizedElement(Node node)
+	public static void throwUnrecognizedElement(Node node)
 	{
 		//throw new ConfigurationErrorsException(SR.GetString("Config_base_unrecognized_element"), node);
 	}

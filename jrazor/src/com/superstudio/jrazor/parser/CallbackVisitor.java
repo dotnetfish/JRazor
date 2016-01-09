@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser;
+package com.superstudio.jrazor.parser;
 
 import java.util.function.Consumer;
 
@@ -71,13 +71,13 @@ public class CallbackVisitor extends ParserVisitor {
 	}
 
 	@Override
-	public void visitSpan(Span span) throws OperationCanceledException, Exception {
+	public void visitSpan(Span span) throws Exception {
 		super.visitSpan(span);
 		raiseCallback(synchronizationContext, span, _spanCallback);
 	}
 
 	@Override
-	public void visitEndBlock(Block block) throws OperationCanceledException, Exception {
+	public void visitEndBlock(Block block) throws Exception {
 		super.visitEndBlock(block);
 		raiseCallback(synchronizationContext, block.getType(), _endBlockCallback);
 	}

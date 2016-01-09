@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.generator;
+package com.superstudio.jrazor.generator;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import com.superstudio.jrazor.RazorEngineHost;
 import com.superstudio.jrazor.parser.ParserVisitor;
 import com.superstudio.jrazor.parser.syntaxTree.*;
 import com.superstudio.jrazor.resources.RazorResources;
-import com.superstudio.web.*;
+
 import com.superstudio.codedom.CodeConstructor;
 import com.superstudio.codedom.CodeNamespaceImport;
 import com.superstudio.codedom.CodeTypeReference;

@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor;
+package com.superstudio.jrazor;
 
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.jrazor.generator.RazorCodeGenerator;
@@ -40,7 +40,7 @@ public abstract class RazorCodeLanguage {
 	 * The type of the CodeDOM provider for this language
 	 * 
 	 */
-	public abstract java.lang.Class<?> getCodeDomProviderType();
+	//public abstract java.lang.Class<?> getCodeDomProviderType();
 
 	/**
 	 * Gets the RazorCodeLanguage registered for the specified file extension

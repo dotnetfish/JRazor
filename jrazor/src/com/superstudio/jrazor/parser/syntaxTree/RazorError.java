@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser.syntaxTree;
+package com.superstudio.jrazor.parser.syntaxTree;
 
 import com.superstudio.commons.IEquatable;
 import com.superstudio.commons.csharpbridge.StringHelper;

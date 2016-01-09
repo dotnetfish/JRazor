@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.generator;
+package com.superstudio.jrazor.generator;
 
 import com.superstudio.commons.csharpbridge.action.ActionOne;
 public abstract class BaseCodeWriter extends CodeWriter

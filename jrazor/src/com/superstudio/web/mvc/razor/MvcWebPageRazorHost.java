@@ -1,37 +1,30 @@
 package com.superstudio.web.mvc.razor;
 
 import com.superstudio.codedom.*;
-import com.superstudio.commons.exception.ArgumentNullException;
-import com.superstudio.jrazor.WebPageRazorHost;
-import com.superstudio.jrazor.generator.CodeGeneratorContext;
-import com.superstudio.jrazor.generator.RazorCodeGenerator;
-import com.superstudio.jrazor.parser.*;
-import com.superstudio.language.java.JavaRazorCodeGenerator;
-import com.superstudio.language.java.mvc.MvcJavaRazorCodeGenerator;
 import com.superstudio.language.java.mvc.MvcJavaRazorCodeParser;
 import com.superstudio.language.java.parser.JavaCodeParser;
+import com.superstudio.web.razor.WebPageRazorHost;
+import com.superstudio.web.razor.generator.CodeGeneratorContext;
+import com.superstudio.web.razor.generator.RazorCodeGenerator;
+import com.superstudio.web.razor.parser.ParserBase;
 
 public class MvcWebPageRazorHost extends WebPageRazorHost {
 	public MvcWebPageRazorHost(String virtualPath, String physicalPath) {
 		super(virtualPath, physicalPath);
-		// super.RegisterSpecialFile(RazorViewEngine.ViewStartFileName,
+		// super.registerSpecialFile(RazorViewEngine.ViewStartFileName,
 		// ViewStartPage.class);
 		// super.DefaultPageBaseClass = WebViewPage.class.getName();
-		super.setDefaultPageBaseClass("com.superstudio.web.webpages");
-		this.getRidOfNamespace("System.Web.WebPages.Html");
+		super.setDefaultPageBaseClass("com.superstudio.web.templatepages");
+		//this.getRidOfNamespace("System.Web.WebPages.Html");
 	}
 
-	@Override
+	 @Override
 	public RazorCodeGenerator decorateCodeGenerator(RazorCodeGenerator incomingCodeGenerator) throws Exception {
-		if (incomingCodeGenerator instanceof JavaRazorCodeGenerator) {
-			return new MvcJavaRazorCodeGenerator(incomingCodeGenerator.getClassName(),
-					incomingCodeGenerator.getRootNamespaceName(), incomingCodeGenerator.getSourceFileName(),
-					incomingCodeGenerator.getHost());
-		}
+
 		return super.decorateCodeGenerator(incomingCodeGenerator);
 	}
-
-	@Override
+	 
+@Override
 	public ParserBase decorateCodeParser(ParserBase incomingCodeParser) throws Exception {
 
 		if (incomingCodeParser instanceof JavaCodeParser) {
@@ -46,9 +39,9 @@ public class MvcWebPageRazorHost extends WebPageRazorHost {
 			this.getNamespaceImports().remove(ns);
 		}
 	}
-
+	
 	@Override
-	public void postProcessGeneratedCode(CodeGeneratorContext context) throws ArgumentNullException {
+	public void postProcessGeneratedCode(CodeGeneratorContext context) {
 		super.postProcessGeneratedCode(context);
 		CodeMemberProperty codeMemberProperty = new CodeMemberProperty();
 		codeMemberProperty.setName("ApplicationInstance");
@@ -61,5 +54,5 @@ public class MvcWebPageRazorHost extends WebPageRazorHost {
 						new CodeTypeReference(this.getGlobalAsaxTypeName()), new CodePropertyReferenceExpression(
 								new CodePropertyReferenceExpression(null, "Context"), "ApplicationInstance"))));
 		context.getGeneratedClass().getMembers().Insert(0, codeMemberProperty);
-	}
+	} 
 }

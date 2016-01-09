@@ -2,14 +2,8 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
- 
-public class CodeAttributeArgumentCollection extends CollectionBase<CodeAttributeArgument> implements Serializable
+public class CodeAttributeArgumentCollection extends CollectionBase implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1019671289576384771L;
-
 	public final CodeAttributeArgument getItem(int index)
 	{
 		return (CodeAttributeArgument)get(index);
@@ -25,20 +19,20 @@ public class CodeAttributeArgumentCollection extends CollectionBase<CodeAttribut
 
 	public CodeAttributeArgumentCollection(CodeAttributeArgumentCollection value)
 	{
-		this.AddRange(value);
+		this.addRange(value);
 	}
 
 	public CodeAttributeArgumentCollection(CodeAttributeArgument[] value)
 	{
-		this.AddRange(value);
+		this.addRange(value);
 	}
 
-	public final int Add(CodeAttributeArgument value)
+	public final int add(CodeAttributeArgument value)
 	{
 		add(value);return size();
 	}
 
-	public final void AddRange(CodeAttributeArgument[] value)
+	public final void addRange(CodeAttributeArgument[] value)
 	{
 		if (value == null)
 		{
@@ -46,11 +40,11 @@ public class CodeAttributeArgumentCollection extends CollectionBase<CodeAttribut
 		}
 		for (int i = 0; i < value.length; i++)
 		{
-			this.Add(value[i]);
+			this.add(value[i]);
 		}
 	}
 
-	public final void AddRange(CodeAttributeArgumentCollection value)
+	public final void addRange(CodeAttributeArgumentCollection value)
 	{
 		if (value == null)
 		{
@@ -59,16 +53,16 @@ public class CodeAttributeArgumentCollection extends CollectionBase<CodeAttribut
 		int count = value.size();
 		for (int i = 0; i < count; i++)
 		{
-			this.Add(value.getItem(i));
+			this.add(value.getItem(i));
 		}
 	}
 
-	public final boolean Contains(CodeAttributeArgument value)
+	public final boolean contains(CodeAttributeArgument value)
 	{
 		return contains(value);
 	}
 
-	public final void CopyTo(CodeAttributeArgument[] array, int index)
+	public final void copyTo(CodeAttributeArgument[] array, int index)
 	{
 		copyTo(array,index);
 	}
@@ -78,12 +72,12 @@ public class CodeAttributeArgumentCollection extends CollectionBase<CodeAttribut
 		return super.List.indexOf(value);
 	}*/
 
-	public final void Insert(int index, CodeAttributeArgument value)
+	public final void insert(int index, CodeAttributeArgument value)
 	{
 		add(index,value);
 	}
 
-	public final void Remove(CodeAttributeArgument value)
+	public final void remove(CodeAttributeArgument value)
 	{
 		remove(value);
 	}

@@ -1,26 +1,25 @@
 package com.superstudio.language.java.mvc;
 
-import com.superstudio.jrazor.WebPageRazorHost;
-import com.superstudio.jrazor.generator.RazorCodeGenerator;
-import com.superstudio.jrazor.parser.*;
-import com.superstudio.language.java.JavaRazorCodeGenerator;
-import com.superstudio.language.java.parser.JavaCodeParser;
+import com.superstudio.web.razor.WebPageRazorHost;
+import com.superstudio.web.razor.generator.CSharpRazorCodeGenerator;
+import com.superstudio.web.razor.generator.RazorCodeGenerator;
+import com.superstudio.web.razor.parser.*;
 
 public class MvcJavaWebPageRazorHost extends WebPageRazorHost {
 	public MvcJavaWebPageRazorHost(String virtualPath, String physicalPath) {
 		super(virtualPath, physicalPath);
-		this.getNamespaceImports().add("com.superstudio.web.webpages.WebViewPage");
+		this.getNamespaceImports().add("com.superstudio.web.templatepages.WebViewPage");
 		
-		// super.RegisterSpecialFile(RazorViewEngine.ViewStartFileName,
+		// super.registerSpecialFile(RazorViewEngine.ViewStartFileName,
 		// ViewStartPage.class);
 		// super.DefaultPageBaseClass = WebViewPage.class.getName();
 		super.setDefaultPageBaseClass("WebViewPage");
-		//this.GetRidOfNamespace("System.Web.Mvc.HtmlHelper");
+		//this.getRidOfNamespace("com.superstudio.mvc.HtmlHelper");
 	}
 
-	// @Override
+	 @Override
 	public RazorCodeGenerator decorateCodeGenerator(RazorCodeGenerator incomingCodeGenerator) throws Exception {
-		if (incomingCodeGenerator instanceof JavaRazorCodeGenerator) {
+		if (incomingCodeGenerator instanceof CSharpRazorCodeGenerator) {
 			return new MvcJavaRazorCodeGenerator(incomingCodeGenerator.getClassName(),
 					incomingCodeGenerator.getRootNamespaceName(), incomingCodeGenerator.getSourceFileName(),
 					incomingCodeGenerator.getHost());
@@ -29,10 +28,10 @@ public class MvcJavaWebPageRazorHost extends WebPageRazorHost {
 	}
 
 	public ParserBase decorateCodeParser(ParserBase incomingCodeParser) throws Exception {
-		if (incomingCodeParser instanceof JavaCodeParser) {
+	/*	if (incomingCodeParser instanceof CSharpCodeParser) {
 			return new MvcJavaRazorCodeParser();
-		}
-		
+		}*/
+
 		return super.decorateCodeParser(incomingCodeParser);
 	}
 

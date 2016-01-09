@@ -5,5 +5,5 @@ import com.superstudio.commons.TextReader;
 
 public interface ICodeParser
 {
-	CodeCompileUnit Parse(TextReader codeStream);
+	CodeCompileUnit parse(TextReader codeStream);
 }

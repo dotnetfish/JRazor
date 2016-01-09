@@ -2,7 +2,7 @@ package com.superstudio.commons;
 
 public class HostingEnvironment {
 
-	public static final VirtualPathProvider VirtualPathProvider = null;
+	//public static  VirtualPathProvider VirtualPathProvider = null;
 
 	public static boolean getIsHosted() {
 		// TODO Auto-generated method stub

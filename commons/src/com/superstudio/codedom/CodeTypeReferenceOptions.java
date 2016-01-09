@@ -1,6 +1,6 @@
 package com.superstudio.codedom;
 
- 
+
 //ORIGINAL LINE: [Flags, ComVisible(true)][Serializable] public enum CodeTypeReferenceOptions
 public enum CodeTypeReferenceOptions
 {
@@ -25,7 +25,7 @@ public enum CodeTypeReferenceOptions
 		return mappings;
 	}
 
-	private CodeTypeReferenceOptions(int value)
+	CodeTypeReferenceOptions(int value)
 	{
 		intValue = value;
 		synchronized (CodeTypeReferenceOptions.class)

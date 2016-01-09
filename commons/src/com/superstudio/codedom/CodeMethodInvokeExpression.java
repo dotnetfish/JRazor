@@ -1,6 +1,7 @@
 package com.superstudio.codedom;
 import java.io.Serializable;
- 
+import java.util.ArrayList;
+
 //ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeMethodInvokeExpression : CodeExpression
 public class CodeMethodInvokeExpression extends CodeExpression implements Serializable
 {

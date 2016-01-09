@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.editor;
+package com.superstudio.jrazor.editor;
 
 
 import java.util.ArrayList;
@@ -7,7 +7,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.superstudio.commons.CancellationToken;
 import com.superstudio.commons.CancellationTokenSource;
-import com.superstudio.commons.IDisposable;
 import com.superstudio.commons.ManualResetEventSlim;
 import com.superstudio.commons.Path;
 import com.superstudio.commons.csharpbridge.action.ActionTwo;
@@ -23,7 +22,7 @@ import com.superstudio.jrazor.text.TextChange;
 import com.superstudio.jrazor.utils.DisposableAction;
 
 
-public class BackgroundParser implements IDisposable {
+public class BackgroundParser implements AutoCloseable {
 	private MainThreadState _main;
 	private BackgroundThread _bg;
 
@@ -39,7 +38,7 @@ public class BackgroundParser implements IDisposable {
 	 * Fired on the main thread.
 	 * 
 	 */
-	// C# TO JAVA CONVERTER TODO TASK: Events are not available in Java:
+
 	private ActionTwo<Object,DocumentParseCompleteEventArgs> resultsReady;
 
 	public final boolean getIsIdle() {
@@ -60,15 +59,14 @@ public class BackgroundParser implements IDisposable {
 
 	 
 	 
-	// [SuppressMessage("Microsoft.Usage",
-	// "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "_main",
-	// Justification = "MainThreadState is disposed when the background thread
-	// shuts down")]
+	public final  void close(){
+		dispose();
+	}
 	public final void dispose() {
 		_main.cancel();
 	}
 
-	public final IDisposable synchronizeMainThreadState() {
+	public final AutoCloseable synchronizeMainThreadState() {
 		return _main.lock();
 	}
 
@@ -148,7 +146,7 @@ public class BackgroundParser implements IDisposable {
 		}
 	}
 
-	private  class MainThreadState extends ThreadStateBase implements IDisposable {
+	private  class MainThreadState extends ThreadStateBase implements AutoCloseable {
 		private CancellationTokenSource _cancelSource = new CancellationTokenSource();
 		private ManualResetEventSlim _hasParcel = new ManualResetEventSlim(false);
 		private CancellationTokenSource _currentParcelCancelSource;
@@ -184,7 +182,7 @@ public class BackgroundParser implements IDisposable {
 			_cancelSource.Cancel();
 		}
 
-		public final IDisposable lock() {
+		public final AutoCloseable lock() {
 			// Monitor.Enter(_stateLock);
 			ReentrantLock lock = new ReentrantLock();
 			lock.lock();
@@ -243,7 +241,7 @@ public class BackgroundParser implements IDisposable {
 		}
 
 		@Override
-		public final void dispose() {
+		public final void close() {
 			dispose(true);
 			System.gc();
 			// GC.SuppressFinalize(this);
@@ -325,8 +323,7 @@ public class BackgroundParser implements IDisposable {
 						try {
 							if (!linkedCancel.IsCancellationRequested()) {
 								// Collect ALL changes
-								// C# TO JAVA CONVERTER TODO TASK: There is
-								// no preprocessor in Java:
+
 								// #if EDITOR_TRACING
 								if (_previouslyDiscarded != null && _previouslyDiscarded.size()>0) {
 									RazorEditorTrace.traceLine(RazorResources.getTrace_CollectedDiscardedChanges(),
@@ -345,15 +342,13 @@ public class BackgroundParser implements IDisposable {
 								}
 
 								TextChange finalChange = allChanges.get(allChanges.size()-1);
-								// C# TO JAVA CONVERTER TODO TASK: There is
-								// no preprocessor in Java:
+
 								// #if EDITOR_TRACING
 								// sw.Start();
 								// #endif
 								GeneratorResults results = parseChange(finalChange.getNewBuffer(),
 										linkedCancel.getToken());
-								// C# TO JAVA CONVERTER TODO TASK: There is
-								// no preprocessor in Java:
+
 								// #if EDITOR_TRACING
 								//sw.Stop();
 								//elapsedMs = sw.ElapsedMilliseconds;
@@ -366,18 +361,14 @@ public class BackgroundParser implements IDisposable {
 									// Clear discarded changes list
 									_previouslyDiscarded = null;
 
-									// Take the current tree and check for
-									// differences
-									// C# TO JAVA CONVERTER TODO TASK: There
-									// is no preprocessor in Java:
+
 									// #if EDITOR_TRACING
 									// sw.Start();
 									// #endif
 									boolean treeStructureChanged = _currentParseTree == null
 											|| treesAreDifferent(_currentParseTree, results.getDocument(),
 													allChanges, parcel.getCancelToken());
-									// C# TO JAVA CONVERTER TODO TASK: There
-									// is no preprocessor in Java:
+
 									// #if EDITOR_TRACING
 									// sw.Stop();
 									// elapsedMs = sw.ElapsedMilliseconds;
@@ -432,7 +423,7 @@ public class BackgroundParser implements IDisposable {
 				RazorEditorTrace.traceLine(RazorResources.getTrace_BackgroundThreadShutdown(), fileNameOnly);
 
 				// Clean up main thread resources
-				_main.dispose();
+				_main.close();
 			}
 		}
 

@@ -2,15 +2,8 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
- 
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeDirectiveCollection : CollectionBase
-public class CodeDirectiveCollection extends CollectionBase<CodeDirective> implements Serializable
+public class CodeDirectiveCollection extends CollectionBase implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3226414386363863489L;
-
 	public final CodeDirective getItem(int index)
 	{
 		return (CodeDirective)get(index);

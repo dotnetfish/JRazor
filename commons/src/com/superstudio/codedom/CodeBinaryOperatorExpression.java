@@ -1,7 +1,5 @@
 package com.superstudio.codedom;
 import java.io.Serializable;
- 
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeBinaryOperatorExpression : CodeExpression
 public class CodeBinaryOperatorExpression extends CodeExpression implements Serializable
 {
 	private CodeBinaryOperatorType op = CodeBinaryOperatorType.values()[0];

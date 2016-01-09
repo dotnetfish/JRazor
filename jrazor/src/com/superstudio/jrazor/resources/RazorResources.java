@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.resources;
+package com.superstudio.jrazor.resources;
 
 import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.ResourceManager;

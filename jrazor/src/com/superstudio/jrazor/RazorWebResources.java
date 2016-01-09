@@ -4,7 +4,6 @@ import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.ResourceManager;
 
  
-//ORIGINAL LINE: [GeneratedCode("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0"), DebuggerNonUserCode, CompilerGenerated] internal class RazorWebResources
 public class RazorWebResources
 {
 	public static final String Could_Not_Locate_FactoryType = "Could_Not_Locate_FactoryType";
@@ -12,7 +11,6 @@ public class RazorWebResources
 	private static ResourceManager resourceMan;
 	private static CultureInfo resourceCulture;
  
-//ORIGINAL LINE: [EditorBrowsable(EditorBrowsableState.Advanced)] internal static ResourceManager ResourceManager
 	public static ResourceManager getResourceManager()
 	{
 		//if (Object.ReferenceEquals(RazorWebResources.resourceMan, null))
@@ -24,7 +22,6 @@ public class RazorWebResources
 		return RazorWebResources.resourceMan;
 	}
  
-//ORIGINAL LINE: [EditorBrowsable(EditorBrowsableState.Advanced)] internal static CultureInfo Culture
 	public static CultureInfo getCulture()
 	{
 		return RazorWebResources.resourceCulture;

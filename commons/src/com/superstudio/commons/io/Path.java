@@ -1,9 +1,9 @@
 package com.superstudio.commons.io;
 
-import java.util.UUID;
-
 import com.superstudio.commons.Environment;
 import com.superstudio.commons.csharpbridge.StringHelper;
+
+import java.util.UUID;
 
 
 public final class Path
@@ -159,19 +159,19 @@ public final class Path
 	{
 		return c == java.io.File.separatorChar || c == Path.AltDirectorySeparatorChar;
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable] public static char[] GetInvalidPathChars()
 	public static char[] GetInvalidPathChars()
 	{
-		return (char[])Path.RealInvalidPathChars.clone();
+		return Path.RealInvalidPathChars.clone();
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable] public static char[] GetInvalidFileNameChars()
 	public static char[] GetInvalidFileNameChars()
 	{
-		return (char[])Path.InvalidFileNameChars.clone();
+		return Path.InvalidFileNameChars.clone();
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable] public static string GetExtension(string path)
 	public static String GetExtension(String path)
 	{
@@ -203,7 +203,7 @@ public final class Path
 		}
 		return "";
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable, SecuritySafeCritical] public static string GetFullPath(string path)
 	public static String GetFullPath(String path)
 	{
@@ -211,7 +211,7 @@ public final class Path
 	//	FileIOPermission.QuickDemand(FileIOPermissionAccess.PathDiscovery, fullPathInternal, false, false);
 		return fullPathInternal;
 	}
- 
+
 //ORIGINAL LINE: [SecurityCritical] internal static string UnsafeGetFullPath(string path)
 	public static String UnsafeGetFullPath(String path)
 	{
@@ -227,13 +227,13 @@ public final class Path
 		}
 		return Path.NormalizePath(path, true);
 	}
- 
+
 //ORIGINAL LINE: [SecuritySafeCritical] internal static string NormalizePath(string path, bool fullCheck)
 	public static String NormalizePath(String path, boolean fullCheck)
 	{
 		return Path.NormalizePath(path, fullCheck, Path.MaxPath);
 	}
- 
+
 //ORIGINAL LINE: [SecuritySafeCritical] internal static string NormalizePath(string path, bool fullCheck, bool expandShortPaths)
 	public static String NormalizePath(String path, boolean fullCheck, boolean expandShortPaths)
 	{
@@ -247,8 +247,8 @@ public final class Path
 	static String NormalizePath(String path, boolean fullCheck, int maxPathLength, boolean expandShortPaths){
 		return path;
 	}
-//C# TO JAVA CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to Java Converter:
- 
+
+
 //ORIGINAL LINE: [SecurityCritical] internal unsafe static string NormalizePath(string path, bool fullCheck, int maxPathLength, bool expandShortPaths)
 //	  static string NormalizePath(string path, bool fullCheck, int maxPathLength, bool expandShortPaths)
 //		{
@@ -601,7 +601,7 @@ public final class Path
 		}
 		return pathSB.delete(0, 4);
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable] public static string GetFileName(string path)
 	public static String GetFileName(String path)
 	{
@@ -621,7 +621,7 @@ public final class Path
 		}
 		return path;
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable] public static string GetFileNameWithoutExtension(string path)
 	public static String GetFileNameWithoutExtension(String path)
 	{
@@ -637,7 +637,7 @@ public final class Path
 		}
 		return path.substring(0, length);
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable] public static string GetPathRoot(string path)
 	public static String GetPathRoot(String path)
 	{
@@ -648,7 +648,7 @@ public final class Path
 		path = Path.NormalizePath(path, false);
 		return path.substring(0, Path.GetRootLength(path));
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable, SecuritySafeCritical] public static string GetTempPath()
 	public static String GetTempPath()
 	{
@@ -666,11 +666,11 @@ public final class Path
 	{
 		return (path.length() < 3 || path.charAt(1) != Path.VolumeSeparatorChar || path.charAt(2) != java.io.File.separatorChar || ((path.charAt(0) < 'a' || path.charAt(0) > 'z') && (path.charAt(0) < 'A' || path.charAt(0) > 'Z'))) && (path.length() < 2 || path.charAt(0) != '\\' || path.charAt(1) != '\\');
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable] public static string GetRandomFileName()
 	public static String GetRandomFileName()
 	{
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
+
 //ORIGINAL LINE: byte[] array = new byte[10];
 		/*byte[] array = new byte[10];
 		RNGCryptoServiceProvider rNGCryptoServiceProvider = null;
@@ -687,31 +687,31 @@ public final class Path
 		{
 			if (rNGCryptoServiceProvider != null)
 			{
-				rNGCryptoServiceProvider.Dispose();
+				rNGCryptoServiceProvider.dispose();
 			}
 		}
 		return result;*/
 		return new UUID(0, 0).randomUUID().toString();
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable, SecuritySafeCritical] public static string GetTempFileName()
 	public static String GetTempFileName()
 	{
 		return Path.InternalGetTempFileName(true);
 	}
- 
+
 //ORIGINAL LINE: [SecurityCritical] internal static string UnsafeGetTempFileName()
 	public static String UnsafeGetTempFileName()
 	{
 		return Path.InternalGetTempFileName(false);
 	}
- 
+
 //ORIGINAL LINE: [SecurityCritical] private static string InternalGetTempFileName(bool checkHost)
 	private static String InternalGetTempFileName(boolean checkHost)
 	{
 		String tempPath = Path.GetTempPath();
 		StringBuilder stringBuilder = new StringBuilder(260);
-		/*(new FileIOPermission(FileIOPermissionAccess.Write, tempPath)).Demand();
+		/*(new FileIOPermission(FileIOPermissionAccess.write, tempPath)).Demand();
 		
 		if (Win32Native.GetTempFileName(tempPath, "tmp", 0, stringBuilder) == 0)
 		{
@@ -719,7 +719,7 @@ public final class Path
 		}*/
 		return stringBuilder.toString();
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable] public static bool HasExtension(string path)
 	public static boolean HasExtension(String path)
 	{
@@ -742,7 +742,7 @@ public final class Path
 		}
 		return false;
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable] public static bool IsPathRooted(string path)
 	public static boolean IsPathRooted(String path)
 	{
@@ -757,7 +757,7 @@ public final class Path
 		}
 		return false;
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable] public static string Combine(string path1, string path2)
 	public static String Combine(String path1, String path2)
 	{
@@ -769,7 +769,7 @@ public final class Path
 		Path.CheckInvalidPathChars(path2, false);
 		return Path.CombineNoChecks(path1, path2);
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable] public static string Combine(string path1, string path2, string path3)
 	public static String Combine(String path1, String path2, String path3)
 	{
@@ -794,7 +794,7 @@ public final class Path
 		Path.CheckInvalidPathChars(path4, false);
 		return Path.CombineNoChecks(Path.CombineNoChecks(Path.CombineNoChecks(path1, path2), path3), path4);
 	}
- 
+
 //ORIGINAL LINE: [__DynamicallyInvokable] public static string Combine(params string[] paths)
 	public static String Combine(String... paths)
 	{
@@ -873,7 +873,7 @@ public final class Path
 		}
 		return path1 + path2;
 	}
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
+
 //ORIGINAL LINE: internal static string ToBase32StringSuitableForDirName(byte[] buff)
 	public static String ToBase32StringSuitableForDirName(byte[] buff)
 	{
@@ -882,32 +882,31 @@ public final class Path
 		int num2 = 0;
 		do
 		{
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
+
 //ORIGINAL LINE: byte b = (num2 < num) ? buff[num2++] : 0;
 			byte b = (num2 < num) ? buff[num2++] : 0;
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
+
 //ORIGINAL LINE: byte b2 = (num2 < num) ? buff[num2++] : 0;
 			byte b2 = (num2 < num) ? buff[num2++] : 0;
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
+
 //ORIGINAL LINE: byte b3 = (num2 < num) ? buff[num2++] : 0;
 			byte b3 = (num2 < num) ? buff[num2++] : 0;
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
+
 //ORIGINAL LINE: byte b4 = (num2 < num) ? buff[num2++] : 0;
 			byte b4 = (num2 < num) ? buff[num2++] : 0;
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
+
 //ORIGINAL LINE: byte b5 = (num2 < num) ? buff[num2++] : 0;
 			byte b5 = (num2 < num) ? buff[num2++] : 0;
-			stringBuilder.append(Path.s_Base32Char[(int)(b & 31)]);
-			stringBuilder.append(Path.s_Base32Char[(int)(b2 & 31)]);
-			stringBuilder.append(Path.s_Base32Char[(int)(b3 & 31)]);
-			stringBuilder.append(Path.s_Base32Char[(int)(b4 & 31)]);
-			stringBuilder.append(Path.s_Base32Char[(int)(b5 & 31)]);
-//C# TO JAVA CONVERTER WARNING: The right shift operator was not replaced by Java's logical right shift operator since the left operand was not confirmed to be of an unsigned type, but you should review whether the logical right shift operator (>>>) is more appropriate:
+			stringBuilder.append(Path.s_Base32Char[(b & 31)]);
+			stringBuilder.append(Path.s_Base32Char[(b2 & 31)]);
+			stringBuilder.append(Path.s_Base32Char[(b3 & 31)]);
+			stringBuilder.append(Path.s_Base32Char[(b4 & 31)]);
+			stringBuilder.append(Path.s_Base32Char[(b5 & 31)]);
+
 			stringBuilder.append(Path.s_Base32Char[(b & 224) >> 5 | (b4 & 96) >> 2]);
-//C# TO JAVA CONVERTER WARNING: The right shift operator was not replaced by Java's logical right shift operator since the left operand was not confirmed to be of an unsigned type, but you should review whether the logical right shift operator (>>>) is more appropriate:
+
 			stringBuilder.append(Path.s_Base32Char[(b2 & 224) >> 5 | (b5 & 96) >> 2]);
-//C# TO JAVA CONVERTER WARNING: The right shift operator was replaced by Java's logical right shift operator since the left operand was originally of an unsigned type, but you should confirm this replacement:
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
+
 //ORIGINAL LINE: b3 = (byte)(b3 >> 5);
 			b3 = (byte)(b3 >>> 5);
 			if ((b4 & 128) != 0)
@@ -952,7 +951,7 @@ public final class Path
 		CheckInvalidPathChars(path, false);
 	}
 
-//C# TO JAVA CONVERTER NOTE: Java does not support optional parameters. Overloaded method(s) are created above:
+
 //ORIGINAL LINE: internal static void CheckInvalidPathChars(string path, bool checkAdditional = false)
 	public static void CheckInvalidPathChars(String path, boolean checkAdditional)
 	{

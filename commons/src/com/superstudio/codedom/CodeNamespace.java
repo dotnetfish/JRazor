@@ -9,11 +9,6 @@ import com.superstudio.commons.SerializationInfo;
 
 public class CodeNamespace extends CodeObject implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6298786789200420703L;
-
 	private String name;
 
 	private CodeNamespaceImportCollection imports = new CodeNamespaceImportCollection();
@@ -32,9 +27,9 @@ public class CodeNamespace extends CodeObject implements Serializable
 
 	private static final int TypesCollection = 4;
 
-		private EventHandler<EmptyEventArgs> populateComments;;
+		private EventHandler<EmptyEventArgs> populateComments;
 
-private EventHandler<EmptyEventArgs> populateImports;
+	private EventHandler<EmptyEventArgs> populateImports;
 
 private EventHandler<EmptyEventArgs> populateTypes;
 

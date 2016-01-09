@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser.syntaxTree;
+package com.superstudio.jrazor.parser.syntaxTree;
 
 import java.util.List;
 
@@ -180,7 +180,7 @@ public class Span extends SyntaxTreeNode {
 		//String.concat()
 		//"".concat（":"）.concat(String.valueOf(23));
 		if(symString.size()>0){
-			builder.append(StringHelper.join(";", (String[])symString.toArray(new String[symString.size()])));
+			builder.append(StringHelper.join(";", symString.toArray(new String[symString.size()])));
 		}
 		
 		builder.append("}");

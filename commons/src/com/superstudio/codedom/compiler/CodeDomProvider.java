@@ -1,27 +1,21 @@
 package com.superstudio.codedom.compiler;
 
-import java.io.FileNotFoundException;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-
 import com.superstudio.codedom.*;
-import com.superstudio.commons.Component;
-import com.superstudio.commons.PrivilegedConfigurationManager;
-import com.superstudio.commons.SR;
-import com.superstudio.commons.TypeConverter;
-import com.superstudio.commons.TypeDescriptor;
+import com.superstudio.commons.*;
 import com.superstudio.commons.csharpbridge.RefObject;
+import com.superstudio.commons.csharpbridge.StringComparison;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.ConfigurationErrorsException;
 import com.superstudio.commons.io.Path;
 import com.superstudio.commons.io.TextWriter;
-import com.superstudio.commons.csharpbridge.StringComparison;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 public abstract class CodeDomProvider extends Component {
 	private static CodeDomCompilationConfiguration getConfig() {
-		CodeDomCompilationConfiguration codeDomCompilationConfiguration = (CodeDomCompilationConfiguration) PrivilegedConfigurationManager
-				.GetSection("system.codedom");
+		CodeDomCompilationConfiguration codeDomCompilationConfiguration = PrivilegedConfigurationManager
+				.GetSection("codeDom");
 		if (codeDomCompilationConfiguration == null) {
 			return CodeDomCompilationConfiguration.getDefault();
 		}
@@ -77,19 +71,19 @@ public abstract class CodeDomProvider extends Component {
 		if (language == null) {
 			throw new IllegalArgumentException("language");
 		}
-		return (CompilerInfo) CodeDomProvider.getConfig()._compilerLanguages.get(language.trim());// [language.trim()];
+		return CodeDomProvider.getConfig()._compilerLanguages.get(language.trim());// [language.trim()];
 	}
 
 	private static CompilerInfo getCompilerInfoForExtensionNoThrow(String extension) {
 		if (extension == null) {
 			throw new IllegalArgumentException("extension");
 		}
-		return (CompilerInfo) CodeDomProvider.getConfig()._compilerExtensions.get(extension.trim());
+		return CodeDomProvider.getConfig()._compilerExtensions.get(extension.trim());
 	}
 
 	public static CompilerInfo[] getAllCompilerInfo() {
 		CompilerInfo[] infos = new CompilerInfo[CodeDomProvider.getConfig()._allCompilerInfo.size()];
-		return (CompilerInfo[]) CodeDomProvider.getConfig()._allCompilerInfo.toArray(infos);
+		return CodeDomProvider.getConfig()._allCompilerInfo.toArray(infos);
 		// return infos;
 	}
 
@@ -121,7 +115,7 @@ public abstract class CodeDomProvider extends Component {
 	}
 
 	public CompilerResults compileAssemblyFromFile(CompilerParameters options, String... fileNames)
-			throws FileNotFoundException, Exception {
+			throws Exception {
 		return this.createCompilerHelper().compileAssemblyFromFileBatch(options, fileNames);
 	}
 
@@ -179,8 +173,8 @@ public abstract class CodeDomProvider extends Component {
 		throw new UnsupportedOperationException(SR.GetString("NotSupported_CodeDomAPI"));
 	}
 
-/*	public CodeCompileUnit Parse(TextReader codeStream) {
-		return this.CreateParserHelper().Parse(codeStream);
+/*	public CodeCompileUnit parse(TextReader codeStream) {
+		return this.CreateParserHelper().parse(codeStream);
 	}*/
 
 	private ICodeCompiler createCompilerHelper() {

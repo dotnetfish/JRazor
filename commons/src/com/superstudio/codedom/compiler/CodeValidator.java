@@ -1,13 +1,13 @@
 package com.superstudio.codedom.compiler;
 
-import java.io.IOException;
-import java.util.Iterator;
-
-import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.commons.io.Path;
 import com.superstudio.codedom.*;
 import com.superstudio.commons.SR;
 import com.superstudio.commons.csharpbridge.StringComparison;
+import com.superstudio.commons.csharpbridge.StringHelper;
+import com.superstudio.commons.io.Path;
+
+import java.io.IOException;
+import java.util.Iterator;
 
 public class CodeValidator
 {
@@ -31,392 +31,392 @@ public class CodeValidator
 		return this.currentClass != null && this.currentClass instanceof CodeTypeDelegate;
 	}
 
-	public final void ValidateIdentifiers(CodeObject e)
+	public final void validateIdentifiers(CodeObject e)
 	{
 		if (e instanceof CodeCompileUnit)
 		{
-			this.ValidateCodeCompileUnit((CodeCompileUnit)e);
+			this.validateCodeCompileUnit((CodeCompileUnit)e);
 			return;
 		}
 		if (e instanceof CodeComment)
 		{
-			this.ValidateComment((CodeComment)e);
+			this.validateComment((CodeComment)e);
 			return;
 		}
 		if (e instanceof CodeExpression)
 		{
-			this.ValidateExpression((CodeExpression)e);
+			this.validateExpression((CodeExpression)e);
 			return;
 		}
 		if (e instanceof CodeNamespace)
 		{
-			this.ValidateNamespace((CodeNamespace)e);
+			this.validateNamespace((CodeNamespace)e);
 			return;
 		}
 		if (e instanceof CodeNamespaceImport)
 		{
-			CodeValidator.ValidateNamespaceImport((CodeNamespaceImport)e);
+			CodeValidator.validateNamespaceImport((CodeNamespaceImport)e);
 			return;
 		}
 		if (e instanceof CodeStatement)
 		{
-			this.ValidateStatement((CodeStatement)e);
+			this.validateStatement((CodeStatement)e);
 			return;
 		}
 		if (e instanceof CodeTypeMember)
 		{
-			this.ValidateTypeMember((CodeTypeMember)e);
+			this.validateTypeMember((CodeTypeMember)e);
 			return;
 		}
 		if (e instanceof CodeTypeReference)
 		{
-			CodeValidator.ValidateTypeReference((CodeTypeReference)e);
+			CodeValidator.validateTypeReference((CodeTypeReference)e);
 			return;
 		}
 		if (e instanceof CodeDirective)
 		{
-			CodeValidator.ValidateCodeDirective((CodeDirective)e);
+			CodeValidator.validateCodeDirective((CodeDirective)e);
 			return;
 		}
 		//throw new IllegalArgumentException(SR.GetString("InvalidElementType", new Object[] {e.getClass().getName()}), "e");
 	}
 
-	private void ValidateTypeMember(CodeTypeMember e)
+	private void validateTypeMember(CodeTypeMember e)
 	{
-		this.ValidateCommentStatements(e.getComments());
-		CodeValidator.ValidateCodeDirectives(e.getStartDirectives());
-		CodeValidator.ValidateCodeDirectives(e.getEndDirectives());
+		this.validateCommentStatements(e.getComments());
+		CodeValidator.validateCodeDirectives(e.getStartDirectives());
+		CodeValidator.validateCodeDirectives(e.getEndDirectives());
 		if (e.getLinePragma() != null)
 		{
-			this.ValidateLinePragmaStart(e.getLinePragma());
+			this.validateLinePragmaStart(e.getLinePragma());
 		}
 		if (e instanceof CodeMemberEvent)
 		{
-			this.ValidateEvent((CodeMemberEvent)e);
+			this.validateEvent((CodeMemberEvent)e);
 			return;
 		}
 		if (e instanceof CodeMemberField)
 		{
-			this.ValidateField((CodeMemberField)e);
+			this.validateField((CodeMemberField)e);
 			return;
 		}
 		if (e instanceof CodeMemberMethod)
 		{
-			this.ValidateMemberMethod((CodeMemberMethod)e);
+			this.validateMemberMethod((CodeMemberMethod)e);
 			return;
 		}
 		if (e instanceof CodeMemberProperty)
 		{
-			this.ValidateProperty((CodeMemberProperty)e);
+			this.validateProperty((CodeMemberProperty)e);
 			return;
 		}
 		if (e instanceof CodeSnippetTypeMember)
 		{
-			this.ValidateSnippetMember((CodeSnippetTypeMember)e);
+			this.validateSnippetMember((CodeSnippetTypeMember)e);
 			return;
 		}
 		if (e instanceof CodeTypeDeclaration)
 		{
-			this.ValidateTypeDeclaration((CodeTypeDeclaration)e);
+			this.validateTypeDeclaration((CodeTypeDeclaration)e);
 			return;
 		}
 		//throw new IllegalArgumentException(SR.GetString("InvalidElementType", new Object[] {e.getClass().getName()}), "e");
 	}
 
-	private void ValidateCodeCompileUnit(CodeCompileUnit e)
+	private void validateCodeCompileUnit(CodeCompileUnit e)
 	{
-		CodeValidator.ValidateCodeDirectives(e.getStartDirectives());
-		CodeValidator.ValidateCodeDirectives(e.getEndDirectives());
+		CodeValidator.validateCodeDirectives(e.getStartDirectives());
+		CodeValidator.validateCodeDirectives(e.getEndDirectives());
 		if (e instanceof CodeSnippetCompileUnit)
 		{
-			this.ValidateSnippetCompileUnit((CodeSnippetCompileUnit)e);
+			this.validateSnippetCompileUnit((CodeSnippetCompileUnit)e);
 			return;
 		}
-		this.ValidateCompileUnitStart(e);
-		this.ValidateNamespaces(e);
-		this.ValidateCompileUnitEnd(e);
+		this.validateCompileUnitStart(e);
+		this.validateNamespaces(e);
+		this.validateCompileUnitEnd(e);
 	}
 
-	private void ValidateSnippetCompileUnit(CodeSnippetCompileUnit e)
+	private void validateSnippetCompileUnit(CodeSnippetCompileUnit e)
 	{
 		if (e.getLinePragma() != null)
 		{
-			this.ValidateLinePragmaStart(e.getLinePragma());
+			this.validateLinePragmaStart(e.getLinePragma());
 		}
 	}
 
-	private void ValidateCompileUnitStart(CodeCompileUnit e)
+	private void validateCompileUnitStart(CodeCompileUnit e)
 	{
 		if (e.getAssemblyCustomAttributes().size() > 0)
 		{
-			this.ValidateAttributes(e.getAssemblyCustomAttributes());
+			this.validateAttributes(e.getAssemblyCustomAttributes());
 		}
 	}
 
-	private void ValidateCompileUnitEnd(CodeCompileUnit e)
+	private void validateCompileUnitEnd(CodeCompileUnit e)
 	{
 	}
 
-	private void ValidateNamespaces(CodeCompileUnit e)
+	private void validateNamespaces(CodeCompileUnit e)
 	{
 		for (Object e2 : e.getNamespaces())
 		{
-			this.ValidateNamespace((CodeNamespace)e2);
+			this.validateNamespace((CodeNamespace)e2);
 		}
 	}
 
-	private void ValidateNamespace(CodeNamespace e)
+	private void validateNamespace(CodeNamespace e)
 	{
-		this.ValidateCommentStatements(e.getComments());
-		CodeValidator.ValidateNamespaceStart(e);
-		this.ValidateNamespaceImports(e);
-		this.ValidateTypes(e);
+		this.validateCommentStatements(e.getComments());
+		CodeValidator.validateNamespaceStart(e);
+		this.validateNamespaceImports(e);
+		this.validateTypes(e);
 	}
 
-	private static void ValidateNamespaceStart(CodeNamespace e)
+	private static void validateNamespaceStart(CodeNamespace e)
 	{
 		if (e.getName() != null && e.getName().length() > 0)
 		{
-			CodeValidator.ValidateTypeName(e, "Name", e.getName());
+			CodeValidator.validateTypeName(e, "Name", e.getName());
 		}
 	}
 
-	private void ValidateNamespaceImports(CodeNamespace e)
+	private void validateNamespaceImports(CodeNamespace e)
 	{
-		Iterator<CodeNamespaceImport> enumerator = e.getImports().iterator();
+		Iterator enumerator = e.getImports().iterator();
 		while (enumerator.hasNext())
 		{
-			CodeNamespaceImport codeNamespaceImport = enumerator.next();
+			CodeNamespaceImport codeNamespaceImport = (CodeNamespaceImport)enumerator.next();
 			if (codeNamespaceImport.getLinePragma() != null)
 			{
-				this.ValidateLinePragmaStart(codeNamespaceImport.getLinePragma());
+				this.validateLinePragmaStart(codeNamespaceImport.getLinePragma());
 			}
-			CodeValidator.ValidateNamespaceImport(codeNamespaceImport);
+			CodeValidator.validateNamespaceImport(codeNamespaceImport);
 		}
 	}
 
-	private static void ValidateNamespaceImport(CodeNamespaceImport e)
+	private static void validateNamespaceImport(CodeNamespaceImport e)
 	{
-		CodeValidator.ValidateTypeName(e, "Namespace", e.getNamespace());
+		CodeValidator.validateTypeName(e, "Namespace", e.getNamespace());
 	}
 
-	private void ValidateAttributes(CodeAttributeDeclarationCollection attributes)
+	private void validateAttributes(CodeAttributeDeclarationCollection attributes)
 	{
 		if (attributes.size() == 0)
 		{
 			return;
 		}
-		Iterator<CodeAttributeDeclaration> enumerator = attributes.iterator();
+		Iterator enumerator = attributes.iterator();
 		while (enumerator.hasNext())
 		{
-			CodeAttributeDeclaration codeAttributeDeclaration = enumerator.next();
-			CodeValidator.ValidateTypeName(codeAttributeDeclaration, "Name", codeAttributeDeclaration.getName());
-			CodeValidator.ValidateTypeReference(codeAttributeDeclaration.getAttributeType());
+			CodeAttributeDeclaration codeAttributeDeclaration = (CodeAttributeDeclaration)enumerator.next();
+			CodeValidator.validateTypeName(codeAttributeDeclaration, "Name", codeAttributeDeclaration.getName());
+			CodeValidator.validateTypeReference(codeAttributeDeclaration.getAttributeType());
 			for (Object arg : codeAttributeDeclaration.getArguments())
 			{
-				this.ValidateAttributeArgument((CodeAttributeArgument)arg);
+				this.validateAttributeArgument((CodeAttributeArgument)arg);
 			}
 		}
 	}
 
-	private void ValidateAttributeArgument(CodeAttributeArgument arg)
+	private void validateAttributeArgument(CodeAttributeArgument arg)
 	{
 		if (arg.getName() != null && arg.getName().length() > 0)
 		{
-			CodeValidator.ValidateIdentifier(arg, "Name", arg.getName());
+			CodeValidator.validateIdentifier(arg, "Name", arg.getName());
 		}
-		this.ValidateExpression(arg.getValue());
+		this.validateExpression(arg.getValue());
 	}
 
-	private void ValidateTypes(CodeNamespace e)
+	private void validateTypes(CodeNamespace e)
 	{
 		for (Object e2 : e.getTypes())
 		{
-			this.ValidateTypeDeclaration((CodeTypeDeclaration)e2);
+			this.validateTypeDeclaration((CodeTypeDeclaration)e2);
 		}
 	}
 
-	private void ValidateTypeDeclaration(CodeTypeDeclaration e)
+	private void validateTypeDeclaration(CodeTypeDeclaration e)
 	{
 		CodeTypeDeclaration codeTypeDeclaration = this.currentClass;
 		this.currentClass = e;
-		this.ValidateTypeStart(e);
-		this.ValidateTypeParameters(e.getTypeParameters());
-		this.ValidateTypeMembers(e);
-		CodeValidator.ValidateTypeReferences(e.getBaseTypes());
+		this.validateTypeStart(e);
+		this.validateTypeParameters(e.getTypeParameters());
+		this.validateTypeMembers(e);
+		CodeValidator.validateTypeReferences(e.getBaseTypes());
 		this.currentClass = codeTypeDeclaration;
 	}
 
-	private void ValidateTypeMembers(CodeTypeDeclaration e)
+	private void validateTypeMembers(CodeTypeDeclaration e)
 	{
 		for (Object e2 : e.getMembers())
 		{
-			this.ValidateTypeMember((CodeTypeMember)e2);
+			this.validateTypeMember((CodeTypeMember)e2);
 		}
 	}
 
-	private void ValidateTypeParameters(CodeTypeParameterCollection parameters)
+	private void validateTypeParameters(CodeTypeParameterCollection parameters)
 	{
 		for (int i = 0; i < parameters.size(); i++)
 		{
-			this.ValidateTypeParameter(parameters.getItem(i));
+			this.validateTypeParameter(parameters.getItem(i));
 		}
 	}
 
-	private void ValidateTypeParameter(CodeTypeParameter e)
+	private void validateTypeParameter(CodeTypeParameter e)
 	{
-		CodeValidator.ValidateIdentifier(e, "Name", e.getName());
-		CodeValidator.ValidateTypeReferences(e.getConstraints());
-		this.ValidateAttributes(e.getCustomAttributes());
+		CodeValidator.validateIdentifier(e, "Name", e.getName());
+		CodeValidator.validateTypeReferences(e.getConstraints());
+		this.validateAttributes(e.getCustomAttributes());
 	}
 
-	private void ValidateField(CodeMemberField e)
+	private void validateField(CodeMemberField e)
 	{
 		if (e.getCustomAttributes().size() > 0)
 		{
-			this.ValidateAttributes(e.getCustomAttributes());
+			this.validateAttributes(e.getCustomAttributes());
 		}
-		CodeValidator.ValidateIdentifier(e, "Name", e.getName());
+		CodeValidator.validateIdentifier(e, "Name", e.getName());
 		if (!this.getIsCurrentEnum())
 		{
-			CodeValidator.ValidateTypeReference(e.getType());
+			CodeValidator.validateTypeReference(e.getType());
 		}
 		if (e.getInitExpression() != null)
 		{
-			this.ValidateExpression(e.getInitExpression());
+			this.validateExpression(e.getInitExpression());
 		}
 	}
 
-	private void ValidateConstructor(CodeConstructor e)
+	private void validateConstructor(CodeConstructor e)
 	{
 		if (e.getCustomAttributes().size() > 0)
 		{
-			this.ValidateAttributes(e.getCustomAttributes());
+			this.validateAttributes(e.getCustomAttributes());
 		}
-		this.ValidateParameters(e.getParameters());
+		this.validateParameters(e.getParameters());
 		CodeExpressionCollection baseConstructorArgs = e.getBaseConstructorArgs();
 		CodeExpressionCollection chainedConstructorArgs = e.getChainedConstructorArgs();
 		if (baseConstructorArgs.size() > 0)
 		{
-			this.ValidateExpressionList(baseConstructorArgs);
+			this.validateExpressionList(baseConstructorArgs);
 		}
 		if (chainedConstructorArgs.size() > 0)
 		{
-			this.ValidateExpressionList(chainedConstructorArgs);
+			this.validateExpressionList(chainedConstructorArgs);
 		}
-		this.ValidateStatements(e.getStatements());
+		this.validateStatements(e.getStatements());
 	}
 
-	private void ValidateProperty(CodeMemberProperty e)
+	private void validateProperty(CodeMemberProperty e)
 	{
 		if (e.getCustomAttributes().size() > 0)
 		{
-			this.ValidateAttributes(e.getCustomAttributes());
+			this.validateAttributes(e.getCustomAttributes());
 		}
-		CodeValidator.ValidateTypeReference(e.getType());
-		CodeValidator.ValidateTypeReferences(e.getImplementationTypes());
+		CodeValidator.validateTypeReference(e.getType());
+		CodeValidator.validateTypeReferences(e.getImplementationTypes());
 		if (e.getPrivateImplementationType() != null && !this.getIsCurrentInterface())
 		{
-			CodeValidator.ValidateTypeReference(e.getPrivateImplementationType());
+			CodeValidator.validateTypeReference(e.getPrivateImplementationType());
 		}
 		if (e.getParameters().size() > 0 && StringHelper.Compare(e.getName(), "Item", StringComparison.OrdinalIgnoreCase) == 0)
 		{
-			this.ValidateParameters(e.getParameters());
+			this.validateParameters(e.getParameters());
 		}
 		else
 		{
-			CodeValidator.ValidateIdentifier(e, "Name", e.getName());
+			CodeValidator.validateIdentifier(e, "Name", e.getName());
 		}
 		if (e.getHasGet() && !this.getIsCurrentInterface() && (e.getAttributes().getValue() & MemberAttributes.ScopeMask) != MemberAttributes.Abstract)
 		{
-			this.ValidateStatements(e.getGetStatements());
+			this.validateStatements(e.getGetStatements());
 		}
 		if (e.getHasSet() && !this.getIsCurrentInterface() && (e.getAttributes().getValue() & MemberAttributes.ScopeMask) != MemberAttributes.Abstract)
 		{
-			this.ValidateStatements(e.getSetStatements());
+			this.validateStatements(e.getSetStatements());
 		}
 	}
 
-	private void ValidateMemberMethod(CodeMemberMethod e)
+	private void validateMemberMethod(CodeMemberMethod e)
 	{
-		this.ValidateCommentStatements(e.getComments());
+		this.validateCommentStatements(e.getComments());
 		if (e.getLinePragma() != null)
 		{
-			this.ValidateLinePragmaStart(e.getLinePragma());
+			this.validateLinePragmaStart(e.getLinePragma());
 		}
-		this.ValidateTypeParameters(e.getTypeParameters());
-		CodeValidator.ValidateTypeReferences(e.getImplementationTypes());
+		this.validateTypeParameters(e.getTypeParameters());
+		CodeValidator.validateTypeReferences(e.getImplementationTypes());
 		if (e instanceof CodeEntryPointMethod)
 		{
-			this.ValidateStatements(((CodeEntryPointMethod)e).getStatements());
+			this.validateStatements(e.getStatements());
 			return;
 		}
 		if (e instanceof CodeConstructor)
 		{
-			this.ValidateConstructor((CodeConstructor)e);
+			this.validateConstructor((CodeConstructor)e);
 			return;
 		}
 		if (e instanceof CodeTypeConstructor)
 		{
-			this.ValidateTypeConstructor((CodeTypeConstructor)e);
+			this.validateTypeConstructor((CodeTypeConstructor)e);
 			return;
 		}
-		this.ValidateMethod(e);
+		this.validateMethod(e);
 	}
 
-	private void ValidateTypeConstructor(CodeTypeConstructor e)
+	private void validateTypeConstructor(CodeTypeConstructor e)
 	{
-		this.ValidateStatements(e.getStatements());
+		this.validateStatements(e.getStatements());
 	}
 
-	private void ValidateMethod(CodeMemberMethod e)
+	private void validateMethod(CodeMemberMethod e)
 	{
 		if (e.getCustomAttributes().size() > 0)
 		{
-			this.ValidateAttributes(e.getCustomAttributes());
+			this.validateAttributes(e.getCustomAttributes());
 		}
 		if (e.getReturnTypeCustomAttributes().size() > 0)
 		{
-			this.ValidateAttributes(e.getReturnTypeCustomAttributes());
+			this.validateAttributes(e.getReturnTypeCustomAttributes());
 		}
-		CodeValidator.ValidateTypeReference(e.getReturnType());
+		CodeValidator.validateTypeReference(e.getReturnType());
 		if (e.getPrivateImplementationType() != null)
 		{
-			CodeValidator.ValidateTypeReference(e.getPrivateImplementationType());
+			CodeValidator.validateTypeReference(e.getPrivateImplementationType());
 		}
-		CodeValidator.ValidateIdentifier(e, "Name", e.getName());
-		this.ValidateParameters(e.getParameters());
+		CodeValidator.validateIdentifier(e, "Name", e.getName());
+		this.validateParameters(e.getParameters());
 		if (!this.getIsCurrentInterface() && ((e.getAttributes().getValue() & MemberAttributes.ScopeMask)) != MemberAttributes.Abstract)
 		{
-			this.ValidateStatements(e.getStatements());
+			this.validateStatements(e.getStatements());
 		}
 	}
 
-	private void ValidateSnippetMember(CodeSnippetTypeMember e)
+	private void validateSnippetMember(CodeSnippetTypeMember e)
 	{
 	}
 
-	private void ValidateTypeStart(CodeTypeDeclaration e)
+	private void validateTypeStart(CodeTypeDeclaration e)
 	{
-		this.ValidateCommentStatements(e.getComments());
+		this.validateCommentStatements(e.getComments());
 		if (e.getCustomAttributes().size() > 0)
 		{
-			this.ValidateAttributes(e.getCustomAttributes());
+			this.validateAttributes(e.getCustomAttributes());
 		}
-		CodeValidator.ValidateIdentifier(e, "Name", e.getName());
+		CodeValidator.validateIdentifier(e, "Name", e.getName());
 		if (this.getIsCurrentDelegate())
 		{
 			CodeTypeDelegate codeTypeDelegate = (CodeTypeDelegate)e;
-			CodeValidator.ValidateTypeReference(codeTypeDelegate.getReturnType());
-			this.ValidateParameters(codeTypeDelegate.getParameters());
+			CodeValidator.validateTypeReference(codeTypeDelegate.getReturnType());
+			this.validateParameters(codeTypeDelegate.getParameters());
 			return;
 		}
-		Iterator<CodeTypeReference> enumerator = e.getBaseTypes().iterator();
+		Iterator enumerator = e.getBaseTypes().iterator();
 		try
 		{
 			while (enumerator.hasNext())
 			{
-				CodeValidator.ValidateTypeReference(enumerator.next());
+				CodeValidator.validateTypeReference((CodeTypeReference)enumerator.next());
 			}
 		}
 		finally
@@ -436,270 +436,270 @@ public class CodeValidator
 		}
 	}
 
-	private void ValidateCommentStatements(CodeCommentStatementCollection e)
+	private void validateCommentStatements(CodeCommentStatementCollection e)
 	{
 		for (Object e2 : e)
 		{
-			this.ValidateCommentStatement((CodeCommentStatement)e2);
+			this.validateCommentStatement((CodeCommentStatement)e2);
 		}
 	}
 
-	private void ValidateCommentStatement(CodeCommentStatement e)
+	private void validateCommentStatement(CodeCommentStatement e)
 	{
-		this.ValidateComment(e.getComment());
+		this.validateComment(e.getComment());
 	}
 
-	private void ValidateComment(CodeComment e)
+	private void validateComment(CodeComment e)
 	{
 	}
 
-	private void ValidateStatement(CodeStatement e)
+	private void validateStatement(CodeStatement e)
 	{
-		CodeValidator.ValidateCodeDirectives(e.getStartDirectives());
-		CodeValidator.ValidateCodeDirectives(e.getEndDirectives());
+		CodeValidator.validateCodeDirectives(e.getStartDirectives());
+		CodeValidator.validateCodeDirectives(e.getEndDirectives());
 		if (e instanceof CodeCommentStatement)
 		{
-			this.ValidateCommentStatement((CodeCommentStatement)e);
+			this.validateCommentStatement((CodeCommentStatement)e);
 			return;
 		}
 		if (e instanceof CodeMethodReturnStatement)
 		{
-			this.ValidateMethodReturnStatement((CodeMethodReturnStatement)e);
+			this.validateMethodReturnStatement((CodeMethodReturnStatement)e);
 			return;
 		}
 		if (e instanceof CodeConditionStatement)
 		{
-			this.ValidateConditionStatement((CodeConditionStatement)e);
+			this.validateConditionStatement((CodeConditionStatement)e);
 			return;
 		}
 		if (e instanceof CodeTryCatchFinallyStatement)
 		{
-			this.ValidateTryCatchFinallyStatement((CodeTryCatchFinallyStatement)e);
+			this.validateTryCatchFinallyStatement((CodeTryCatchFinallyStatement)e);
 			return;
 		}
 		if (e instanceof CodeAssignStatement)
 		{
-			this.ValidateAssignStatement((CodeAssignStatement)e);
+			this.validateAssignStatement((CodeAssignStatement)e);
 			return;
 		}
 		if (e instanceof CodeExpressionStatement)
 		{
-			this.ValidateExpressionStatement((CodeExpressionStatement)e);
+			this.validateExpressionStatement((CodeExpressionStatement)e);
 			return;
 		}
 		if (e instanceof CodeIterationStatement)
 		{
-			this.ValidateIterationStatement((CodeIterationStatement)e);
+			this.validateIterationStatement((CodeIterationStatement)e);
 			return;
 		}
 		if (e instanceof CodeThrowExceptionStatement)
 		{
-			this.ValidateThrowExceptionStatement((CodeThrowExceptionStatement)e);
+			this.validateThrowExceptionStatement((CodeThrowExceptionStatement)e);
 			return;
 		}
 		if (e instanceof CodeSnippetStatement)
 		{
-			this.ValidateSnippetStatement((CodeSnippetStatement)e);
+			this.validateSnippetStatement((CodeSnippetStatement)e);
 			return;
 		}
 		if (e instanceof CodeVariableDeclarationStatement)
 		{
-			this.ValidateVariableDeclarationStatement((CodeVariableDeclarationStatement)e);
+			this.validateVariableDeclarationStatement((CodeVariableDeclarationStatement)e);
 			return;
 		}
 		if (e instanceof CodeAttachEventStatement)
 		{
-			this.ValidateAttachEventStatement((CodeAttachEventStatement)e);
+			this.validateAttachEventStatement((CodeAttachEventStatement)e);
 			return;
 		}
 		if (e instanceof CodeRemoveEventStatement)
 		{
-			this.ValidateRemoveEventStatement((CodeRemoveEventStatement)e);
+			this.validateRemoveEventStatement((CodeRemoveEventStatement)e);
 			return;
 		}
 		if (e instanceof CodeGotoStatement)
 		{
-			CodeValidator.ValidateGotoStatement((CodeGotoStatement)e);
+			CodeValidator.validateGotoStatement((CodeGotoStatement)e);
 			return;
 		}
 		if (e instanceof CodeLabeledStatement)
 		{
-			this.ValidateLabeledStatement((CodeLabeledStatement)e);
+			this.validateLabeledStatement((CodeLabeledStatement)e);
 			return;
 		}
 		//throw new IllegalArgumentException(SR.GetString("InvalidElementType", new Object[] {e.getClass().getName()}), "e");
 	}
 
-	private void ValidateStatements(CodeStatementCollection stms)
+	private void validateStatements(CodeStatementCollection stms)
 	{
-		Iterator<CodeStatement> enumerator = stms.iterator();
+		Iterator enumerator = stms.iterator();
 		while (enumerator.hasNext())
 		{
-			this.ValidateStatement(enumerator.next());
+			this.validateStatement((CodeStatement)enumerator.next());
 		}
 	}
 
-	private void ValidateExpressionStatement(CodeExpressionStatement e)
+	private void validateExpressionStatement(CodeExpressionStatement e)
 	{
-		this.ValidateExpression(e.getExpression());
+		this.validateExpression(e.getExpression());
 	}
 
-	private void ValidateIterationStatement(CodeIterationStatement e)
+	private void validateIterationStatement(CodeIterationStatement e)
 	{
-		this.ValidateStatement(e.getInitStatement());
-		this.ValidateExpression(e.getTestExpression());
-		this.ValidateStatement(e.getIncrementStatement());
-		this.ValidateStatements(e.getStatements());
+		this.validateStatement(e.getInitStatement());
+		this.validateExpression(e.getTestExpression());
+		this.validateStatement(e.getIncrementStatement());
+		this.validateStatements(e.getStatements());
 	}
 
-	private void ValidateThrowExceptionStatement(CodeThrowExceptionStatement e)
+	private void validateThrowExceptionStatement(CodeThrowExceptionStatement e)
 	{
 		if (e.getToThrow() != null)
 		{
-			this.ValidateExpression(e.getToThrow());
+			this.validateExpression(e.getToThrow());
 		}
 	}
 
-	private void ValidateMethodReturnStatement(CodeMethodReturnStatement e)
+	private void validateMethodReturnStatement(CodeMethodReturnStatement e)
 	{
 		if (e.getExpression() != null)
 		{
-			this.ValidateExpression(e.getExpression());
+			this.validateExpression(e.getExpression());
 		}
 	}
 
-	private void ValidateConditionStatement(CodeConditionStatement e)
+	private void validateConditionStatement(CodeConditionStatement e)
 	{
-		this.ValidateExpression(e.getCondition());
-		this.ValidateStatements(e.getTrueStatements());
+		this.validateExpression(e.getCondition());
+		this.validateStatements(e.getTrueStatements());
 		if (e.getFalseStatements().size() > 0)
 		{
-			this.ValidateStatements(e.getFalseStatements());
+			this.validateStatements(e.getFalseStatements());
 		}
 	}
 
-	private void ValidateTryCatchFinallyStatement(CodeTryCatchFinallyStatement e)
+	private void validateTryCatchFinallyStatement(CodeTryCatchFinallyStatement e)
 	{
-		this.ValidateStatements(e.getTryStatements());
+		this.validateStatements(e.getTryStatements());
 		CodeCatchClauseCollection catchClauses = e.getCatchClauses();
 		if (catchClauses.size() > 0)
 		{
-			Iterator<CodeCatchClause> enumerator = catchClauses.iterator();
+			Iterator enumerator = catchClauses.iterator();
 			while (enumerator.hasNext())
 			{
-				CodeCatchClause codeCatchClause = enumerator.next();
-				CodeValidator.ValidateTypeReference(codeCatchClause.getCatchExceptionType());
-				CodeValidator.ValidateIdentifier(codeCatchClause, "LocalName", codeCatchClause.getLocalName());
-				this.ValidateStatements(codeCatchClause.getStatements());
+				CodeCatchClause codeCatchClause = (CodeCatchClause)enumerator.next();
+				CodeValidator.validateTypeReference(codeCatchClause.getCatchExceptionType());
+				CodeValidator.validateIdentifier(codeCatchClause, "LocalName", codeCatchClause.getLocalName());
+				this.validateStatements(codeCatchClause.getStatements());
 			}
 		}
 		CodeStatementCollection finallyStatements = e.getFinallyStatements();
 		if (finallyStatements.size() > 0)
 		{
-			this.ValidateStatements(finallyStatements);
+			this.validateStatements(finallyStatements);
 		}
 	}
 
-	private void ValidateAssignStatement(CodeAssignStatement e)
+	private void validateAssignStatement(CodeAssignStatement e)
 	{
-		this.ValidateExpression(e.getLeft());
-		this.ValidateExpression(e.getRight());
+		this.validateExpression(e.getLeft());
+		this.validateExpression(e.getRight());
 	}
 
-	private void ValidateAttachEventStatement(CodeAttachEventStatement e)
+	private void validateAttachEventStatement(CodeAttachEventStatement e)
 	{
-		this.ValidateEventReferenceExpression(e.getEvent());
-		this.ValidateExpression(e.getListener());
+		this.validateEventReferenceExpression(e.getEvent());
+		this.validateExpression(e.getListener());
 	}
 
-	private void ValidateRemoveEventStatement(CodeRemoveEventStatement e)
+	private void validateRemoveEventStatement(CodeRemoveEventStatement e)
 	{
-		this.ValidateEventReferenceExpression(e.getEvent());
-		this.ValidateExpression(e.getListener());
+		this.validateEventReferenceExpression(e.getEvent());
+		this.validateExpression(e.getListener());
 	}
 
-	private static void ValidateGotoStatement(CodeGotoStatement e)
+	private static void validateGotoStatement(CodeGotoStatement e)
 	{
-		CodeValidator.ValidateIdentifier(e, "Label", e.getLabel());
+		CodeValidator.validateIdentifier(e, "Label", e.getLabel());
 	}
 
-	private void ValidateLabeledStatement(CodeLabeledStatement e)
+	private void validateLabeledStatement(CodeLabeledStatement e)
 	{
-		CodeValidator.ValidateIdentifier(e, "Label", e.getLabel());
+		CodeValidator.validateIdentifier(e, "Label", e.getLabel());
 		if (e.getStatement() != null)
 		{
-			this.ValidateStatement(e.getStatement());
+			this.validateStatement(e.getStatement());
 		}
 	}
 
-	private void ValidateVariableDeclarationStatement(CodeVariableDeclarationStatement e)
+	private void validateVariableDeclarationStatement(CodeVariableDeclarationStatement e)
 	{
-		CodeValidator.ValidateTypeReference(e.getType());
-		CodeValidator.ValidateIdentifier(e, "Name", e.getName());
+		CodeValidator.validateTypeReference(e.getType());
+		CodeValidator.validateIdentifier(e, "Name", e.getName());
 		if (e.getInitExpression() != null)
 		{
-			this.ValidateExpression(e.getInitExpression());
+			this.validateExpression(e.getInitExpression());
 		}
 	}
 
-	private void ValidateLinePragmaStart(CodeLinePragma e)
+	private void validateLinePragmaStart(CodeLinePragma e)
 	{
 	}
 
-	private void ValidateEvent(CodeMemberEvent e)
+	private void validateEvent(CodeMemberEvent e)
 	{
 		if (e.getCustomAttributes().size() > 0)
 		{
-			this.ValidateAttributes(e.getCustomAttributes());
+			this.validateAttributes(e.getCustomAttributes());
 		}
 		if (e.getPrivateImplementationType() != null)
 		{
-			CodeValidator.ValidateTypeReference(e.getType());
-			CodeValidator.ValidateIdentifier(e, "Name", e.getName());
+			CodeValidator.validateTypeReference(e.getType());
+			CodeValidator.validateIdentifier(e, "Name", e.getName());
 		}
-		CodeValidator.ValidateTypeReferences(e.getImplementationTypes());
+		CodeValidator.validateTypeReferences(e.getImplementationTypes());
 	}
 
-	private void ValidateParameters(CodeParameterDeclarationExpressionCollection parameters)
+	private void validateParameters(CodeParameterDeclarationExpressionCollection parameters)
 	{
-		Iterator<CodeParameterDeclarationExpression> enumerator = parameters.iterator();
+		Iterator enumerator = parameters.iterator();
 		while (enumerator.hasNext())
 		{
-			CodeParameterDeclarationExpression e = enumerator.next();
-			this.ValidateParameterDeclarationExpression(e);
+			CodeParameterDeclarationExpression e = (CodeParameterDeclarationExpression)enumerator.next();
+			this.validateParameterDeclarationExpression(e);
 		}
 	}
 
-	private void ValidateSnippetStatement(CodeSnippetStatement e)
+	private void validateSnippetStatement(CodeSnippetStatement e)
 	{
 	}
 
-	private void ValidateExpressionList(CodeExpressionCollection expressions)
+	private void validateExpressionList(CodeExpressionCollection expressions)
 	{
-		Iterator<CodeExpression> enumerator = expressions.iterator();
+		Iterator enumerator = expressions.iterator();
 		while (enumerator.hasNext())
 		{
-			this.ValidateExpression(enumerator.next());
+			this.validateExpression((CodeExpression)enumerator.next());
 		}
 	}
 
-	private static void ValidateTypeReference(CodeTypeReference e)
+	private static void validateTypeReference(CodeTypeReference e)
 	{
 		String baseType = e.getBaseType();
-		CodeValidator.ValidateTypeName(e, "BaseType", baseType);
-		CodeValidator.ValidateArity(e);
-		CodeValidator.ValidateTypeReferences(e.getTypeArguments());
+		CodeValidator.validateTypeName(e, "BaseType", baseType);
+		CodeValidator.validateArity(e);
+		CodeValidator.validateTypeReferences(e.getTypeArguments());
 	}
 
-	private static void ValidateTypeReferences(CodeTypeReferenceCollection refs)
+	private static void validateTypeReferences(CodeTypeReferenceCollection refs)
 	{
 		for (int i = 0; i < refs.size(); i++)
 		{
-			CodeValidator.ValidateTypeReference(refs.getItem(i));
+			CodeValidator.validateTypeReference(refs.getItem(i));
 		}
 	}
 
-	private static void ValidateArity(CodeTypeReference e)
+	private static void validateArity(CodeTypeReference e)
 	{
 		String baseType = e.getBaseType();
 		int num = 0;
@@ -711,7 +711,7 @@ public class CodeValidator
 				int num2 = 0;
 				while (i < baseType.length() && baseType.charAt(i) >= '0' && baseType.charAt(i) <= '9')
 				{
-					num2 = num2 * 10 + (int)(baseType.charAt(i) - '0');
+					num2 = num2 * 10 + baseType.charAt(i) - '0';
 					i++;
 				}
 				num += num2;
@@ -723,147 +723,147 @@ public class CodeValidator
 		}
 	}
 
-	private static void ValidateTypeName(Object e, String propertyName, String typeName)
+	private static void validateTypeName(Object e, String propertyName, String typeName)
 	{
-		if (!CodeGenerator.IsValidLanguageIndependentTypeName(typeName))
+		if (!CodeGenerator.isValidLanguageIndependentTypeName(typeName))
 		{
 			//throw new IllegalArgumentException(SR.GetString("InvalidTypeName", new Object[] {typeName, propertyName, e.getClass().getName()}), "typeName");
 		}
 	}
 
-	private static void ValidateIdentifier(Object e, String propertyName, String identifier)
+	private static void validateIdentifier(Object e, String propertyName, String identifier)
 	{
-		if (!CodeGenerator.IsValidLanguageIndependentIdentifier(identifier))
+		if (!CodeGenerator.isValidLanguageIndependentIdentifier(identifier))
 		{
 			//throw new IllegalArgumentException(SR.GetString("InvalidLanguageIdentifier", new Object[] {identifier, propertyName, e.getClass().getName()}), "identifier");
 		}
 	}
 
-	private void ValidateExpression(CodeExpression e)
+	private void validateExpression(CodeExpression e)
 	{
 		if (e instanceof CodeArrayCreateExpression)
 		{
-			this.ValidateArrayCreateExpression((CodeArrayCreateExpression)e);
+			this.validateArrayCreateExpression((CodeArrayCreateExpression)e);
 			return;
 		}
 		if (e instanceof CodeBaseReferenceExpression)
 		{
-			this.ValidateBaseReferenceExpression((CodeBaseReferenceExpression)e);
+			this.validateBaseReferenceExpression((CodeBaseReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeBinaryOperatorExpression)
 		{
-			this.ValidateBinaryOperatorExpression((CodeBinaryOperatorExpression)e);
+			this.validateBinaryOperatorExpression((CodeBinaryOperatorExpression)e);
 			return;
 		}
 		if (e instanceof CodeCastExpression)
 		{
-			this.ValidateCastExpression((CodeCastExpression)e);
+			this.validateCastExpression((CodeCastExpression)e);
 			return;
 		}
 		if (e instanceof CodeDefaultValueExpression)
 		{
-			CodeValidator.ValidateDefaultValueExpression((CodeDefaultValueExpression)e);
+			CodeValidator.validateDefaultValueExpression((CodeDefaultValueExpression)e);
 			return;
 		}
 		if (e instanceof CodeDelegateCreateExpression)
 		{
-			this.ValidateDelegateCreateExpression((CodeDelegateCreateExpression)e);
+			this.validateDelegateCreateExpression((CodeDelegateCreateExpression)e);
 			return;
 		}
 		if (e instanceof CodeFieldReferenceExpression)
 		{
-			this.ValidateFieldReferenceExpression((CodeFieldReferenceExpression)e);
+			this.validateFieldReferenceExpression((CodeFieldReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeArgumentReferenceExpression)
 		{
-			CodeValidator.ValidateArgumentReferenceExpression((CodeArgumentReferenceExpression)e);
+			CodeValidator.validateArgumentReferenceExpression((CodeArgumentReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeVariableReferenceExpression)
 		{
-			CodeValidator.ValidateVariableReferenceExpression((CodeVariableReferenceExpression)e);
+			CodeValidator.validateVariableReferenceExpression((CodeVariableReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeIndexerExpression)
 		{
-			this.ValidateIndexerExpression((CodeIndexerExpression)e);
+			this.validateIndexerExpression((CodeIndexerExpression)e);
 			return;
 		}
 		if (e instanceof CodeArrayIndexerExpression)
 		{
-			this.ValidateArrayIndexerExpression((CodeArrayIndexerExpression)e);
+			this.validateArrayIndexerExpression((CodeArrayIndexerExpression)e);
 			return;
 		}
 		if (e instanceof CodeSnippetExpression)
 		{
-			this.ValidateSnippetExpression((CodeSnippetExpression)e);
+			this.validateSnippetExpression((CodeSnippetExpression)e);
 			return;
 		}
 		if (e instanceof CodeMethodInvokeExpression)
 		{
-			this.ValidateMethodInvokeExpression((CodeMethodInvokeExpression)e);
+			this.validateMethodInvokeExpression((CodeMethodInvokeExpression)e);
 			return;
 		}
 		if (e instanceof CodeMethodReferenceExpression)
 		{
-			this.ValidateMethodReferenceExpression((CodeMethodReferenceExpression)e);
+			this.validateMethodReferenceExpression((CodeMethodReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeEventReferenceExpression)
 		{
-			this.ValidateEventReferenceExpression((CodeEventReferenceExpression)e);
+			this.validateEventReferenceExpression((CodeEventReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeDelegateInvokeExpression)
 		{
-			this.ValidateDelegateInvokeExpression((CodeDelegateInvokeExpression)e);
+			this.validateDelegateInvokeExpression((CodeDelegateInvokeExpression)e);
 			return;
 		}
 		if (e instanceof CodeObjectCreateExpression)
 		{
-			this.ValidateObjectCreateExpression((CodeObjectCreateExpression)e);
+			this.validateObjectCreateExpression((CodeObjectCreateExpression)e);
 			return;
 		}
 		if (e instanceof CodeParameterDeclarationExpression)
 		{
-			this.ValidateParameterDeclarationExpression((CodeParameterDeclarationExpression)e);
+			this.validateParameterDeclarationExpression((CodeParameterDeclarationExpression)e);
 			return;
 		}
 		if (e instanceof CodeDirectionExpression)
 		{
-			this.ValidateDirectionExpression((CodeDirectionExpression)e);
+			this.validateDirectionExpression((CodeDirectionExpression)e);
 			return;
 		}
 		if (e instanceof CodePrimitiveExpression)
 		{
-			this.ValidatePrimitiveExpression((CodePrimitiveExpression)e);
+			this.validatePrimitiveExpression((CodePrimitiveExpression)e);
 			return;
 		}
 		if (e instanceof CodePropertyReferenceExpression)
 		{
-			this.ValidatePropertyReferenceExpression((CodePropertyReferenceExpression)e);
+			this.validatePropertyReferenceExpression((CodePropertyReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodePropertySetValueReferenceExpression)
 		{
-			this.ValidatePropertySetValueReferenceExpression((CodePropertySetValueReferenceExpression)e);
+			this.validatePropertySetValueReferenceExpression((CodePropertySetValueReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeThisReferenceExpression)
 		{
-			this.ValidateThisReferenceExpression((CodeThisReferenceExpression)e);
+			this.validateThisReferenceExpression((CodeThisReferenceExpression)e);
 			return;
 		}
 		if (e instanceof CodeTypeReferenceExpression)
 		{
-			CodeValidator.ValidateTypeReference(((CodeTypeReferenceExpression)e).getType());
+			CodeValidator.validateTypeReference(((CodeTypeReferenceExpression)e).getType());
 			return;
 		}
 		if (e instanceof CodeTypeOfExpression)
 		{
-			CodeValidator.ValidateTypeOfExpression((CodeTypeOfExpression)e);
+			CodeValidator.validateTypeOfExpression((CodeTypeOfExpression)e);
 			return;
 		}
 		if (e == null)
@@ -873,194 +873,194 @@ public class CodeValidator
 		//throw new IllegalArgumentException(SR.GetString("InvalidElementType", new Object[] {e.getClass().getName()}), "e");
 	}
 
-	private void ValidateArrayCreateExpression(CodeArrayCreateExpression e)
+	private void validateArrayCreateExpression(CodeArrayCreateExpression e)
 	{
-		CodeValidator.ValidateTypeReference(e.getCreateType());
+		CodeValidator.validateTypeReference(e.getCreateType());
 		CodeExpressionCollection initializers = e.getInitializers();
 		if (initializers.size() > 0)
 		{
-			this.ValidateExpressionList(initializers);
+			this.validateExpressionList(initializers);
 			return;
 		}
 		if (e.getSizeExpression() != null)
 		{
-			this.ValidateExpression(e.getSizeExpression());
+			this.validateExpression(e.getSizeExpression());
 		}
 	}
 
-	private void ValidateBaseReferenceExpression(CodeBaseReferenceExpression e)
+	private void validateBaseReferenceExpression(CodeBaseReferenceExpression e)
 	{
 	}
 
-	private void ValidateBinaryOperatorExpression(CodeBinaryOperatorExpression e)
+	private void validateBinaryOperatorExpression(CodeBinaryOperatorExpression e)
 	{
-		this.ValidateExpression(e.getLeft());
-		this.ValidateExpression(e.getRight());
+		this.validateExpression(e.getLeft());
+		this.validateExpression(e.getRight());
 	}
 
-	private void ValidateCastExpression(CodeCastExpression e)
+	private void validateCastExpression(CodeCastExpression e)
 	{
-		CodeValidator.ValidateTypeReference(e.getTargetType());
-		this.ValidateExpression(e.getExpression());
+		CodeValidator.validateTypeReference(e.getTargetType());
+		this.validateExpression(e.getExpression());
 	}
 
-	private static void ValidateDefaultValueExpression(CodeDefaultValueExpression e)
+	private static void validateDefaultValueExpression(CodeDefaultValueExpression e)
 	{
-		CodeValidator.ValidateTypeReference(e.getType());
+		CodeValidator.validateTypeReference(e.getType());
 	}
 
-	private void ValidateDelegateCreateExpression(CodeDelegateCreateExpression e)
+	private void validateDelegateCreateExpression(CodeDelegateCreateExpression e)
 	{
-		CodeValidator.ValidateTypeReference(e.getDelegateType());
-		this.ValidateExpression(e.getTargetObject());
-		CodeValidator.ValidateIdentifier(e, "MethodName", e.getMethodName());
+		CodeValidator.validateTypeReference(e.getDelegateType());
+		this.validateExpression(e.getTargetObject());
+		CodeValidator.validateIdentifier(e, "MethodName", e.getMethodName());
 	}
 
-	private void ValidateFieldReferenceExpression(CodeFieldReferenceExpression e)
+	private void validateFieldReferenceExpression(CodeFieldReferenceExpression e)
 	{
 		if (e.getTargetObject() != null)
 		{
-			this.ValidateExpression(e.getTargetObject());
+			this.validateExpression(e.getTargetObject());
 		}
-		CodeValidator.ValidateIdentifier(e, "FieldName", e.getFieldName());
+		CodeValidator.validateIdentifier(e, "FieldName", e.getFieldName());
 	}
 
-	private static void ValidateArgumentReferenceExpression(CodeArgumentReferenceExpression e)
+	private static void validateArgumentReferenceExpression(CodeArgumentReferenceExpression e)
 	{
-		CodeValidator.ValidateIdentifier(e, "ParameterName", e.getParameterName());
+		CodeValidator.validateIdentifier(e, "ParameterName", e.getParameterName());
 	}
 
-	private static void ValidateVariableReferenceExpression(CodeVariableReferenceExpression e)
+	private static void validateVariableReferenceExpression(CodeVariableReferenceExpression e)
 	{
-		CodeValidator.ValidateIdentifier(e, "VariableName", e.getVariableName());
+		CodeValidator.validateIdentifier(e, "VariableName", e.getVariableName());
 	}
 
-	private void ValidateIndexerExpression(CodeIndexerExpression e)
+	private void validateIndexerExpression(CodeIndexerExpression e)
 	{
-		this.ValidateExpression(e.getTargetObject());
+		this.validateExpression(e.getTargetObject());
 		for (Object e2 : e.getIndices())
 		{
-			this.ValidateExpression((CodeExpression)e2);
+			this.validateExpression((CodeExpression)e2);
 		}
 	}
-	private void ValidateArrayIndexerExpression(CodeArrayIndexerExpression e)
+	private void validateArrayIndexerExpression(CodeArrayIndexerExpression e)
 	{
-		this.ValidateExpression(e.getTargetObject());
+		this.validateExpression(e.getTargetObject());
 		for (Object e2 : e.getIndices())
 		{
-			this.ValidateExpression((CodeExpression)e2);
+			this.validateExpression((CodeExpression)e2);
 		}
 	}
 
-	private void ValidateSnippetExpression(CodeSnippetExpression e)
+	private void validateSnippetExpression(CodeSnippetExpression e)
 	{
 	}
 
-	private void ValidateMethodInvokeExpression(CodeMethodInvokeExpression e)
+	private void validateMethodInvokeExpression(CodeMethodInvokeExpression e)
 	{
-		this.ValidateMethodReferenceExpression(e.getMethod());
-		this.ValidateExpressionList(e.getParameters());
+		this.validateMethodReferenceExpression(e.getMethod());
+		this.validateExpressionList(e.getParameters());
 	}
 
-	private void ValidateMethodReferenceExpression(CodeMethodReferenceExpression e)
+	private void validateMethodReferenceExpression(CodeMethodReferenceExpression e)
 	{
 		if (e.getTargetObject() != null)
 		{
-			this.ValidateExpression(e.getTargetObject());
+			this.validateExpression(e.getTargetObject());
 		}
-		CodeValidator.ValidateIdentifier(e, "MethodName", e.getMethodName());
-		CodeValidator.ValidateTypeReferences(e.getTypeArguments());
+		CodeValidator.validateIdentifier(e, "MethodName", e.getMethodName());
+		CodeValidator.validateTypeReferences(e.getTypeArguments());
 	}
 
-	private void ValidateEventReferenceExpression(CodeEventReferenceExpression e)
+	private void validateEventReferenceExpression(CodeEventReferenceExpression e)
 	{
 		if (e.getTargetObject() != null)
 		{
-			this.ValidateExpression(e.getTargetObject());
+			this.validateExpression(e.getTargetObject());
 		}
-		CodeValidator.ValidateIdentifier(e, "EventName", e.getEventName());
+		CodeValidator.validateIdentifier(e, "EventName", e.getEventName());
 	}
 
-	private void ValidateDelegateInvokeExpression(CodeDelegateInvokeExpression e)
+	private void validateDelegateInvokeExpression(CodeDelegateInvokeExpression e)
 	{
 		if (e.getTargetObject() != null)
 		{
-			this.ValidateExpression(e.getTargetObject());
+			this.validateExpression(e.getTargetObject());
 		}
-		this.ValidateExpressionList(e.getParameters());
+		this.validateExpressionList(e.getParameters());
 	}
 
-	private void ValidateObjectCreateExpression(CodeObjectCreateExpression e)
+	private void validateObjectCreateExpression(CodeObjectCreateExpression e)
 	{
-		CodeValidator.ValidateTypeReference(e.getCreateType());
-		this.ValidateExpressionList(e.getParameters());
+		CodeValidator.validateTypeReference(e.getCreateType());
+		this.validateExpressionList(e.getParameters());
 	}
 
-	private void ValidateParameterDeclarationExpression(CodeParameterDeclarationExpression e)
+	private void validateParameterDeclarationExpression(CodeParameterDeclarationExpression e)
 	{
 		if (e.getCustomAttributes().size() > 0)
 		{
-			this.ValidateAttributes(e.getCustomAttributes());
+			this.validateAttributes(e.getCustomAttributes());
 		}
-		CodeValidator.ValidateTypeReference(e.getType());
-		CodeValidator.ValidateIdentifier(e, "Name", e.getName());
+		CodeValidator.validateTypeReference(e.getType());
+		CodeValidator.validateIdentifier(e, "Name", e.getName());
 	}
 
-	private void ValidateDirectionExpression(CodeDirectionExpression e)
+	private void validateDirectionExpression(CodeDirectionExpression e)
 	{
-		this.ValidateExpression(e.getExpression());
+		this.validateExpression(e.getExpression());
 	}
 
-	private void ValidatePrimitiveExpression(CodePrimitiveExpression e)
+	private void validatePrimitiveExpression(CodePrimitiveExpression e)
 	{
 	}
 
-	private void ValidatePropertyReferenceExpression(CodePropertyReferenceExpression e)
+	private void validatePropertyReferenceExpression(CodePropertyReferenceExpression e)
 	{
 		if (e.getTargetObject() != null)
 		{
-			this.ValidateExpression(e.getTargetObject());
+			this.validateExpression(e.getTargetObject());
 		}
-		CodeValidator.ValidateIdentifier(e, "PropertyName", e.getPropertyName());
+		CodeValidator.validateIdentifier(e, "PropertyName", e.getPropertyName());
 	}
 
-	private void ValidatePropertySetValueReferenceExpression(CodePropertySetValueReferenceExpression e)
+	private void validatePropertySetValueReferenceExpression(CodePropertySetValueReferenceExpression e)
 	{
 	}
 
-	private void ValidateThisReferenceExpression(CodeThisReferenceExpression e)
+	private void validateThisReferenceExpression(CodeThisReferenceExpression e)
 	{
 	}
 
-	private static void ValidateTypeOfExpression(CodeTypeOfExpression e)
+	private static void validateTypeOfExpression(CodeTypeOfExpression e)
 	{
-		CodeValidator.ValidateTypeReference(e.getType());
+		CodeValidator.validateTypeReference(e.getType());
 	}
 
-	private static void ValidateCodeDirectives(CodeDirectiveCollection e)
+	private static void validateCodeDirectives(CodeDirectiveCollection e)
 	{
 		for (int i = 0; i < e.size(); i++)
 		{
-			CodeValidator.ValidateCodeDirective(e.getItem(i));
+			CodeValidator.validateCodeDirective(e.getItem(i));
 		}
 	}
 
-	private static void ValidateCodeDirective(CodeDirective e)
+	private static void validateCodeDirective(CodeDirective e)
 	{
 		if (e instanceof CodeChecksumPragma)
 		{
-			CodeValidator.ValidateChecksumPragma((CodeChecksumPragma)e);
+			CodeValidator.validateChecksumPragma((CodeChecksumPragma)e);
 			return;
 		}
 		if (e instanceof CodeRegionDirective)
 		{
-			CodeValidator.ValidateRegionDirective((CodeRegionDirective)e);
+			CodeValidator.validateRegionDirective((CodeRegionDirective)e);
 			return;
 		}
 		//throw new IllegalArgumentException(SR.GetString("InvalidElementType", new Object[] {e.getClass().getName()}), "e");
 	}
 
-	private static void ValidateChecksumPragma(CodeChecksumPragma e)
+	private static void validateChecksumPragma(CodeChecksumPragma e)
 	{
 		//if (e.getFileName().IndexOfAny(Path.GetInvalidPathChars()) != -1)
 		if(StringHelper.indexOfAny(e.getFileName(), Path.GetInvalidPathChars())!= -1)
@@ -1069,7 +1069,7 @@ public class CodeValidator
 		}
 	}
 
-	private static void ValidateRegionDirective(CodeRegionDirective e)
+	private static void validateRegionDirective(CodeRegionDirective e)
 	{
 		//if (e.getRegionText().IndexOfAny(CodeValidator.newLineChars) != -1)
 		if(StringHelper.indexOfAny(e.getRegionText(), CodeValidator.newLineChars)!=-1)

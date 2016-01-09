@@ -1,6 +1,6 @@
 package com.superstudio.codedom;
 import java.io.Serializable;
- 
+
 //ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeMethodReferenceExpression : CodeExpression
 public class CodeMethodReferenceExpression extends CodeExpression implements Serializable
 {
@@ -8,7 +8,7 @@ public class CodeMethodReferenceExpression extends CodeExpression implements Ser
 
 	private String methodName;
 
- 
+
 //ORIGINAL LINE: [OptionalField] private CodeTypeReferenceCollection typeArguments;
 	private CodeTypeReferenceCollection typeArguments;
 
@@ -34,7 +34,7 @@ public class CodeMethodReferenceExpression extends CodeExpression implements Ser
 		this.methodName = value;
 	}
 
- 
+
 //ORIGINAL LINE: [ComVisible(false)] public CodeTypeReferenceCollection TypeArguments
 	public final CodeTypeReferenceCollection getTypeArguments()
 	{

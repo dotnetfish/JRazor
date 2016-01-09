@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser;
+package com.superstudio.jrazor.parser;
 
 import com.superstudio.jrazor.parser.syntaxTree.Block;
 

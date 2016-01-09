@@ -7,9 +7,7 @@ public final class StringHelper
 {
 	public static final String Empty = "";
 
-	//------------------------------------------------------------------------------------
-	//	This method replaces the .NET static string method 'IsNullOrEmpty'.
-	//------------------------------------------------------------------------------------
+
 	public static boolean isNullOrEmpty(String string)
 	{
 		return string == null || string.equals("");
@@ -20,9 +18,7 @@ public final class StringHelper
 		return string == null || string.equals("");
 	}
 
-	//------------------------------------------------------------------------------------
-	//	This method replaces the .NET static string method 'Join' (2 parameter version).
-	//------------------------------------------------------------------------------------
+
 	public static String join(String separator, String[] stringarray)
 	{
 		if (stringarray == null)
@@ -31,9 +27,7 @@ public final class StringHelper
 			return join(separator, stringarray, 0, stringarray.length);
 	}
 
-	//------------------------------------------------------------------------------------
-	//	This method replaces the .NET static string method 'Join' (4 parameter version).
-	//------------------------------------------------------------------------------------
+
 	public static String join(String separator, String[] stringarray, int startindex, int count)
 	{
 		String result = "";
@@ -53,9 +47,7 @@ public final class StringHelper
 		return result;
 	}
 
-	//------------------------------------------------------------------------------------
-	//	This method replaces the .NET static string method 'TrimEnd'.
-	//------------------------------------------------------------------------------------
+
 	public static String trimEnd(String string, Character... charsToTrim)
 	{
 		if (string == null || charsToTrim == null)
@@ -91,9 +83,7 @@ public final class StringHelper
 		return string.substring(0, lengthToKeep);
 	}
 
-	//------------------------------------------------------------------------------------
-	//	This method replaces the .NET static string method 'TrimStart'.
-	//------------------------------------------------------------------------------------
+
 	public static String trimStart(String string, Character... charsToTrim)
 	{
 		if (string == null || charsToTrim == null)
@@ -129,9 +119,7 @@ public final class StringHelper
 		return string.substring(startingIndex);
 	}
 
-	//------------------------------------------------------------------------------------
-	//	This method replaces the .NET static string method 'Trim' when arguments are used.
-	//------------------------------------------------------------------------------------
+
 	public static String trim(String string, Character... charsToTrim)
 	{
 		return trimEnd(trimStart(string, charsToTrim), charsToTrim);
@@ -141,11 +129,7 @@ public final class StringHelper
 	{
 		return stringsEqual(s1,s2,StringComparison.Ordinal);
 	}
-	//------------------------------------------------------------------------------------
-	//	This method is used for string equality comparisons when the option
-	//	'Use helper 'stringsEqual' method to handle null strings' is selected
-	//	(The Java String 'equals' method can't be called on a null instance).
-	//------------------------------------------------------------------------------------
+
 	public static boolean stringsEqual(String s1, String s2,StringComparison com)
 	{
 		if(com==StringComparison.OrdinalIgnoreCase){

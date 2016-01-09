@@ -1,11 +1,11 @@
 package com.superstudio.codedom.compiler;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
- 
 public class CodeGeneratorOptions
 {
-	private Map<String,Object> options = new HashMap<String,Object>();
+	private Map options = new HashMap<String,Object>();
 
 	public final Object getItem(String index)
 	{
@@ -64,7 +64,7 @@ public class CodeGeneratorOptions
 		this.options.put("BlankLinesBetweenMembers", value);
 	}
 
- 
+
 //ORIGINAL LINE: [ComVisible(false)] public bool VerbatimOrder
 	public final boolean getVerbatimOrder()
 	{

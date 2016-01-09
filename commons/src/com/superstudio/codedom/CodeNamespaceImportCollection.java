@@ -3,22 +3,18 @@ package com.superstudio.codedom;
 import java.io.Serializable;
 import java.util.*;
 
- 
- 
-public class CodeNamespaceImportCollection implements  Iterable<CodeNamespaceImport>, Serializable
-{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4888432700163255170L;
 
+
+//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeNamespaceImportCollection : IList, ICollection, IEnumerable
+public class CodeNamespaceImportCollection implements  Iterable, Serializable
+{
 	private ArrayList<CodeNamespaceImport> data = new ArrayList<CodeNamespaceImport>();
 
 	private Hashtable<String,CodeNamespaceImport> keys = new Hashtable<String,CodeNamespaceImport>();
 
 	public final CodeNamespaceImport get(int index)
 	{
-		return (CodeNamespaceImport)this.data.get(index);
+		return this.data.get(index);
 	}
 	public final void set(int index, CodeNamespaceImport value)
 	{
@@ -31,7 +27,7 @@ public class CodeNamespaceImportCollection implements  Iterable<CodeNamespaceImp
 		return this.data.size();
 	}
 
-	/*private boolean getIsReadOnly()
+	private boolean getIsReadOnly()
 	{
 		return false;
 	}
@@ -39,14 +35,14 @@ public class CodeNamespaceImportCollection implements  Iterable<CodeNamespaceImp
 	private boolean getIsFixedSize()
 	{
 		return false;
-	}*/
+	}
 
 	
 	
 
 	
 
-	/*private boolean getIsSynchronized()
+	private boolean getIsSynchronized()
 	{
 		return false;
 	}
@@ -55,7 +51,7 @@ public class CodeNamespaceImportCollection implements  Iterable<CodeNamespaceImp
 	{
 		return null;
 	}
-*/
+
 	public final void Add(CodeNamespaceImport value)
 	{
 		if (!this.keys.containsKey(value.getNamespace()))
@@ -86,19 +82,19 @@ public class CodeNamespaceImportCollection implements  Iterable<CodeNamespaceImp
 
 	private void SyncKeys()
 	{
-		this.keys = new Hashtable<String,CodeNamespaceImport>();
+		this.keys = new Hashtable();
 		for (CodeNamespaceImport codeNamespaceImport : this.data)
 		{
 			this.keys.put(codeNamespaceImport.getNamespace(), codeNamespaceImport);
 		}
 	}
 
-	public final Iterator<CodeNamespaceImport> iterator()
+	public final Iterator iterator()
 	{
 		return this.data.iterator();
 	}
 
-	/*public final void CopyTo(CodeNamespaceImport[] array, int index)
+	/*public final void copyTo(CodeNamespaceImport[] array, int index)
 	{
 		this.data.copyTo(array, index);
 	}*/
@@ -109,7 +105,7 @@ public class CodeNamespaceImportCollection implements  Iterable<CodeNamespaceImp
 	{
 		if( this.data.add((CodeNamespaceImport)value)){
 			return size();
-		};
+		}
 		return -1;
 	}
 
@@ -117,14 +113,14 @@ public class CodeNamespaceImportCollection implements  Iterable<CodeNamespaceImp
 
 	public final boolean contains(Object objectValue)
 	{
-		Object value = (Object)objectValue;
+		Object value = objectValue;
 		return this.data.contains(value);
 	}
 
 	public final int indexOf(Object objectValue)
 	{
-		Object value = (Object)objectValue;
-		return this.data.indexOf((CodeNamespaceImport)value);
+		Object value = objectValue;
+		return this.data.indexOf(value);
 	}
 
 	public final void add(int index, Object value)
@@ -135,8 +131,8 @@ public class CodeNamespaceImportCollection implements  Iterable<CodeNamespaceImp
 
 	public final void remove(Object objectValue)
 	{
-		Object value = (Object)objectValue;
-		this.data.remove((CodeNamespaceImport)value);
+		Object value = objectValue;
+		this.data.remove(value);
 		this.SyncKeys();
 	}
 

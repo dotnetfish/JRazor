@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser;
+package com.superstudio.jrazor.parser;
 
 import com.superstudio.commons.NotSupportedException;
 import com.superstudio.commons.Tuple;
@@ -38,13 +38,13 @@ public abstract class ParserBase
 
 	// Markup Parsers need the ParseDocument and ParseSection methods since the markup parser is the first parser to hit the document 
 	// and the logic may be different than the ParseBlock method.
-	public void parseDocument() throws NotSupportedException, InvalidOperationException, Exception
+	public void parseDocument() throws Exception
 	{
 		assert getIsMarkupParser();
 		throw new NotSupportedException(RazorResources.getParserIsNotAMarkupParser());
 	}
 
-	public void parseSection(Tuple<String, String> nestingSequences, boolean caseSensitive) throws NotSupportedException, Exception
+	public void parseSection(Tuple<String, String> nestingSequences, boolean caseSensitive) throws Exception
 	{
 		assert getIsMarkupParser();
 		throw new NotSupportedException(RazorResources.getParserIsNotAMarkupParser());

@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.generator;
+package com.superstudio.jrazor.generator;
 
 import com.superstudio.jrazor.parser.syntaxTree.Span;
 
@@ -18,7 +18,7 @@ public abstract class SpanCodeGenerator implements ISpanCodeGenerator
 	@Override
 	public boolean equals(Object obj)
 	{
-		return ((ISpanCodeGenerator)((obj instanceof ISpanCodeGenerator) ? obj : null)) != null;
+		return ((obj instanceof ISpanCodeGenerator) ? obj : null) != null;
 	}
 
 	@Override

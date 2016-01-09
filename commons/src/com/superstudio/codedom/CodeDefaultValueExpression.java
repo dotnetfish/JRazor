@@ -1,7 +1,5 @@
 package com.superstudio.codedom;
 import java.io.Serializable;
- 
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeDefaultValueExpression : CodeExpression
 public class CodeDefaultValueExpression extends CodeExpression implements Serializable
 {
 	private CodeTypeReference type;

@@ -2,15 +2,10 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
- 
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeParameterDeclarationExpressionCollection : CollectionBase
-public class CodeParameterDeclarationExpressionCollection extends CollectionBase<CodeParameterDeclarationExpression> implements Serializable
-{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4178473798398703101L;
 
+//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeParameterDeclarationExpressionCollection : CollectionBase
+public class CodeParameterDeclarationExpressionCollection extends CollectionBase implements Serializable
+{
 	public final CodeParameterDeclarationExpression getItem(int index)
 	{
 		return (CodeParameterDeclarationExpression)get(index);
@@ -38,7 +33,7 @@ public class CodeParameterDeclarationExpressionCollection extends CollectionBase
 	public final int Add(CodeParameterDeclarationExpression value)
 	{
 		add(value);return size();
-		//return super.List.Add(value);
+		//return super.List.add(value);
 	}
 
 	public final void AddRange(CodeParameterDeclarationExpression[] value)
@@ -83,7 +78,7 @@ public class CodeParameterDeclarationExpressionCollection extends CollectionBase
 
 	public final void Insert(int index, CodeParameterDeclarationExpression value)
 	{
-		//super.List.Insert(index, value);
+		//super.List.insert(index, value);
 		add(index,value);
 	}
 

@@ -1,9 +1,9 @@
 package com.superstudio.language.java.mvc;
 
 import com.superstudio.codedom.CodeTypeReference;
-import com.superstudio.jrazor.RazorEngineHost;
 import com.superstudio.language.java.JavaRazorCodeGenerator;
 import com.superstudio.web.mvc.razor.*;
+import com.superstudio.web.razor.RazorEngineHost;
 
 
 public class MvcJavaRazorCodeGenerator extends JavaRazorCodeGenerator

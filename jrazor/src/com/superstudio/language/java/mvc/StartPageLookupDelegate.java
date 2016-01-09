@@ -1,5 +1,6 @@
 package com.superstudio.language.java.mvc;
 
+
 @FunctionalInterface
 public interface StartPageLookupDelegate<T>
 {

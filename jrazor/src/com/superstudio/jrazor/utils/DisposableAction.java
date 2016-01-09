@@ -1,11 +1,10 @@
-﻿package com.superstudio.jrazor.utils;
+package com.superstudio.jrazor.utils;
 
-import com.superstudio.commons.IDisposable;
 import com.superstudio.commons.csharpbridge.action.Action;
 
 
 
-public class DisposableAction implements IDisposable {
+public class DisposableAction implements AutoCloseable {
 	private Action _action;
 
 	public DisposableAction(Action action)  {
@@ -16,7 +15,7 @@ public class DisposableAction implements IDisposable {
 	}
 
 	@Override
-	public  void dispose() {
+	public  void close() {
 		dispose(true);
 		System.gc();
 		// GC.SuppressFinalize(this);

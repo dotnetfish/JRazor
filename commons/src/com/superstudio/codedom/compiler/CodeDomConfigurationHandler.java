@@ -9,8 +9,8 @@ public class CodeDomConfigurationHandler implements IConfigurationSectionHandler
 	{
 	}
 
-	public Object Create(Object inheritedObject, Object configContextObj, XmlNode node)
+	public Object create(Object inheritedObject, Object configContextObj, XmlNode node)
 	{
-		return CodeDomCompilationConfiguration.SectionHandler.CreateStatic(inheritedObject, node);
+		return CodeDomCompilationConfiguration.SectionHandler.createStatic(inheritedObject, node);
 	}
 }

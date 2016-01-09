@@ -7,10 +7,6 @@ import com.superstudio.commons.exception.HttpException;
 
 public final class VirtualPath implements java.lang.Comparable, Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5676048792744682656L;
 	private String _appRelativeVirtualPath;
 	private String _virtualPath;
 	private static final int isWithinAppRootComputed = 1;
@@ -19,7 +15,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 	
 	private SimpleBitVector32 flags;
 	public static VirtualPath RootVirtualPath = VirtualPath.Create("/");
-	public String getVirtualPathString()  
+	public String getVirtualPathString() 
 	{
 		if (this._virtualPath == null)
 		{
@@ -39,7 +35,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 		}
 		return this._virtualPath;
 	}
-	public String getVirtualPathStringNoTrailingSlash() throws HttpException
+	public String getVirtualPathStringNoTrailingSlash()
 	{
 		return UrlPath.RemoveSlashFromPathIfNeeded(this.getVirtualPathString());
 	}
@@ -89,11 +85,11 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 		}
 		return this._virtualPath;
 	}
-	public String getExtension() throws HttpException
+	public String getExtension()
 	{
 		return UrlPath.GetExtension(this.getVirtualPathString());
 	}
-	public String getFileName() throws HttpException
+	public String getFileName()
 	{
 		return UrlPath.GetFileName(this.getVirtualPathStringNoTrailingSlash());
 	}
@@ -105,7 +101,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 		}
 		return UrlPath.HasTrailingSlash(this._appRelativeVirtualPath);
 	}
-	public boolean getIsWithinAppRoot() throws HttpException
+	public boolean getIsWithinAppRoot()
 	{
 		if (!this.flags.get(1))
 		{
@@ -133,7 +129,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 	{
 		return this._virtualPath.equals("/");
 	}
-	public VirtualPath getParent() throws HttpException
+	public VirtualPath getParent()
 	{
 		this.FailIfRelativePath();
 		if (this.getIsRoot())
@@ -179,11 +175,11 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 		}
 		return StringHelper.Compare(this.getVirtualPathString(), virtualPath.getVirtualPathString(),StringComparison.OrdinalIgnoreCase);
 	}
-	public VirtualPath CombineWithAppRoot() throws HttpException
+	public VirtualPath CombineWithAppRoot()
 	{
 		return HttpRuntime.getAppDomainAppVirtualPathObject().Combine(this);
 	}
-	public VirtualPath Combine(VirtualPath relativePath) throws HttpException
+	public VirtualPath Combine(VirtualPath relativePath)
 	{
 		if (relativePath == null)
 		{
@@ -215,7 +211,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 		expr_22.CopyFlagsFrom(this, 7);
 		return expr_22;
 	}
-	public VirtualPath MakeRelative(VirtualPath toVirtualPath) throws Exception
+	public VirtualPath MakeRelative(VirtualPath toVirtualPath)
 	{
 		VirtualPath arg_11_0 = new VirtualPath();
 		this.FailIfRelativePath();
@@ -247,9 +243,9 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 	{
 		return HostingEnvironment.getVirtualPathProvider().GetCacheDependency(this, virtualPathDependencies, utcStart);
 	}*/
-	/*public boolean FileExists()
+	/*public boolean fileExists()
 	{
-		return HostingEnvironment.getVirtualPathProvider().FileExists(this);
+		return HostingEnvironment.getVirtualPathProvider().fileExists(this);
 	}
 	public boolean DirectoryExists()
 	{
@@ -271,7 +267,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 	{
 		return VirtualPathProvider.OpenFile(this);
 	}*/
-	public void FailIfNotWithinAppRoot() throws Exception
+	public void FailIfNotWithinAppRoot()
 	{
 		if (!this.getIsWithinAppRoot())
 		{
@@ -285,7 +281,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 			throw new IllegalArgumentException(SR.GetString("VirtualPath_AllowRelativePath", new Object[] {this._virtualPath}));
 		}
 	}
-	public static VirtualPath Combine(VirtualPath v1, VirtualPath v2) throws HttpException
+	public static VirtualPath Combine(VirtualPath v1, VirtualPath v2)
 	{
 		if (v1 == null)
 		{
@@ -298,15 +294,15 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 		}
 		return v1.Combine(v2);
 	}
-	public static boolean OpEquality(VirtualPath v1, VirtualPath v2) throws Exception
+	public static boolean OpEquality(VirtualPath v1, VirtualPath v2)
 	{
 		return VirtualPath.equals(v1, v2);
 	}
-	public static boolean OpInequality(VirtualPath v1, VirtualPath v2) throws Exception
+	public static boolean OpInequality(VirtualPath v1, VirtualPath v2)
 	{
 		return !VirtualPath.equals(v1, v2);
 	}
-	public static boolean equals(VirtualPath v1, VirtualPath v2) throws Exception
+	public static boolean equals(VirtualPath v1, VirtualPath v2)
 	{
 		return v1 == v2 || (v1 != null && v2 != null && VirtualPath.EqualsHelper(v1, v2));
 	}
@@ -320,16 +316,14 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 		VirtualPath virtualPath = (VirtualPath)((value instanceof VirtualPath) ? value : null);
 		return virtualPath != null && VirtualPath.EqualsHelper(virtualPath, this);
 	}
-	private static boolean EqualsHelper(VirtualPath v1, VirtualPath v2) 
+	private static boolean EqualsHelper(VirtualPath v1, VirtualPath v2)
 	{
 		return StringHelper.Compare(v1.getVirtualPathString(), v2.getVirtualPathString(),StringComparison.OrdinalIgnoreCase) == 0;
 	}
 	@Override
 	public int hashCode()
 	{
-		
-			return StringHelper.HashCode(this.getVirtualPathString(),StringComparison.OrdinalIgnoreCase);
-		
+		return StringHelper.HashCode(this.getVirtualPathString(),StringComparison.OrdinalIgnoreCase);
 	}
 	@Override
 	public String toString()
@@ -352,7 +346,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 		}
 		return null;
 	}
-	public static String GetVirtualPathStringNoTrailingSlash(VirtualPath virtualPath) throws HttpException
+	public static String GetVirtualPathStringNoTrailingSlash(VirtualPath virtualPath)
 	{
 		if (!(virtualPath == null))
 		{
@@ -416,7 +410,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable
 	{
 		return VirtualPath.Create(virtualPath, VirtualPathOptions.AllowNull | VirtualPathOptions.EnsureTrailingSlash | VirtualPathOptions.AllowAbsolutePath | VirtualPathOptions.AllowAppRelativePath);
 	}
-//C# TO JAVA CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to Java Converter:
+
 	public  static VirtualPath Create(String virtualPath, int options)
 		{
 			return new VirtualPath("F:\\Razor");//"F:\\Razor";

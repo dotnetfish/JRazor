@@ -14,12 +14,12 @@ abstract class JavaModifierAttributeConverter extends TypeConverter {
 
 	protected abstract Object getDefaultValue();
 
-	 @Override
+	@Override
 	public boolean canConvertFrom(ITypeDescriptorContext context, Class sourceType) {
 		return sourceType == String.class || super.canConvertFrom(context, sourceType);
 	}
 
-	// @Override
+
 	public Object convertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value) {
 		if (value instanceof String) {
 			String value2 = (String) value;
@@ -50,12 +50,11 @@ abstract class JavaModifierAttributeConverter extends TypeConverter {
 		return super.convertTo(context, culture, value, destinationType);
 	}
 
-	// @Override
-	public boolean getStandardValuesExclusive(ITypeDescriptorContext context) {
+	 public boolean getStandardValuesExclusive(ITypeDescriptorContext context) {
 		return true;
 	}
 
-	// @Override
+
 	public boolean getStandardValuesSupported(ITypeDescriptorContext context) {
 		return true;
 	}

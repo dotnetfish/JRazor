@@ -2,8 +2,7 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
- 
-public class CodeCatchClauseCollection extends CollectionBase<CodeCatchClause> implements Serializable
+public class CodeCatchClauseCollection extends CollectionBase implements Serializable
 {
 	public final CodeCatchClause getItem(int index)
 	{

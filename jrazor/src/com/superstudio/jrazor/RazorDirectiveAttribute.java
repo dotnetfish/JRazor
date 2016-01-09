@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor;
+package com.superstudio.jrazor;
 
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.jrazor.resources.RazorResources;

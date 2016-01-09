@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.text;
+package com.superstudio.jrazor.text;
 
 
 
@@ -11,16 +11,18 @@ public interface ITextBuffer
 	int peek();
 	default void Seek(int characters) {
 		setPosition(getPosition() + characters);
-	 };
-	 default ITextDocument toDocument() 
+	 }
+
+	default ITextDocument toDocument()
 		{
 			ITextDocument ret = (ITextDocument)this;
 			if (ret == null){
 				ret = new SeekableTextReader(this);
 			}
 			return ret;
-		};
-		default LookaheadToken BeginLookahead()
+		}
+
+	default LookaheadToken BeginLookahead()
 		{
 			int start = getPosition();
 	 

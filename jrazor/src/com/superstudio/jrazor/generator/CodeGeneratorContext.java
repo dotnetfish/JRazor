@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.generator;
+package com.superstudio.jrazor.generator;
 
 import com.superstudio.codedom.CodeCompileUnit;
 import com.superstudio.codedom.CodeLinePragma;
@@ -10,7 +10,6 @@ import com.superstudio.codedom.CodeSnippetStatement;
 import com.superstudio.codedom.CodeTypeDeclaration;
 import com.superstudio.codedom.MemberAttributes;
 import com.superstudio.commons.CollectionHelper;
-import com.superstudio.commons.IDisposable;
 import com.superstudio.commons.csharpbridge.RefObject;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.csharpbridge.action.ActionOne;

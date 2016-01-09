@@ -2,7 +2,7 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
- 
+
 //ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeTypeMember : CodeObject
 public class CodeTypeMember extends CodeObject implements Serializable
 {
@@ -16,11 +16,11 @@ public class CodeTypeMember extends CodeObject implements Serializable
 
 	private CodeLinePragma linePragma;
 
- 
+
 //ORIGINAL LINE: [OptionalField] private CodeDirectiveCollection startDirectives;
 	private CodeDirectiveCollection startDirectives;
 
- 
+
 //ORIGINAL LINE: [OptionalField] private CodeDirectiveCollection endDirectives;
 	private CodeDirectiveCollection endDirectives;
 

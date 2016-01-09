@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.tokenizer.symbols;
+package com.superstudio.jrazor.tokenizer.symbols;
 
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.jrazor.parser.syntaxTree.RazorError;

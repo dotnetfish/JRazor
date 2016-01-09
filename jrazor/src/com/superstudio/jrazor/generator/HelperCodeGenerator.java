@@ -1,10 +1,9 @@
-﻿package com.superstudio.jrazor.generator;
+package com.superstudio.jrazor.generator;
 
 import com.superstudio.codedom.CodeLinePragma;
 import com.superstudio.codedom.CodeSnippetTypeMember;
 import com.superstudio.commons.Environment;
 import com.superstudio.commons.HashCodeCombiner;
-import com.superstudio.commons.IDisposable;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.jrazor.parser.syntaxTree.Block;
 import com.superstudio.jrazor.text.LocationTagged;

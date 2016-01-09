@@ -1,23 +1,24 @@
-﻿package com.superstudio.jrazor.parser.syntaxTree;
+package com.superstudio.jrazor.parser.syntaxTree;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import com.superstudio.commons.CollectionHelper;
+import com.superstudio.commons.exception.InvalidOperationException;
 import com.superstudio.jrazor.generator.IBlockCodeGenerator;
 import com.superstudio.jrazor.parser.ParserVisitor;
+import com.superstudio.jrazor.resources.RazorResources;
 import com.superstudio.jrazor.text.*;
 
 
 
 public class Block extends SyntaxTreeNode {
-	public Block(BlockBuilder source) {
+	public Block(BlockBuilder source) throws InvalidOperationException {
 		if (source.getType() == null) {
-			// throw new
-			// InvalidOperationException(RazorResources.getBlock_Type_Not_Specified());
-			// throw new
-			// InvalidOperationException(RazorResources.getBlock_Type_Not_Specified());
+			 throw new
+					 InvalidOperationException(RazorResources.getBlock_Type_Not_Specified());
+
 		}
 		setType(source.getType());
 		setChildren(source.getChildren());
@@ -39,10 +40,7 @@ public class Block extends SyntaxTreeNode {
 
 	 
 	 
-	// [SuppressMessage("Microsoft.Naming",
-	// "CA1721:PropertyNamesShouldNotMatchGetMethods", Justification = "Type is
-	// the most appropriate name for this property and there is little chance of
-	// confusion with GetType")]
+
 	private BlockType privateType = BlockType.forValue(0);
 
 	public final BlockType getType() {
@@ -162,7 +160,7 @@ public class Block extends SyntaxTreeNode {
 				Block block=(Block)item;
 				Iterable<Span> subItems=block.flatten();
 				for(Span subItem:subItems){
-						allItem.add((Span)subItem);
+						allItem.add(subItem);
 				}
 			}
 		}
@@ -238,11 +236,7 @@ public class Block extends SyntaxTreeNode {
 				return false;
 			}
 		}
-		if (rightEnum.hasNext()) {
-			// More items in right than left
-			return false;
-		}
-		return true;
+		return !rightEnum.hasNext();
 	}
 
 	@Override

@@ -1,7 +1,5 @@
 package com.superstudio.language.java;
 
-import java.util.Map;
-
 import com.superstudio.codedom.CodeTypeMember;
 import com.superstudio.codedom.MemberAttributes;
 import com.superstudio.codedom.compiler.CodeDomProvider;
@@ -12,6 +10,8 @@ import com.superstudio.commons.TypeAttributes;
 import com.superstudio.commons.TypeConverter;
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.commons.io.TextWriter;
+
+import java.util.Map;
 
 public class JavaCodeProvider extends CodeDomProvider
 {
@@ -37,14 +37,13 @@ public class JavaCodeProvider extends CodeDomProvider
 		}
 		this.generator = new JavaCodeGenerator(providerOptions);
 	}
-	//[Obsolete("Callers should not use the ICodeGenerator interface and should instead use the methods directly on the CodeDomProvider class.")]
-	@Override
+		@Override
 	public  ICodeGenerator createGenerator()
 	{
 		return this.generator;
 	}
-	//[Obsolete("Callers should not use the ICodeCompiler interface and should instead use the methods directly on the CodeDomProvider class.")]
-	@Override
+
+			@Override
 	public  ICodeCompiler createCompiler()
 	{
 		return this.generator;
@@ -65,6 +64,6 @@ public class JavaCodeProvider extends CodeDomProvider
 	@Override
 	public  void generateCodeFromMember(CodeTypeMember member, TextWriter writer, CodeGeneratorOptions options) throws Exception
 	{
-		this.generator.GenerateCodeFromMember(member, writer, options);
+		this.generator.generateCodeFromMember(member, writer, options);
 	}
 }

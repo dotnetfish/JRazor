@@ -2,14 +2,10 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
- 
-public class CodeTypeParameterCollection extends CollectionBase<CodeTypeParameter> implements Serializable
-{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8116870820965846663L;
 
+//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeTypeParameterCollection : CollectionBase
+public class CodeTypeParameterCollection extends CollectionBase implements Serializable
+{
 	public final CodeTypeParameter getItem(int index)
 	{
 		return (CodeTypeParameter)get(index);

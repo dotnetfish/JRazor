@@ -24,11 +24,11 @@ public final class AssemblyBuilderWrapper implements IAssemblyBuilder
 	}
 	
 	@Override
-	public void AddCodeCompileUnit(BuildProvider buildProvider, CodeCompileUnit compileUnit)
+	public void addCodeCompileUnit(BuildProvider buildProvider, CodeCompileUnit compileUnit)
 	{
 		this.getInnerBuilder().AddCodeCompileUnit(buildProvider, compileUnit);
 	}
-	public void GenerateTypeFactory(String typeName)
+	public void generateTypeFactory(String typeName)
 	{
 		this.getInnerBuilder().GenerateTypeFactory(typeName);
 	}

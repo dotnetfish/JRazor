@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.parser;
+package com.superstudio.jrazor.parser;
 
 import java.util.Iterator;
 
@@ -52,7 +52,7 @@ implements IEquatable<Object>
 					@Override
 					public boolean hasNext() {
 						// TODO Auto-generated method stub
-						TSymbol current = (TSymbol) tok.nextSymbol();
+						TSymbol current = tok.nextSymbol();
 						refObj.setRefObj(current);
 						if(current==null){
 							reader.close();

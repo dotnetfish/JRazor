@@ -1,6 +1,7 @@
 package com.superstudio.commons;
 
 import java.util.List;
+import java.util.function.Function;
 
 public abstract class IList<T> implements List<T> {
 

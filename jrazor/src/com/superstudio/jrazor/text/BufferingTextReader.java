@@ -1,8 +1,7 @@
-﻿package com.superstudio.jrazor.text;
+package com.superstudio.jrazor.text;
 
 import java.io.IOException;
 
-import com.superstudio.commons.IDisposable;
 import com.superstudio.commons.TextReader;
 import com.superstudio.jrazor.utils.DisposableAction;
 

@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.utils;
+package com.superstudio.jrazor.utils;
 
 
 

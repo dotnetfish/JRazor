@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
- 
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeCompileUnit : CodeObject
 public class CodeCompileUnit extends CodeObject implements Serializable
 {
 	/**
@@ -19,12 +17,10 @@ public class CodeCompileUnit extends CodeObject implements Serializable
 
 	private CodeAttributeDeclarationCollection attributes;
 
- 
-//ORIGINAL LINE: [OptionalField] private CodeDirectiveCollection startDirectives;
+
 	private CodeDirectiveCollection startDirectives;
 
- 
-//ORIGINAL LINE: [OptionalField] private CodeDirectiveCollection endDirectives;
+
 	private CodeDirectiveCollection endDirectives;
 
 	public final CodeNamespaceCollection getNamespaces()

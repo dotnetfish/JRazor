@@ -2,7 +2,6 @@ package com.superstudio.language.java;
 
 import com.superstudio.commons.csharpbridge.StringComparison;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -171,7 +170,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 
 	private String quoteSnippetStringCStyle(String value) throws Exception {
 		StringBuilder StringBuilder = new StringBuilder(value.length() + 5);
-		Indentation indentation = new Indentation((IndentedTextWriter) this.output, this.getIndent() + 1);
+		Indentation indentation = new Indentation(this.output, this.getIndent() + 1);
 		StringBuilder.append("\"");
 		int i = 0;
 		while (i < value.length()) {
@@ -244,7 +243,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		return StringBuilder.toString();
 	}
 
-	private String QuoteSnippetStringVerbatimStyle(String value) {
+	private String quoteSnippetStringVerbatimStyle(String value) {
 		StringBuilder StringBuilder = new StringBuilder(value.length() + 5);
 		StringBuilder.append("\"");
 		for (int i = 0; i < value.length(); i++) {
@@ -263,14 +262,14 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		return StringBuilder.toString();
 	}
 
-	private String QuoteSnippetString(String value) throws Exception {
+	private String quoteSnippetString(String value) throws Exception {
 		if (value.length() < 256 || value.length() > 1500 || value.indexOf('\0') != -1) {
 			return this.quoteSnippetStringCStyle(value);
 		}
-		return this.QuoteSnippetStringVerbatimStyle(value);
+		return this.quoteSnippetStringVerbatimStyle(value);
 	}
 
-	private void ProcessCompilerOutputLine(CompilerResults results, String line) {
+	private void processCompilerOutputLine(CompilerResults results, String line) {
 		if (JavaCodeGenerator.outputRegSimple == null) {
 			JavaCodeGenerator.outputRegWithFileAndLine = Pattern
 					.compile("(^(.*)(\\(([0-9]+),([0-9]+)\\)): )(error|warning) ([A-Z]+[0-9]+) ?: (.*)");
@@ -296,11 +295,11 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			}
 			compilerError.setErrorNumber(match.group(flag ? 7 : 2));
 			compilerError.setErrorText(match.group(flag ? 8 : 3));
-			results.getErrors().Add(compilerError);
+			results.getErrors().add(compilerError);
 		}
 	}
 
-	private String CmdArgsFromParameters(CompilerParameters options) {
+	private String cmdArgsFromParameters(CompilerParameters options) {
 		StringBuilder StringBuilder = new StringBuilder(128);
 		if (options.getGenerateExecutable()) {
 			StringBuilder.append("/t:exe ");
@@ -370,17 +369,17 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		return StringBuilder.toString();
 	}
 
-	private void ContinueOnNewLine(String st) throws Exception {
-		this.output.WriteLine(st);
+	private void continueOnNewLine(String st) throws Exception {
+		this.output.writeLine(st);
 	}
 
 	private String getResponseFileCmdArgs(CompilerParameters options, String cmdArgs) throws Exception {
-		String text = options.getTempFiles().AddExtension("cmdline");
+		String text = options.getTempFiles().addExtension("cmdline");
 		FileStream stream = new FileStream(text, FileMode.Create, FileAccess.Write, FileShare.Read);
 		try {
 			try (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8)) {
-				streamWriter.Write(cmdArgs);
-				streamWriter.Flush();
+				streamWriter.write(cmdArgs);
+				streamWriter.flush();
 			}
 		} finally {
 			stream.Close();
@@ -389,53 +388,53 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	}
 
 	private void outputIdentifier(String ident) throws Exception {
-		this.output.Write(this.createEscapedIdentifier(ident));
+		this.output.write(this.createEscapedIdentifier(ident));
 	}
 
-	private void OutputType(CodeTypeReference typeRef) throws Exception {
-		this.output.Write(this.getTypeOutput(typeRef));
+	private void outputType(CodeTypeReference typeRef) throws Exception {
+		this.output.write(this.getTypeOutput(typeRef));
 	}
 
-	private void GenerateArrayCreateExpression(CodeArrayCreateExpression e) throws Exception {
-		this.output.Write("new ");
+	private void generateArrayCreateExpression(CodeArrayCreateExpression e) throws Exception {
+		this.output.write("new ");
 		CodeExpressionCollection initializers = e.getInitializers();
 		if (initializers.size() > 0) {
-			this.OutputType(e.getCreateType());
+			this.outputType(e.getCreateType());
 			if (e.getCreateType().getArrayRank() == 0) {
-				this.output.Write("[]");
+				this.output.write("[]");
 			}
-			this.output.WriteLine(" {");
+			this.output.writeLine(" {");
 			int indent = this.getIndent();
 			this.setIndent(indent + 1);
 			this.outputExpressionList(initializers, true);
 			indent = this.getIndent();
 			this.setIndent(indent - 1);
-			this.output.Write("}");
+			this.output.write("}");
 			return;
 		}
-		this.output.Write(this.getBaseTypeOutput(e.getCreateType()));
-		this.output.Write("[");
+		this.output.write(this.getBaseTypeOutput(e.getCreateType()));
+		this.output.write("[");
 		if (e.getSizeExpression() != null) {
 			this.generateExpression(e.getSizeExpression());
 		} else {
-			this.output.Write(e.getSize());
+			this.output.write(e.getSize());
 		}
-		this.output.Write("]");
+		this.output.write("]");
 		int nestedArrayDepth = e.getCreateType().getNestedArrayDepth();
 		for (int i = 0; i < nestedArrayDepth - 1; i++) {
-			this.output.Write("[]");
+			this.output.write("[]");
 		}
 	}
 
-	private void GenerateBaseReferenceExpression(CodeBaseReferenceExpression e) throws Exception {
-		this.output.Write("super");
+	private void generateBaseReferenceExpression(CodeBaseReferenceExpression e) throws Exception {
+		this.output.write("super");
 	}
 
-	private void GenerateBinaryOperatorExpression(CodeBinaryOperatorExpression e) throws Exception {
+	private void generateBinaryOperatorExpression(CodeBinaryOperatorExpression e) throws Exception {
 		boolean flag = false;
-		this.output.Write("(");
+		this.output.write("(");
 		this.generateExpression(e.getLeft());
-		this.output.Write(" ");
+		this.output.write(" ");
 		if (e.getLeft() instanceof CodeBinaryOperatorExpression
 				|| e.getRight() instanceof CodeBinaryOperatorExpression) {
 			if (!this.inNestedBinary) {
@@ -443,27 +442,27 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 				this.inNestedBinary = true;
 				this.setIndent(this.getIndent() + 3);
 			}
-			this.ContinueOnNewLine("");
+			this.continueOnNewLine("");
 		}
 		this.outputOperator(e.getOperator());
-		this.output.Write(" ");
+		this.output.write(" ");
 		this.generateExpression(e.getRight());
-		this.output.Write(")");
+		this.output.write(")");
 		if (flag) {
 			this.setIndent(this.getIndent() - 3);
 			this.inNestedBinary = false;
 		}
 	}
 
-	private void GenerateCastExpression(CodeCastExpression e) throws Exception {
-		this.output.Write("((");
-		this.OutputType(e.getTargetType());
-		this.output.Write(")(");
+	private void generateCastExpression(CodeCastExpression e) throws Exception {
+		this.output.write("((");
+		this.outputType(e.getTargetType());
+		this.output.write(")(");
 		this.generateExpression(e.getExpression());
-		this.output.Write("))");
+		this.output.write("))");
 	}
 
-	public void GenerateCodeFromMember(CodeTypeMember member, TextWriter writer, CodeGeneratorOptions options)
+	public void generateCodeFromMember(CodeTypeMember member, TextWriter writer, CodeGeneratorOptions options)
 			throws Exception {
 		if (this.output != null) {
 			throw new Exception(SR.GetString("CodeGenReentrance"));
@@ -481,31 +480,31 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 	}
 
-	private void GenerateDefaultValueExpression(CodeDefaultValueExpression e) throws Exception {
+	private void generateDefaultValueExpression(CodeDefaultValueExpression e) throws Exception {
 		/*
-		 * this.output.Write("default("); this.OutputType(e.getType());
-		 * this.output.Write(")");
+		 * this.output.write("default("); this.outputType(e.getType());
+		 * this.output.write(")");
 		 */
-		this.output.Write("null");
+		this.output.write("null");
 	}
 
-	private void GenerateDelegateCreateExpression(CodeDelegateCreateExpression e) throws Exception {
-		this.output.Write("new ");
-		this.OutputType(e.getDelegateType());
-		this.output.Write("(");
+	private void generateDelegateCreateExpression(CodeDelegateCreateExpression e) throws Exception {
+		this.output.write("new ");
+		this.outputType(e.getDelegateType());
+		this.output.write("(");
 		this.generateExpression(e.getTargetObject());
-		this.output.Write(".");
+		this.output.write(".");
 		this.outputIdentifier(e.getMethodName());
-		this.output.Write(")");
+		this.output.write(")");
 	}
 
-	private void GenerateEvents(CodeTypeDeclaration e) throws Exception {
+	private void generateEvents(CodeTypeDeclaration e) throws Exception {
 		Iterable enumerators = e.getMembers();
 		for (Object enumerator : enumerators) {
 			if (enumerator instanceof CodeMemberEvent) {
 				this.currentMember = (CodeTypeMember) enumerator;
 				if (this.options.getBlankLinesBetweenMembers()) {
-					this.output.WriteLine();
+					this.output.writeLine();
 				}
 				if (this.currentMember.getStartDirectives().size() > 0) {
 					this.generateDirectives(this.currentMember.getStartDirectives());
@@ -526,13 +525,13 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 	}
 
-	private void GenerateFields(CodeTypeDeclaration e) throws Exception {
+	private void generateFields(CodeTypeDeclaration e) throws Exception {
 		// IEnumerator enumerator = e.getMembers.GetEnumerator();
 		for (Object enumerator : e.getMembers()) {
 			if (enumerator instanceof CodeMemberField) {
 				this.currentMember = (CodeTypeMember) enumerator;
 				if (this.options.getBlankLinesBetweenMembers()) {
-					this.output.WriteLine();
+					this.output.writeLine();
 				}
 				if (this.currentMember.getStartDirectives().size() > 0) {
 					this.generateDirectives(this.currentMember.getStartDirectives());
@@ -553,58 +552,58 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 	}
 
-	private void GenerateFieldReferenceExpression(CodeFieldReferenceExpression e) throws Exception {
+	private void generateFieldReferenceExpression(CodeFieldReferenceExpression e) throws Exception {
 		if (e.getTargetObject() != null) {
 			this.generateExpression(e.getTargetObject());
-			this.output.Write(".");
+			this.output.write(".");
 		}
 		this.outputIdentifier(e.getFieldName());
 	}
 
-	private void GenerateArgumentReferenceExpression(CodeArgumentReferenceExpression e) throws Exception {
+	private void generateArgumentReferenceExpression(CodeArgumentReferenceExpression e) throws Exception {
 		this.outputIdentifier(e.getParameterName());
 	}
 
-	private void GenerateVariableReferenceExpression(CodeVariableReferenceExpression e) throws Exception {
+	private void generateVariableReferenceExpression(CodeVariableReferenceExpression e) throws Exception {
 		this.outputIdentifier(e.getVariableName());
 	}
 
-	private void GenerateIndexerExpression(CodeIndexerExpression e) throws Exception {
+	private void generateIndexerExpression(CodeIndexerExpression e) throws Exception {
 		this.generateExpression(e.getTargetObject());
-		this.output.Write("[");
+		this.output.write("[");
 		boolean flag = true;
 		for (Object e2 : e.getIndices()) {
 			if (flag) {
 				flag = false;
 			} else {
-				this.output.Write(", ");
+				this.output.write(", ");
 			}
 			this.generateExpression((CodeExpression) e2);
 		}
-		this.output.Write("]");
+		this.output.write("]");
 	}
 
-	private void GenerateArrayIndexerExpression(CodeArrayIndexerExpression e) throws Exception {
+	private void generateArrayIndexerExpression(CodeArrayIndexerExpression e) throws Exception {
 		this.generateExpression(e.getTargetObject());
-		this.output.Write("[");
+		this.output.write("[");
 		boolean flag = true;
 		for (Object e2 : e.getIndices()) {
 			if (flag) {
 				flag = false;
 			} else {
-				this.output.Write(", ");
+				this.output.write(", ");
 			}
 			this.generateExpression((CodeExpression) e2);
 		}
-		this.output.Write("]");
+		this.output.write("]");
 	}
 
-	private void GenerateSnippetCompileUnit(CodeSnippetCompileUnit e) throws Exception {
+	private void generateSnippetCompileUnit(CodeSnippetCompileUnit e) throws Exception {
 		this.generateDirectives(e.getStartDirectives());
 		if (e.getLinePragma() != null) {
 			this.generateLinePragmaStart(e.getLinePragma());
 		}
-		this.output.WriteLine(e.getValue());
+		this.output.writeLine(e.getValue());
 		if (e.getLinePragma() != null) {
 			this.generateLinePragmaEnd(e.getLinePragma());
 		}
@@ -613,31 +612,31 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 	}
 
-	private void GenerateSnippetExpression(CodeSnippetExpression e) throws Exception {
-		this.output.Write(e.getValue());
+	private void generateSnippetExpression(CodeSnippetExpression e) throws Exception {
+		this.output.write(e.getValue());
 	}
 
-	private void GenerateMethodInvokeExpression(CodeMethodInvokeExpression e) throws Exception {
-		this.GenerateMethodReferenceExpression(e.getMethod());
-		this.output.Write("(");
+	private void generateMethodInvokeExpression(CodeMethodInvokeExpression e) throws Exception {
+		this.generateMethodReferenceExpression(e.getMethod());
+		this.output.write("(");
 		this.outputExpressionList(e.getParameters());
-		this.output.Write(")");
+		this.output.write(")");
 	}
 
-	private void GenerateMethodReferenceExpression(CodeMethodReferenceExpression e) throws Exception {
+	private void generateMethodReferenceExpression(CodeMethodReferenceExpression e) throws Exception {
 		if (e.getTargetObject() != null) {
 			if (e.getTargetObject() instanceof CodeBinaryOperatorExpression) {
-				this.output.Write("(");
+				this.output.write("(");
 				this.generateExpression(e.getTargetObject());
-				this.output.Write(")");
+				this.output.write(")");
 			} else {
 				this.generateExpression(e.getTargetObject());
 			}
-			this.output.Write(".");
+			this.output.write(".");
 		}
 		this.outputIdentifier(e.getMethodName());
 		if (e.getTypeArguments().size() > 0) {
-			this.output.Write(this.getTypeArgumentsOutput(e.getTypeArguments()));
+			this.output.write(this.getTypeArgumentsOutput(e.getTypeArguments()));
 		}
 	}
 
@@ -653,11 +652,11 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		this.generateCommentStatements(e.getComments());
 		this.generateNamespaceStart(e);
 		if (this.getUserData(e, "GenerateImports", true)) {
-			this.enerateNamespaceImports(e);
+			this.generateNamespaceImports(e);
 		}
 		// TODO fro debug;
 
-		this.output.WriteLine();
+		this.output.writeLine();
 		this.generateTypes(e);
 
 		this.generateNamespaceEnd(e);
@@ -742,16 +741,16 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 	}
 
-	private void generateStatements(CodeStatementCollection stms) throws Exception, InvalidOperationException {
+	private void generateStatements(CodeStatementCollection stms) throws Exception {
 		// IEnumerator enumerator = stms.GetEnumerator();
 		// if(stms==null)return;
 		for (Object enumerator : stms) {
-			((ICodeGenerator) this).generateCodeFromStatement((CodeStatement) enumerator, this.output.getInnerWriter(),
+			this.generateCodeFromStatement((CodeStatement) enumerator, this.output.getInnerWriter(),
 					this.options);
 		}
 	}
 
-	private void enerateNamespaceImports(CodeNamespace e) throws Exception {
+	private void generateNamespaceImports(CodeNamespace e) throws Exception {
 		// IEnumerator enumerator = e.Imports.GetEnumerator();
 		for (Object enumerator : e.getImports()) {
 			CodeNamespaceImport codeNamespaceImport = (CodeNamespaceImport) enumerator;
@@ -768,7 +767,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	private void generateEventReferenceExpression(CodeEventReferenceExpression e) throws Exception {
 		if (e.getTargetObject() != null) {
 			this.generateExpression(e.getTargetObject());
-			this.output.Write(".");
+			this.output.write(".");
 		}
 		this.outputIdentifier(e.getEventName());
 	}
@@ -777,17 +776,17 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		if (e.getTargetObject() != null) {
 			this.generateExpression(e.getTargetObject());
 		}
-		this.output.Write("(");
+		this.output.write("(");
 		this.outputExpressionList(e.getParameters());
-		this.output.Write(")");
+		this.output.write(")");
 	}
 
 	private void generateObjectCreateExpression(CodeObjectCreateExpression e) throws Exception {
-		this.output.Write("new ");
-		this.OutputType(e.getCreateType());
-		this.output.Write("(");
+		this.output.write("new ");
+		this.outputType(e.getCreateType());
+		this.output.write("(");
 		this.outputExpressionList(e.getParameters());
-		this.output.Write(")");
+		this.output.write(")");
 	}
 
 	private void generatePrimitiveExpression(CodePrimitiveExpression e) throws Exception {
@@ -796,20 +795,20 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			return;
 		}
 		if (e.getValue() instanceof Byte) {
-			this.output.Write(((Byte) e.getValue()).toString());
+			this.output.write(e.getValue().toString());
 			return;
 		}
 		/*
 		 * if (e.getValue() instanceof ) {
-		 * this.output.Write(((ushort)e.getValue()).ToString(CultureInfo.
+		 * this.output.write(((ushort)e.getValue()).ToString(CultureInfo.
 		 * InvariantCulture)); return; } if (e.getValue() instanceof uint) {
-		 * this.output.Write(((uint)e.getValue()).ToString(CultureInfo.
-		 * InvariantCulture)); this.output.Write("u"); return; }
+		 * this.output.write(((uint)e.getValue()).ToString(CultureInfo.
+		 * InvariantCulture)); this.output.write("u"); return; }
 		 */
 		if (e.getValue() instanceof Long) {
-			// this.output.Write(((Long)e.getValue()).toString(CultureInfo.InvariantCulture));
-			this.output.Write(String.valueOf(e.getValue()));
-			this.output.Write("l");
+			// this.output.write(((Long)e.getValue()).toString(CultureInfo.InvariantCulture));
+			this.output.write(String.valueOf(e.getValue()));
+			this.output.write("l");
 			return;
 		}
 		this.generatePrimitiveExpressionBase(e);
@@ -817,40 +816,40 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 
 	private void generatePrimitiveExpressionBase(CodePrimitiveExpression e) throws Exception {
 		if (e.getValue() == null) {
-			this.output.Write(this.getNullToken());
+			this.output.write(this.getNullToken());
 			return;
 		}
 		if (e.getValue() instanceof String) {
-			this.output.Write(this.QuoteSnippetString((String) e.getValue()));
+			this.output.write(this.quoteSnippetString((String) e.getValue()));
 			return;
 		}
 		if (e.getValue() instanceof Character) {
-			this.output.Write("'" + e.getValue().toString() + "'");
+			this.output.write("'" + e.getValue().toString() + "'");
 			return;
 		}
 		if (e.getValue() instanceof Byte) {
-			// this.output.Write(((Byte) e.getValue()).toString());
-			this.output.Write(String.valueOf(e.getValue()));
+			// this.output.write(((Byte) e.getValue()).toString());
+			this.output.write(String.valueOf(e.getValue()));
 			return;
 		}
 		if (e.getValue() instanceof Short) {
-			this.output.Write(String.valueOf(e.getValue()));
-			// this.output.Write(((Short)e.getValue()).toString(CultureInfo.InvariantCulture));
+			this.output.write(String.valueOf(e.getValue()));
+			// this.output.write(((Short)e.getValue()).toString(CultureInfo.InvariantCulture));
 			return;
 		}
 		if (e.getValue() instanceof Integer) {
-			this.output.Write(String.valueOf(e.getValue()));
-			// this.output.Write(((int)e.getValue()).ToString(CultureInfo.InvariantCulture));
+			this.output.write(String.valueOf(e.getValue()));
+			// this.output.write(((int)e.getValue()).ToString(CultureInfo.InvariantCulture));
 			return;
 		}
 		if (e.getValue() instanceof Long) {
-			this.output.Write(String.valueOf(e.getValue()));
-			// this.output.Write(((long)e.getValue()).ToString(CultureInfo.InvariantCulture));
+			this.output.write(String.valueOf(e.getValue()));
+			// this.output.write(((long)e.getValue()).ToString(CultureInfo.InvariantCulture));
 			return;
 		}
 		/*
 		 * if (e.getValue() instanceof float) {
-		 * this.GenerateSingleFloatValue((float)e.getValue()); return; }
+		 * this.generateSingleFloatValue((float)e.getValue()); return; }
 		 */
 		if (e.getValue() instanceof Double) {
 			this.generateDoubleValue((Double) e.getValue());
@@ -858,7 +857,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		/*
 		 * if (e.getValue() instanceof decimal) {
-		 * this.GenerateDecimalValue((decimal)e.getValue()); return; }
+		 * this.generateDecimalValue((decimal)e.getValue()); return; }
 		 */
 		if (!(e.getValue() instanceof Boolean)) {
 			/*
@@ -867,27 +866,27 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			 */
 		}
 		if ((boolean) e.getValue()) {
-			this.output.Write("true");
+			this.output.write("true");
 			return;
 		}
-		this.output.Write("false");
+		this.output.write("false");
 	}
 
 	private void generatePrimitiveChar(char c) throws Exception {
-		this.output.Write('\'');
+		this.output.write('\'');
 		if (c > '\'') {
 			if (c <= '\u0084') {
 				if (c == '\\') {
-					this.output.Write("\\\\");
+					this.output.write("\\\\");
 					// goto IL_143;
-					this.output.Write('\'');
+					this.output.write('\'');
 				}
 				if (c != '\u0084') {
 					// goto IL_125;
 					if (Character.isSurrogate(c)) {
 						this.appendEscapedChar(null, c);
 					} else {
-						this.output.Write(c);
+						this.output.write(c);
 					}
 				}
 			} else {
@@ -896,43 +895,43 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 					if (Character.isSurrogate(c)) {
 						this.appendEscapedChar(null, c);
 					} else {
-						this.output.Write(c);
+						this.output.write(c);
 					}
 				}
 			}
 			this.appendEscapedChar(null, c);
-			this.output.Write('\'');
+			this.output.write('\'');
 			// goto IL_143;
 		}
 		if (c <= '\r') {
 			if (c == '\0') {
-				this.output.Write("\\0");
-				this.output.Write('\'');
+				this.output.write("\\0");
+				this.output.write('\'');
 				// goto IL_143;
 			}
 			switch (c) {
 			case '\t':
-				this.output.Write("\\t");
-				this.output.Write('\'');
+				this.output.write("\\t");
+				this.output.write('\'');
 				// goto IL_143;
 			case '\n':
-				this.output.Write("\\n");
-				this.output.Write('\'');
+				this.output.write("\\n");
+				this.output.write('\'');
 				// goto IL_143;
 			case '\r':
-				this.output.Write("\\r");
+				this.output.write("\\r");
 				// goto IL_143;
-				this.output.Write('\'');
+				this.output.write('\'');
 			}
 		} else {
 			if (c == '"') {
-				this.output.Write("\\\"");
+				this.output.write("\\\"");
 				// goto IL_143;
-				this.output.Write('\'');
+				this.output.write('\'');
 			}
 			if (c == '\'') {
-				this.output.Write("\\'");
-				this.output.Write('\'');
+				this.output.write("\\'");
+				this.output.write('\'');
 				// goto IL_143;
 			}
 		}
@@ -942,44 +941,44 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	private void appendEscapedChar(StringBuilder b, char value) throws Exception {
 		int num;
 		if (b == null) {
-			this.output.Write("\\u");
+			this.output.write("\\u");
 			// TextWriter arg_2C_0 = this.output;
 			num = (int) value;
-			this.output.Write(String.valueOf(num));
-			// arg_2C_0.Write(num.toString("X4", CultureInfo.InvariantCulture));
+			this.output.write(String.valueOf(num));
+			// arg_2C_0.write(num.toString("X4", CultureInfo.InvariantCulture));
 			return;
 		}
 		b.append("\\u");
 		num = (int) value;
-		// b.Append(num.ToString("X4", CultureInfo.InvariantCulture));
+		// b.append(num.ToString("X4", CultureInfo.InvariantCulture));
 		b.append(String.valueOf(num));
 	}
 
 	private void generatePropertySetValueReferenceExpression(CodePropertySetValueReferenceExpression e)
 			throws Exception {
-		this.output.Write("value");
+		this.output.write("value");
 	}
 
 	private void generateThisReferenceExpression(CodeThisReferenceExpression e) throws Exception {
-		this.output.Write("this");
+		this.output.write("this");
 	}
 
 	private void generateExpressionStatement(CodeExpressionStatement e) throws Exception {
 		this.generateExpression(e.getExpression());
 		if (!this.generatingForLoop) {
-			this.output.WriteLine(";");
+			this.output.writeLine(";");
 		}
 	}
 
-	private void generateIterationStatement(CodeIterationStatement e) throws Exception, Exception {
+	private void generateIterationStatement(CodeIterationStatement e) throws Exception {
 		this.generatingForLoop = true;
-		this.output.Write("for (");
+		this.output.write("for (");
 		this.generateStatement(e.getInitStatement());
-		this.output.Write("; ");
+		this.output.write("; ");
 		this.generateExpression(e.getTestExpression());
-		this.output.Write("; ");
+		this.output.write("; ");
 		this.generateStatement(e.getIncrementStatement());
-		this.output.Write(")");
+		this.output.write(")");
 		this.outputStartingBrace();
 		this.generatingForLoop = false;
 		int indent = this.getIndent();
@@ -987,46 +986,46 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		this.generateStatements(e.getStatements());
 		indent = this.getIndent();
 		this.setIndent(indent - 1);
-		this.output.WriteLine("}");
+		this.output.writeLine("}");
 	}
 
 	private void generateThrowExceptionStatement(CodeThrowExceptionStatement e) throws Exception {
-		this.output.Write("throw");
+		this.output.write("throw");
 		if (e.getToThrow() != null) {
-			this.output.Write(" ");
+			this.output.write(" ");
 			this.generateExpression(e.getToThrow());
 		}
-		this.output.WriteLine(";");
+		this.output.writeLine(";");
 	}
 
 	private void generateComment(CodeComment e) throws Exception {
 		String value = e.getDocComment() ? "///" : "//";
-		this.output.Write(value);
-		this.output.Write(" ");
+		this.output.write(value);
+		this.output.write(" ");
 		String text = e.getText();
 		for (int i = 0; i < text.length(); i++) {
 			if (text.charAt(i) != '\0') {
-				this.output.Write(text.charAt(i));
+				this.output.write(text.charAt(i));
 				if (text.charAt(i) == '\r') {
 					if (i < text.length() - 1 && text.charAt(i + 1) == '\n') {
-						this.output.Write('\n');
+						this.output.write('\n');
 						i++;
 					}
-					((IndentedTextWriter) this.output).InternalOutputTabs();
-					this.output.Write(value);
+					this.output.internalOutputTabs();
+					this.output.write(value);
 				} else {
 					if (text.charAt(i) == '\n') {
-						((IndentedTextWriter) this.output).InternalOutputTabs();
-						this.output.Write(value);
+						this.output.internalOutputTabs();
+						this.output.write(value);
 					} else {
 						if (text.charAt(i) == '\u2028' || text.charAt(i) == '\u2029' || text.charAt(i) == '\u0085') {
-							this.output.Write(value);
+							this.output.write(value);
 						}
 					}
 				}
 			}
 		}
-		this.output.WriteLine();
+		this.output.writeLine();
 	}
 
 	private void generateCommentStatement(CodeCommentStatement e) throws Exception {
@@ -1044,18 +1043,18 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	}
 
 	private void generateMethodReturnStatement(CodeMethodReturnStatement e) throws Exception {
-		this.output.Write("return");
+		this.output.write("return");
 		if (e.getExpression() != null) {
-			this.output.Write(" ");
+			this.output.write(" ");
 			this.generateExpression(e.getExpression());
 		}
-		this.output.WriteLine(";");
+		this.output.writeLine(";");
 	}
 
-	private void generateConditionStatement(CodeConditionStatement e) throws Exception, InvalidOperationException {
-		this.output.Write("if (");
+	private void generateConditionStatement(CodeConditionStatement e) throws Exception {
+		this.output.write("if (");
 		this.generateExpression(e.getCondition());
-		this.output.Write(")");
+		this.output.write(")");
 		this.outputStartingBrace();
 		int indent = this.getIndent();
 		this.setIndent(indent + 1);
@@ -1063,13 +1062,13 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		indent = this.getIndent();
 		this.setIndent(indent - 1);
 		if (e.getFalseStatements().size() > 0) {
-			this.output.Write("}");
+			this.output.write("}");
 			if (this.getOptions().getElseOnClosing()) {
-				this.output.Write(" ");
+				this.output.write(" ");
 			} else {
-				this.output.WriteLine("");
+				this.output.writeLine("");
 			}
-			this.output.Write("else");
+			this.output.write("else");
 			this.outputStartingBrace();
 			indent = this.getIndent();
 			this.setIndent(indent + 1);
@@ -1077,13 +1076,13 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			indent = this.getIndent();
 			this.setIndent(indent - 1);
 		}
-		this.output.WriteLine("//----if else end----------");
-		this.output.WriteLine("}");
+		this.output.writeLine("//----if else end----------");
+		this.output.writeLine("}");
 	}
 
 	private void generateTryCatchFinallyStatement(CodeTryCatchFinallyStatement e)
-			throws Exception, InvalidOperationException {
-		this.output.Write("try");
+			throws Exception {
+		this.output.write("try");
 		this.outputStartingBrace();
 		int indent = this.getIndent();
 		this.setIndent(indent + 1);
@@ -1094,18 +1093,18 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		if (catchClauses.size() > 0) {
 			// IEnumerator enumerator = catchClauses.GetEnumerator();
 			for (Object enumerator : catchClauses) {
-				this.output.Write("}");
+				this.output.write("}");
 				if (this.options.getElseOnClosing()) {
-					this.output.Write(" ");
+					this.output.write(" ");
 				} else {
-					this.output.WriteLine("");
+					this.output.writeLine("");
 				}
 				CodeCatchClause codeCatchClause = (CodeCatchClause) enumerator;
-				this.output.Write("catch (");
-				this.OutputType(codeCatchClause.getCatchExceptionType());
-				this.output.Write(" ");
+				this.output.write("catch (");
+				this.outputType(codeCatchClause.getCatchExceptionType());
+				this.output.write(" ");
 				this.outputIdentifier(codeCatchClause.getLocalName());
-				this.output.Write(")");
+				this.output.write(")");
 				this.outputStartingBrace();
 				indent = this.getIndent();
 				this.setIndent(indent + 1);
@@ -1116,13 +1115,13 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		CodeStatementCollection finallyStatements = e.getFinallyStatements();
 		if (finallyStatements.size() > 0) {
-			this.output.Write("}");
+			this.output.write("}");
 			if (this.options.getElseOnClosing()) {
-				this.output.Write(" ");
+				this.output.write(" ");
 			} else {
-				this.output.WriteLine("");
+				this.output.writeLine("");
 			}
-			this.output.Write("finally");
+			this.output.write("finally");
 			this.outputStartingBrace();
 			indent = this.getIndent();
 			this.setIndent(indent + 1);
@@ -1130,47 +1129,47 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			indent = this.getIndent();
 			this.setIndent(indent - 1);
 		}
-		this.output.WriteLine("}");
+		this.output.writeLine("}");
 	}
 
 	private void generateAssignStatement(CodeAssignStatement e) throws Exception {
 		this.generateExpression(e.getLeft());
-		this.output.Write(" = ");
+		this.output.write(" = ");
 		this.generateExpression(e.getRight());
 		if (!this.generatingForLoop) {
-			this.output.WriteLine(";");
+			this.output.writeLine(";");
 		}
 	}
 
 	private void generateAttachEventStatement(CodeAttachEventStatement e) throws Exception {
 		this.generateEventReferenceExpression(e.getEvent());
-		this.output.Write(" += ");
+		this.output.write(" += ");
 		this.generateExpression(e.getListener());
-		this.output.WriteLine(";");
+		this.output.writeLine(";");
 	}
 
 	private void generateRemoveEventStatement(CodeRemoveEventStatement e) throws Exception {
 		this.generateEventReferenceExpression(e.getEvent());
-		this.output.Write(" -= ");
+		this.output.write(" -= ");
 		this.generateExpression(e.getListener());
-		this.output.WriteLine(";");
+		this.output.writeLine(";");
 	}
 
 	private void generateSnippetStatement(CodeSnippetStatement e) throws Exception {
-		this.output.WriteLine(e.getValue());
+		this.output.writeLine(e.getValue());
 	}
 
 	private void generateGotoStatement(CodeGotoStatement e) throws Exception {
-		this.output.Write("goto ");
-		this.output.Write(e.getLabel());
-		this.output.WriteLine(";");
+		this.output.write("goto ");
+		this.output.write(e.getLabel());
+		this.output.writeLine(";");
 	}
 
 	private void generateLabeledStatement(CodeLabeledStatement e) throws Exception {
 		int indent = this.getIndent();
 		this.setIndent(indent - 1);
-		this.output.Write(e.getLabel());
-		this.output.WriteLine(":");
+		this.output.write(e.getLabel());
+		this.output.writeLine(":");
 		indent = this.getIndent();
 		this.setIndent(indent + 1);
 		if (e.getStatement() != null) {
@@ -1181,28 +1180,28 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	private void generateVariableDeclarationStatement(CodeVariableDeclarationStatement e) throws Exception {
 		this.outputTypeNamePair(e.getType(), e.getName());
 		if (e.getInitExpression() != null) {
-			this.output.Write(" = ");
+			this.output.write(" = ");
 			this.generateExpression(e.getInitExpression());
 		}
 		if (!this.generatingForLoop) {
-			this.output.WriteLine(";");
+			this.output.writeLine(";");
 		}
 	}
 
 	private void generateLinePragmaStart(CodeLinePragma e) throws Exception {
-		this.output.WriteLine("");
-		this.output.Write("#line ");
-		this.output.Write(e.getLineNumber());
-		this.output.Write(" \"");
-		this.output.Write(e.getFileName());
-		this.output.Write("\"");
-		this.output.WriteLine("");
+		this.output.writeLine("");
+		this.output.write("#line ");
+		this.output.write(e.getLineNumber());
+		this.output.write(" \"");
+		this.output.write(e.getFileName());
+		this.output.write("\"");
+		this.output.writeLine("");
 	}
 
 	private void generateLinePragmaEnd(CodeLinePragma e) throws Exception {
-		this.output.WriteLine();
-		this.output.WriteLine("//#line default");
-		this.output.WriteLine("//#line hidden");
+		this.output.writeLine();
+		this.output.writeLine("//#line default");
+		this.output.writeLine("//#line hidden");
 	}
 
 	private void generateEvent(CodeMemberEvent e, CodeTypeDeclaration c) throws Exception {
@@ -1215,66 +1214,66 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		if (e.getPrivateImplementationType() == null) {
 			this.outputMemberAccessModifier(e.getAttributes());
 		}
-		this.output.Write("event ");
+		this.output.write("event ");
 		String text = e.getName();
 		if (e.getPrivateImplementationType() != null) {
 			text = this.getBaseTypeOutput(e.getPrivateImplementationType()) + "." + text;
 		}
 		this.outputTypeNamePair(e.getType(), text);
-		this.output.WriteLine(";");
+		this.output.writeLine(";");
 	}
 
 	private void generateExpression(CodeExpression e) throws Exception {
 		if (e instanceof CodeArrayCreateExpression) {
-			this.GenerateArrayCreateExpression((CodeArrayCreateExpression) e);
+			this.generateArrayCreateExpression((CodeArrayCreateExpression) e);
 			return;
 		}
 		if (e instanceof CodeBaseReferenceExpression) {
-			this.GenerateBaseReferenceExpression((CodeBaseReferenceExpression) e);
+			this.generateBaseReferenceExpression((CodeBaseReferenceExpression) e);
 			return;
 		}
 		if (e instanceof CodeBinaryOperatorExpression) {
-			this.GenerateBinaryOperatorExpression((CodeBinaryOperatorExpression) e);
+			this.generateBinaryOperatorExpression((CodeBinaryOperatorExpression) e);
 			return;
 		}
 		if (e instanceof CodeCastExpression) {
-			this.GenerateCastExpression((CodeCastExpression) e);
+			this.generateCastExpression((CodeCastExpression) e);
 			return;
 		}
 		if (e instanceof CodeDelegateCreateExpression) {
-			this.GenerateDelegateCreateExpression((CodeDelegateCreateExpression) e);
+			this.generateDelegateCreateExpression((CodeDelegateCreateExpression) e);
 			return;
 		}
 		if (e instanceof CodeFieldReferenceExpression) {
-			this.GenerateFieldReferenceExpression((CodeFieldReferenceExpression) e);
+			this.generateFieldReferenceExpression((CodeFieldReferenceExpression) e);
 			return;
 		}
 		if (e instanceof CodeArgumentReferenceExpression) {
-			this.GenerateArgumentReferenceExpression((CodeArgumentReferenceExpression) e);
+			this.generateArgumentReferenceExpression((CodeArgumentReferenceExpression) e);
 			return;
 		}
 		if (e instanceof CodeVariableReferenceExpression) {
-			this.GenerateVariableReferenceExpression((CodeVariableReferenceExpression) e);
+			this.generateVariableReferenceExpression((CodeVariableReferenceExpression) e);
 			return;
 		}
 		if (e instanceof CodeIndexerExpression) {
-			this.GenerateIndexerExpression((CodeIndexerExpression) e);
+			this.generateIndexerExpression((CodeIndexerExpression) e);
 			return;
 		}
 		if (e instanceof CodeArrayIndexerExpression) {
-			this.GenerateArrayIndexerExpression((CodeArrayIndexerExpression) e);
+			this.generateArrayIndexerExpression((CodeArrayIndexerExpression) e);
 			return;
 		}
 		if (e instanceof CodeSnippetExpression) {
-			this.GenerateSnippetExpression((CodeSnippetExpression) e);
+			this.generateSnippetExpression((CodeSnippetExpression) e);
 			return;
 		}
 		if (e instanceof CodeMethodInvokeExpression) {
-			this.GenerateMethodInvokeExpression((CodeMethodInvokeExpression) e);
+			this.generateMethodInvokeExpression((CodeMethodInvokeExpression) e);
 			return;
 		}
 		if (e instanceof CodeMethodReferenceExpression) {
-			this.GenerateMethodReferenceExpression((CodeMethodReferenceExpression) e);
+			this.generateMethodReferenceExpression((CodeMethodReferenceExpression) e);
 			return;
 		}
 		if (e instanceof CodeEventReferenceExpression) {
@@ -1322,7 +1321,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			return;
 		}
 		if (e instanceof CodeDefaultValueExpression) {
-			this.GenerateDefaultValueExpression((CodeDefaultValueExpression) e);
+			this.generateDefaultValueExpression((CodeDefaultValueExpression) e);
 			return;
 		}
 		if (e == null) {
@@ -1344,10 +1343,10 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			}
 			this.outputIdentifier(e.getName());
 			if (e.getInitExpression() != null) {
-				this.output.Write(" = ");
+				this.output.write(" = ");
 				this.generateExpression(e.getInitExpression());
 			}
-			this.output.WriteLine(",");
+			this.output.writeLine(",");
 			return;
 		}
 		if (e.getCustomAttributes().size() > 0) {
@@ -1358,14 +1357,14 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		this.outputFieldScopeModifier(e.getAttributes());
 		this.outputTypeNamePair(e.getType(), e.getName());
 		if (e.getInitExpression() != null) {
-			this.output.Write(" = ");
+			this.output.write(" = ");
 			this.generateExpression(e.getInitExpression());
 		}
-		this.output.WriteLine(";");
+		this.output.writeLine(";");
 	}
 
 	private void generateSnippetMember(CodeSnippetTypeMember e) throws Exception {
-		this.output.Write(e.getText());
+		this.output.write(e.getText());
 	}
 
 	private void generateParameterDeclarationExpression(CodeParameterDeclarationExpression e) throws Exception {
@@ -1376,20 +1375,20 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		this.outputTypeNamePair(e.getType(), e.getName());
 	}
 
-	private void generateEntryPointMethod(CodeEntryPointMethod e, CodeTypeDeclaration c) throws Exception, Exception {
+	private void generateEntryPointMethod(CodeEntryPointMethod e, CodeTypeDeclaration c) throws Exception {
 		if (e.getCustomAttributes().size() > 0) {
 			this.generateAttributes(e.getCustomAttributes());
 		}
-		this.output.Write("public static ");
-		this.OutputType(e.getReturnType());
-		this.output.Write(" Main()");
+		this.output.write("public static ");
+		this.outputType(e.getReturnType());
+		this.output.write(" Main()");
 		this.outputStartingBrace();
 		int indent = this.getIndent();
 		this.setIndent(indent + 1);
 		this.generateStatements(e.getStatements());
 		indent = this.getIndent();
 		this.setIndent(indent - 1);
-		this.output.WriteLine("}");
+		this.output.writeLine("}");
 	}
 
 	private void generateMethods(CodeTypeDeclaration e) throws Exception {
@@ -1399,7 +1398,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 					&& !(enumerator instanceof CodeConstructor)) {
 				this.currentMember = (CodeTypeMember) enumerator;
 				if (this.options.getBlankLinesBetweenMembers()) {
-					this.output.WriteLine();
+					this.output.writeLine();
 				}
 				if (this.currentMember.getStartDirectives().size() > 0) {
 					this.generateDirectives(this.currentMember.getStartDirectives());
@@ -1424,7 +1423,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 	}
 
-	private void generateMethod(CodeMemberMethod e, CodeTypeDeclaration c) throws Exception, InvalidOperationException {
+	private void generateMethod(CodeMemberMethod e, CodeTypeDeclaration c) throws Exception {
 		if (!this.getIsCurrentClass() && !this.getIsCurrentStruct() && !this.getIsCurrentInterface()) {
 			return;
 		}
@@ -1438,23 +1437,23 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			this.outPutOverride(e.getAttributes());
 			if (e.getPrivateImplementationType() == null) {
 				this.outputMemberAccessModifier(e.getAttributes());
-				// this.OutputVTableModifier(e.getAttributes());
+				// this.outputVTableModifier(e.getAttributes());
 				this.outputMemberScopeModifier(e.getAttributes());
 			}
 		} /*
-			 * else { //this.OutputVTableModifier(e.getAttributes()); }
+			 * else { //this.outputVTableModifier(e.getAttributes()); }
 			 */
-		this.OutputType(e.getReturnType());
-		this.output.Write(" ");
+		this.outputType(e.getReturnType());
+		this.output.write(" ");
 		if (e.getPrivateImplementationType() != null) {
-			this.output.Write(this.getBaseTypeOutput(e.getPrivateImplementationType()));
-			this.output.Write(".");
+			this.output.write(this.getBaseTypeOutput(e.getPrivateImplementationType()));
+			this.output.write(".");
 		}
 		this.outputIdentifier(e.getName());
-		this.outputTypeParameters(e.getTypeParameters());
-		this.output.Write("(");
+		this.OutputTypeParameters(e.getTypeParameters());
+		this.output.write("(");
 		this.outputParameters(e.getParameters());
-		this.output.Write(")");
+		this.output.write(")");
 		this.outputTypeParameterConstraints(e.getTypeParameters());
 		if (!this.getIsCurrentInterface()
 				&& (e.getAttributes().getValue() & MemberAttributes.ScopeMask) != MemberAttributes.Abstract) {
@@ -1464,27 +1463,27 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			this.generateStatements(e.getStatements());
 			indent = this.getIndent();
 			this.setIndent(indent - 1);
-			this.output.WriteLine("}");
+			this.output.writeLine("}");
 			return;
 		}
-		this.output.WriteLine(";");
+		this.output.writeLine(";");
 	}
 
 	private void outPutOverride(MemberAttributes attributes) throws IOException {
 
 		if ((attributes.getValue() & MemberAttributes.ScopeMask) == MemberAttributes.Override) {
-			this.output.WriteLine("@Override ");
+			this.output.writeLine("@Override ");
 		}
 
 	}
 
-	private void generateProperties(CodeTypeDeclaration e) throws Exception, Exception {
+	private void generateProperties(CodeTypeDeclaration e) throws Exception {
 		// IEnumerator enumerator = e.Members.GetEnumerator();
 		for (Object enumerator : e.getMembers()) {
 			if (enumerator instanceof CodeMemberProperty) {
 				this.currentMember = (CodeTypeMember) enumerator;
 				if (this.options.getBlankLinesBetweenMembers()) {
-					this.output.WriteLine();
+					this.output.writeLine();
 				}
 				if (this.currentMember.getStartDirectives().size() > 0) {
 					this.generateDirectives(this.currentMember.getStartDirectives());
@@ -1506,7 +1505,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	}
 
 	private void generateProperty(CodeMemberProperty e, CodeTypeDeclaration c)
-			throws Exception, InvalidOperationException {
+			throws Exception {
 		if (!this.getIsCurrentClass() && !this.getIsCurrentStruct() && !this.getIsCurrentInterface()) {
 			return;
 		}
@@ -1522,17 +1521,17 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		} else {
 			this.outputVTableModifier(e.getAttributes());
 		}
-		this.OutputType(e.getType());
-		this.output.Write(" ");
+		this.outputType(e.getType());
+		this.output.write(" ");
 		if (e.getPrivateImplementationType() != null && !this.getIsCurrentInterface()) {
-			this.output.Write(this.getBaseTypeOutput(e.getPrivateImplementationType()));
-			this.output.Write(".");
+			this.output.write(this.getBaseTypeOutput(e.getPrivateImplementationType()));
+			this.output.write(".");
 		}
 		if (e.getParameters().size() > 0
 				&& StringHelper.Compare(e.getName(), "Item", StringComparison.OrdinalIgnoreCase) == 0) {
-			this.output.Write("this[");
+			this.output.write("this[");
 			this.outputParameters(e.getParameters());
-			this.output.Write("]");
+			this.output.write("]");
 		} else {
 			this.outputIdentifier(e.getName());
 		}
@@ -1542,118 +1541,118 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		if (e.getHasGet()) {
 			if (this.getIsCurrentInterface()
 					|| (e.getAttributes().getValue() & MemberAttributes.ScopeMask) == MemberAttributes.Abstract) {
-				this.output.WriteLine("get;");
+				this.output.writeLine("get;");
 			} else {
-				this.output.Write("get");
+				this.output.write("get");
 				this.outputStartingBrace();
 				indent = this.getIndent();
 				this.setIndent(indent + 1);
 				this.generateStatements(e.getGetStatements());
 				indent = this.getIndent();
 				this.setIndent(indent - 1);
-				this.output.WriteLine("}");
+				this.output.writeLine("}");
 			}
 		}
 		if (e.getHasSet()) {
 			if (this.getIsCurrentInterface()
 					|| (e.getAttributes().getValue() & MemberAttributes.ScopeMask) == MemberAttributes.Abstract) {
-				this.output.WriteLine("set;");
+				this.output.writeLine("set;");
 			} else {
-				this.output.Write("set");
+				this.output.write("set");
 				this.outputStartingBrace();
 				indent = this.getIndent();
 				this.setIndent(indent + 1);
 				this.generateStatements(e.getSetStatements());
 				indent = this.getIndent();
 				this.setIndent(indent - 1);
-				this.output.WriteLine("}");
+				this.output.writeLine("}");
 			}
 		}
 		indent = this.getIndent();
 		this.setIndent(indent - 1);
-		this.output.WriteLine("}");
+		this.output.writeLine("}");
 	}
 
 	private void generateSingleFloatValue(float s) throws Exception {
 
 		if (Float.isNaN(s)) {
-			this.output.Write("float.NaN");
+			this.output.write("float.NaN");
 			return;
 		}
 		if (Float.isFinite(s)) {
-			this.output.Write("float.NegativeInfinity");
+			this.output.write("float.NegativeInfinity");
 			return;
 		}
 		if (Float.isInfinite(s)) {
-			this.output.Write("float.PositiveInfinity");
+			this.output.write("float.PositiveInfinity");
 			return;
 		}
-		this.output.Write(String.valueOf(s));
-		this.output.Write('F');
+		this.output.write(String.valueOf(s));
+		this.output.write('F');
 	}
 
 	private void generateDoubleValue(double d) throws Exception {
 		if (Double.isNaN(d)) {
-			this.output.Write("double.NaN");
+			this.output.write("double.NaN");
 			return;
 		}
 		if (Double.isFinite(d)) {
-			this.output.Write("double.NegativeInfinity");
+			this.output.write("double.NegativeInfinity");
 			return;
 		}
 		if (Double.isInfinite(d)) {
-			this.output.Write("double.PositiveInfinity");
+			this.output.write("double.PositiveInfinity");
 			return;
 		}
-		// this.output.Write(d.ToString("R", CultureInfo.InvariantCulture));
-		this.output.Write(String.valueOf(d));
-		this.output.Write("D");
+		// this.output.write(d.ToString("R", CultureInfo.InvariantCulture));
+		this.output.write(String.valueOf(d));
+		this.output.write("D");
 	}
 
 	private void generateDecimalValue(BigDecimal d) throws Exception {
-		this.output.Write(String.valueOf(d));
-		this.output.Write('m');
+		this.output.write(String.valueOf(d));
+		this.output.write('m');
 	}
 
 	private void outputVTableModifier(MemberAttributes attributes) throws Exception {
 		int memberAttributes = attributes == null ? 0 : attributes.getValue() & MemberAttributes.VTableMask;
 		if (memberAttributes == MemberAttributes.New) {
-			this.output.Write("new ");
+			this.output.write("new ");
 		}
 	}
 
 	private void outputMemberAccessModifier(MemberAttributes attributes) throws Exception {
 		/*
-		 * if(attributes==null){ //this.output.Write("public "); return; }
+		 * if(attributes==null){ //this.output.write("public "); return; }
 		 */
 		int memberAttributes = (attributes == null ? 0 : attributes.getValue() & MemberAttributes.AccessMask);
 		if (memberAttributes <= MemberAttributes.Family) {
 			if (memberAttributes == MemberAttributes.Assembly) {
-				this.output.Write(" ");
+				this.output.write(" ");
 				return;
 			}
 			if (memberAttributes == MemberAttributes.FamilyAndAssembly) {
-				this.output.Write(" ");
+				this.output.write(" ");
 				return;
 			}
 			if (memberAttributes != MemberAttributes.Family) {
 				return;
 			}
-			this.output.Write("protected ");
+			this.output.write("protected ");
 			return;
 		} else {
 			if (memberAttributes == MemberAttributes.FamilyOrAssembly) {
-				this.output.Write("protected  ");
+				this.output.write("protected  ");
 				return;
 			}
 			if (memberAttributes == MemberAttributes.Private) {
-				this.output.Write("private ");
+				this.output.write("private ");
 				return;
 			}
 			if (memberAttributes != MemberAttributes.Public) {
 				return;
 			}
-			this.output.Write("public ");
+			this.output.write("public ");
 			return;
 		}
 	}
@@ -1661,16 +1660,16 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	private void outputMemberScopeModifier(MemberAttributes attributes) throws Exception {
 		switch (((attributes == null ? 0 : attributes.getValue()) & MemberAttributes.ScopeMask)) {
 		case MemberAttributes.Abstract:
-			this.output.Write("abstract ");
+			this.output.write("abstract ");
 			return;
 		case MemberAttributes.Final:
-			this.output.Write("final ");
+			this.output.write("final ");
 			return;
 		case MemberAttributes.Static:
-			this.output.Write("static ");
+			this.output.write("static ");
 			return;
 		case MemberAttributes.Override:
-			this.output.Write(" ");
+			this.output.write(" ");
 			return;
 		default: {
 			MemberAttributes memberAttributes = MemberAttributes
@@ -1678,7 +1677,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			if (memberAttributes.getValue() == MemberAttributes.Assembly
 					|| memberAttributes.getValue() == MemberAttributes.Family
 					|| memberAttributes.getValue() == MemberAttributes.Public) {
-				this.output.Write(" ");
+				this.output.write(" ");
 			}
 			return;
 		}
@@ -1688,55 +1687,55 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	private void outputOperator(CodeBinaryOperatorType op) throws Exception {
 		switch (op) {
 		case Add:
-			this.output.Write("+");
+			this.output.write("+");
 			return;
 		case Subtract:
-			this.output.Write("-");
+			this.output.write("-");
 			return;
 		case Multiply:
-			this.output.Write("*");
+			this.output.write("*");
 			return;
 		case Divide:
-			this.output.Write("/");
+			this.output.write("/");
 			return;
 		case Modulus:
-			this.output.Write("%");
+			this.output.write("%");
 			return;
 		case Assign:
-			this.output.Write("=");
+			this.output.write("=");
 			return;
 		case IdentityInequality:
-			this.output.Write("!=");
+			this.output.write("!=");
 			return;
 		case IdentityEquality:
-			this.output.Write("==");
+			this.output.write("==");
 			return;
 		case ValueEquality:
-			this.output.Write("==");
+			this.output.write("==");
 			return;
 		case BitwiseOr:
-			this.output.Write("|");
+			this.output.write("|");
 			return;
 		case BitwiseAnd:
-			this.output.Write("&");
+			this.output.write("&");
 			return;
 		case BooleanOr:
-			this.output.Write("||");
+			this.output.write("||");
 			return;
 		case BooleanAnd:
-			this.output.Write("&&");
+			this.output.write("&&");
 			return;
 		case LessThan:
-			this.output.Write("<");
+			this.output.write("<");
 			return;
 		case LessThanOrEqual:
-			this.output.Write("<=");
+			this.output.write("<=");
 			return;
 		case GreaterThan:
-			this.output.Write(">");
+			this.output.write(">");
 			return;
 		case GreaterThanOrEqual:
-			this.output.Write(">=");
+			this.output.write(">=");
 			return;
 		default:
 			return;
@@ -1749,10 +1748,10 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		case MemberAttributes.Override:
 			break;
 		case MemberAttributes.Static:
-			this.output.Write("static ");
+			this.output.write("static ");
 			return;
 		case MemberAttributes.Const:
-			this.output.Write("const ");
+			this.output.write("const ");
 			break;
 		default:
 			return;
@@ -1762,18 +1761,18 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	private void generatePropertyReferenceExpression(CodePropertyReferenceExpression e) throws Exception {
 		if (e.getTargetObject() != null) {
 			this.generateExpression(e.getTargetObject());
-			this.output.Write(".");
+			this.output.write(".");
 		}
 		this.outputIdentifier(e.getPropertyName());
 	}
 
-	private void generateConstructors(CodeTypeDeclaration e) throws Exception, Exception {
+	private void generateConstructors(CodeTypeDeclaration e) throws Exception {
 		// IEnumerator enumerator = e.Members.GetEnumerator();
 		for (Object enumerator : e.getMembers()) {
 			if (enumerator instanceof CodeConstructor) {
 				this.currentMember = (CodeTypeMember) enumerator;
 				if (this.options.getBlankLinesBetweenMembers()) {
-					this.output.WriteLine();
+					this.output.writeLine();
 				}
 				if (this.currentMember.getStartDirectives().size() > 0) {
 					this.generateDirectives(this.currentMember.getStartDirectives());
@@ -1795,7 +1794,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	}
 
 	private void generateConstructor(CodeConstructor e, CodeTypeDeclaration c)
-			throws Exception, InvalidOperationException {
+			throws Exception {
 		if (!this.getIsCurrentClass() && !this.getIsCurrentStruct()) {
 			return;
 		}
@@ -1804,35 +1803,35 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		this.outputMemberAccessModifier(e.getAttributes());
 		this.outputIdentifier(this.getCurrentTypeName());
-		this.output.Write("(");
+		this.output.write("(");
 		this.outputParameters(e.getParameters());
-		this.output.Write(")");
+		this.output.write(")");
 		CodeExpressionCollection baseConstructorArgs = e.getBaseConstructorArgs();
 		CodeExpressionCollection chainedConstructorArgs = e.getChainedConstructorArgs();
 		int indent;
 		if (baseConstructorArgs.size() > 0) {
-			this.output.WriteLine(" : ");
+			this.output.writeLine(" : ");
 			indent = this.getIndent();
 			this.setIndent(indent + 1);
 			indent = this.getIndent();
 			this.setIndent(indent + 1);
-			this.output.Write("base(");
+			this.output.write("base(");
 			this.outputExpressionList(baseConstructorArgs);
-			this.output.Write(")");
+			this.output.write(")");
 			indent = this.getIndent();
 			this.setIndent(indent - 1);
 			indent = this.getIndent();
 			this.setIndent(indent - 1);
 		}
 		if (chainedConstructorArgs.size() > 0) {
-			this.output.WriteLine(" : ");
+			this.output.writeLine(" : ");
 			indent = this.getIndent();
 			this.setIndent(indent + 1);
 			indent = this.getIndent();
 			this.setIndent(indent + 1);
-			this.output.Write("this(");
+			this.output.write("this(");
 			this.outputExpressionList(chainedConstructorArgs);
-			this.output.Write(")");
+			this.output.write(")");
 			indent = this.getIndent();
 			this.setIndent(indent - 1);
 			indent = this.getIndent();
@@ -1844,36 +1843,36 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		this.generateStatements(e.getStatements());
 		indent = this.getIndent();
 		this.setIndent(indent - 1);
-		this.output.WriteLine("}");
+		this.output.writeLine("}");
 	}
 
-	private void generateTypeConstructor(CodeTypeConstructor e) throws Exception, InvalidOperationException {
+	private void generateTypeConstructor(CodeTypeConstructor e) throws Exception {
 		if (!this.getIsCurrentClass() && !this.getIsCurrentStruct()) {
 			return;
 		}
 		if (e.getCustomAttributes().size() > 0) {
 			this.generateAttributes(e.getCustomAttributes());
 		}
-		this.output.Write("static ");
-		this.output.Write(this.getCurrentTypeName());
-		this.output.Write("()");
+		this.output.write("static ");
+		this.output.write(this.getCurrentTypeName());
+		this.output.write("()");
 		this.outputStartingBrace();
 		int indent = this.getIndent();
 		this.setIndent(indent + 1);
 		this.generateStatements(e.getStatements());
 		indent = this.getIndent();
 		this.setIndent(indent - 1);
-		this.output.WriteLine("}");
+		this.output.writeLine("}");
 	}
 
 	private void generateTypeReferenceExpression(CodeTypeReferenceExpression e) throws Exception {
-		this.OutputType(e.getType());
+		this.outputType(e.getType());
 	}
 
 	private void generateTypeOfExpression(CodeTypeOfExpression e) throws Exception {
-		this.output.Write("typeof(");
-		this.OutputType(e.getType());
-		this.output.Write(")");
+		this.output.write("typeof(");
+		this.outputType(e.getType());
+		this.output.write(")");
 	}
 
 	private void generateType(CodeTypeDeclaration e) throws Exception {
@@ -1910,17 +1909,17 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 				/*
 				 * IDisposable disposable = enumerator as IDisposable;
 				 * 
-				 * if (disposable != null) { disposable.Dispose(); }
+				 * if (disposable != null) { disposable.dispose(); }
 				 */
 
 			}
 		}
-		this.GenerateFields(e);
+		this.generateFields(e);
 		this.generateSnippetMembers(e);
 		this.generateTypeConstructors(e);
 		this.generateConstructors(e);
 		this.generateProperties(e);
-		this.GenerateEvents(e);
+		this.generateEvents(e);
 		this.generateMethods(e);
 		this.generateNestedTypes(e);
 		// IL_CA:
@@ -1934,12 +1933,12 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 	}
 
-	private void generateTypes(CodeNamespace e) throws Exception, Exception {
+	private void generateTypes(CodeNamespace e) throws Exception {
 		for (Object e2 : e.getTypes()) {
 			if (this.options.getBlankLinesBetweenMembers()) {
-				this.output.WriteLine();
+				this.output.writeLine();
 			}
-			((ICodeGenerator) this).generateCodeFromType((CodeTypeDeclaration) e2, this.output.getInnerWriter(),
+			this.generateCodeFromType((CodeTypeDeclaration) e2, this.output.getInnerWriter(),
 					this.options);
 		}
 	}
@@ -1953,30 +1952,30 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 					.forValue(e.getTypeAttributes().getValue() & TypeAttributes.VisibilityMask);
 			if (typeAttributes.getValue() != TypeAttributes.NotPublic
 					&& typeAttributes.getValue() == TypeAttributes.Public) {
-				this.output.Write("public ");
+				this.output.write("public ");
 			}
 			CodeTypeDelegate codeTypeDelegate = (CodeTypeDelegate) e;
-			this.output.Write("delegate ");
-			this.OutputType(codeTypeDelegate.getReturnType());
-			this.output.Write(" ");
+			this.output.write("delegate ");
+			this.outputType(codeTypeDelegate.getReturnType());
+			this.output.write(" ");
 			this.outputIdentifier(e.getName());
-			this.output.Write("(");
+			this.output.write("(");
 			this.outputParameters(codeTypeDelegate.getParameters());
-			this.output.WriteLine(");");
+			this.output.writeLine(");");
 			return;
 		}
 		this.outputTypeAttributes(e);
 		this.outputIdentifier(e.getName());
-		this.outputTypeParameters(e.getTypeParameters());
+		this.OutputTypeParameters(e.getTypeParameters());
 		boolean flag = true;
 		for (Object typeRef : e.getBaseTypes()) {
 			if (flag) {
-				this.output.Write(" extends ");
+				this.output.write(" extends ");
 				flag = false;
 			} else {
-				this.output.Write(", ");
+				this.output.write(", ");
 			}
-			this.OutputType((CodeTypeReference) typeRef);
+			this.outputType((CodeTypeReference) typeRef);
 		}
 		this.outputTypeParameterConstraints(e.getTypeParameters());
 		this.outputStartingBrace();
@@ -1986,10 +1985,10 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 
 	private void generateTypeMember(CodeTypeMember member, CodeTypeDeclaration declaredType) throws Exception {
 		if (this.options.getBlankLinesBetweenMembers()) {
-			this.output.WriteLine();
+			this.output.writeLine();
 		}
 		if (member instanceof CodeTypeDeclaration) {
-			((ICodeGenerator) this).generateCodeFromType((CodeTypeDeclaration) member, this.output.getInnerWriter(),
+			this.generateCodeFromType((CodeTypeDeclaration) member, this.output.getInnerWriter(),
 					this.options);
 			this.currentClass = declaredType;
 			return;
@@ -2030,7 +2029,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 							this.setIndent(0);
 							this.generateSnippetMember((CodeSnippetTypeMember) member);
 							this.setIndent(indent);
-							this.output.WriteLine();
+							this.output.writeLine();
 						}
 					}
 				}
@@ -2044,13 +2043,13 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 	}
 
-	private void generateTypeConstructors(CodeTypeDeclaration e) throws Exception, InvalidOperationException {
+	private void generateTypeConstructors(CodeTypeDeclaration e) throws Exception {
 		// IEnumerator enumerator = e.Members.GetEnumerator();
 		for (Object enumerator : e.getMembers()) {
 			if (enumerator instanceof CodeTypeConstructor) {
 				this.currentMember = (CodeTypeMember) enumerator;
 				if (this.options.getBlankLinesBetweenMembers()) {
-					this.output.WriteLine();
+					this.output.writeLine();
 				}
 				if (this.currentMember.getStartDirectives().size() > 0) {
 					this.generateDirectives(this.currentMember.getStartDirectives());
@@ -2079,7 +2078,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 				flag = true;
 				this.currentMember = (CodeTypeMember) enumerator;
 				if (this.options.getBlankLinesBetweenMembers()) {
-					this.output.WriteLine();
+					this.output.writeLine();
 				}
 				if (this.currentMember.getStartDirectives().size() > 0) {
 					this.generateDirectives(this.currentMember.getStartDirectives());
@@ -2102,26 +2101,26 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			}
 		}
 		if (flag) {
-			this.output.WriteLine();
+			this.output.writeLine();
 		}
 	}
 
-	private void generateNestedTypes(CodeTypeDeclaration e) throws Exception, Exception {
+	private void generateNestedTypes(CodeTypeDeclaration e) throws Exception {
 		// IEnumerator enumerator = e.Members.GetEnumerator();
 		for (Object enumerator : e.getMembers()) {
 			if (enumerator instanceof CodeTypeDeclaration) {
 				if (this.options.getBlankLinesBetweenMembers()) {
-					this.output.WriteLine();
+					this.output.writeLine();
 				}
 				CodeTypeDeclaration e2 = (CodeTypeDeclaration) enumerator;
-				((ICodeGenerator) this).generateCodeFromType(e2, this.output.getInnerWriter(), this.options);
+				this.generateCodeFromType(e2, this.output.getInnerWriter(), this.options);
 			}
 		}
 	}
 
-	private void generateNamespaces(CodeCompileUnit e) throws Exception, InvalidOperationException {
+	private void generateNamespaces(CodeCompileUnit e) throws Exception {
 		for (Object e2 : e.getNamespaces()) {
-			((ICodeGenerator) this).generateCodeFromNamespace((CodeNamespace) e2, this.output.getInnerWriter(),
+			this.generateCodeFromNamespace((CodeNamespace) e2, this.output.getInnerWriter(),
 					this.options);
 		}
 	}
@@ -2129,9 +2128,9 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	private void outputAttributeArgument(CodeAttributeArgument arg) throws Exception {
 		if (arg.getName() != null && arg.getName().length() > 0) {
 			this.outputIdentifier(arg.getName());
-			this.output.Write("=");
+			this.output.write("=");
 		}
-		((ICodeGenerator) this).generateCodeFromExpression(arg.getValue(), this.output.getInnerWriter(), this.options);
+		this.generateCodeFromExpression(arg.getValue(), this.output.getInnerWriter(), this.options);
 	}
 
 	private void outputDirection(FieldDirection dir) throws Exception {
@@ -2139,10 +2138,10 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		case In:
 			break;
 		case Out:
-			this.output.Write("out ");
+			this.output.write("out ");
 			return;
 		case Ref:
-			this.output.Write("ref ");
+			this.output.write("ref ");
 			break;
 		default:
 			return;
@@ -2164,12 +2163,12 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 				flag = false;
 			} else {
 				if (newlineBetweenItems) {
-					this.ContinueOnNewLine(",");
+					this.continueOnNewLine(",");
 				} else {
-					this.output.Write(", ");
+					this.output.write(", ");
 				}
 			}
-			((ICodeGenerator) this).generateCodeFromExpression((CodeExpression) enumerator,
+			this.generateCodeFromExpression((CodeExpression) enumerator,
 					this.output.getInnerWriter(), this.options);
 		}
 		indent = this.getIndent();
@@ -2188,10 +2187,10 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			if (flag) {
 				flag = false;
 			} else {
-				this.output.Write(", ");
+				this.output.write(", ");
 			}
 			if (flag2) {
-				this.ContinueOnNewLine("");
+				this.continueOnNewLine("");
 			}
 			this.generateExpression(e);
 		}
@@ -2201,30 +2200,30 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	}
 
 	private void outputTypeNamePair(CodeTypeReference typeRef, String name) throws Exception {
-		this.OutputType(typeRef);
-		this.output.Write(" ");
+		this.outputType(typeRef);
+		this.output.write(" ");
 		this.outputIdentifier(name);
 	}
 
-	private void outputTypeParameters(CodeTypeParameterCollection typeParameters) throws Exception {
+	private void OutputTypeParameters(CodeTypeParameterCollection typeParameters) throws Exception {
 		if (typeParameters.size() == 0) {
 			return;
 		}
-		this.output.Write('<');
+		this.output.write('<');
 		boolean flag = true;
 		for (int i = 0; i < typeParameters.size(); i++) {
 			if (flag) {
 				flag = false;
 			} else {
-				this.output.Write(", ");
+				this.output.write(", ");
 			}
 			if (typeParameters.getItem(i).getCustomAttributes().size() > 0) {
 				this.generateAttributes(typeParameters.getItem(i).getCustomAttributes(), null, true);
-				this.output.Write(' ');
+				this.output.write(' ');
 			}
-			this.output.Write(typeParameters.getItem(i).getName());
+			this.output.write(typeParameters.getItem(i).getName());
 		}
-		this.output.Write('>');
+		this.output.write('>');
 	}
 
 	private void outputTypeParameterConstraints(CodeTypeParameterCollection typeParameters) throws Exception {
@@ -2232,30 +2231,30 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			return;
 		}
 		for (int i = 0; i < typeParameters.size(); i++) {
-			this.output.WriteLine();
+			this.output.writeLine();
 			int indent = this.getIndent();
 			this.setIndent(indent + 1);
 			boolean flag = true;
 			if (typeParameters.getItem(i).getConstraints().size() > 0) {
 				for (Object typeRef : typeParameters.getItem(i).getConstraints()) {
 					if (flag) {
-						this.output.Write("where ");
-						this.output.Write(typeParameters.getItem(i).getName());
-						this.output.Write(" : ");
+						this.output.write("where ");
+						this.output.write(typeParameters.getItem(i).getName());
+						this.output.write(" : ");
 						flag = false;
 					} else {
-						this.output.Write(", ");
+						this.output.write(", ");
 					}
-					this.OutputType((CodeTypeReference) typeRef);
+					this.outputType((CodeTypeReference) typeRef);
 				}
 			}
 			if (typeParameters.getItem(i).getHasConstructorConstraint()) {
 				if (flag) {
-					this.output.Write("where ");
-					this.output.Write(typeParameters.getItem(i).getName());
-					this.output.Write(" : new()");
+					this.output.write("where ");
+					this.output.write(typeParameters.getItem(i).getName());
+					this.output.write(" : new()");
 				} else {
-					this.output.Write(", new ()");
+					this.output.write(", new ()");
 				}
 			}
 			indent = this.getIndent();
@@ -2267,69 +2266,69 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		// if ((e.getAttributes().getValue() & MemberAttributes.New.getValue())
 		// != 0) {
 		if (e.getAttributes() != null && (e.getAttributes().getValue() & MemberAttributes.New) != 0) {
-			this.output.Write("new ");
+			this.output.write("new ");
 		}
 		TypeAttributes typeAttributes = e.getTypeAttributes();
 		switch ((typeAttributes.getValue() & TypeAttributes.VisibilityMask)) {
 		case TypeAttributes.NotPublic:
 		case TypeAttributes.NestedAssembly:
 		case TypeAttributes.NestedFamANDAssem:
-			this.output.Write("internal ");
+			this.output.write("internal ");
 			break;
 		case TypeAttributes.Public:
 		case TypeAttributes.NestedPublic:
-			this.output.Write("public ");
+			this.output.write("public ");
 			break;
 		case TypeAttributes.NestedPrivate:
-			this.output.Write("private ");
+			this.output.write("private ");
 			break;
 		case TypeAttributes.NestedFamily:
-			this.output.Write("protected ");
+			this.output.write("protected ");
 			break;
 		case TypeAttributes.VisibilityMask:
-			this.output.Write("protected internal ");
+			this.output.write("protected internal ");
 			break;
 		}
 		if (e.getIsStruct()) {
 			if (e.getIsPartial()) {
-				this.output.Write("partial ");
+				this.output.write("partial ");
 			}
-			this.output.Write("struct ");
+			this.output.write("struct ");
 			return;
 		}
 		if (e.getIsEnum()) {
-			this.output.Write("enum ");
+			this.output.write("enum ");
 			return;
 		}
 		TypeAttributes typeAttributes2 = TypeAttributes
 				.forValue(typeAttributes.getValue() & TypeAttributes.ClassSemanticsMask);
 		if (typeAttributes2.getValue() == TypeAttributes.NotPublic) {
 			if ((typeAttributes.getValue() & TypeAttributes.Sealed) == TypeAttributes.Sealed) {
-				this.output.Write("sealed ");
+				this.output.write("sealed ");
 			}
 			if ((typeAttributes.getValue() & TypeAttributes.Abstract) == TypeAttributes.Abstract) {
-				this.output.Write("abstract ");
+				this.output.write("abstract ");
 			}
 			if (e.getIsPartial()) {
-				this.output.Write("partial ");
+				this.output.write("partial ");
 			}
-			this.output.Write("class ");
+			this.output.write("class ");
 			return;
 		}
 		if (typeAttributes2.getValue() != TypeAttributes.ClassSemanticsMask) {
 			return;
 		}
 		if (e.getIsPartial()) {
-			this.output.Write("partial ");
+			this.output.write("partial ");
 		}
-		this.output.Write("interface ");
+		this.output.write("interface ");
 	}
 
 	private void generateTypeEnd(CodeTypeDeclaration e) throws Exception {
 		if (!this.getIsCurrentDelegate()) {
 			int indent = this.getIndent();
 			this.setIndent(indent - 1);
-			this.output.WriteLine("}");
+			this.output.writeLine("}");
 		}
 	}
 
@@ -2339,27 +2338,26 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	 */
 	private void generateNamespaceStart(CodeNamespace e) throws Exception {
 		if (e.getName() != null && e.getName().length() > 0) {
-			this.output.Write("package ");
+			this.output.write("package ");
 			// String[] array = StringHelper.split(e.getName(), new char[] { '.'
 			// });
 			String[] array = e.getName().split(".");
 			if (array.length == 0)
-				this.output.Write(e.getName());
-			;
+				this.output.write(e.getName());
 			if (array.length > 0)
 				this.outputIdentifier(array[0]);
 			for (int i = 1; i < array.length; i++) {
-				this.output.Write(".");
+				this.output.write(".");
 				this.outputIdentifier(array[i]);
 			}
-			this.output.WriteLine(";");
-			// this.OutputStartingBrace();
+			this.output.writeLine(";");
+			// this.outputStartingBrace();
 			// int indent = this.getIndent();
 			// this.setIndent(indent + 1);
 		}
 	}
 
-	private void generateCompileUnit(CodeCompileUnit e) throws Exception, InvalidOperationException {
+	private void generateCompileUnit(CodeCompileUnit e) throws Exception {
 		this.generateCompileUnitStart(e);
 		this.generateNamespaces(e);
 		this.generateCompileUnitEnd(e);
@@ -2369,7 +2367,23 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		if (e.getStartDirectives().size() > 0) {
 			this.generateDirectives(e.getStartDirectives());
 		}
-		
+		this.output.writeLine("//------------------------------------------------------------------------------");
+		this.output.write("// <");
+		this.output.writeLine(SR.GetString("AutoGen_Comment_Line1"));
+		this.output.write("//     ");
+		this.output.writeLine(SR.GetString("AutoGen_Comment_Line2"));
+		this.output.write("//     ");
+		this.output.write(SR.GetString("AutoGen_Comment_Line3"));
+		this.output.writeLine(Environment.Version.toString());
+		this.output.writeLine("//");
+		this.output.write("//     ");
+		this.output.writeLine(SR.GetString("AutoGen_Comment_Line4"));
+		this.output.write("//     ");
+		this.output.writeLine(SR.GetString("AutoGen_Comment_Line5"));
+		this.output.write("// </");
+		this.output.writeLine(SR.GetString("AutoGen_Comment_Line1"));
+		this.output.writeLine("//------------------------------------------------------------------------------");
+		this.output.writeLine("");
 		// SortedList sortedList = new SortedList(StringComparer.Ordinal);
 		SortedMap<String, String> sortedList = new TreeMap<String, String>();
 		for (Object codeNamespaceO : e.getNamespaces()) {
@@ -2385,16 +2399,16 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			}
 		}
 		for (String ident : sortedList.keySet()) {
-			this.output.Write("import ");
+			this.output.write("import ");
 			this.outputIdentifier(ident);
-			this.output.Write(";");
+			this.output.write(";");
 		}
 		if (sortedList.keySet().size() > 0) {
-			this.output.WriteLine("");
+			this.output.writeLine("");
 		}
 		if (e.getAssemblyCustomAttributes().size() > 0) {
 			this.generateAttributes(e.getAssemblyCustomAttributes(), "assembly: ");
-			this.output.WriteLine("");
+			this.output.writeLine("");
 		}
 	}
 
@@ -2423,33 +2437,33 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	}
 
 	private void generateChecksumPragma(CodeChecksumPragma checksumPragma) throws Exception {
-		this.output.Write("#pragma checksum \"");
-		this.output.Write(checksumPragma.getFileName());
-		this.output.Write("\" \"");
-		// this.output.Write(checksumPragma.getChecksumAlgorithmId().toString("B",
+		this.output.write("#pragma checksum \"");
+		this.output.write(checksumPragma.getFileName());
+		this.output.write("\" \"");
+		// this.output.write(checksumPragma.getChecksumAlgorithmId().toString("B",
 		// CultureInfo.InvariantCulture));
-		this.output.Write(checksumPragma.getChecksumAlgorithmId().toString());
-		this.output.Write("\" \"");
+		this.output.write(checksumPragma.getChecksumAlgorithmId().toString());
+		this.output.write("\" \"");
 		if (checksumPragma.getChecksumData() != null) {
 			byte[] checksumData = checksumPragma.getChecksumData();
 			for (int i = 0; i < checksumData.length; i++) {
 				byte b = checksumData[i];
-				// this.output.Write(b.ToString("X2",
+				// this.output.write(b.ToString("X2",
 				// CultureInfo.InvariantCulture));
-				this.output.Write(String.valueOf(b));
+				this.output.write(String.valueOf(b));
 			}
 		}
-		this.output.WriteLine("\"");
+		this.output.writeLine("\"");
 	}
 
 	private void generateCodeRegionDirective(CodeRegionDirective regionDirective) throws Exception {
 		if (regionDirective.getRegionMode() == CodeRegionMode.Start) {
-			this.output.Write("#region ");
-			this.output.WriteLine(regionDirective.getRegionText());
+			this.output.write("#region ");
+			this.output.writeLine(regionDirective.getRegionText());
 			return;
 		}
 		if (regionDirective.getRegionMode() == CodeRegionMode.End) {
-			this.output.WriteLine("#endregion");
+			this.output.writeLine("#endregion");
 		}
 	}
 
@@ -2457,23 +2471,23 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		if (e.getName() != null && e.getName().length() > 0) {
 			/*
 			 * int indent = this.getIndent(); this.setIndent(indent - 1);
-			 * this.output.WriteLine("}");
+			 * this.output.writeLine("}");
 			 */
 		}
 	}
 
 	private void generateNamespaceImport(CodeNamespaceImport e) throws Exception {
-		this.output.Write("import ");
+		this.output.write("import ");
 		this.outputIdentifier(e.getNamespace());
-		this.output.WriteLine(";");
+		this.output.writeLine(";");
 	}
 
 	private void generateAttributeDeclarationsStart(CodeAttributeDeclarationCollection attributes) throws Exception {
-		this.output.Write("[");
+		this.output.write("[");
 	}
 
 	private void generateAttributeDeclarationsEnd(CodeAttributeDeclarationCollection attributes) throws Exception {
-		this.output.Write("]");
+		this.output.write("]");
 	}
 
 	private void generateAttributes(CodeAttributeDeclarationCollection attributes) throws Exception {
@@ -2499,40 +2513,40 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			} else {
 				this.generateAttributeDeclarationsStart(attributes);
 				if (prefix != null) {
-					this.output.Write(prefix);
+					this.output.write(prefix);
 				}
 				if (codeAttributeDeclaration.getAttributeType() != null) {
-					this.output.Write(this.getTypeOutput(codeAttributeDeclaration.getAttributeType()));
+					this.output.write(this.getTypeOutput(codeAttributeDeclaration.getAttributeType()));
 				}
-				this.output.Write("(");
+				this.output.write("(");
 				boolean flag2 = true;
 				for (Object arg : codeAttributeDeclaration.getArguments()) {
 					if (flag2) {
 						flag2 = false;
 					} else {
-						this.output.Write(", ");
+						this.output.write(", ");
 					}
 					this.outputAttributeArgument((CodeAttributeArgument) arg);
 				}
-				this.output.Write(")");
+				this.output.write(")");
 				this.generateAttributeDeclarationsEnd(attributes);
 				if (inLine) {
-					this.output.Write(" ");
+					this.output.write(" ");
 				} else {
-					this.output.WriteLine();
+					this.output.writeLine();
 				}
 			}
 		}
 		if (flag) {
 			if (prefix != null) {
-				this.output.Write(prefix);
+				this.output.write(prefix);
 			}
-			this.output.Write("params");
+			this.output.write("params");
 			if (inLine) {
-				this.output.Write(" ");
+				this.output.write(" ");
 				return;
 			}
-			this.output.WriteLine();
+			this.output.writeLine();
 		}
 	}
 
@@ -2545,6 +2559,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		return value.length() >= 3 && (value.charAt(0) == '_' && value.charAt(1) == '_') && value.charAt(2) != '_';
 	}
 
+	@Override
 	public boolean supports(GeneratorSupport support) {
 		return GeneratorSupport.forValue(support.getValue() & (GeneratorSupport.ArraysOfArrays.getValue()
 				| GeneratorSupport.EntryPointMethod.getValue() | GeneratorSupport.GotoStatements.getValue()
@@ -2562,6 +2577,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 				| GeneratorSupport.DeclareIndexerProperties.getValue())) == support;
 	}
 
+	@Override
 	public boolean isValidIdentifier(String value) {
 		if (value == null || value.length() == 0) {
 			return false;
@@ -2576,15 +2592,17 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		} else {
 			value = value.substring(1);// (1,value.length()-1);
 		}
-		return CodeGenerator.IsValidLanguageIndependentIdentifier(value);
+		return CodeGenerator.isValidLanguageIndependentIdentifier(value);
 	}
 
+	@Override
 	public void validateIdentifier(String value) throws ArgumentException {
 		if (!this.isValidIdentifier(value)) {
 			throw new ArgumentException(SR.GetString("InvalidIdentifier", new Object[] { value }));
 		}
 	}
 
+	@Override
 	public String createValidIdentifier(String name) {
 		if (JavaCodeGenerator.isPrefixTwoUnderscore(name)) {
 			name = "_" + name;
@@ -2595,6 +2613,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		return name;
 	}
 
+	@Override
 	public String createEscapedIdentifier(String name) {
 		if (JavaCodeGenerator.isKeyword(name) || JavaCodeGenerator.isPrefixTwoUnderscore(name)) {
 			return "@" + name;
@@ -2753,7 +2772,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 					i++;
 					int num4 = 0;
 					while (i < baseType.length() && baseType.charAt(i) >= '0' && baseType.charAt(i) <= '9') {
-						num4 = num4 * 10 + (int) (baseType.charAt(i) - '0');
+						num4 = num4 * 10 + baseType.charAt(i) - '0';
 						i++;
 					}
 					this.getTypeArgumentsOutput(typeRef.getTypeArguments(), num3, num4, StringBuilder);
@@ -2787,7 +2806,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	}
 
 	private void getTypeArgumentsOutput(CodeTypeReferenceCollection typeArguments, int start, int length,
-			StringBuilder sb) {
+										StringBuilder sb) {
 		sb.append('<');
 		boolean flag = true;
 		for (int i = start; i < start + length; i++) {
@@ -2825,11 +2844,11 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 
 	private void outputStartingBrace() throws Exception {
 		if (this.getOptions().getBracingStyle() == "C") {
-			this.output.WriteLine("");
-			this.output.WriteLine("{");
+			this.output.writeLine("");
+			this.output.writeLine("{");
 			return;
 		}
-		this.output.WriteLine(" {");
+		this.output.writeLine(" {");
 	}
 
 	private CompilerResults fromFileBatch(CompilerParameters options, String[] fileNames) throws Exception {
@@ -2855,7 +2874,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		if (options.getOutputAssembly() == null || options.getOutputAssembly().length() == 0) {
 			String fileExtension = options.getGenerateExecutable() ? "exe" : "dll";
 			options.setOutputAssembly(
-					compilerResults.getTempFiles().AddExtension(fileExtension, !options.getGenerateInMemory()));
+					compilerResults.getTempFiles().addExtension(fileExtension, !options.getGenerateInMemory()));
 			new FileStream(options.getOutputAssembly(), FileMode.Create, FileAccess.ReadWrite).close();
 			flag = true;
 		}
@@ -2864,11 +2883,11 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		// CultureInfo.InvariantCulture.CompareInfo.IndexOf(options.CompilerOptions,
 		// "/debug:pdbonly", CompareOptions.IgnoreCase))
 		if (options.getCompilerOptions() != null && true) {
-			compilerResults.getTempFiles().AddExtension(text, true);
+			compilerResults.getTempFiles().addExtension(text, true);
 		} else {
-			compilerResults.getTempFiles().AddExtension(text);
+			compilerResults.getTempFiles().addExtension(text);
 		}
-		String text2 = this.CmdArgsFromParameters(options) + " " + JavaCodeGenerator.joinStringArray(fileNames, " ");
+		String text2 = this.cmdArgsFromParameters(options) + " " + JavaCodeGenerator.joinStringArray(fileNames, " ");
 		String responseFileCmdArgs = this.getResponseFileCmdArgs(options, text2);
 		String trueArgs = null;
 		if (responseFileCmdArgs != null) {
@@ -2877,7 +2896,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		RefObject<String> refFile = new RefObject<String>(file);
 		RefObject<Integer> refNum = new RefObject<Integer>(num);
-		this.compile(options, RedistVersionInfo.GetCompilerPath(this.provOptions, this.getCompilerName()),
+		this.compile(options, RedistVersionInfo.getCompilerPath(this.provOptions, this.getCompilerName()),
 				this.getCompilerName(), text2, refFile, refNum, trueArgs);
 		num = refNum.getRefObj();
 		file = refFile.getRefObj();
@@ -2887,7 +2906,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			for (int i = 0; i < array.length; i++) {
 				String text3 = array[i];
 				compilerResults.getOutput().add(text3);
-				this.ProcessCompilerOutputLine(compilerResults, text3);
+				this.processCompilerOutputLine(compilerResults, text3);
 			}
 			if (num > 0 & flag) {
 				File.Delete(options.getOutputAssembly());
@@ -2920,7 +2939,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	}
 
 	private static String[] readAllLines(String file, String encoding, FileShare share)
-			throws FileNotFoundException, Exception {
+			throws Exception {
 		String[] result = null;
 		try (FileStream fileStream = File.Open(file, FileMode.Open, FileAccess.Read, share)) {
 			List<String> list = new ArrayList<String>();
@@ -2944,7 +2963,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		try {
 			result = this.fromDom(options, e);
 		} finally {
-			options.getTempFiles().SafeDelete();
+			options.getTempFiles().safeDelete();
 		}
 		return result;
 	}
@@ -2957,7 +2976,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		try {
 			result = this.fromFile(options, fileName);
 		} finally {
-			options.getTempFiles().SafeDelete();
+			options.getTempFiles().safeDelete();
 		}
 		return result;
 	}
@@ -2970,7 +2989,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		try {
 			result = this.fromSource(options, source);
 		} finally {
-			options.getTempFiles().SafeDelete();
+			options.getTempFiles().safeDelete();
 		}
 		return result;
 	}
@@ -2984,13 +3003,13 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		try {
 			result = this.fromSourceBatch(options, sources);
 		} finally {
-			options.getTempFiles().SafeDelete();
+			options.getTempFiles().safeDelete();
 		}
 		return result;
 	}
 
 	public CompilerResults compileAssemblyFromFileBatch(CompilerParameters options, String[] fileNames)
-			throws FileNotFoundException, Exception {
+			throws Exception {
 		if (options == null) {
 			throw new ArgumentNullException("options");
 		}
@@ -3005,7 +3024,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			}
 			result = this.fromFileBatch(options, fileNames);
 		} finally {
-			options.getTempFiles().SafeDelete();
+			options.getTempFiles().safeDelete();
 		}
 		return result;
 	}
@@ -3019,15 +3038,15 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		try {
 			result = this.fromDomBatch(options, ea);
 		} finally {
-			options.getTempFiles().SafeDelete();
+			options.getTempFiles().safeDelete();
 		}
 		return result;
 	}
 
 	void compile(CompilerParameters options, String compilerDirectory, String compilerExe, String arguments,
-			RefObject<String> outputFile, RefObject<Integer> nativeReturnValue, String trueArgs) throws Exception {
+				 RefObject<String> outputFile, RefObject<Integer> nativeReturnValue, String trueArgs) throws Exception {
 		String text = null;
-		outputFile.setRefObj(options.getTempFiles().AddExtension("out"));
+		outputFile.setRefObj(options.getTempFiles().addExtension("out"));
 		// RefObject<String> refObject = new RefObject<String>(outputFile);
 
 		String text2 = Path.Combine(compilerDirectory, compilerExe);
@@ -3096,12 +3115,12 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 				for (int i = 0; i < ea.length; i++) {
 					if (ea[i] != null) {
 						this.resolveReferencedAssemblies(options, ea[i]);
-						array[i] = options.getTempFiles().AddExtension(i + this.getFileExtension());
+						array[i] = options.getTempFiles().addExtension(i + this.getFileExtension());
 						FileStream stream = new FileStream(array[i], FileMode.Create, FileAccess.Write, FileShare.Read);
 						try {
 							try (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8)) {
-								((ICodeGenerator) this).generateCodeFromCompileUnit(ea[i], streamWriter, this.options);
-								streamWriter.Flush();
+								this.generateCodeFromCompileUnit(ea[i], streamWriter, this.options);
+								streamWriter.flush();
 							}
 						} finally {
 							stream.Close();
@@ -3144,12 +3163,12 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			// Executor.RevertImpersonation();
 			try {
 				for (int i = 0; i < sources.length; i++) {
-					String text = options.getTempFiles().AddExtension(i + this.getFileExtension());
+					String text = options.getTempFiles().addExtension(i + this.getFileExtension());
 					FileStream stream = new FileStream(text, FileMode.Create, FileAccess.Write, FileShare.Read);
 					try {
 						try (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8)) {
-							streamWriter.Write(sources[i]);
-							streamWriter.Flush();
+							streamWriter.write(sources[i]);
+							streamWriter.flush();
 						}
 					} finally {
 						stream.Close();
@@ -3238,7 +3257,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		try {
 			if (e instanceof CodeSnippetCompileUnit) {
-				this.GenerateSnippetCompileUnit((CodeSnippetCompileUnit) e);
+				this.generateSnippetCompileUnit((CodeSnippetCompileUnit) e);
 			} else {
 				this.generateCompileUnit(e);
 			}

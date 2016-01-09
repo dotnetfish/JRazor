@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor;
+package com.superstudio.jrazor;
 
 import com.superstudio.jrazor.parser.syntaxTree.Block;
 import com.superstudio.jrazor.parser.syntaxTree.RazorError;

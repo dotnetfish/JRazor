@@ -1,16 +1,15 @@
 package com.superstudio.codedom.compiler;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.*;
-
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.io.FileAccess;
 import com.superstudio.commons.io.FileMode;
 import com.superstudio.commons.io.FileStream;
 import com.superstudio.commons.io.Path;
 
- 
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.*;
+
 public class TempFileCollection implements List, java.io.Closeable, Serializable {
 	private String basePath;
 
@@ -44,7 +43,7 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 	}
 
 	public final String getBasePath() throws Exception {
-		this.EnsureTempNameCreated();
+		this.ensureTempNameCreated();
 		return this.basePath;
 	}
 
@@ -71,35 +70,35 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 	}
 
 	public final void close() throws java.io.IOException {
-		this.Dispose(true);
+		this.dispose(true);
 		System.gc();
 		// GC.SuppressFinalize(this);
 	}
 
-	protected void Dispose(boolean disposing) {
-		this.Delete();
+	protected void dispose(boolean disposing) {
+		this.delete();
 	}
 
 	protected void finalize() throws Throwable {
-		this.Dispose(false);
+		this.dispose(false);
 	}
 
-	public final String AddExtension(String fileExtension) throws Exception {
-		return this.AddExtension(fileExtension, this.keepFiles);
+	public final String addExtension(String fileExtension) throws Exception {
+		return this.addExtension(fileExtension, this.keepFiles);
 	}
 
-	public final String AddExtension(String fileExtension, boolean keepFile) throws Exception {
+	public final String addExtension(String fileExtension, boolean keepFile) throws Exception {
 		if (fileExtension == null || fileExtension.length() == 0) {
 			// throw new
 			// IllegalArgumentException(SR.GetString("InvalidNullEmptyArgument",
 			// new Object[] {"fileExtension"}), "fileExtension");
 		}
 		String text = this.getBasePath() + "." + fileExtension;
-		this.AddFile(text, keepFile);
+		this.addFile(text, keepFile);
 		return text;
 	}
 
-	public final void AddFile(String fileName, boolean keepFile) {
+	public final void addFile(String fileName, boolean keepFile) {
 		if (fileName == null || fileName.length() == 0) {
 			// throw new
 			// IllegalArgumentException(SR.GetString("InvalidNullEmptyArgument",
@@ -113,7 +112,7 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 		this.files.put(fileName, keepFile);
 	}
 
-	public final Iterator<String> iterator() {
+	public final Iterator iterator() {
 		return this.files.keySet().iterator();
 	}
 
@@ -123,11 +122,11 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 	 */
 
 	/*
-	 * public final void CopyTo(Arrays array, int start) {
+	 * public final void copyTo(Arrays array, int start) {
 	 * this.files.keySet().toArray(array, start); }
 	 */
 
-	public final void CopyTo(String[] fileNames, int start) {
+	public final void copyTo(String[] fileNames, int start) {
 		for (String str : this.files.keySet()) {
 			fileNames[start] = str;
 			start++;
@@ -137,14 +136,14 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 		// this.files.keySet().toArray(fileNames,start);//(fileNames, start);
 	}
 
-	private void EnsureTempNameCreated() throws Exception {
+	private void ensureTempNameCreated() throws Exception {
 		if (this.basePath == null) {
 			String text = null;
 			boolean flag = false;
 			int num = 5000;
 			do {
 				try {
-					this.basePath = TempFileCollection.GetTempFileName(this.getTempDir());
+					this.basePath = TempFileCollection.getTempFileName(this.getTempDir());
 					String fullPath = (new java.io.File(this.basePath)).getAbsolutePath();
 					// (new FileIOPermission(FileIOPermissionAccess.AllAccess,
 					// fullPath)).Demand();
@@ -155,7 +154,7 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 				} catch (IOException e) {
 					num--;
 				
-					// ORIGINAL LINE: uint num2 = 2147942480u;
+
 					long num2 = 2147942480L;
 					
 					// ORIGINAL LINE: if (num == 0 ||
@@ -172,16 +171,16 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 		}
 	}
 
-	private boolean KeepFile(String fileName) {
+	private boolean keepFile(String fileName) {
 		Object obj = this.files.get(fileName);
 		return obj != null && (Boolean) obj;
 	}
 
-	public final void Delete() {
+	public final void delete() {
 		if (this.files != null && this.files.size() > 0) {
 			String[] array = new String[this.files.size()];
 			// CollectionHelper.c
-			// this.files.keySet().CopyTo(array, 0);
+			// this.files.keySet().copyTo(array, 0);
 			int len = this.files.size();
 			int index = 0;
 			for (String str : this.files.keySet()) {
@@ -192,8 +191,8 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 			String[] array2 = array;
 			for (int i = 0; i < array2.length; i++) {
 				String text = array2[i];
-				if (!this.KeepFile(text)) {
-					this.Delete(text);
+				if (!this.keepFile(text)) {
+					this.delete(text);
 					this.files.remove(text);
 				}
 			}
@@ -201,24 +200,24 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 
 	}
 
-	public final void SafeDelete() {
+	public final void safeDelete() {
 		// WindowsImpersonationContext impersonation =
 		// Executor.RevertImpersonation();
 		try {
-			this.Delete();
+			this.delete();
 		} finally {
 			// Executor.ReImpersonate(impersonation);
 		}
 	}
 
-	private void Delete(String fileName) {
+	private void delete(String fileName) {
 		try {
 			(new java.io.File(fileName)).delete();
 		} catch (java.lang.Exception e) {
 		}
 	}
 
-	private static String GetTempFileName(String tempDir) {
+	private static String getTempFileName(String tempDir) {
 		if (StringHelper.isNullOrEmpty(tempDir)) {
 			tempDir = Path.GetTempPath();
 		}

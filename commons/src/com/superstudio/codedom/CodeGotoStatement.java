@@ -2,7 +2,7 @@ package com.superstudio.codedom;
 import java.io.Serializable;
 
 import com.superstudio.commons.csharpbridge.StringHelper;
- 
+
 //ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeGotoStatement : CodeStatement
 public class CodeGotoStatement extends CodeStatement implements Serializable
 {

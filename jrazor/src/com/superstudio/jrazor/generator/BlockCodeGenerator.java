@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.generator;
+package com.superstudio.jrazor.generator;
 
 
 import com.superstudio.commons.IEquatable;
@@ -18,7 +18,7 @@ public abstract class BlockCodeGenerator implements IBlockCodeGenerator,IEquatab
 	@Override
 	public boolean equals(Object obj)
 	{
-		return ((IBlockCodeGenerator)((obj instanceof IBlockCodeGenerator) ? obj : null)) != null;
+		return ((obj instanceof IBlockCodeGenerator) ? obj : null) != null;
 	}
 
 	@Override

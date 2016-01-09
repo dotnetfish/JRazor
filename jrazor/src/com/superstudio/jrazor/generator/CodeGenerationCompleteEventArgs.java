@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor.generator;
+package com.superstudio.jrazor.generator;
 
 import com.superstudio.codedom.CodeCompileUnit;
 import com.superstudio.commons.EventArgs;

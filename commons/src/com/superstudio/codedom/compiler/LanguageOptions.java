@@ -1,5 +1,7 @@
 package com.superstudio.codedom.compiler;
 
+import com.superstudio.codedom.*;
+
 public class LanguageOptions
 {
 	public static final LanguageOptions None = new LanguageOptions(0);

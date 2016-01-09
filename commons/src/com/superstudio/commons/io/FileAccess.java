@@ -18,7 +18,7 @@ public enum FileAccess {
 		return mappings;
 	}
 
-	private FileAccess(int value) {
+	FileAccess(int value) {
 		intValue = value;
 		getMappings().put(value, this);
 	}

@@ -2,18 +2,14 @@ package com.superstudio.codedom.compiler;
 
 import java.io.Serializable;
 
+import com.superstudio.codedom.*;
 import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.csharpbridge.StringHelper;
 
- 
+
 //ORIGINAL LINE: [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")][Serializable] public class CompilerError
 public class CompilerError implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3960168630961895103L;
-
 	private int line;
 
 	private int column;

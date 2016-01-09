@@ -1,6 +1,8 @@
 package com.superstudio.codedom;
 import java.io.Serializable;
- 
+import java.util.ArrayList;
+import java.util.List;
+
 //ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeIndexerExpression : CodeExpression
 public class CodeIndexerExpression extends CodeExpression implements Serializable
 {

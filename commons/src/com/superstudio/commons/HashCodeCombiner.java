@@ -10,7 +10,7 @@ public class HashCodeCombiner
 		// return _combinedHash64;
 	}
 
-	public HashCodeCombiner Add(Iterable<Object> e) {
+	public HashCodeCombiner Add(Iterable e) {
 		if (e == null) {
 			Add(0);
 		} else {

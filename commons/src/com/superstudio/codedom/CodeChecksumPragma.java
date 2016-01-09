@@ -1,17 +1,16 @@
 package com.superstudio.codedom;
 
-import java.io.Serializable;
-
 import com.superstudio.commons.Guid;
 
- 
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeChecksumPragma : CodeDirective
+import java.io.Serializable;
+
+
 public class CodeChecksumPragma extends CodeDirective implements Serializable
 {
 	private String fileName;
 
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
-//ORIGINAL LINE: private byte[] checksumData;
+
+
 	private byte[] checksumData;
 
 	private Guid checksumAlgorithmId = new Guid();
@@ -38,14 +37,14 @@ public class CodeChecksumPragma extends CodeDirective implements Serializable
 		this.checksumAlgorithmId = value;
 	}
 
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
-//ORIGINAL LINE: public byte[] getChecksumData()
+
+
 	public final byte[] getChecksumData()
 	{
 		return this.checksumData;
 	}
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
-//ORIGINAL LINE: public void setChecksumData(byte[] value)
+
+
 	public final void setChecksumData(byte[] value)
 	{
 		this.checksumData = value;
@@ -55,8 +54,7 @@ public class CodeChecksumPragma extends CodeDirective implements Serializable
 	{
 	}
 
-//C# TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
-//ORIGINAL LINE: public CodeChecksumPragma(string fileName, Guid checksumAlgorithmId, byte[] checksumData)
+
 	public CodeChecksumPragma(String fileName, Guid checksumAlgorithmId, byte[] checksumData)
 	{
 		this.fileName = fileName;

@@ -1,7 +1,5 @@
 package com.superstudio.codedom;
 import java.io.Serializable;
- 
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeConstructor : CodeMemberMethod
 public class CodeConstructor extends CodeMemberMethod implements Serializable
 {
 	private CodeExpressionCollection baseConstructorArgs =   new CodeExpressionCollection();

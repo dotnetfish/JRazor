@@ -1,4 +1,4 @@
-﻿package com.superstudio.jrazor;
+package com.superstudio.jrazor;
 
 import com.superstudio.commons.csharpbridge.action.ActionTwo;
 import com.superstudio.jrazor.editor.BackgroundParser;
@@ -10,7 +10,6 @@ import com.superstudio.jrazor.parser.syntaxTree.Block;
 import com.superstudio.jrazor.parser.syntaxTree.Span;
 import com.superstudio.jrazor.resources.RazorResources;
 import com.superstudio.jrazor.text.TextChange;
-import com.superstudio.commons.IDisposable;
 import com.superstudio.commons.Path;
 import com.superstudio.commons.csharpbridge.StringHelper;
 

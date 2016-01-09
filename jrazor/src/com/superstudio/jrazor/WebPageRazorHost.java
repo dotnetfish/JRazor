@@ -230,7 +230,7 @@ public class WebPageRazorHost extends RazorEngineHost {
 
 	protected String getClassName(String virtualPath) {
 		return ParserHelpers
-				.sanitizeClassName("_Page_" + StringHelper.trimStart(virtualPath, new Character[] { '~', '/' }));
+				.sanitizeClassName("_Page_" + StringHelper.trimStart(virtualPath, '~', '/'));
 	}
 
 	protected RazorCodeLanguage getNewCodeLanguage() {
