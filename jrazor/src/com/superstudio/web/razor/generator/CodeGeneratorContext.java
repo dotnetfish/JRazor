@@ -12,7 +12,7 @@ import com.superstudio.web.razor.utils.DisposableAction;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.codedom.*;
 import com.superstudio.commons.CollectionHelper;
-import com.superstudio.commons.IDisposable;
+
 import com.superstudio.commons.csharpbridge.RefObject;
 
 
@@ -318,7 +318,7 @@ public class CodeGeneratorContext {
 		}
 	}
 
-	public final IDisposable ChangeStatementCollector(ActionTwo<String, CodeLinePragma> collector) {
+	public final AutoCloseable ChangeStatementCollector(ActionTwo<String, CodeLinePragma> collector) {
 		ActionTwo<String, CodeLinePragma> oldCollector = getStatementCollector();
 		setStatementCollector(collector);
 

@@ -1,6 +1,6 @@
 package com.superstudio.web.razor;
 
-import com.superstudio.commons.IDisposable;
+
 import com.superstudio.commons.Path;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.csharpbridge.action.ActionTwo;
@@ -59,7 +59,7 @@ import com.superstudio.web.razor.text.TextChange;
  event, for the second change.
  
 */
-public class RazorEditorParser implements IDisposable
+public class RazorEditorParser implements AutoCloseable
 {
 	// lock for this document
 	private Span _lastChangeOwner;
@@ -181,8 +181,8 @@ public class RazorEditorParser implements IDisposable
 		String changeString = "";
 
 //		using (_parser.synchronizeMainThreadState())
-IDisposable disposable=_parser.synchronizeMainThreadState();
-		try
+;
+		try(AutoCloseable disposable=_parser.synchronizeMainThreadState())
 		{
 			// Capture the string value of the change while we're synchronized
 			changeString = change.toString();
@@ -192,10 +192,8 @@ IDisposable disposable=_parser.synchronizeMainThreadState();
 			{
 				result = tryPartialParse(change);
 			}
-		}
-		finally
-		{
-			 disposable.dispose();
+		}catch (Exception ex){
+			ex.printStackTrace();
 		}
 
 		// If partial parsing failed or there were outstanding parser tasks, start a full reparse
@@ -224,13 +222,11 @@ IDisposable disposable=_parser.synchronizeMainThreadState();
 	*/
 	
 
-
-	//[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "_cancelTokenSource", Justification = "The cancellation token is owned by the worker thread, so it is disposed there"), SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "_changeReceived", Justification = "The change received event is owned by the worker thread, so it is disposed there")]
-	protected void dispose(boolean disposing)
+protected void dispose(boolean disposing)
 	{
 		if (disposing)
 		{
-			_parser.dispose();
+			_parser.close();
 		}
 	}
 
@@ -283,16 +279,13 @@ IDisposable disposable=_parser.synchronizeMainThreadState();
 	private void onDocumentParseComplete(DocumentParseCompleteEventArgs args)
 	{
 
-//		using (_parser.synchronizeMainThreadState())
-		IDisposable disposable=_parser.synchronizeMainThreadState();
-		try
+
+		try(AutoCloseable disposable=_parser.synchronizeMainThreadState())
 		{
 			_currentParseTree = args.getGeneratorResults().getDocument();
 			_lastChangeOwner = null;
-		}
-		finally
-		{
-			 disposable.dispose();
+		}catch (Exception ex){
+			ex.printStackTrace();
 		}
 
 		////Debug.Assert(args != null, "Event arguments cannot be null");
@@ -322,6 +315,9 @@ IDisposable disposable=_parser.synchronizeMainThreadState();
 		//Debug.Assert(result.HasFlag(PartialParseResult.Accepted) || !result.HasFlag(PartialParseResult.Provisional), "Partial parse result was Rejected AND had Provisional flag set");
 */	}
 	@Override
+	public  void close(){
+		dispose();
+	}
 	public void dispose() {
 		// TODO Auto-generated method stub
 		

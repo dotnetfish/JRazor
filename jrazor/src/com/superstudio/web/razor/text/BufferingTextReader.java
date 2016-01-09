@@ -1,6 +1,6 @@
 package com.superstudio.web.razor.text;
 
-import com.superstudio.commons.IDisposable;
+
 import com.superstudio.commons.TextReader;
 import com.superstudio.web.razor.utils.DisposableAction;
 
@@ -100,7 +100,7 @@ public class BufferingTextReader extends LookaheadTextReader
 	}
 
 	@Override
-	public IDisposable beginLookahead()
+	public AutoCloseable beginLookahead()
 	{
 		// Is this our first lookahead?
 		if (getBuffer() == null)

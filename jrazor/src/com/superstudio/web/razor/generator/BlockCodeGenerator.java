@@ -11,8 +11,7 @@ public abstract class BlockCodeGenerator implements IBlockCodeGenerator,IEquatab
 	{
 	}
 
-	public void generateEndBlockCode(Block target, CodeGeneratorContext context)
-	{
+	public void generateEndBlockCode(Block target, CodeGeneratorContext context) throws Exception {
 	}
 
 	@Override

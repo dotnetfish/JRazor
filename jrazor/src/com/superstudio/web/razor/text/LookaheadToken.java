@@ -1,10 +1,10 @@
 package com.superstudio.web.razor.text;
 
-import com.superstudio.commons.IDisposable;
+
 import com.superstudio.commons.csharpbridge.action.Action;
 
 
-public class LookaheadToken implements IDisposable
+public class LookaheadToken implements AutoCloseable
 {
 	private Action _cancelAction;
 	private boolean _accepted;
@@ -19,8 +19,10 @@ public class LookaheadToken implements IDisposable
 		_accepted = true;
 	}
 
-	
-
+	@Override
+public  void  close(){
+	dispose();
+}
 	protected void dispose(boolean disposing)
 	{
 		if (!_accepted)
@@ -31,7 +33,7 @@ public class LookaheadToken implements IDisposable
 
 	
 
-	@Override
+
 	public void dispose() {
 		// TODO Auto-generated method stub
 		dispose(true);

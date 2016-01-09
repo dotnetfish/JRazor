@@ -1,11 +1,10 @@
 package com.superstudio.web.razor.utils;
 
-import com.superstudio.commons.IDisposable;
+
 import com.superstudio.commons.csharpbridge.action.Action;
-import com.superstudio.commons.exception.ArgumentNullException;
 
 
-public class DisposableAction implements IDisposable {
+public class DisposableAction implements AutoCloseable {
 	private Action _action;
 
 	public DisposableAction(Action action)  {
@@ -16,13 +15,13 @@ public class DisposableAction implements IDisposable {
 	}
 
 	@Override
-	public  void dispose() {
-		dispose(true);
+	public  void close() {
+		close(true);
 		System.gc();
 		// GC.SuppressFinalize(this);
 	}
 
-	protected void dispose(boolean disposing) {
+	protected void close(boolean disposing) {
 		// If we were disposed by the finalizer it's because the user didn't use
 		// a "using" block, so don't do anything!
 		if (disposing) {

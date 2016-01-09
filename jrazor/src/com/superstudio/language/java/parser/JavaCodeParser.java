@@ -1,7 +1,6 @@
 package com.superstudio.language.java.parser;
 
 import com.superstudio.commons.CollectionHelper;
-import com.superstudio.commons.IDisposable;
 import com.superstudio.commons.Tuple;
 import com.superstudio.commons.csharpbridge.RefObject;
 import com.superstudio.commons.csharpbridge.StringHelper;
@@ -225,26 +224,21 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 			Output(SpanKind.Code);
 		}
 
-		// We're valid, so parse the nested block
 		AutoCompleteEditHandler bodyEditHandler = 
 				new AutoCompleteEditHandler(p->getLanguage().tokenizeString(p));
-		
-		// using (PushSpanConfig(defaultSpanConfig))
-		IDisposable disposable=PushSpanConfig((p) -> defaultSpanConfig(p));
-		try {
-			
-			// using (Context.startBlock(BlockType.statement))
-			IDisposable blockDispose=getContext().startBlock(BlockType.Statement);
-			try {
+
+		try (AutoCloseable disposable=PushSpanConfig((p) -> defaultSpanConfig(p))){
+
+			try(AutoCloseable blockDispose=getContext().startBlock(BlockType.Statement)) {
 				getSpan().setEditHandler(bodyEditHandler);
 				codeBlock(false, block);
 				completeBlock(true);
 				Output(SpanKind.Code);
-			} finally {
-				blockDispose.dispose();
+			} catch (Exception ex){
+				ex.printStackTrace();
 			}
-		} finally {
-			disposable.dispose();
+		} catch (Exception ex){
+			ex.printStackTrace();
 		}
 		initialize(getSpan());
 
@@ -1166,24 +1160,17 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 
 	@Override
 	public void parseBlock()  {
-	
-		// using (PushSpanConfig(defaultSpanConfig))
-		IDisposable disposable=PushSpanConfig((p) -> defaultSpanConfig(p));
-		try {
+
+		try(AutoCloseable disposable=PushSpanConfig((p) -> defaultSpanConfig(p))) {
 			if (getContext() == null) {
 				
 				//throw new InvalidOperationException(RazorResources.getParser_Context_Not_Set());
 			}
 
 			// Unless changed, the block is a statement block
-			
-
-			IDisposable blockDispose= getContext().startBlock(BlockType.Statement);
-			try {
+			try(AutoCloseable blockDispose= getContext().startBlock(BlockType.Statement)) {
 				nextToken();
-
 				AcceptWhile(isSpacingToken(true, true));
-
 				JavaSymbol current = getCurrentSymbol();
 				if (At(JavaSymbolType.StringLiteral) 
 						&& getCurrentSymbol().getContent().length() > 0
@@ -1209,11 +1196,11 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 					afterTransition();
 				}
 				Output(SpanKind.Code);
-			} finally {
-				blockDispose.dispose();
+			} catch (Exception ex){
+				ex.printStackTrace();
 			}
-		} finally {
-			disposable.dispose();
+		}catch (Exception ex){
+			ex.printStackTrace();
 		}
 	}
 
@@ -1235,8 +1222,8 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 
 	private void afterTransition() {
 
-		IDisposable disposable=PushSpanConfig((p) -> defaultSpanConfig(p));
-		try {
+
+		try(AutoCloseable disposable=PushSpanConfig((p) -> defaultSpanConfig(p))) {
 			EnsureCurrent();
 			try {
 				// What type of block is this?
@@ -1295,8 +1282,8 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 				// parser.
 				putCurrentBack();
 			}
-		} finally {
-			 disposable.dispose();
+		} catch (Exception ex){
+			ex.printStackTrace();
 		}
 	}
 
@@ -1341,21 +1328,12 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		getContext().getCurrentBlock().setCodeGenerator(new ExpressionCodeGenerator());
 
 
-		// its Java equivalent:
-
-		// methods are not converted
-		// using (PushSpanConfig(span -> { span.EditHandler = new
-		// ImplicitExpressionEditHandler(Language.tokenizeString, Keywords,
-		// acceptTrailingDot: IsNested); span.EditHandler.AcceptedCharacters =
-		// AcceptedCharacters.NonWhiteSpace; span.CodeGenerator = new
-		// ExpressionCodeGenerator(); }))
-		IDisposable disposable=PushSpanConfig(span -> {
+		try ( AutoCloseable disposable=PushSpanConfig(span -> {
 			span.setEditHandler(
 					new ImplicitExpressionEditHandler(p->getLanguage().tokenizeString(p), getKeywords(), getIsNested()));
 			span.getEditHandler().setAcceptedCharacters(AcceptedCharacters.NonWhiteSpace);
 			span.setCodeGenerator(new ExpressionCodeGenerator());
-		});
-		try {
+		})){
 			do {
 				if (AtIdentifier(true)) {
 					AcceptAndMoveNext();
@@ -1364,8 +1342,8 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 
 			putCurrentBack();
 			Output(SpanKind.Code);
-		} finally {
-			 disposable.dispose();
+		} catch (Exception ex){
+			ex.printStackTrace();
 		}
 	}
 
@@ -1377,28 +1355,16 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 				getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.Any);
 
 				JavaSymbolType right;
-				boolean success;
+				boolean success=false;
 
-
-				// replaced by its Java equivalent:
-
-				// anonymous methods are not converted
-				// using (PushSpanConfig((span, prev) -> { prev(span);
-				// span.EditHandler.AcceptedCharacters = AcceptedCharacters.Any;
-				// }))
-				IDisposable disposable=	PushSpanConfig((span, prev) -> {
+				try(AutoCloseable disposable=	PushSpanConfig((span, prev) -> {
 					prev.accept(span);
 					span.getEditHandler().setAcceptedCharacters(AcceptedCharacters.Any);
-				});
-				try {
+				})) {
 					right = getLanguage().flipBracket(getCurrentSymbol().getType());
 					BalancingModes modes = BalancingModes.forValue(BalancingModes.BacktrackOnFailure.getValue()
 							| BalancingModes.AllowCommentsAndTemplates.getValue());
 					success = balance(modes);
-				} finally {
-					disposable.dispose();
-				}
-
 				if (!success) {
 					AcceptUntil(JavaSymbolType.LessThan);
 				}
@@ -1407,6 +1373,9 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 					getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.NonWhiteSpace);
 				}
 				return methodCallOrArrayIndex();
+				} catch (Exception ex){
+					ex.printStackTrace();
+				}
 			}
 			if (getCurrentSymbol().getType() == JavaSymbolType.Dot) {
 				JavaSymbol dot = getCurrentSymbol();
@@ -1490,8 +1459,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		Output(SpanKind.MetaCode);
 
 
-		IDisposable disposable =PushSpanConfig((p) -> configureExplicitExpressionSpan(p));
-		try {
+		try (AutoCloseable disposable =PushSpanConfig((p) -> configureExplicitExpressionSpan(p))){
 			BalancingModes modes = BalancingModes.forValue(BalancingModes.BacktrackOnFailure.getValue()
 					| BalancingModes.NoErrorOnFailure.getValue() | BalancingModes.AllowCommentsAndTemplates.getValue());
 			boolean success = balance(modes, JavaSymbolType.LeftParenthesis, JavaSymbolType.RightParenthesis,
@@ -1515,8 +1483,8 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 
 			// Output the content span and then capture the ")"
 			Output(SpanKind.Code);
-		} finally {
-		 disposable.dispose();
+		}catch (Exception ex){
+		 ex.printStackTrace();
 		}
 		Optional(JavaSymbolType.RightParenthesis);
 		if (!getEndOfFile()) {
@@ -1535,20 +1503,16 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		}
 		Output(SpanKind.Code);
 
-
-		IDisposable disposable =getContext().startBlock(BlockType.Template);
-		try {
+		try(AutoCloseable disposable =getContext().startBlock(BlockType.Template)) {
 			getContext().getCurrentBlock().setCodeGenerator(new TemplateBlockCodeGenerator());
 			putCurrentBack();
 			otherParserBlock();
-		} finally {
-			 disposable.dispose();
+		} catch (Exception ex){
+			 ex.printStackTrace();
 		}
 	}
 
 	private void otherParserBlock() {
-
-
 		parseWithOtherParser(p -> p.parseBlock());
 	}
 
@@ -1569,13 +1533,11 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		boolean wasNested = getIsNested();
 		setIsNested(true);
 
-		// its Java equivalent:
-		// using (PushSpanConfig())
-		IDisposable disposable=PushSpanConfig();
-		try {
+
+		try(AutoCloseable disposable=PushSpanConfig()) {
 			parseBlock();
-		} finally {
-			disposable.dispose();
+		} catch (Exception ex){
+			ex.printStackTrace();
 		}
 		initialize(getSpan());
 		setIsNested(wasNested);
@@ -1601,15 +1563,13 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 	}
 
 	private void parseWithOtherParser(Consumer<ParserBase> parseAction) {
-		
-		// using (PushSpanConfig())
-		IDisposable disposable=PushSpanConfig();
-		try {
+
+		try(AutoCloseable disposable=PushSpanConfig()) {
 			getContext().SwitchActiveParser();
 			parseAction.accept(getContext().getMarkupParser());
 			getContext().SwitchActiveParser();
-		} finally {
-			disposable.dispose();
+		} catch (Exception ex){
+			ex.printStackTrace();
 		}
 		initialize(getSpan());
 		nextToken();

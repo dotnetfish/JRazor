@@ -510,7 +510,7 @@ public class RazorResources
 	}
 
 	/** 
-	   Looks up a localized string similar to Cannot use built-in RazorComment handler, language characteristics does not define the CommentStart, CommentStar and CommentBody known symbol types or parser does not override TokenizerBackedParser.OutputSpanBeforeRazorComment.
+	   Looks up a localized string similar to Cannot use built-in razorComment handler, language characteristics does not define the CommentStart, CommentStar and CommentBody known symbol types or parser does not override TokenizerBackedParser.OutputSpanBeforeRazorComment.
 	 
 	*/
 	public static String getLanguage_Does_Not_Support_RazorComment()

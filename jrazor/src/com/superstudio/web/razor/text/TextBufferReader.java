@@ -1,6 +1,6 @@
 package com.superstudio.web.razor.text;
 
-import com.superstudio.commons.IDisposable;
+
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.web.razor.utils.DisposableAction;
 
@@ -66,17 +66,27 @@ public class TextBufferReader extends LookaheadTextReader
 		if (disposing)
 		{
 			ITextBuffer tempVar = getInnerBuffer();
-			IDisposable disposable = (IDisposable)((tempVar instanceof IDisposable) ? tempVar : null);
+			AutoCloseable disposable = (AutoCloseable)((tempVar instanceof AutoCloseable) ? tempVar : null);
 			if (disposable != null)
 			{
-				disposable.dispose();
+				try {
+					disposable.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		//super.dispose(disposing);
 	}
 
 	@Override
-	public IDisposable beginLookahead()
+	public void  close() {
+		super.close();
+		dispose(true);
+	}
+
+	@Override
+	public AutoCloseable beginLookahead()
 	{
 		BacktrackContext tempVar = new BacktrackContext();
 		tempVar.setLocation(getCurrentLocation());

@@ -1907,7 +1907,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 				 * if(collection!=null) for(Object e)
 				 */
 				/*
-				 * IDisposable disposable = enumerator as IDisposable;
+				 * AutoCloseable disposable = enumerator as AutoCloseable;
 				 * 
 				 * if (disposable != null) { disposable.dispose(); }
 				 */

@@ -1,7 +1,7 @@
 package com.superstudio.web.razor.parser;
 
 import com.superstudio.commons.CollectionHelper;
-import com.superstudio.commons.IDisposable;
+
 import com.superstudio.commons.IEquatable;
 import com.superstudio.commons.Tuple;
 import com.superstudio.commons.csharpbridge.action.ActionTwo;
@@ -336,16 +336,16 @@ public abstract class TokenizerBackedParser<TTokenizer extends Tokenizer<TSymbol
 		}
 	}
 
-	protected final IDisposable PushSpanConfig() {
+	protected final AutoCloseable PushSpanConfig() {
 		return PushSpanConfig((ActionTwo<SpanBuilder, Consumer<SpanBuilder>>) null);
 	}
 
-	protected final IDisposable PushSpanConfig(Consumer<SpanBuilder> newConfig) {
+	protected final AutoCloseable PushSpanConfig(Consumer<SpanBuilder> newConfig) {
 			return PushSpanConfig(newConfig == null ? (ActionTwo<SpanBuilder, Consumer<SpanBuilder>>) null
 				: (span, t) -> newConfig.accept(span));
 	}
 
-	protected final IDisposable PushSpanConfig(ActionTwo<SpanBuilder, Consumer<SpanBuilder>> newConfig) {
+	protected final AutoCloseable PushSpanConfig(ActionTwo<SpanBuilder, Consumer<SpanBuilder>> newConfig) {
 		/*
 		 * Consumer<SpanBuilder> old = getSpanConfig();
 		 * ConfigureSpan(newConfig); 
@@ -591,14 +591,10 @@ public abstract class TokenizerBackedParser<TTokenizer extends Tokenizer<TSymbol
 		}
 
 
-		// using (PushSpanConfig(CommentSpanConfig))
-		IDisposable disposable = PushSpanConfig((a) -> CommentSpanConfig(a));
-		try {
 
+		try (AutoCloseable disposable = PushSpanConfig((a) -> CommentSpanConfig(a))){
 
-			// using (Context.startBlock(BlockType.getComment()))
-			IDisposable disposablew = getContext().startBlock(BlockType.Comment);
-			try {
+			try(AutoCloseable disposablew = getContext().startBlock(BlockType.Comment)) {
 				getContext().getCurrentBlock().setCodeGenerator(new RazorCommentCodeGenerator());
 				SourceLocation start = getCurrentLocation().clone();
 
@@ -628,12 +624,12 @@ public abstract class TokenizerBackedParser<TTokenizer extends Tokenizer<TSymbol
 				} else {
 					Output(SpanKind.Transition, AcceptedCharacters.None);
 				}
-			} finally {
-				disposablew.dispose();
+			}catch (Exception ex){
+				ex.printStackTrace();
 			}
-		} finally {
-			disposable.dispose();
-		}
+		} catch (Exception ex){
+            ex.printStackTrace();
+        }
 		initialize(getSpan());
 	}
 }

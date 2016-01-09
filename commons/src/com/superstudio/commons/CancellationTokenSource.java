@@ -2,7 +2,7 @@ package com.superstudio.commons;
 
 
 
-public class CancellationTokenSource {
+public class CancellationTokenSource implements AutoCloseable{
 
 	public CancellationToken getToken() {
 		// TODO Auto-generated method stub
@@ -12,6 +12,10 @@ public class CancellationTokenSource {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void close(){
+		dispose();
 	}
 
 	public void Cancel() {

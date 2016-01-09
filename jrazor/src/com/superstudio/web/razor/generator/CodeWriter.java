@@ -3,7 +3,7 @@ package com.superstudio.web.razor.generator;
 import com.superstudio.codedom.CodeLinePragma;
 import com.superstudio.codedom.CodeSnippetStatement;
 import com.superstudio.codedom.CodeSnippetTypeMember;
-import com.superstudio.commons.IDisposable;
+
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.web.razor.text.LocationTagged;
 
@@ -12,7 +12,7 @@ import java.io.StringWriter;
 
 
 // Utility class which helps write code snippets
-public abstract class CodeWriter implements IDisposable
+public abstract class CodeWriter implements AutoCloseable
 {
 	private StringWriter _writer;
 
@@ -176,6 +176,10 @@ public abstract class CodeWriter implements IDisposable
 		dispose(true);
 		//GC.SuppressFinalize(this);
 		System.gc();
+	}
+
+	public  final  void close(){
+		dispose(true);
 	}
 
 	public final void clear()

@@ -1,37 +1,21 @@
 package com.superstudio.language.csharp;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.superstudio.codedom.*;
 import com.superstudio.codedom.compiler.*;
-import com.superstudio.commons.Assembly;
-import com.superstudio.commons.Encoding;
-import com.superstudio.commons.Environment;
-import com.superstudio.commons.FixedStringLookup;
+import com.superstudio.commons.*;
 import com.superstudio.commons.Path;
-import com.superstudio.commons.SR;
-import com.superstudio.commons.StreamReader;
-import com.superstudio.commons.StreamWriter;
-import com.superstudio.commons.TypeAttributes;
 import com.superstudio.commons.csharpbridge.RefObject;
 import com.superstudio.commons.csharpbridge.StringComparison;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.ArgumentException;
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.commons.exception.InvalidOperationException;
-import com.superstudio.commons.io.File;
-import com.superstudio.commons.io.FileAccess;
-import com.superstudio.commons.io.FileMode;
-import com.superstudio.commons.io.FileShare;
-import com.superstudio.commons.io.FileStream;
-import com.superstudio.commons.io.TextWriter;
+import com.superstudio.commons.io.*;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CSharpCodeGenerator implements ICodeCompiler, ICodeGenerator {
 
@@ -1899,7 +1883,7 @@ public class CSharpCodeGenerator implements ICodeCompiler, ICodeGenerator {
 				}
 				return;
 			} finally {
-				// IDisposable disposable = enumerator as IDisposable;
+				// AutoCloseable disposable = enumerator as AutoCloseable;
 				/*
 				 * if (disposable != null) { disposable.dispose(); }
 				 */

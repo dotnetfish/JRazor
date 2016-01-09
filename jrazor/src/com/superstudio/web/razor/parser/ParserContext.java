@@ -1,7 +1,7 @@
 package com.superstudio.web.razor.parser;
 
 import com.superstudio.commons.CollectionHelper;
-import com.superstudio.commons.IDisposable;
+
 import com.superstudio.commons.exception.InvalidOperationException;
 import com.superstudio.web.RazorResources;
 import com.superstudio.web.razor.ParserResults;
@@ -192,7 +192,7 @@ public class ParserContext
 	 
 	 @param blockType The type of the block to start
 	*/
-	public final IDisposable startBlock(BlockType blockType)
+	public final AutoCloseable startBlock(BlockType blockType)
 	{
 		try {
 			EnusreNotTerminated();
@@ -212,7 +212,7 @@ public class ParserContext
 	 * @throws Exception 
 	 
 	*/
-	public final IDisposable startBlock() throws Exception
+	public final AutoCloseable startBlock() throws Exception
 	{
 		EnusreNotTerminated();
 		AssertOnOwnerTask();

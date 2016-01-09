@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 
-public class BackgroundParser implements IDisposable {
+public class BackgroundParser implements AutoCloseable {
 	private MainThreadState _main;
 	private BackgroundThread _bg;
 
@@ -55,12 +55,12 @@ public class BackgroundParser implements IDisposable {
 	}
 
 
-
-	public final void dispose() {
+@Override
+	public final void close() {
 		_main.cancel();
 	}
 
-	public final IDisposable synchronizeMainThreadState() {
+	public final AutoCloseable synchronizeMainThreadState() {
 		return _main.lock();
 	}
 
@@ -126,17 +126,13 @@ public class BackgroundParser implements IDisposable {
 		}
 	}
 
-	private  class MainThreadState extends ThreadStateBase implements IDisposable {
+	private  class MainThreadState extends ThreadStateBase implements AutoCloseable {
 		private CancellationTokenSource _cancelSource = new CancellationTokenSource();
 		private ManualResetEventSlim _hasParcel = new ManualResetEventSlim(false);
 		private CancellationTokenSource _currentParcelCancelSource;
 		
 		private  ActionTwo<Object,DocumentParseCompleteEventArgs> resultsReady;
-		// C# TO JAVA CONVERTER TODO TASK: Java annotations will not correspond
-		// to .NET attributes:
-		// [SuppressMessage("Microsoft.Performance",
-		// "CA1823:AvoidUnusedPrivateFields", Justification = "Field is used in
-		// //Debug code and may be used later")]
+
 		private String _fileName;
 		private Object _stateLock = new Object();
 		private java.util.List<TextChange> _changes = new java.util.ArrayList<TextChange>();
@@ -162,7 +158,7 @@ public class BackgroundParser implements IDisposable {
 			_cancelSource.Cancel();
 		}
 
-		public final IDisposable lock() {
+		public final AutoCloseable lock() {
 			// Monitor.Enter(_stateLock);
 			ReentrantLock lock = new ReentrantLock();
 			lock.lock();
@@ -221,10 +217,10 @@ public class BackgroundParser implements IDisposable {
 		}
 
 		@Override
-		public final void dispose() {
+		public final void close() {
 			dispose(true);
 			System.gc();
-			// GC.SuppressFinalize(this);
+
 		}
 
 		protected void dispose(boolean disposing) {
@@ -289,9 +285,9 @@ public class BackgroundParser implements IDisposable {
 								parcel.getChanges().size());
 						DocumentParseCompleteEventArgs args = null;
 
-						CancellationTokenSource linkedCancel = CancellationTokenSource.CreateLinkedTokenSource(_shutdownToken,
-								parcel.getCancelToken());
-						try {
+
+						try(CancellationTokenSource linkedCancel = CancellationTokenSource.CreateLinkedTokenSource(_shutdownToken,
+								parcel.getCancelToken())){
 							if (!linkedCancel.IsCancellationRequested()) {
 
 								if (_previouslyDiscarded != null && _previouslyDiscarded.size()>0) {
@@ -355,8 +351,8 @@ public class BackgroundParser implements IDisposable {
 								}
 
 							}
-						} finally {
-							linkedCancel.dispose();
+						} catch (Exception ex){
+							ex.printStackTrace();
 						}
 						if (args != null) {
 							_main.ReturnParcel(args);
@@ -369,9 +365,7 @@ public class BackgroundParser implements IDisposable {
 				}
 			} finally {
 				RazorEditorTrace.traceLine(RazorResources.getTrace_BackgroundThreadShutdown(), fileNameOnly);
-
-				// Clean up main thread resources
-				_main.dispose();
+_main.close();
 			}
 		}
 

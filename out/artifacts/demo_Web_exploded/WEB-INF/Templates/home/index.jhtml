@@ -7,7 +7,7 @@
 @section scripts{
   <script type="text/javascript">
   function sayHello(){
-
+ alert("hello world");
   }
   </script>
 }

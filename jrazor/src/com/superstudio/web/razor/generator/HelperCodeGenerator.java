@@ -1,12 +1,12 @@
 package com.superstudio.web.razor.generator;
 
-import com.superstudio.codedom.*;
+import com.superstudio.codedom.CodeLinePragma;
+import com.superstudio.codedom.CodeSnippetTypeMember;
 import com.superstudio.commons.Environment;
 import com.superstudio.commons.HashCodeCombiner;
-import com.superstudio.commons.IDisposable;
 import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.web.razor.parser.syntaxTree.*;
-import com.superstudio.web.razor.text.*;
+import com.superstudio.web.razor.parser.syntaxTree.Block;
+import com.superstudio.web.razor.text.LocationTagged;
 
 
 public class HelperCodeGenerator extends BlockCodeGenerator {
@@ -14,7 +14,7 @@ public class HelperCodeGenerator extends BlockCodeGenerator {
 
 	private CodeWriter _writer;
 	private String _oldWriter;
-	private IDisposable _statementCollectorToken;
+	private AutoCloseable _statementCollectorToken;
 
 	public HelperCodeGenerator(LocationTagged<String> signature, boolean headerComplete) {
 		setSignature(signature);
@@ -81,8 +81,8 @@ public class HelperCodeGenerator extends BlockCodeGenerator {
 	}
 
 	@Override
-	public void generateEndBlockCode(Block target, CodeGeneratorContext context) {
-		_statementCollectorToken.dispose();
+	public void generateEndBlockCode(Block target, CodeGeneratorContext context) throws Exception {
+		_statementCollectorToken.close();
 		if (getHeaderComplete()) {
 			_writer.writeEndLambdaDelegate();
 			_writer.writeEndConstructor();
@@ -125,9 +125,7 @@ public class HelperCodeGenerator extends BlockCodeGenerator {
 		}
 		_writer.writeSnippet(statement);
 		_writer.getInnerWriter().write(Environment.NewLine);
-		//_writer.getInnerWriter().writeLine(); // CodeDOM normally inserts an
-												// extra line so we need to do
-												// so here.
+
 		if (pragma != null) {
 			_writer.writeLinePragma();
 		}

@@ -1,6 +1,6 @@
 package com.superstudio.web.razor.parser;
 
-import com.superstudio.commons.IDisposable;
+
 import com.superstudio.commons.Tuple;
 import com.superstudio.commons.csharpbridge.StringComparison;
 import com.superstudio.commons.csharpbridge.StringHelper;
@@ -42,15 +42,9 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		}
 
 
-		// its Java equivalent:
-		// using (PushSpanConfig(defaultMarkupSpan))
-	 IDisposable	disposable= PushSpanConfig((t) -> defaultMarkupSpan(t));
-		try {
+		try( AutoCloseable	disposable= PushSpanConfig((t) -> defaultMarkupSpan(t))) {
 
-			// replaced by its Java equivalent:
-			// using (Context.startBlock(BlockType.Markup))
-			IDisposable	disposable2=getContext().startBlock(BlockType.Markup);
-			try {
+			try(AutoCloseable	disposable2=getContext().startBlock(BlockType.Markup)) {
 				if (!nextToken()) {
 					return;
 				}
@@ -86,11 +80,11 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 							RazorResources.getParseError_MarkupBlock_Must_Start_With_Tag());
 				}
 				Output(SpanKind.Markup);
-			} finally {
-					disposable2.dispose();
+			}catch (Exception ex){
+				ex.printStackTrace();
 			}
-		} finally {
-				disposable.dispose();
+		}catch (Exception ex){
+			ex.printStackTrace();
 		}
 	}
 
@@ -367,14 +361,10 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		Output(SpanKind.Markup);
 
 		// start a new markup block for the attribute
-
-		// its Java equivalent:
-		// using (Context.startBlock(BlockType.Markup))
-		IDisposable	disposable= getContext().startBlock(BlockType.Markup);
-		try {
+		try(AutoCloseable	disposable= getContext().startBlock(BlockType.Markup)) {
 			attributePrefix(whitespace, name);
-		} finally {
-				disposable.dispose();
+		} catch (Exception ex){
+			ex.printStackTrace();
 		}
 	}
 
@@ -464,18 +454,14 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			getSpan().setCodeGenerator(SpanCodeGenerator.Null);
 
 			// Dynamic value, start a new block and set the code generator
-
-			// replaced by its Java equivalent:
-			// using (Context.startBlock(BlockType.Markup))
-			IDisposable	disposable=getContext().startBlock(BlockType.Markup);
-			try {
+			try(AutoCloseable	disposable=getContext().startBlock(BlockType.Markup)) {
 				getContext().getCurrentBlock().setCodeGenerator(
 						new DynamicAttributeBlockCodeGenerator(
 								ISymbol.getContent(prefix,prefixStart), valueStart));
 
 				OtherParserBlock();
-			} finally {
-					disposable.dispose();
+			} catch (Exception ex){
+				ex.printStackTrace();
 			}
 		} else if (At(HtmlSymbolType.Text) && getCurrentSymbol().getContent().length() > 0
 				&& getCurrentSymbol().getContent().charAt(0) == '~' && NextIs(HtmlSymbolType.Solidus)) {
@@ -803,14 +789,10 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			throw new InvalidOperationException(RazorResources.getParser_Context_Not_Set());
 		}
 
-		
-		// using (PushSpanConfig(defaultMarkupSpan))
-		IDisposable spanConfig =PushSpanConfig((p) -> defaultMarkupSpan(p));
-		try {
-			
-			// using (Context.startBlock(BlockType.Markup))
-			IDisposable dispose=getContext().startBlock(BlockType.Markup);
-			try {
+
+		try(AutoCloseable spanConfig =PushSpanConfig((p) -> defaultMarkupSpan(p))) {
+
+			try(AutoCloseable dispose=getContext().startBlock(BlockType.Markup)) {
 				nextToken();
 				while (!getEndOfFile()) {
 					SkipToAndParseCode(HtmlSymbolType.OpenAngle);
@@ -818,11 +800,11 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				}
 				AddMarkerSymbolIfNecessary();
 				Output(SpanKind.Markup);
-			} finally {
-				dispose.dispose();
+			} catch (Exception ex){
+				ex.printStackTrace();
 			}
-		} finally {
-			spanConfig.dispose();
+		} catch (Exception ex){
+			ex.printStackTrace();
 		}
 	}
 
@@ -981,14 +963,13 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 	private void OtherParserBlock() {
 		AddMarkerSymbolIfNecessary();
 		Output(SpanKind.Markup);
-		// using (PushSpanConfig())
-		IDisposable disposable=PushSpanConfig();
-		try {
+
+		try (AutoCloseable disposable=PushSpanConfig()){
 			getContext().SwitchActiveParser();
 			getContext().getCodeParser().parseBlock();
 			getContext().SwitchActiveParser();
-		} finally {
-			disposable.dispose();
+		} catch (Exception ex){
+			ex.printStackTrace();
 		}
 		initialize(getSpan());
 		nextToken();
@@ -1014,12 +995,10 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			//throw new InvalidOperationException(RazorResources.getParser_Context_Not_Set());
 		}
 
-	
-		// using (PushSpanConfig(defaultMarkupSpan))
-		IDisposable	disposable=PushSpanConfig((p) -> defaultMarkupSpan(p));
-		try {
+
+		try (AutoCloseable	disposable=PushSpanConfig((p) -> defaultMarkupSpan(p))){
 			// using (Context.startBlock(BlockType.Markup))
-			IDisposable	disposable2=getContext().startBlock(BlockType.Markup);
+			AutoCloseable	disposable2=getContext().startBlock(BlockType.Markup);
 			try {
 				nextToken();
 				setCaseSensitive(caseSensitive);
@@ -1030,11 +1009,11 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				}
 				AddMarkerSymbolIfNecessary();
 				Output(SpanKind.Markup);
-			} finally {
-					disposable2.dispose();
+			} catch (Exception ex){
+					ex.printStackTrace();
 			}
-		} finally {
-				disposable.dispose();
+		} catch (Exception ex){
+			ex.printStackTrace();
 		}
 	}
 
