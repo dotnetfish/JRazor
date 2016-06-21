@@ -2,8 +2,8 @@
 #############
 ## intellj idea
 #############
-
 .idea/
+/.idea/*
 *.class
 target/*
 build/*
