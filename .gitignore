@@ -227,3 +227,4 @@ pip-log.txt
 .mr.developer.cfg
 *.class
 *.class
+.idea/workspace.xml
