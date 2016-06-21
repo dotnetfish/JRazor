@@ -65,23 +65,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MVCServletContextListener.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MVCServletContextListener.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/demo/src/main/java/com/superstudio/demo/servlet/MVCServletContextListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="567">
-              <caret line="27" column="57" selection-start-line="27" selection-start-column="57" selection-end-line="27" selection-end-column="57" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+            <state relative-caret-position="321">
+              <caret line="27" column="33" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HostBuilder.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="HostBuilder.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jrazortemplate/src/com/superstudio/web/HostBuilder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="48" column="16" selection-start-line="48" selection-start-column="16" selection-end-line="48" selection-end-column="16" />
+            <state relative-caret-position="1269">
+              <caret line="57" column="13" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#useTemplateEngine#0;class#HostBuilder#0" expanded="false" />
@@ -222,13 +220,13 @@
         <option value="$PROJECT_DIR$/demo/src/main/java/JRazor/_Page_Templates_home_index_jhtml.java" />
         <option value="$PROJECT_DIR$/demo/web/WEB-INF/Templates/home/index.jhtml" />
         <option value="$PROJECT_DIR$/jrazor/src/com/superstudio/language/java/JavaCodeGenerator.java" />
-        <option value="$PROJECT_DIR$/demo/src/main/java/com/superstudio/demo/servlet/MVCServletContextListener.java" />
         <option value="$PROJECT_DIR$/jrazortemplate/src/com/superstudio/web/FileWatch.java" />
         <option value="$PROJECT_DIR$/jrazor/pom.xml" />
         <option value="$PROJECT_DIR$/jrazortemplate/pom.xml" />
         <option value="$USER_HOME$/.m2/settings.xml" />
         <option value="$PROJECT_DIR$/jrazortemplate/src/com/superstudio/web/FileListener.java" />
         <option value="$PROJECT_DIR$/jrazortemplate/src/com/superstudio/web/HostBuilder.java" />
+        <option value="$PROJECT_DIR$/demo/src/main/java/com/superstudio/demo/servlet/MVCServletContextListener.java" />
       </list>
     </option>
   </component>
@@ -1129,12 +1127,12 @@
       <workItem from="1466400861762" duration="1329000" />
       <workItem from="1466402597863" duration="12302000" />
       <workItem from="1466418830340" duration="5746000" />
-      <workItem from="1466468758803" duration="5255000" />
+      <workItem from="1466468758803" duration="5589000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41806000" />
+    <option name="totallyTimeSpent" value="42140000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -1544,16 +1542,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/demo/src/main/java/com/superstudio/demo/servlet/MVCServletContextListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="27" column="57" selection-start-line="27" selection-start-column="57" selection-end-line="27" selection-end-column="57" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/demo/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-135">
@@ -1598,8 +1586,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/jrazortemplate/src/com/superstudio/web/HostBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="48" column="16" selection-start-line="48" selection-start-column="16" selection-end-line="48" selection-end-column="16" />
+        <state relative-caret-position="1269">
+          <caret line="57" column="13" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#useTemplateEngine#0;class#HostBuilder#0" expanded="false" />
@@ -1607,6 +1595,14 @@
             <element signature="e#934#935#0" expanded="true" />
             <element signature="e#966#967#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/src/main/java/com/superstudio/demo/servlet/MVCServletContextListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="27" column="33" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>
