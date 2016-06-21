@@ -2,6 +2,7 @@ package com.superstudio.template.templatepages;
 
 import com.superstudio.template.mvc.context.HostContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -14,7 +15,9 @@ public class WebPageHttpHandler {
 
 	public static List<String> getRegisteredExtensions() {
 		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> extenions=new ArrayList();
+		extenions.add("jhtml");
+		return extenions ;
 	}
 
 }

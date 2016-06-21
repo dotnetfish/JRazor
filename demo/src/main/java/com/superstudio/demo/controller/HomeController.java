@@ -4,6 +4,7 @@ import com.superstudio.template.JRazorTemplateEngine;
 import com.superstudio.template.mvc.context.HostContext;
 import com.superstudio.template.mvc.context.RenderContext;
 import com.superstudio.template.mvc.context.TemplateInfo;
+import com.superstudio.web.razor.tokenizer.symbols.SymbolBase;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +32,7 @@ public class HomeController {
         template.setTemplateName(name);
         //autoCloseable
         String result="content is empty";
+        long timeStart=System.currentTimeMillis();
         try(JRazorTemplateEngine engine=new JRazorTemplateEngine(host)){
             RenderContext context=new RenderContext(host,template,null);
             context.setHttpContext(host);
@@ -41,16 +43,29 @@ public class HomeController {
             //context.setRouteData();
             //... prepare  parameters,which you can access them by @ViewBag.get("variantName")
             context.getTemplateData().getTemplateData().put("myVariant","variantValue");//in the the template @ViewBag.get("myVariant") would output variantValue
-            context.getTemplateData().setModel(new Object());//set a  template page model entry,then you can access it by @Model
+            TestEntry entry=new TestEntry();
+            TestEntry father=new TestEntry();
+            father.setName("lily's father");
+            father.setAge(40);
+            father.setGender(1);
+
+            entry.setName("Lily");
+            entry.setAge(18);
+            entry.setGender(0);
+            entry.setFather(father);
+            context.getTemplateData().setModel(entry);//set a  template page model entry,then you can access it by @Model
 
             result=engine.renderTemplate(context,"index","");
             //or you can just render it to buffered Stream
             //BufferedStringWriter writer=new BufferedStringWriter();
             //engine.renderTempalte(renderContext,writer);
         }
+long timeEnd= System.currentTimeMillis();
 
         Map<String, String> map = new HashMap<String, String>();
-        map.put("html", result);
+        map.put("html", result+" it took "+String.valueOf(timeEnd-timeStart));
         return new ModelAndView("/render",map);
     }
+
+
 }

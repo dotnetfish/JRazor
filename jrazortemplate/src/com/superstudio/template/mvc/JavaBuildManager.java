@@ -1,5 +1,6 @@
 package com.superstudio.template.mvc;
 
+
 import com.superstudio.codedom.compiler.CodeDomProvider;
 import com.superstudio.codedom.compiler.CodeGeneratorOptions;
 import com.superstudio.codedom.compiler.ICodeGenerator;
@@ -30,9 +31,12 @@ public class JavaBuildManager {
 	private static Map<String, Class> mapper = new HashMap<String, Class>();
 
 	public static IWebObjectFactory getObjectFactory(String virtualPath, boolean b) {
-		// TODO Auto-generated method stub
-		String className = virtualPath;
-		return new JavaObjectFactory(className);
+		virtualPath=StringHelper.trimStart(virtualPath, '~', '/');
+
+		String className = ParserHelpers
+				.sanitizeClassName("_Page_" + virtualPath);
+
+		return new JavaObjectFactory("JRazor." +className);
 	}
 
 	public static Class getCompiledType(String virtualPath) {
@@ -156,8 +160,8 @@ public class JavaBuildManager {
 	}
 
 	public static <T> T createInstanceFromVirtualPath(String virtualPath) {
-		// TODO Auto-generated method stub
-		Class clazz= compilerPath(virtualPath);
+
+		Class clazz=compilerPath(virtualPath);
 		try {
 			return  (T)clazz.newInstance();
 		} catch (InstantiationException e) {
@@ -166,6 +170,15 @@ public class JavaBuildManager {
 			e.printStackTrace();
 		}
 		return  null;
+	}
+private static   HashMap<String, Class> virtualPathCache=new HashMap<>();
+	private static Class getCompiledPath(String virtualPath) {
+		 Class clazz=virtualPathCache.get(virtualPath);
+		if(clazz==null){
+			clazz=compilerPath(virtualPath);
+			virtualPathCache.put(virtualPath,clazz);
+		}
+		return  clazz;
 	}
 
 }

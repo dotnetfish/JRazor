@@ -85,7 +85,7 @@ public abstract class BuildManagerTemplateEngine extends VirtualPathProviderTemp
 		return templatePageActivator;
 	}
 
-	protected boolean getIsPrecompiledNonUpdateableSite()
+	/*protected boolean getIsPrecompiledNonUpdateableSite()
 	{
 		RefObject<Boolean> tempRef__isPrecompiledNonUpdateableSite = new RefObject<Boolean>(isPrecompiledNonUpdateableSite);
 		RefObject<Boolean> tempRef__isPrecompiledNonUpdateableSiteInitialized = new RefObject<Boolean>(isPrecompiledNonUpdateableSiteInitialized);
@@ -97,7 +97,7 @@ public abstract class BuildManagerTemplateEngine extends VirtualPathProviderTemp
 		isPrecompiledNonUpdateableSiteInitialized = tempRef__isPrecompiledNonUpdateableSiteInitialized.getRefObj();
 		isPrecompiledNonUpdateableSiteInitializedLock = tempRef__isPrecompiledNonUpdateableSiteInitializedLock.getRefObj();
 		return tempVar;
-	}
+	}*/
 
 	@Override
 	protected boolean fileExists(RenderContext renderContext, String virtualPath)
@@ -106,14 +106,14 @@ public abstract class BuildManagerTemplateEngine extends VirtualPathProviderTemp
 		// way to check for existence of a file in this case is by querying the BuildManager.
 		// For all other scenarios, checking for files on disk is faster and should suffice.
 		//Contract.Assert(_fileExistsCache != null);
-		return _fileExistsCache.fileExists(virtualPath) || (getIsPrecompiledNonUpdateableSite() && getBuildManager().fileExists(virtualPath));
+		return _fileExistsCache.fileExists(virtualPath) ;
 	}
 
-	private static boolean getPrecompiledNonUpdateable()
+	/*private static boolean getPrecompiledNonUpdateable()
 	{
 		IVirtualPathUtility virtualPathUtility = new VirtualPathUtilityWrapper();
 		return com.superstudio.template.templatepages.BuildManagerWrapper.isNonUpdateablePrecompiledApp(HostingEnvironment.getVirtualPathProvider(), virtualPathUtility);
-	}
+	}*/
 
 	public static class DefaultTemplatePageActivator implements ITemplatePageActivator
 	{

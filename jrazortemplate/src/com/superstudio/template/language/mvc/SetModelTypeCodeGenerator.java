@@ -18,7 +18,7 @@ public class SetModelTypeCodeGenerator extends SetBaseTypeCodeGenerator
 	@Override
 	protected String resolveType(CodeGeneratorContext context, String baseType)
 	{
-		return String.format(CultureInfo.InvariantCulture, 
+		return String.format(
 				this._genericTypeFormat, new Object[] {
 				context.getHost().getDefaultBaseClass(), baseType});
 	}

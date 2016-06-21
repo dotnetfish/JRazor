@@ -33,10 +33,7 @@ public class MvcJavaWebPageRazorHost extends WebPageRazorHost {
 		if (incomingCodeParser instanceof JavaCodeParser) {
 			return new MvcJavaRazorCodeParser();
 		}
-		/*
-		 * if (incomingCodeParser instanceof VBCodeParser) { return new
-		 * MvcVBRazorCodeParser(); }
-		 */
+
 		return super.decorateCodeParser(incomingCodeParser);
 	}
 

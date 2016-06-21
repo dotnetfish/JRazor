@@ -12,7 +12,7 @@ import java.io.Writer;
 
 
 
-public abstract class WebTemplatePage extends WebPageBase
+public abstract class WebTemplatePage<T> extends WebPageBase
 {
 	private TemplateDataDictionary _templateData;
 	
@@ -96,6 +96,13 @@ public abstract class WebTemplatePage extends WebPageBase
 		this._templateData=value;
 	}
 
+	public  final  Object get(String key){
+		return getTemplateData().get(key);
+	}
+
+    public  final  T model(){
+        return  (T)getTemplateData().getModel();
+    }
 	
 protected void configurePage(WebPageBase parentPage)
 	{

@@ -1,5 +1,6 @@
 package com.superstudio.template.templatepages;
 
+import com.oracle.xmlns.internal.webservices.jaxws_databinding.ObjectFactory;
 import com.superstudio.commons.*;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.io.Path;
@@ -19,7 +20,7 @@ public final class BuildManagerWrapper implements IVirtualPathFactory
 	private static final int _objectFactoryCacheDuration =60000;//Timespan.fromminutes(1)
 	private IVirtualPathUtility _virtualPathUtility;
 	private Supplier<VirtualPathProvider> _vppFunc;
-	private boolean _isPrecompiled;
+	//private boolean _isPrecompiled;//是否预编译
 	private FileExistenceCache _vppCache;
 	private List<String> _supportedExtensions;
 
@@ -41,11 +42,11 @@ public final class BuildManagerWrapper implements IVirtualPathFactory
 
 		_vppFunc = vppFunc;
 		_virtualPathUtility = virtualPathUtility;
-		_isPrecompiled = isNonUpdatablePrecompiledApp();
-		if (!_isPrecompiled)
-		{
+		//_isPrecompiled = isNonUpdatablePrecompiledApp();
+		//if (!_isPrecompiled)
+		//{
 			_vppCache = new FileExistenceCache(vppFunc);
-		}
+		//}
 	}
 
 	public List<String> getSupportedExtensions()
@@ -64,90 +65,13 @@ public final class BuildManagerWrapper implements IVirtualPathFactory
 	*/
 	public boolean exists(String virtualPath)
 	{
-		if (_isPrecompiled)
-		{
-			return existsInPrecompiledSite(virtualPath);
-		}
+
 		return existsInVpp(virtualPath);
 	}
 
-	public boolean isNonUpdatablePrecompiledApp()
-	{
-		VirtualPathProvider vpp = _vppFunc.get();
-		// VirtualPathProvider currently null in some test scenarios e.g. PreApplicationStartCodeTest.StartTest
-		if (vpp == null)
-		{
-			return false;
-		}
-		return isNonUpdateablePrecompiledApp(vpp, _virtualPathUtility);
-	}
 
-	/** 
-	 An app's is precompiled for our purposes if 
-	 (a) it has a PreCompiledApp.config file in the site root, 
-	 (b) The PreCompiledApp.config says that the app is not Updatable.
-	 
-	 
-	 This code is based on System.Web.DynamicData.Misc.IsNonUpdatablePrecompiledAppNoCache (DynamicData)
-	 
-	*/
-	public static boolean isNonUpdateablePrecompiledApp(VirtualPathProvider vpp, IVirtualPathUtility virtualPathUtility)
-	{
-		String virtualPath = virtualPathUtility.toAbsolute("~/PrecompiledApp.config");
-		if (!vpp.fileExists(virtualPath))
-		{
-			return false;
-		}
-//TODO edit to java xml
-		/*XDocument document;
-		try (InputStream stream = vpp.GetFile(virtualPath).Open())
-		{
-			try
-			{
-				document = XDocument.Load(stream);
-			}
-			catch (java.lang.Exception e)
-			{
-				// If we are unable to load the file, ignore it. The BuildManager behaves identically.
-				return false;
-			}
-		}
 
-		if (document.Root == null || !document.Root.Name.LocalName.equals("precompiledApp", StringComparison.OrdinalIgnoreCase))
-		{
-			return false;
-		}
 
-		var updatableAttribute = document.Root.Attribute("updatable");
-		if (updatableAttribute != null)
-		{
-			boolean result = false;
-			RefObject<Boolean> tempRef_result = new RefObject<Boolean>(result);
-			boolean tempVar = Boolean.TryParse(updatableAttribute.Value, tempRef_result) && (result == false);
-			result = tempRef_result.argValue;
-			return tempVar;
-		}*/
-		return false;
-	}
-
-	private boolean existsInPrecompiledSite(String virtualPath)
-	{
-		String key = getKeyFromVirtualPath(virtualPath);
-
-		// We assume that the key is unique enough to avoid collisions.
-		BuildManagerResult buildManagerResult = (BuildManagerResult)RuntimeCache.getInstance().get(key);
-		if (buildManagerResult == null)
-		{
-			// For precompiled apps, we cache the ObjectFactory and use it in the createInstance method.
-			IWebObjectFactory objectFactory = getObjectFactory(virtualPath);
-			buildManagerResult = new BuildManagerResult();
-			buildManagerResult.setObjectFactory(objectFactory);
-			buildManagerResult.setExists(objectFactory != null);
-			// Cache the result with a sliding expiration for a long duration. 
-			RuntimeCache.getInstance().set(key, buildManagerResult);//, null, Cache.NoAbsoluteExpiration, _objectFactoryCacheDuration, CacheItemPriority.Low, null);
-		}
-		return buildManagerResult.getExists();
-	}
 
 	/** 
 	 Determines if a site exists in the VirtualPathProvider.
@@ -180,8 +104,6 @@ public final class BuildManagerWrapper implements IVirtualPathFactory
 
 	public <T> T createInstanceOfType(String virtualPath) throws InstantiationException, IllegalAccessException, ClassNotFoundException
 	{
-		if (_isPrecompiled)
-		{
 			BuildManagerResult buildManagerResult = (BuildManagerResult)RuntimeCache.getInstance().get(getKeyFromVirtualPath(virtualPath));
 			// The cache could have evicted our results. In this case, we'll simply fall through to createInstanceFromVirtualPath
 			if (buildManagerResult != null)
@@ -190,9 +112,14 @@ public final class BuildManagerWrapper implements IVirtualPathFactory
 				Object tempVar = buildManagerResult.getObjectFactory().CreateInstance();
 				return (T)tempVar;
 			}
-		}
-  
-		return JavaBuildManager.<T>createInstanceFromVirtualPath(virtualPath);
+		T result= JavaBuildManager.<T>createInstanceFromVirtualPath(virtualPath);
+		BuildManagerResult buildResult =new BuildManagerResult();
+		IWebObjectFactory objectFactory=getObjectFactory(virtualPath);
+		buildResult.setObjectFactory(objectFactory);
+		buildResult.setExists(objectFactory != null);
+		RuntimeCache.getInstance().set(getKeyFromVirtualPath(virtualPath),buildResult);
+		System.out.println(result.getClass().getName());
+		return  result;
 	}
 
 	/** 

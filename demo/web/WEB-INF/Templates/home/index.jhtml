@@ -1,4 +1,6 @@
 ﻿@import java.util.Date;
+@import com.superstudio.demo.controller.TestEntry;
+@model com.superstudio.demo.controller.TestEntry
 @{
        setLayout("~/Templates/shared/_layout.jhtml");
       String  title="test page";
@@ -20,6 +22,20 @@
 }<br/>
 data from variant:@getTemplateData().get("myVariant")
 
+<br/>
+--------------------------------------------------------<br/>
+access data with get :get("myVariant")<br/>
+result:@get("myVariant")
+<br/>-----------------------------------------------------
+<br/>
+<br/>
+--------------------------------------------------------<br/>
+access model data with model :model().getName()<br/>
+result:Name:@(model().getName())
+<br/>Age:@(model().getAge())
+<br/>Gender:@(model().getGender())
+<br/>Father Name:@(model().getFather().getName())
+<br/>-----------------------------------------------------
 <br/>
 @date
 <br/>

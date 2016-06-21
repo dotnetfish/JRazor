@@ -23,11 +23,11 @@
 			<artifactId>commons</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>com.superstudio.web</groupId>
 			<artifactId>web</artifactId>
 			<scope>compile</scope>
-		</dependency>
+		</dependency>-->
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

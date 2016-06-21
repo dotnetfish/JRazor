@@ -2761,42 +2761,8 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			// StringBuilder.append(" ");
 		}
 		String baseType = typeRef.getBaseType();
-		int num2 = 0;
-		int num3 = 0;
-		for (int i = 0; i < baseType.length(); i++) {
-			char c = baseType.charAt(i);
-			if (c != '+' && c != '.') {
-				if (c == '`') {
 
-					StringBuilder.append(this.createEscapedIdentifier(baseType.substring(num2, i - num2)));
-					i++;
-					int num4 = 0;
-					while (i < baseType.length() && baseType.charAt(i) >= '0' && baseType.charAt(i) <= '9') {
-						num4 = num4 * 10 + baseType.charAt(i) - '0';
-						i++;
-					}
-					this.getTypeArgumentsOutput(typeRef.getTypeArguments(), num3, num4, StringBuilder);
-					num3 += num4;
-					if (i < baseType.length() && (baseType.charAt(i) == '+' || baseType.charAt(i) == '.')) {
-						StringBuilder.append('.');
-						i++;
-					}
-					num2 = i;
-				}
-			} else {
-				StringBuilder.append(this.createEscapedIdentifier(baseType.substring(num2, i - num2)));
-				StringBuilder.append('.');
-				i++;
-				num2 = i;
-			}
-		}
-		if (num2 < baseType.length()) {
-			StringBuilder.append(this.createEscapedIdentifier(baseType.substring(num2)));
-		}
-		if (StringBuilder.indexOf("global::", 0) >= 0) {
-			StringBuilder.replace(StringBuilder.indexOf("global::", 0), 8, "");
-		}
-		return StringBuilder.toString();
+		return baseType;
 	}
 
 	private String getTypeArgumentsOutput(CodeTypeReferenceCollection typeArguments) {
