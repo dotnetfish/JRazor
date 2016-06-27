@@ -13,9 +13,9 @@ public class WebVirtualPathProvider extends VirtualPathProvider {
 		try {
 			
 			path = HostContext.getCurrent().mapPath("/");
-			path+=virtualPath.toLowerCase().replace("~/", "WEB-INF/").replace("\\", "//");
+			path+=virtualPath.toLowerCase().replace("~/", "web-inf/").replace("\\", "//");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 			return false;
 		}

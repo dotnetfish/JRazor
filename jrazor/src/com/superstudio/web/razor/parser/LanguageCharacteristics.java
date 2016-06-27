@@ -138,7 +138,7 @@ implements IEquatable<Object>
 			right = createSymbol(SourceLocationTracker.calculateNewLocation(symbol.getStart(), left.getContent()),
 					symbol.getContent().substring(splitAt), symbol.getType(), symbol.getErrors());
 		}
-		return Tuple.Create(left, right);
+		return Tuple.create(left, right);
 	}
 
 	public abstract TSymbolType getKnownSymbolType(KnownSymbolType type);

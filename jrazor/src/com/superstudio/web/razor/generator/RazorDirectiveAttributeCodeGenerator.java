@@ -6,11 +6,8 @@ import com.superstudio.codedom.CodePrimitiveExpression;
 import com.superstudio.codedom.CodeTypeReference;
 import com.superstudio.commons.Tuple;
 import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.web.*;
 import com.superstudio.web.razor.*;
-import com.superstudio.web.razor.parser.*;
 import com.superstudio.web.razor.parser.syntaxTree.*;
-import com.superstudio.web.razor.text.*;
 
 
 public class RazorDirectiveAttributeCodeGenerator extends SpanCodeGenerator {
@@ -67,7 +64,7 @@ public class RazorDirectiveAttributeCodeGenerator extends SpanCodeGenerator {
 
 	@Override
 	public int hashCode() {
-		return Tuple.Create(getName().toUpperCase(), 
+		return Tuple.create(getName().toUpperCase(),
 				getValue().toUpperCase()).hashCode();
 	}
 }

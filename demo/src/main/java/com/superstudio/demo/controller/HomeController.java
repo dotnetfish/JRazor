@@ -1,6 +1,7 @@
 package com.superstudio.demo.controller;
 
 import com.superstudio.template.JRazorTemplateEngine;
+import com.superstudio.template.mvc.actionresult.TemplateDataDictionary;
 import com.superstudio.template.mvc.context.HostContext;
 import com.superstudio.template.mvc.context.RenderContext;
 import com.superstudio.template.mvc.context.TemplateInfo;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
@@ -21,7 +23,7 @@ import java.util.Map;
 @Controller
 public class HomeController {
     @RequestMapping("/home")
-    public ModelAndView index(@RequestParam(value="name", defaultValue="index") String name) throws Exception {
+    public ModelAndView index(@RequestParam(value="name", defaultValue="performence") String name) throws Exception {
 
         HostContext host =HostContext.getCurrent();
 
@@ -32,38 +34,55 @@ public class HomeController {
         template.setTemplateName(name);
         //autoCloseable
         String result="content is empty";
+        TestEntry entry=new TestEntry();
+        TestEntry father=new TestEntry();
+        father.setName("lily's father");
+        father.setAge(40);
+        father.setGender(1);
+
+        entry.setName("Lily");
+        entry.setAge(18);
+        entry.setGender(0);
+        entry.setFather(father);
+        StringWriter writer=new StringWriter();
+
+//        try(JRazorTemplateEngine engine=new JRazorTemplateEngine(host)){
+//            RenderContext context=new RenderContext(host,template,null);
+//            context.setHttpContext(host);
+//            context.setTemplateInfo(template);
+//
+//            context.setWriter(writer);
+//            //context.setRequestContext(context);
+//            //context.setRouteData();
+//            //... prepare  parameters,which you can access them by @ViewBag.get("variantName")
+//            context.getTemplateData().getTemplateData().put("myVariant","variantValue");//in the the template @ViewBag.get("myVariant") would output variantValue
+//
+//            context.getTemplateData().setModel(entry);//set a  template page model entry,then you can access it by @Model
+//
+//            result=engine.renderTemplate(context,"index","");
+//            //or you can just render it to buffered Stream
+//            //BufferedStringWriter writer=new BufferedStringWriter();
+//            //engine.renderTempalte(renderContext,writer);
+//        }
+        Map<String, Object> templateData=new HashMap<String,Object>();
+        TemplateDataDictionary data=new TemplateDataDictionary(null);
+       // templateData.put("myVariant","variantValue");
+       // data.setTemplateData(templateData);
+        data.setModel(StockModel.dummyItems());
+        JRazorTemplateEngine.render(template,data,writer);
+        String result1=writer.toString();
         long timeStart=System.currentTimeMillis();
-        try(JRazorTemplateEngine engine=new JRazorTemplateEngine(host)){
-            RenderContext context=new RenderContext(host,template,null);
-            context.setHttpContext(host);
-            context.setTemplateInfo(template);
-            Writer writer=new StringWriter();
-            context.setWriter(writer);
-            //context.setRequestContext(context);
-            //context.setRouteData();
-            //... prepare  parameters,which you can access them by @ViewBag.get("variantName")
-            context.getTemplateData().getTemplateData().put("myVariant","variantValue");//in the the template @ViewBag.get("myVariant") would output variantValue
-            TestEntry entry=new TestEntry();
-            TestEntry father=new TestEntry();
-            father.setName("lily's father");
-            father.setAge(40);
-            father.setGender(1);
+//        for (int i = 0;
+//        i<50000;i++){
+//            StringWriter writer2=new StringWriter();
+//            JRazorTemplateEngine.render(template,data,writer2);
+//        }
 
-            entry.setName("Lily");
-            entry.setAge(18);
-            entry.setGender(0);
-            entry.setFather(father);
-            context.getTemplateData().setModel(entry);//set a  template page model entry,then you can access it by @Model
-
-            result=engine.renderTemplate(context,"index","");
-            //or you can just render it to buffered Stream
-            //BufferedStringWriter writer=new BufferedStringWriter();
-            //engine.renderTempalte(renderContext,writer);
-        }
-long timeEnd= System.currentTimeMillis();
+        long timeEnd= System.currentTimeMillis();
+      //  StringReader sr=new StringReader();
 
         Map<String, String> map = new HashMap<String, String>();
-        map.put("html", result+" it took "+String.valueOf(timeEnd-timeStart));
+        map.put("html", result1+" it took "+String.valueOf(timeEnd-timeStart));
         return new ModelAndView("/render",map);
     }
 

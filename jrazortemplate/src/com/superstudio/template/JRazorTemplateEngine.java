@@ -7,10 +7,12 @@ import com.superstudio.template.mvc.actionresult.TemplateDataDictionary;
 import com.superstudio.template.mvc.actionresult.TemplateResult;
 import com.superstudio.template.mvc.context.HostContext;
 import com.superstudio.template.mvc.context.RenderContext;
+import com.superstudio.template.mvc.context.TemplateInfo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.Writer;
 
 /**
  * Created by Chaoqun on 2015/11/11.
@@ -44,5 +46,30 @@ public class JRazorTemplateEngine implements AutoCloseable {
     @Override
     public void close() throws Exception {
 
+    }
+
+    public static void render(TemplateInfo template, TemplateDataDictionary templateData, Writer writer) {
+       try {
+           HostContext host = HostContext.getCurrent();
+           RenderContext context = new RenderContext(host, template, null);
+
+         context.setWriter(writer);
+           context.setTemplateData(templateData);
+
+          //... prepare  parameters,which you can access them by @ViewBag.get("variantName")
+
+        //  String result=engine.renderTemplate(context,"index","");
+           TemplateResult result = new TemplateResult();
+           result.setMasterName("");
+           result.setTemplateData(context.getTemplateData());
+           result.setTemplateName(template.getTemplateName());
+           result.setTempData(context.getTemplateData().getTemplateData());
+           result.setTemplateEngine(host.getTemplateEngineCollection());
+
+           result.execute(context);
+
+       }catch (Exception ex){
+
+       }
     }
 }

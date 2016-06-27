@@ -1,6 +1,6 @@
 package com.superstudio.codedom;
 
-import com.superstudio.commons.Guid;
+import com.superstudio.commons.KeyGenerator;
 
 import java.io.Serializable;
 
@@ -13,7 +13,7 @@ public class CodeChecksumPragma extends CodeDirective implements Serializable
 
 	private byte[] checksumData;
 
-	private Guid checksumAlgorithmId = new Guid();
+	private KeyGenerator checksumAlgorithmId = new KeyGenerator();
 
 	public final String getFileName()
 	{
@@ -28,11 +28,11 @@ public class CodeChecksumPragma extends CodeDirective implements Serializable
 		this.fileName = value;
 	}
 
-	public final Guid getChecksumAlgorithmId()
+	public final KeyGenerator getChecksumAlgorithmId()
 	{
 		return this.checksumAlgorithmId;
 	}
-	public final void setChecksumAlgorithmId(Guid value)
+	public final void setChecksumAlgorithmId(KeyGenerator value)
 	{
 		this.checksumAlgorithmId = value;
 	}
@@ -55,7 +55,7 @@ public class CodeChecksumPragma extends CodeDirective implements Serializable
 	}
 
 
-	public CodeChecksumPragma(String fileName, Guid checksumAlgorithmId, byte[] checksumData)
+	public CodeChecksumPragma(String fileName, KeyGenerator checksumAlgorithmId, byte[] checksumData)
 	{
 		this.fileName = fileName;
 		this.checksumAlgorithmId = checksumAlgorithmId;

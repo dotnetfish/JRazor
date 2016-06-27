@@ -1,6 +1,7 @@
 package com.superstudio.template.templatepages;
 
 import com.superstudio.commons.CultureInfo;
+import com.superstudio.commons.Tuple;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.HttpException;
 import com.superstudio.template.mvc.context.HostContext;
@@ -174,6 +175,14 @@ public abstract class WebPageExecutingBase
 	public void writeAttribute(String name, PositionTagged<String> prefix, PositionTagged<String> suffix, AttributeValue... values) throws IOException
 	{
 		writeAttributeTo(getOutputWriter(), name, prefix, suffix, values);
+	}
+	public void writeAttribute(String name, Tuple prefix, Tuple  suffix,
+							   AttributeValue... values) throws IOException
+	{
+		writeAttributeTo(getOutputWriter(), name,new PositionTagged(prefix.getItem1()
+				,(Integer) prefix.getItem2())
+		,  new PositionTagged(suffix.getItem1()
+						,(Integer) prefix.getItem2()), values);
 	}
 
 	public void writeAttributeTo(Writer writer, String name, PositionTagged<String> prefix, PositionTagged<String> suffix, AttributeValue... values) throws IOException

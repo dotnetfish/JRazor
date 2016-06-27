@@ -1521,7 +1521,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		// methods are not converted
 		parseWithOtherParser(p -> {
 			try{
-				p.parseSection(Tuple.Create(left, right), caseSensitive);
+				p.parseSection(Tuple.create(left, right), caseSensitive);
 			}catch(Exception e){
 				e.printStackTrace();
 			}

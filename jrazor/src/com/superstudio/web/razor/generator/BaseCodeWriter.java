@@ -1,5 +1,6 @@
 package com.superstudio.web.razor.generator;
 
+import com.sun.deploy.util.StringUtils;
 import com.superstudio.commons.csharpbridge.action.ActionOne;
 
 public abstract class BaseCodeWriter extends CodeWriter
@@ -19,19 +20,30 @@ public abstract class BaseCodeWriter extends CodeWriter
 	@Override
 	protected void emitStartMethodInvoke(String methodName, String... genericArguments)
 	{
-		getInnerWriter().write(methodName);
+
+
 		if (genericArguments != null && genericArguments.length > 0)
 		{
-			writeStartGenerics();
-			for (int i = 0; i < genericArguments.length; i++)
-			{
-				if (i > 0)
+
+			int lastIndex=methodName.lastIndexOf('.');
+			if(lastIndex>0){
+				String genericMethodName=methodName.substring(lastIndex+1);
+				getInnerWriter().write(methodName.substring(0,lastIndex+1));
+				writeStartGenerics();
+				for (int i = 0; i < genericArguments.length; i++)
 				{
-					writeParameterSeparator();
+					if (i > 0)
+					{
+						writeParameterSeparator();
+					}
+					writeSnippet(genericArguments[i]);
 				}
-				writeSnippet(genericArguments[i]);
+				writeEndGenerics();
+				getInnerWriter().write(genericMethodName);
 			}
-			writeEndGenerics();
+
+		}else{
+			getInnerWriter().write(methodName);
 		}
 
 		getInnerWriter().write("(");

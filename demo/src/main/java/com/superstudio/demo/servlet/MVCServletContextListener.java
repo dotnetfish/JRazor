@@ -24,12 +24,11 @@ public class MVCServletContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent arg0) {
 
         HostBuilder builder=new HostBuilder();
-       HostContext host= builder.useHost(new WebTemplateHost())
-               .useAutoCompiler("/web/web-inf/templates")
+        WebTemplateHost templateHost=new WebTemplateHost();
+       HostContext host= builder.useHost(templateHost)
+               .useAutoCompiler(templateHost.mapPath("/web-inf/templates"))
                 .useTemplateEngine(new RazorTemplateEngine()).build();
-       /* HostContext host =new WebTemplateHost();
-        HostContext.initRequestContext(host);
-        TemplateEngines.registe(new RazorTemplateEngine());*/
+
     }
 
 }

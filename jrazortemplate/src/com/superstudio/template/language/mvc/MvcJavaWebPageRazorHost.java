@@ -11,7 +11,7 @@ public class MvcJavaWebPageRazorHost extends WebPageRazorHost {
 	public MvcJavaWebPageRazorHost(String virtualPath, String physicalPath) {
 		super(virtualPath, physicalPath);
 		this.getNamespaceImports().add("com.superstudio.template.templatepages.WebTemplatePage");
-		
+		this.getNamespaceImports().add("com.superstudio.commons.Tuple");
 		 //super.registerSpecialFile(RazorViewEngine.ViewStartFileName,
 		 //ViewStartPage.class);
 		// super.DefaultPageBaseClass = WebViewPage.class.getName();

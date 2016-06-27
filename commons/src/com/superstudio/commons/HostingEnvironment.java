@@ -25,10 +25,7 @@ public class HostingEnvironment {
 	}
 
 	public static VirtualPathProvider getVirtualPathProvider() {
-		// TODO Auto-generated method stub
-		/*return new VirtualPathProvider(){
-			
-		};*/
+
 		try{
 			return (VirtualPathProvider)Class.forName("com.superstudio.web.WebVirtualPathProvider").newInstance();
 		}catch(Exception ex){
@@ -44,7 +41,8 @@ public class HostingEnvironment {
 		return null;
 	}
 
-	public static String MapPathInternal(VirtualPath virtualPath, VirtualPath baseVirtualDir,
+	public static String MapPathInternal(VirtualPath virtualPath,
+										 VirtualPath baseVirtualDir,
 			boolean allowCrossAppMapping) {
 		// TODO Auto-generated method stub
 		return null;

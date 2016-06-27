@@ -575,7 +575,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			tagName = new HtmlSymbol(getCurrentLocation().clone(), "", HtmlSymbolType.Unknown);
 		}
 
-		Tuple<HtmlSymbol, SourceLocation> tag = Tuple.Create(tagName, _lastTagStart.clone());
+		Tuple<HtmlSymbol, SourceLocation> tag = Tuple.create(tagName, _lastTagStart.clone());
 
 		if (tags.empty() && StringHelper.stringsEqual(tag.getItem1().getContent(), SyntaxConstants.TextTagName,
 				StringComparison.OrdinalIgnoreCase)) {
@@ -1144,7 +1144,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 	@Override
 	public boolean equals(Object obj, Object others) {
-		// TODO Auto-generated method stub
-		return false;
+	
+		return obj.equals(others);
 	}
 }

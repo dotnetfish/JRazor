@@ -52,9 +52,9 @@ public abstract class WebTemplatePage<T> extends WebPageBase
 		html = value;
 	}
 
-	public final Object getModel()
+	public final T getModel()
 	{
-		return getTemplateData().getModel();
+		return (T)getTemplateData().getModel();
 	}
 
 	private String overridenLayoutPath;

@@ -2,17 +2,25 @@ package com.superstudio.commons;
 
 public class Tuple<T1,T2> {
 
-	public static <T1, T2> Tuple<T1, T2> Create(T1 left, T2 right) {
+	public static <T1, T2> Tuple<T1, T2> create(T1 left, T2 right) {
 		// TODO Auto-generated method stub
 		return new Tuple<T1,T2>(left,right);
 	}
-	
+	public static <T1, T2,T3> Tuple<T1, T2> create(T1 left, T2 right,T3 isTrue) {
+		// TODO Auto-generated method stub
+		return new Tuple<T1,T2>(left,right);
+	}
+
+
+
 	private T1 item1;
 	private T2 item2;
+
 	public  Tuple(T1 left, T2 right) {
 		this.setItem1(left);
 		this.setItem2(right);
 	}
+
 	public T1 getItem1() {
 		return item1;
 	}
@@ -27,3 +35,5 @@ public class Tuple<T1,T2> {
 	}
  
 }
+
+

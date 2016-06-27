@@ -1,12 +1,12 @@
 package com.superstudio.template.templatepages;
 
-import com.oracle.xmlns.internal.webservices.jaxws_databinding.ObjectFactory;
 import com.superstudio.commons.*;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.io.Path;
 import com.superstudio.template.mvc.JavaBuildManager;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Supplier;
 /** 
  Wraps the caching and instantiation of paths of the BuildManager. 
@@ -16,11 +16,12 @@ import java.util.function.Supplier;
 */
 public final class BuildManagerWrapper implements IVirtualPathFactory
 {
-	public static final Guid KeyGuid = new Guid();
+	public static final KeyGenerator KeyGuid = new KeyGenerator();
+
 	private static final int _objectFactoryCacheDuration =60000;//Timespan.fromminutes(1)
 	private IVirtualPathUtility _virtualPathUtility;
 	private Supplier<VirtualPathProvider> _vppFunc;
-	//private boolean _isPrecompiled;//是否预编译
+
 	private FileExistenceCache _vppCache;
 	private List<String> _supportedExtensions;
 
@@ -32,26 +33,21 @@ public final class BuildManagerWrapper implements IVirtualPathFactory
 	public BuildManagerWrapper(VirtualPathProvider vpp, IVirtualPathUtility virtualPathUtility)
 	{
 		this(() -> vpp, virtualPathUtility);
-		//Contract.Assert(vpp != null);
+
 	}
 
 	public BuildManagerWrapper(Supplier<VirtualPathProvider> vppFunc, IVirtualPathUtility virtualPathUtility)
 	{
-		/*Contract.Assert(vppFunc != null);
-		Contract.Assert(virtualPathUtility != null);*/
-
 		_vppFunc = vppFunc;
 		_virtualPathUtility = virtualPathUtility;
-		//_isPrecompiled = isNonUpdatablePrecompiledApp();
-		//if (!_isPrecompiled)
-		//{
 			_vppCache = new FileExistenceCache(vppFunc);
-		//}
 	}
 
 	public List<String> getSupportedExtensions()
 	{
-		return (_supportedExtensions != null) ? _supportedExtensions : WebPageHttpHandler.getRegisteredExtensions();
+		return (_supportedExtensions != null)
+                ? _supportedExtensions :
+                WebPageHttpHandler.getRegisteredExtensions();
 	}
 	public void setSupportedExtensions(List<String> value)
 	{
@@ -133,7 +129,7 @@ public final class BuildManagerWrapper implements IVirtualPathFactory
 	}
 
 	/** 
-	 Creates a reasonably unique key for a given virtual path by concatenating it with a Guid.
+	 Creates a reasonably unique key for a given virtual path by concatenating it with a KeyGenerator.
 	*/
 	private static String getKeyFromVirtualPath(String virtualPath)
 	{

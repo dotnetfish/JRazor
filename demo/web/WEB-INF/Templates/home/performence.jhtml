@@ -1,0 +1,76 @@
+@import com.superstudio.demo.controller.StockModel;
+@import java.util.ArrayList;
+@model ArrayList<com.superstudio.demo.controller.StockModel>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StockModel - JRazor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <style type="text/css">
+        body {
+            color: #333333;
+            line-height: 150%;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        thead {
+            font-weight: bold;
+            background-color: #C8FBAF;
+        }
+
+        .odd {
+            background-color: #F3DEFB;
+        }
+
+        .even {
+            background-color: #EFFFF8;
+        }
+    </style>
+</head>
+<body>
+<h1>StockModel - JRazor</h1>
+<table>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>id</th>
+        <th>code</th>
+        <th>name</th>
+        <th>price</th>
+        <th>range</th>
+        <th>amount</th>
+        <th>gravity</th>
+    </tr>
+    </thead>
+    <tbody>
+    @{
+    int index=0;
+    String style="even";
+    }
+    @for(StockModel item : getModel()){
+
+
+                 <tr class="even">
+            <td>@index</td>
+            <td>@item.getId()</td>
+            <td>@item.getCode()</td>
+            <td style="text-align: left;">@item.getName()</td>
+            <td>@item.getPrice()</td>
+            <td >@(item.getRange())%</td>
+            <td>@(item.getAmount())</td>
+            @if(item.getGravity() >= 20) {
+            <td style="color: red;">@(item.getGravity())%</td>
+           } else {
+            <td style="color: blue;">@(item.getGravity())%</td>
+            }
+        </tr>
+        index++;
+    }
+    </tbody>
+</table>
+</body>
+</html>

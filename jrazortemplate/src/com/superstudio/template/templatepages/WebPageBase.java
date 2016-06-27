@@ -20,8 +20,7 @@ import java.util.function.Predicate;
 
 
 public abstract class WebPageBase extends WebPageRenderingBase {
-	// private static final String VirtualPathFactory = null;
-	// Keep track of which sections renderSection has already been called on
+		// Keep track of which sections renderSection has already been called on
 	private final HashSet<String> _renderedSections = new HashSet<String>();
 	// Keep track of whether renderBody has been called
 	private boolean _renderedBody = false;

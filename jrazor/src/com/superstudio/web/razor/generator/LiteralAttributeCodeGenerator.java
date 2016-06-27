@@ -1,6 +1,7 @@
 package com.superstudio.web.razor.generator;
 
 import com.superstudio.commons.HashCodeCombiner;
+
 import com.superstudio.web.razor.parser.syntaxTree.*;
 import com.superstudio.web.razor.text.*;
 
@@ -76,7 +77,9 @@ public class LiteralAttributeCodeGenerator extends SpanCodeGenerator {
 			cw.writeLocationTaggedString(getPrefix());
 			cw.writeParameterSeparator();
 			if (getValueGenerator() != null) {
-				cw.writeStartMethodInvoke("Tuple.create", "System.Object", "System.Int32");
+
+				//cw.writeStartMethodInvoke("Tuple.create", "System.Object", "System.Int32");
+				cw.writeStartMethodInvoke("Tuple.create", "Object", "Integer");
 				context.setExpressionRenderingMode(ExpressionRenderingMode.InjectCode);
 			} else {
 				cw.writeLocationTaggedString(getValue());

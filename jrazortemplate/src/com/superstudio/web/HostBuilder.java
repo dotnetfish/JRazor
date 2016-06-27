@@ -27,13 +27,20 @@ public class HostBuilder {
         return this;
     }
 
+    public HostBuilder configure(){
+        return  this;
+    }
+
+    public  HostBuilder configure(String configurePath){
+        return  this;
+    }
 /*
 build host
  */
     public HostContext build() {
         return this.host;
     }
-
+   static FileAlterationMonitor monitor=null;
     /*
     使用文件监控自动编译更新模板
      */
@@ -45,15 +52,16 @@ build host
         // 创建一个文件观察器用于处理文件的格式
         FileAlterationObserver _observer = new FileAlterationObserver(
                 rootDir,
-                FileFilterUtils.and(
+                FileFilterUtils.or(FileFilterUtils.and(
                         FileFilterUtils.fileFileFilter(),
-                        FileFilterUtils.suffixFileFilter(".jhtml")),  //过滤文件格式
+                        FileFilterUtils.suffixFileFilter(".jhtml")),
+                        FileFilterUtils.directoryFileFilter()),  //过滤文件格式
                 null);
         FileAlterationObserver observer = new FileAlterationObserver(rootDir);
 
         observer.addListener(new FileListener()); //设置文件变化监听器
         //创建文件变化监听器
-        FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
+       monitor= new FileAlterationMonitor(interval, observer);
         // 开始监控
         try {
             monitor.start();
