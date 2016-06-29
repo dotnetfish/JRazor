@@ -5,7 +5,7 @@ the gramma just like c# razor，but it runs java.<br/>
 you can define a code block with "@" or output the variable with "@". it's easy if you're good at java,in another way,it is java.
 ## Quick start
 
-### Render Template
+### Initial HostContext
 ```java
 // first init your template host envirenments,you could set it be singleton and init the hostContext when your app started
  HostBuilder builder=new HostBuilder();
@@ -18,19 +18,18 @@ you can define a code block with "@" or output the variable with "@". it's easy 
 ```
 ### Render Template
 ```java
-  String result=engine.renderTemplate(renderContext);
-  
-        TemplateInfo template=new TemplateInfo();//or load templateInfo from database
-        template.setTemplateCategory("home");
-        template.setTemplateName(name);
-        Map<String, Object> templateData=new HashMap<String,Object>();
-        TemplateDataDictionary data=new TemplateDataDictionary(null);
-        templateData.put("myVariant","variantValue");
-        data.setTemplateData(templateData);//in the the template @get("myVariant") would output variantValue
-        data.setModel(new ModelEntry());//set a  template page model entry,then you can access it by @getModel()
-        JRazorTemplateEngine.render(template,data,writer);
-        String result1=writer.toString();
-}
+ TemplateInfo template=new TemplateInfo();//or load templateInfo from database
+ template.setTemplateCategory("home");
+ template.setTemplateName(name);
+ Map<String, Object> templateData=new HashMap<String,Object>();
+ TemplateDataDictionary data=new TemplateDataDictionary(null);
+ templateData.put("myVariant","variantValue");
+ data.setTemplateData(templateData);//in the the template @get("myVariant") would output variantValue
+ data.setModel(new ModelEntry());//set a  template page model entry,then you can access it by @getModel()
+ StringWriter writer=new StringWriter();
+ JRazorTemplateEngine.render(template,data,writer);
+ String result1=writer.toString();
+
 ```
 
 ## template demo
