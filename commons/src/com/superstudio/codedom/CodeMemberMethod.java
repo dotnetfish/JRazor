@@ -1,13 +1,12 @@
 package com.superstudio.codedom;
 
+import com.sun.org.apache.bcel.internal.classfile.CodeException;
 import com.superstudio.commons.EmptyEventArgs;
 import com.superstudio.commons.EventArgs;
 import com.superstudio.commons.EventHandler;
 
 import java.io.Serializable;
 
-
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeMemberMethod : CodeTypeMember
 public class CodeMemberMethod extends CodeTypeMember implements Serializable
 {
 	private CodeParameterDeclarationExpressionCollection parameters = new CodeParameterDeclarationExpressionCollection();
@@ -22,9 +21,9 @@ public class CodeMemberMethod extends CodeTypeMember implements Serializable
 
 	private CodeAttributeDeclarationCollection returnAttributes;
 
-
-//ORIGINAL LINE: [OptionalField] private CodeTypeParameterCollection typeParameters;
 	private CodeTypeParameterCollection typeParameters;
+
+	private CodeExceptionCollection exceptionTypes;
 
 	private int populated;
 
@@ -35,18 +34,12 @@ public class CodeMemberMethod extends CodeTypeMember implements Serializable
 	private static final int ImplTypesCollection = 4;
 
 
-
-//ORIGINAL LINE: [method: CompilerGenerated][CompilerGenerated] public event EventHandler PopulateParameters;
 	private EventHandler<EmptyEventArgs> populateParameters;
 
 
-
-//ORIGINAL LINE: [method: CompilerGenerated][CompilerGenerated] public event EventHandler PopulateStatements;
 	private EventHandler<EmptyEventArgs> populateStatements;
 
 
-
-//ORIGINAL LINE: [method: CompilerGenerated][CompilerGenerated] public event EventHandler PopulateImplementationTypes;
 	private  EventHandler<EmptyEventArgs> populateImplementationTypes;
 
 	public final CodeTypeReference getReturnType()
@@ -122,9 +115,14 @@ public class CodeMemberMethod extends CodeTypeMember implements Serializable
 		}
 		return this.returnAttributes;
 	}
-
-
-//ORIGINAL LINE: [ComVisible(false)] public CodeTypeParameterCollection TypeParameters
+	public final CodeExceptionCollection getExceptionTypes()
+	{
+		if (this.exceptionTypes == null)
+		{
+			this.exceptionTypes=new CodeExceptionCollection() ;
+		}
+		return this.exceptionTypes;
+	}
 	public final CodeTypeParameterCollection getTypeParameters()
 	{
 		if (this.typeParameters == null)

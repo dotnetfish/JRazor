@@ -165,4 +165,10 @@ protected void configurePage(WebPageBase parentPage)
 	public void setLayout(String layout) {
 		this.layout = layout;
 	}
+
+	public  AttributeValue toAttributeValue(PositionTagged<String> first,PositionTagged<Object> second,Boolean isLiter){
+		return new AttributeValue(first,
+				second,
+				isLiter);
+	}
 }

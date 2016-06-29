@@ -51,8 +51,6 @@ public class HtmlTokenizer extends Tokenizer<HtmlSymbol, HtmlSymbolType>
 
 	public static Iterable<HtmlSymbol> tokenize(String content) throws Exception
 	{
-
-//		using (SeekableTextReader reader = new SeekableTextReader(content))
 		SeekableTextReader reader = new SeekableTextReader(content);
 		final HtmlTokenizer  tok=new HtmlTokenizer(reader);
 		
@@ -62,14 +60,10 @@ public class HtmlTokenizer extends Tokenizer<HtmlSymbol, HtmlSymbolType>
 			//private final SeekableTextReader reader = new SeekableTextReader(content);
 			@Override
 			public Iterator<HtmlSymbol> iterator() {
-				
-				
-				// TODO Auto-generated method stub
-				return new Iterator<HtmlSymbol>(){
+					return new Iterator<HtmlSymbol>(){
 					private HtmlSymbol current=null;
 					@Override
 					public boolean hasNext() {
-						// TODO Auto-generated method stub
 						boolean result=(current = tok.nextSymbol()) != null;
 						if(!result)reader.close();
 						return result;
@@ -77,7 +71,6 @@ public class HtmlTokenizer extends Tokenizer<HtmlSymbol, HtmlSymbolType>
 
 					@Override
 					public HtmlSymbol next() {
-						// TODO Auto-generated method stub
 						return current;
 					}
 					

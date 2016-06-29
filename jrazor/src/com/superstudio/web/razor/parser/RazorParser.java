@@ -87,7 +87,7 @@ public class RazorParser {
 		try {
 			visitor.visit(results);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 	}
@@ -145,11 +145,7 @@ public class RazorParser {
 	}
 
 
-	// .NET attributes:
-	// [SuppressMessage("Microsoft.Web.FxCop",
-	// "MW1200:DoNotConstructTaskInstances", Justification = "This rule is not
-	// applicable to this assembly.")]
-	public Action CreateParseTask(TextReader input, ParserVisitor consumer) {
+		public Action CreateParseTask(TextReader input, ParserVisitor consumer) {
 
 		// methods are not converted
 		return new Action() {

@@ -7,6 +7,7 @@ import com.superstudio.commons.exception.InvalidOperationException;
 import com.superstudio.web.*;
 import com.superstudio.web.razor.*;
 import com.superstudio.web.razor.parser.syntaxTree.*;
+import com.superstudio.web.razor.resources.RazorResources;
 import com.superstudio.web.razor.text.*;
 import com.superstudio.web.razor.utils.DisposableAction;
 import com.superstudio.commons.csharpbridge.StringHelper;
@@ -14,6 +15,8 @@ import com.superstudio.codedom.*;
 import com.superstudio.commons.CollectionHelper;
 
 import com.superstudio.commons.csharpbridge.RefObject;
+
+import java.util.function.Consumer;
 
 
 public class CodeGeneratorContext {
@@ -367,12 +370,12 @@ public class CodeGeneratorContext {
 		return getCodeWriterFactory().execute();
 	}
 
-	public final String BuildCodeString(ActionOne<CodeWriter> action) {
+final String BuildCodeString(Consumer<CodeWriter> action) {
 
 		// using (CodeWriter cw = CodeWriterFactory())
 		CodeWriter cw = getCodeWriterFactory().execute();
 		try {
-			action.execute(cw);
+			action.accept(cw);
 			return cw.getContent();
 		} finally {
 			cw.dispose();

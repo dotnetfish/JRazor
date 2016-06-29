@@ -73,13 +73,13 @@ public class LiteralAttributeCodeGenerator extends SpanCodeGenerator {
 		// methods are not converted
 		context.BufferStatementFragment(context.BuildCodeString(cw -> {
 			cw.writeParameterSeparator();
-			cw.writeStartMethodInvoke("Tuple.create");
+			cw.writeStartMethodInvoke("toAttributeValue");
 			cw.writeLocationTaggedString(getPrefix());
 			cw.writeParameterSeparator();
 			if (getValueGenerator() != null) {
 
 				//cw.writeStartMethodInvoke("Tuple.create", "System.Object", "System.Int32");
-				cw.writeStartMethodInvoke("Tuple.create", "Object", "Integer");
+				cw.writeStartMethodInvoke("toAttributeValue");
 				context.setExpressionRenderingMode(ExpressionRenderingMode.InjectCode);
 			} else {
 				cw.writeLocationTaggedString(getValue());

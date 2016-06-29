@@ -1454,7 +1454,8 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		this.output.write("(");
 		this.outputParameters(e.getParameters());
 		this.output.write(")");
-		this.outputTypeParameterConstraints(e.getTypeParameters());
+		this.outputExceptionConstraints(e.getExceptionTypes());
+		//this.outputTypeParameterConstraints(e.getTypeParameters());
 		if (!this.getIsCurrentInterface()
 				&& (e.getAttributes().getValue() & MemberAttributes.ScopeMask) != MemberAttributes.Abstract) {
 			this.outputStartingBrace();
@@ -1467,6 +1468,21 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			return;
 		}
 		this.output.writeLine(";");
+	}
+
+	private void outputExceptionConstraints(CodeExceptionCollection exceptionTypes) throws IOException{
+		if (exceptionTypes.size() == 0) {
+			return;
+		}
+		this.output.write(" throws ");
+
+		for (int i = 0; i < exceptionTypes.size(); i++) {
+			this.output.write(exceptionTypes.getItem(i).getName());
+			if(i<exceptionTypes.size()-1){
+				this.output.write(",");
+			}
+
+		}
 	}
 
 	private void outPutOverride(MemberAttributes attributes) throws IOException {
@@ -1977,7 +1993,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			}
 			this.outputType((CodeTypeReference) typeRef);
 		}
-		this.outputTypeParameterConstraints(e.getTypeParameters());
+		//this.outputTypeParameterConstraints(e.getTypeParameters());
 		this.outputStartingBrace();
 		int indent = this.getIndent();
 		this.setIndent(indent + 1);

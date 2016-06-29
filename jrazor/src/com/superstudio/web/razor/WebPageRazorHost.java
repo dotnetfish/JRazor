@@ -1,6 +1,7 @@
 package com.superstudio.web.razor;
 
 import com.superstudio.codedom.CodeNamespaceImport;
+import com.superstudio.codedom.CodeTypeDeclaration;
 import com.superstudio.commons.CollectionHelper;
 import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.HostingEnvironment;
@@ -158,8 +159,12 @@ public class WebPageRazorHost extends RazorEngineHost {
 		this.setGeneratedClassContext(
 				new GeneratedClassContext(
 						GeneratedClassContext.DefaultExecuteMethodName,
-				GeneratedClassContext.DefaultWriteMethodName, GeneratedClassContext.DefaultWriteLiteralMethodName,
-				"writeTo", "writeLiteralTo", WebPageRazorHost.TemplateTypeName, "defineSection", "beginContext",
+				GeneratedClassContext.DefaultWriteMethodName,
+						GeneratedClassContext.DefaultWriteLiteralMethodName,
+				"writeTo", "writeLiteralTo",
+						WebPageRazorHost.TemplateTypeName,
+						"defineSection",
+						"beginContext",
 				"endContext"));
 		this.getGeneratedClassContext().setResolveUrlMethodName("href");
 		this.setDefaultPageBaseClass(WebPageRazorHost.PageBaseClass);
@@ -274,6 +279,10 @@ public class WebPageRazorHost extends RazorEngineHost {
 				(s) -> new CodeNamespaceImport(s));
 		CodeNamespaceImport[] list=new CodeNamespaceImport[imports.size()];
 		context.getNamespace().getImports().AddRange(imports.toArray(list));
+		CodeTypeDeclaration exceptions=new CodeTypeDeclaration();
+		exceptions.setName("Exception");
+		//exceptions.set
+		context.getTargetMethod().getExceptionTypes().add(exceptions);
 		/*CodeMemberProperty codeMemberProperty = new CodeMemberProperty();
 		codeMemberProperty.setName("ApplicationInstance");
 		codeMemberProperty.setType(new CodeTypeReference(this.getGlobalAsaxTypeName()));

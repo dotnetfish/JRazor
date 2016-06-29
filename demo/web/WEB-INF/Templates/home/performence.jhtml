@@ -54,7 +54,7 @@
     @for(StockModel item : getModel()){
 
 
-                 <tr class="even">
+                 <tr class="@(index%2==0?"odd":"even")">
             <td>@index</td>
             <td>@item.getId()</td>
             <td>@item.getCode()</td>

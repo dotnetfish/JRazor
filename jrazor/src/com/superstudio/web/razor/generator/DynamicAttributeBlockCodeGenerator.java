@@ -68,11 +68,11 @@ public class DynamicAttributeBlockCodeGenerator extends BlockCodeGenerator
 			generatedCode = context.BuildCodeString(cw ->
 			{
 				cw.writeParameterSeparator();
-				cw.writeStartMethodInvoke("Tuple.create");
+				cw.writeStartMethodInvoke("toAttributeValue");
 				cw.writeLocationTaggedString(getPrefix());
 				cw.writeParameterSeparator();
 				//cw.writeStartMethodInvoke("Tuple.create", "Object", "Int32");
-				cw.writeStartMethodInvoke("Tuple.create", "Object", "Integer");
+				cw.writeStartMethodInvoke("new PositionTagged");
 			}
 		   );
 
@@ -85,10 +85,11 @@ public class DynamicAttributeBlockCodeGenerator extends BlockCodeGenerator
 			generatedCode = context.BuildCodeString(cw ->
 			{
 				cw.writeParameterSeparator();
-				cw.writeStartMethodInvoke("Tuple.create");
+				cw.writeStartMethodInvoke("new PositionTagged");
 				cw.writeLocationTaggedString(getPrefix());
 				cw.writeParameterSeparator();
-				cw.writeStartMethodInvoke("Tuple.create", "Object", "Integer");
+				//cw.writeStartMethodInvoke("Tuple.create", "Object", "Integer");
+				cw.writeStartMethodInvoke("toAttributeValue");
 				cw.writeStartConstructor(context.getHost().getGeneratedClassContext().getTemplateTypeName());
 				cw.writeStartLambdaDelegate(ValueWriterName);
 			}

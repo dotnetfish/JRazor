@@ -28,4 +28,6 @@ public interface ICodeGenerator
 	void generateCodeFromCompileUnit(CodeCompileUnit e, TextWriter w, CodeGeneratorOptions o)throws   Exception;
 
 	void generateCodeFromType(CodeTypeDeclaration e, TextWriter w, CodeGeneratorOptions o) throws Exception;
+
+
 }

@@ -230,7 +230,7 @@ public abstract class CodeWriter implements AutoCloseable
 	
 	public void writeLocationTaggedString(LocationTagged<String> value)
 	{
-		writeStartMethodInvoke("Tuple.create");
+		writeStartMethodInvoke("new PositionTagged");
 		try {
 			writeStringLiteral(value.getValue());
 		} catch (ArgumentNullException e) {

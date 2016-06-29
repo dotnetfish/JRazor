@@ -56,7 +56,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 					try {
 						tagBlock(new java.util.Stack<Tuple<HtmlSymbol, SourceLocation>>());
 					} catch (ArgumentNullException e) {
-						// TODO Auto-generated catch block
+
 						e.printStackTrace();
 					}
 				} else if (getCurrentSymbol().getType() == HtmlSymbolType.Transition) {
@@ -171,14 +171,14 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		if (!getEndOfFile()) {
 			switch (getCurrentSymbol().getType()) {
 			case Solidus:
-				// End Tag
+				// End Tag /
 				return endTag(tagStart, tags);
 			case Bang:
-				// Comment
+				// Comment!
 				Accept(_bufferedOpenAngle);
 				return bangTag();
 			case QuestionMark:
-				// XML PI
+				// XML PI？
 				Accept(_bufferedOpenAngle);
 				return xmlPI();
 			default:
@@ -1144,7 +1144,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 	@Override
 	public boolean equals(Object obj, Object others) {
-	
+
 		return obj.equals(others);
 	}
 }

@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 
 
 
@@ -176,21 +177,19 @@ public abstract class WebPageExecutingBase
 	{
 		writeAttributeTo(getOutputWriter(), name, prefix, suffix, values);
 	}
-	public void writeAttribute(String name, Tuple prefix, Tuple  suffix,
-							   AttributeValue... values) throws IOException
-	{
-		writeAttributeTo(getOutputWriter(), name,new PositionTagged(prefix.getItem1()
-				,(Integer) prefix.getItem2())
-		,  new PositionTagged(suffix.getItem1()
-						,(Integer) prefix.getItem2()), values);
-	}
+
 
 	public void writeAttributeTo(Writer writer, String name, PositionTagged<String> prefix, PositionTagged<String> suffix, AttributeValue... values) throws IOException
 	{
 		writeAttributeTo(getVirtualPath(), writer, name, prefix, suffix, values);
 	}
 
-	protected void writeAttributeTo(String pageVirtualPath, Writer writer, String name, PositionTagged<String> prefix, PositionTagged<String> suffix, AttributeValue... values) throws IOException
+	protected void writeAttributeTo(String pageVirtualPath,
+									Writer writer,
+									String name,
+									PositionTagged<String> prefix,
+									PositionTagged<String> suffix,
+									AttributeValue... values) throws IOException
 	{
 		boolean first = true;
 		boolean wroteSomething = false;
@@ -219,18 +218,19 @@ public abstract class WebPageExecutingBase
 				// of the string 'true'. If the value is the bool 'false' we don't want to write anything.
 				//
 				// Otherwise the value is another object (perhaps an IHtmlString), and we'll ask it to format itself.
-				String stringValue;
-				Boolean boolValue = (Boolean)(val.getValue());
-				if (boolValue.equals(true))
-				{
-					stringValue = name;
-				}
-				else if (boolValue.equals(false))
-				{
-					continue;
-				}
-				else
-				{
+				String stringValue="";
+				if(val.getValue() instanceof Boolean){
+					Boolean boolValue = (Boolean)(val.getValue());
+					if (boolValue.equals(true))
+					{
+						stringValue = name;
+					}
+					else if (boolValue.equals(false))
+					{
+						continue;
+					}
+
+				}else{
 					stringValue = (String)((val.getValue() instanceof String) ? val.getValue() : null);
 				}
 

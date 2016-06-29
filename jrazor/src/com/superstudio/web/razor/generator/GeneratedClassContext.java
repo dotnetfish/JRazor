@@ -62,9 +62,15 @@ public final class GeneratedClassContext {
 		setDefineSectionMethodName(defineSectionMethodName);
 	}
 
-	public GeneratedClassContext(String executeMethodName, String writeMethodName, String writeLiteralMethodName,
-			String writeToMethodName, String writeLiteralToMethodName, String templateTypeName,
-			String defineSectionMethodName, String beginContextMethodName, String endContextMethodName) {
+	public GeneratedClassContext(String executeMethodName,
+								 String writeMethodName,
+								 String writeLiteralMethodName,
+			String writeToMethodName,
+								 String writeLiteralToMethodName,
+								 String templateTypeName,
+			String defineSectionMethodName,
+								 String beginContextMethodName,
+								 String endContextMethodName) {
 		this(executeMethodName, writeMethodName, writeLiteralMethodName, writeToMethodName, writeLiteralToMethodName,
 				templateTypeName, defineSectionMethodName);
 		setBeginContextMethodName(beginContextMethodName);
