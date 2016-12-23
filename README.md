@@ -5,25 +5,31 @@ the gramma just like c# razor，but it runs java.<br/>
 you can define a code block with "@" or output the variable with "@". it's easy if you're good at java,in another way,it is java.
 ## Quick start
 
-### Render Template
+### Initial HostContext
 ```java
 // first init your template host envirenments,you could set it be singleton and init the hostContext when your app started
-TemplateHostContext host =new TemplateHostContext();
-host.setVirtualPathProvider(new DefaultVirtualPathProvider());
-// somewhere you want to render a template
-TemplateInfo template=new TemplateInfo();//or load templateInfo from database 
-//autoCloseable
-try(TemplateEngine engine=new TemplateEngine(TemplateHostEnvirenments.getCurrent())){
-  TemplateRenderContext context=new TemplateRenderContext(template);
-  //... prepare  parameters,which you can access them by @ViewBag.get("variantName")
-  context.getTemplateData().set("myVariant","variantValue");//in the the template @ViewBag.get("myVariant") would output variantValue
-  context.setModel(new ModelEntry());//set a  template page model entry,then you can access it by @Model
-  
-  String result=engine.renderTemplate(renderContext);
-  //or you can just render it to buffered Stream
-  //BufferedStringWriter writer=new BufferedStringWriter();
-  //engine.renderTempalte(renderContext,writer);
-}
+ HostBuilder builder=new HostBuilder();
+ WebTemplateHost templateHost=new WebTemplateHost();
+ HostContext host= builder.useHost(templateHost)
+                          .useAutoCompiler(templateHost.mapPath("/web-inf/templates"))
+                          .useTemplateEngine(new RazorTemplateEngine())
+                          .build();
+
+```
+### Render Template
+```java
+ TemplateInfo template=new TemplateInfo();//or load templateInfo from database
+ template.setTemplateCategory("home");
+ template.setTemplateName(name);
+ Map<String, Object> templateData=new HashMap<String,Object>();
+ TemplateDataDictionary data=new TemplateDataDictionary(null);
+ templateData.put("myVariant","variantValue");
+ data.setTemplateData(templateData);//in the the template @get("myVariant") would output variantValue
+ data.setModel(new ModelEntry());//set a  template page model entry,then you can access it by @getModel()
+ StringWriter writer=new StringWriter();
+ JRazorTemplateEngine.render(template,data,writer);
+ String result1=writer.toString();
+
 ```
 
 ## template demo
@@ -38,11 +44,11 @@ this is a simple template: which will import package and out hello world
 @{ 
 //this is java code block,you can write comments just like java does 
 String name=MessageFormat.format("{0} {1}","",""); 
-String who="superstudio";//declare a who varian 
+String who="superstudio";//declared  who variant
 
 } 
-<!--in the say way you can write html comment outside code block--> 
-<!--and the line below would output "hellow,superstudio"--> 
+<!--in the say way you can write html comments outside code block--> 
+<!--and the line below would output "hello,superstudio"--> 
 Hello,@who
 </body> 
 </html> 
@@ -53,8 +59,8 @@ this template will output a Html :
 <head> 
 </head> 
 <body> 
-<!--in the say way you can write html comment outside code block--> 
-<!--and the line below would output "hellow,superstudio"--> 
+<!--in the say way you can write html comments outside code block--> 
+<!--and the line below would output "hello,superstudio"--> 
 Hello,superstudio 
 </body> 
 </html> 

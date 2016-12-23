@@ -25,7 +25,7 @@ public class HomeController {
     @RequestMapping("/home")
     public ModelAndView index(@RequestParam(value="name", defaultValue="performence") String name) throws Exception {
 
-        HostContext host =HostContext.getCurrent();
+      //  HostContext host =HostContext.getCurrent();
 
         //host.setVirtualPathProvider(new DefaultVirtualPathProvider());
         // somewhere you want to render a template
@@ -46,37 +46,19 @@ public class HomeController {
         entry.setFather(father);
         StringWriter writer=new StringWriter();
 
-//        try(JRazorTemplateEngine engine=new JRazorTemplateEngine(host)){
-//            RenderContext context=new RenderContext(host,template,null);
-//            context.setHttpContext(host);
-//            context.setTemplateInfo(template);
-//
-//            context.setWriter(writer);
-//            //context.setRequestContext(context);
-//            //context.setRouteData();
-//            //... prepare  parameters,which you can access them by @ViewBag.get("variantName")
-//            context.getTemplateData().getTemplateData().put("myVariant","variantValue");//in the the template @ViewBag.get("myVariant") would output variantValue
-//
-//            context.getTemplateData().setModel(entry);//set a  template page model entry,then you can access it by @Model
-//
-//            result=engine.renderTemplate(context,"index","");
-//            //or you can just render it to buffered Stream
-//            //BufferedStringWriter writer=new BufferedStringWriter();
-//            //engine.renderTempalte(renderContext,writer);
-//        }
         Map<String, Object> templateData=new HashMap<String,Object>();
         TemplateDataDictionary data=new TemplateDataDictionary(null);
        // templateData.put("myVariant","variantValue");
        // data.setTemplateData(templateData);
         data.setModel(StockModel.dummyItems());
-        JRazorTemplateEngine.render(template,data,writer);
+      //  JRazorTemplateEngine.render(template,data,writer);
         String result1=writer.toString();
         long timeStart=System.currentTimeMillis();
-//        for (int i = 0;
-//        i<50000;i++){
-//            StringWriter writer2=new StringWriter();
-//            JRazorTemplateEngine.render(template,data,writer2);
-//        }
+        for (int i = 0;
+        i<200000;i++){
+           StringWriter writer2=new StringWriter();
+           JRazorTemplateEngine.render(template,data,writer2);
+      }
 
         long timeEnd= System.currentTimeMillis();
       //  StringReader sr=new StringReader();

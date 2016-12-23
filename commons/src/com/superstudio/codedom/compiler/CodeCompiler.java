@@ -77,9 +77,9 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		CompilerResults result;
 		try {
 
-			try (AutoCloseable closeable = com.superstudio.commons.io.File.OpenRead(fileNames)) {
+		/*	try (AutoCloseable closeable = com.superstudio.commons.io.File.OpenRead(fileNames)) {
 
-			}
+			}*/
 			result = this.fromFileBatch(options, fileNames);
 		} finally {
 			options.getTempFiles().safeDelete();
@@ -143,9 +143,9 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		/*
 		 * try (File.OpenRead(fileName)) { }
 		 */
-		try (AutoCloseable closeable = File.OpenRead(fileName)) {
+		/*try (AutoCloseable closeable = File.OpenRead(fileName)) {
 
-		}
+		}*/
 		return this.fromFileBatch(options, new String[] { fileName });
 	}
 

@@ -1,7 +1,9 @@
 package com.superstudio.language.java;
 
+import com.sun.deploy.util.StringUtils;
 import com.superstudio.commons.Environment;
 import com.superstudio.commons.csharpbridge.StringHelper;
+import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.web.razor.generator.BaseCodeWriter;
 
 public class JavaCodeWriter extends BaseCodeWriter {
@@ -46,15 +48,8 @@ public class JavaCodeWriter extends BaseCodeWriter {
 			// throw new ArgumentNullException("literal");
 		}
 
-		// From JavaCodeProvider in CodeDOM
-		// If the string is short, use C style quoting (e.g "\r\n")
-		// Also do it if it is too long to fit in one line
-		// If the string contains '\0', verbatim style won't work.
-		/*if (literal.length() >= 256 && literal.length() <= 1500 && literal.indexOf('\0') == -1) {
-			writeVerbatimStringLiteral(literal);
-		} else {*/
 			writeCStyleStringLiteral(literal);
-		/*}*/
+
 	}
 
 	private void writeVerbatimStringLiteral(String literal) {
@@ -74,7 +69,7 @@ public class JavaCodeWriter extends BaseCodeWriter {
 		// From JavaCodeGenerator.QuoteSnippetStringCStyle in CodeDOM
 		getInnerWriter().write("\"");
 		for (int i = 0; i < literal.length(); i++) {
-			// switch (literal[i])
+
 			// ORIGINAL LINE: case '\r':
 			if (literal.charAt(i) == '\r') {
 				getInnerWriter().write("\\r");
@@ -105,12 +100,11 @@ public class JavaCodeWriter extends BaseCodeWriter {
 			}
 			// ORIGINAL LINE: case '\u2028': 
 			else if (literal.charAt(i) == '\u2028' || literal.charAt(i) == '\u2029') {
-				// Inlined CSharpCodeGenerator.AppendEscapedChar
+
 				getInnerWriter().write("\\u");
-				// getInnerWriter().write((new
-				// Integer(literal.charAt(i))).toString("X4",
-				// CultureInfo.InvariantCulture));
-				getInnerWriter().write((new Integer(literal.charAt(i))).toString());
+				String result=Integer.toHexString(new Integer(literal.charAt(i)));
+				StringHelper.padLeft(result.toUpperCase(),4,"0");
+				getInnerWriter().write(result);
 
 			} else {
 				getInnerWriter().write(literal.charAt(i));
@@ -152,9 +146,9 @@ public class JavaCodeWriter extends BaseCodeWriter {
 	}
 
 	@Override
-	protected void emitStartLambdaExpression(String[] parameterNames) {
+	protected void emitStartLambdaExpression(String[] parameterNames) throws ArgumentNullException{
 		if (parameterNames == null) {
-			// throw new ArgumentNullException("parameterNames");
+			throw new ArgumentNullException("parameterNames");
 		}
 
 		if (parameterNames.length == 0 || parameterNames.length > 1) {
@@ -168,9 +162,9 @@ public class JavaCodeWriter extends BaseCodeWriter {
 	}
 
 	@Override
-	protected void emitStartLambdaDelegate(String[] parameterNames) {
+	protected void emitStartLambdaDelegate(String[] parameterNames) throws ArgumentNullException {
 		if (parameterNames == null) {
-			// throw new ArgumentNullException("parameterNames");
+			throw new ArgumentNullException("parameterNames");
 		}
 
 		emitStartLambdaExpression(parameterNames);
@@ -183,9 +177,9 @@ public class JavaCodeWriter extends BaseCodeWriter {
 	}
 
 	@Override
-	protected void emitStartConstructor(String typeName) {
+	protected void emitStartConstructor(String typeName) throws ArgumentNullException {
 		if (typeName == null) {
-			// throw new ArgumentNullException("typeName");
+			 throw new ArgumentNullException("typeName");
 		}
 
 		getInnerWriter().write("new ");

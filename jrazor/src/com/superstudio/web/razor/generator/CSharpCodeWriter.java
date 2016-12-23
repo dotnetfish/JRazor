@@ -206,11 +206,11 @@ public class CSharpCodeWriter extends BaseCodeWriter
 	}
 
 	@Override
-	protected void emitStartLambdaDelegate(String[] parameterNames)
+	protected void emitStartLambdaDelegate(String[] parameterNames) throws ArgumentNullException
 	{
 		if (parameterNames == null)
 		{
-			//throw new ArgumentNullException("parameterNames");
+		throw new ArgumentNullException("parameterNames");
 		}
 
 		emitStartLambdaExpression(parameterNames);
@@ -224,11 +224,11 @@ public class CSharpCodeWriter extends BaseCodeWriter
 	}
 
 	@Override
-	protected void emitStartConstructor(String typeName)
+	protected void emitStartConstructor(String typeName) throws ArgumentNullException
 	{
 		if (typeName == null)
 		{
-			//throw new ArgumentNullException("typeName");
+			throw new ArgumentNullException("typeName");
 		}
 
 		getInnerWriter().write("new ");

@@ -132,17 +132,17 @@ public abstract class CodeWriter implements AutoCloseable
 		getInnerWriter().write(" = ");
 	}
 
-	public final void writeStartLambdaExpression(String... parameterNames)
+	public final void writeStartLambdaExpression(String... parameterNames) throws ArgumentNullException
 	{
 		emitStartLambdaExpression(parameterNames);
 	}
 
-	public final void writeStartConstructor(String typeName)
+	public final void writeStartConstructor(String typeName)throws ArgumentNullException
 	{
 		emitStartConstructor(typeName);
 	}
 
-	public final void writeStartLambdaDelegate(String... parameterNames)
+	public final void writeStartLambdaDelegate(String... parameterNames)throws ArgumentNullException
 	{
 		emitStartLambdaDelegate(parameterNames);
 	}
@@ -174,8 +174,7 @@ public abstract class CodeWriter implements AutoCloseable
 	public final void dispose()
 	{
 		dispose(true);
-		//GC.SuppressFinalize(this);
-		System.gc();
+
 	}
 
 	public  final  void close(){
@@ -200,9 +199,9 @@ public abstract class CodeWriter implements AutoCloseable
 		return new CodeSnippetTypeMember(getContent());
 	}
 
-	protected abstract void emitStartLambdaDelegate(String[] parameterNames);
-	protected abstract void emitStartLambdaExpression(String[] parameterNames);
-	protected abstract void emitStartConstructor(String typeName);
+	protected abstract void emitStartLambdaDelegate(String[] parameterNames) throws ArgumentNullException;
+	protected abstract void emitStartLambdaExpression(String[] parameterNames) throws ArgumentNullException;
+	protected abstract void emitStartConstructor(String typeName) throws ArgumentNullException;
 	protected abstract void emitStartMethodInvoke(String methodName);
 
 	protected void emitStartMethodInvoke(String methodName, String... genericArguments)
