@@ -116,7 +116,7 @@ public abstract class RazorCodeGenerator extends ParserVisitor
 	}
 
 	@Override
-	public void visitStartBlock(Block block)
+	public void visitStartBlock(Block block) throws Exception
 	{
 		block.getCodeGenerator().generateStartBlockCode(block, getContext());
 	}

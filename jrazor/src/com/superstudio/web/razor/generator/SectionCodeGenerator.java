@@ -19,17 +19,18 @@ public class SectionCodeGenerator extends BlockCodeGenerator {
 	}
 
 	@Override
-	public void generateStartBlockCode(Block target, CodeGeneratorContext context) {
+	public void generateStartBlockCode(Block target, CodeGeneratorContext context) throws Exception{
 		String startBlock = context.BuildCodeString(cw -> {
 			cw.writeStartMethodInvoke(context.getHost().getGeneratedClassContext().getDefineSectionMethodName());
 			try {
 				cw.writeStringLiteral(getSectionName());
+				cw.writeParameterSeparator();
+				cw.writeStartLambdaDelegate();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			cw.writeParameterSeparator();
-			cw.writeStartLambdaDelegate();
+
 		});
 		context.AddStatement(startBlock);
 	}

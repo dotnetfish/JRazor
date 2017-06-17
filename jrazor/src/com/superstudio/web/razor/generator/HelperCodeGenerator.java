@@ -52,7 +52,7 @@ public class HelperCodeGenerator extends BlockCodeGenerator {
 	}
 
 	@Override
-	public void generateStartBlockCode(Block target, CodeGeneratorContext context) {
+	public void generateStartBlockCode(Block target, CodeGeneratorContext context) throws Exception {
 		_writer = context.CreateCodeWriter();
 
 

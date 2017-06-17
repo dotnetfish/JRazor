@@ -16,9 +16,14 @@ public class TemplateBlockCodeGenerator extends BlockCodeGenerator
 
 		String generatedCode = context.BuildCodeString(cw ->
 		{
-			cw.writeStartLambdaExpression(ItemParameterName);
-			cw.writeStartConstructor(context.getHost().getGeneratedClassContext().getTemplateTypeName());
-			cw.writeStartLambdaDelegate(TemplateWriterName);
+			try {
+				cw.writeStartLambdaExpression(ItemParameterName);
+				cw.writeStartConstructor(context.getHost().getGeneratedClassContext().getTemplateTypeName());
+				cw.writeStartLambdaDelegate(TemplateWriterName);
+			}catch(Exception e){
+				e.printStackTrace();
+				//context.get
+			}
 		}
 	   );
 

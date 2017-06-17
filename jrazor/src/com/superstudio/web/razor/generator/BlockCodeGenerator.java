@@ -7,7 +7,7 @@ public abstract class BlockCodeGenerator implements IBlockCodeGenerator,IEquatab
 {
 	public static final IBlockCodeGenerator Null = new NullBlockCodeGenerator();
 
-	public void generateStartBlockCode(Block target, CodeGeneratorContext context)
+	public void generateStartBlockCode(Block target, CodeGeneratorContext context) throws Exception
 	{
 	}
 

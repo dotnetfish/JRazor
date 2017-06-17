@@ -84,14 +84,18 @@ public class DynamicAttributeBlockCodeGenerator extends BlockCodeGenerator
 
 			generatedCode = context.BuildCodeString(cw ->
 			{
-				cw.writeParameterSeparator();
-				cw.writeStartMethodInvoke("new PositionTagged");
-				cw.writeLocationTaggedString(getPrefix());
-				cw.writeParameterSeparator();
-				//cw.writeStartMethodInvoke("Tuple.create", "Object", "Integer");
-				cw.writeStartMethodInvoke("toAttributeValue");
-				cw.writeStartConstructor(context.getHost().getGeneratedClassContext().getTemplateTypeName());
-				cw.writeStartLambdaDelegate(ValueWriterName);
+				try {
+					cw.writeParameterSeparator();
+					cw.writeStartMethodInvoke("new PositionTagged");
+					cw.writeLocationTaggedString(getPrefix());
+					cw.writeParameterSeparator();
+					//cw.writeStartMethodInvoke("Tuple.create", "Object", "Integer");
+					cw.writeStartMethodInvoke("toAttributeValue");
+					cw.writeStartConstructor(context.getHost().getGeneratedClassContext().getTemplateTypeName());
+					cw.writeStartLambdaDelegate(ValueWriterName);
+				}catch (Exception ex){
+					ex.printStackTrace();
+				}
 			}
 		   );
 		}
