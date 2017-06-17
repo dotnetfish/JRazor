@@ -2,18 +2,13 @@ package com.superstudio.demo.controller;
 
 import com.superstudio.template.JRazorTemplateEngine;
 import com.superstudio.template.mvc.actionresult.TemplateDataDictionary;
-import com.superstudio.template.mvc.context.HostContext;
-import com.superstudio.template.mvc.context.RenderContext;
 import com.superstudio.template.mvc.context.TemplateInfo;
-import com.superstudio.web.razor.tokenizer.symbols.SymbolBase;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +28,7 @@ public class HomeController {
         template.setTemplateCategory("home");
         template.setTemplateName(name);
         //autoCloseable
-        String result="content is empty";
+        //String result="content is empty";
         TestEntry entry=new TestEntry();
         TestEntry father=new TestEntry();
         father.setName("lily's father");
@@ -46,7 +41,7 @@ public class HomeController {
         entry.setFather(father);
         StringWriter writer=new StringWriter();
 
-        Map<String, Object> templateData=new HashMap<String,Object>();
+        //Map<String, Object> templateData=new HashMap<String,Object>();
         TemplateDataDictionary data=new TemplateDataDictionary(null);
        // templateData.put("myVariant","variantValue");
        // data.setTemplateData(templateData);

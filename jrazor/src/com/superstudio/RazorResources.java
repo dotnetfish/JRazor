@@ -236,17 +236,17 @@ import com.superstudio.commons.ResourceManager;
 public class RazorResources
 {
 
-	//private static  ResourceManager resourceMan= new ResourceManager(null, null);
+	private static  ResourceManager resourceMan= new ResourceManager(null, null);
 
 	private static CultureInfo resourceCulture;
+
 	
 	
 
 
-	//[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-	public RazorResources()
+		public RazorResources()
 	{
-		//this.resourceMan=new ResourceManager(null, null);
+		this.resourceMan=new ResourceManager(null, null);
 	}
 
 	/** 
@@ -254,15 +254,14 @@ public class RazorResources
 	 
 	*/
 
-	//[System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
 	public static ResourceManager getResourceManager()
 	{
-		/*if (Object.ReferenceEquals(resourceMan, null))
+		if (resourceMan==null)
 		{
-			ResourceManager temp = new ResourceManager("System.Web.Razor.Resources.RazorResources", RazorResources.class.getPackage());
-			resourceMan = temp;
-		}*/
-		return new ResourceManager(null,null);
+			resourceMan= new ResourceManager("com.superstudio.web.RazorResources","zh-cn");
+
+		}
+		return resourceMan;
 	}
 
 	/** 
@@ -271,7 +270,6 @@ public class RazorResources
 	 
 	*/
 
-	//[System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
 	public static CultureInfo getCulture()
 	{
 		return new CultureInfo();
@@ -281,6 +279,10 @@ public class RazorResources
 		resourceCulture = value;
 	}
 
+
+	public static String getResources(String key){
+		return  getResourceManager().GetString(key,getCulture());
+	}
 	/** 
 	   Looks up a localized string similar to The active parser must the same as either the markup or code parser..
 	 
@@ -288,6 +290,10 @@ public class RazorResources
 	public static String getActiveParser_Must_Be_Code_Or_Markup_Parser()
 	{
 		return getResourceManager().GetString("ActiveParser_Must_Be_Code_Or_Markup_Parser", resourceCulture);
+	}
+
+	public  static  String Argument_Cannot_Be_Null_Or_Empty(){
+		return  getResourceManager().GetString("Argument_Cannot_Be_Null_Or_Empty",getCulture());
 	}
 
 	/** 

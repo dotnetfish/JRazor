@@ -8,7 +8,7 @@ import com.superstudio.commons.CollectionHelper;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.csharpbridge.action.Func;
 import com.superstudio.commons.exception.ArgumentNullException;
-import com.superstudio.web.CommonResources;
+import com.superstudio.web.RazorResources;
 import com.superstudio.web.razor.ParserResults;
 import com.superstudio.web.razor.RazorEngineHost;
 import com.superstudio.web.razor.parser.ParserVisitor;
@@ -28,7 +28,8 @@ public abstract class RazorCodeGenerator extends ParserVisitor
 	{
 		if (StringHelper.isNullOrEmpty(className))
 		{
-			throw new IllegalArgumentException(CommonResources.getArgument_Cannot_Be_Null_Or_Empty()+ "className");
+			throw new IllegalArgumentException(
+					RazorResources.getResources("Argument_Cannot_Be_Null_Or_Empty")+ "className");
 		}
 		if (rootNamespaceName == null)
 		{

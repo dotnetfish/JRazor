@@ -4,7 +4,6 @@ package com.superstudio.web.razor;
 import com.superstudio.commons.Path;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.csharpbridge.action.ActionTwo;
-import com.superstudio.web.CommonResources;
 import com.superstudio.web.RazorResources;
 import com.superstudio.web.razor.editor.BackgroundParser;
 import com.superstudio.web.razor.editor.EditResult;
@@ -83,7 +82,8 @@ public class RazorEditorParser implements AutoCloseable
 		}
 		if (StringHelper.isNullOrEmpty(sourceFileName))
 		{
-			throw new IllegalArgumentException(CommonResources.getArgument_Cannot_Be_Null_Or_Empty()+ "sourceFileName");
+			throw new IllegalArgumentException(
+					RazorResources.getResources("getArgument_Cannot_Be_Null_Or_Empty")+ "sourceFileName");
 		}
 
 		setHost(host);

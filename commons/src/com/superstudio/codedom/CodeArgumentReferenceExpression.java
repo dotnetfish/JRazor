@@ -12,14 +12,14 @@ public class CodeArgumentReferenceExpression extends CodeExpression
 		}
 		return "";
 	}
-	public final void setParameterName(String value)
-	{
-		this.parameterName = value;
-	}
+	//public final void setParameterName(String value)
+	//{
+	//	this.parameterName = value;
+	//}
 
-	public CodeArgumentReferenceExpression()
-	{
-	}
+	//public CodeArgumentReferenceExpression()
+//	{
+//	}
 
 	public CodeArgumentReferenceExpression(String parameterName)
 	{

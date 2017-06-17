@@ -8,13 +8,13 @@ import com.superstudio.web.razor.generator.SpanCodeGenerator;
 import com.superstudio.web.razor.text.SourceLocation;
 public class MvcJavaRazorCodeParser extends JavaCodeParser
 {
-	//private static final String ModelKeyword = "model";
-	//private static final String GenericTypeFormatString = "{0}<{1}>";
+	private static final String ModelKeyword = "model";
+	private static final String GenericTypeFormatString = "{0}<{1}>";
 	private SourceLocation _endInheritsLocation = null;
 	private boolean _modelStatementFound;
 	public MvcJavaRazorCodeParser()
 	{
-		super.mapDirectives(()->this.modelDirective(), "model");
+		super.mapDirectives(()->this.modelDirective(), ModelKeyword);
 	}
 	@Override
 	protected void inheritsDirective()
@@ -24,6 +24,7 @@ public class MvcJavaRazorCodeParser extends JavaCodeParser
 		super.inheritsDirectiveCore();
 		this.checkForInheritsAndModelStatements();
 	}
+
 	private void checkForInheritsAndModelStatements()
 	{
 		if (this._modelStatementFound && this._endInheritsLocation != null)
@@ -32,6 +33,7 @@ public class MvcJavaRazorCodeParser extends JavaCodeParser
 					MvcResources.MvcRazorCodeParser_CannotHaveModelAndInheritsKeyword, new Object[] {"model"}));
 		}
 	}
+
 	protected void modelDirective()
 	{
 		super.AcceptAndMoveNext();
@@ -47,6 +49,6 @@ public class MvcJavaRazorCodeParser extends JavaCodeParser
 	}
 	private SpanCodeGenerator createModelCodeGenerator(String model)
 	{
-		return new SetModelTypeCodeGenerator(model, "{0}<{1}>");
+		return new SetModelTypeCodeGenerator(model, GenericTypeFormatString);
 	}
 }

@@ -3,18 +3,19 @@ package com.superstudio.language.java.mvc;
 import com.superstudio.web.razor.WebPageRazorHost;
 import com.superstudio.web.razor.generator.CSharpRazorCodeGenerator;
 import com.superstudio.web.razor.generator.RazorCodeGenerator;
-import com.superstudio.web.razor.parser.*;
+import com.superstudio.web.razor.parser.ParserBase;
 
 public class MvcJavaWebPageRazorHost extends WebPageRazorHost {
 	public MvcJavaWebPageRazorHost(String virtualPath, String physicalPath) {
 		super(virtualPath, physicalPath);
-		this.getNamespaceImports().add("com.superstudio.web.templatepages.WebViewPage");
+		//this.getn
+		this.getNamespaceImports().add("com.superstudio.web.templatepages.WebTemplatePage");
 		
-		// super.registerSpecialFile(RazorViewEngine.ViewStartFileName,
-		// ViewStartPage.class);
-		// super.DefaultPageBaseClass = WebViewPage.class.getName();
+		//super.registerSpecialFile(RazorTemplateEngine.ViewStartFileName,
+		// TemplateStartPage.class);
+		//super.DefaultPageBaseClass = WebTemplatePage.class.getName();
 		super.setDefaultPageBaseClass("WebViewPage");
-		//this.getRidOfNamespace("com.superstudio.mvc.HtmlHelper");
+		this.getRidOfNamespace("com.superstudio.mvc.HtmlHelper");
 	}
 
 	 @Override
@@ -28,9 +29,6 @@ public class MvcJavaWebPageRazorHost extends WebPageRazorHost {
 	}
 
 	public ParserBase decorateCodeParser(ParserBase incomingCodeParser) throws Exception {
-	/*	if (incomingCodeParser instanceof CSharpCodeParser) {
-			return new MvcJavaRazorCodeParser();
-		}*/
 
 		return super.decorateCodeParser(incomingCodeParser);
 	}

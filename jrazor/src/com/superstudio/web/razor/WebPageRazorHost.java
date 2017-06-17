@@ -7,7 +7,7 @@ import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.HostingEnvironment;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.io.Path;
-import com.superstudio.web.CommonResources;
+import com.superstudio.web.RazorResources;
 import com.superstudio.web.razor.generator.CodeGeneratorContext;
 import com.superstudio.web.razor.generator.GeneratedClassContext;
 import com.superstudio.web.razor.parser.HtmlMarkupParser;
@@ -180,7 +180,7 @@ public class WebPageRazorHost extends RazorEngineHost {
 		this();
 		if (StringHelper.isNullOrEmpty(virtualPath)) {
 			 throw new IllegalArgumentException(StringHelper.format(CultureInfo.CurrentCulture,
-			 CommonResources.Argument_Cannot_Be_Null_Or_Empty, new Object[]
+			 RazorResources.Argument_Cannot_Be_Null_Or_Empty(), new Object[]
 			 {"virtualPath"}));
 		}
 		this.setVirtualPath(virtualPath);

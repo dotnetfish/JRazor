@@ -1,11 +1,10 @@
 package com.superstudio.web.razor;
 
 import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.web.CommonResources;
+import com.superstudio.web.RazorResources;
 
 
-
-/** 
+/**
  Specifies a Razor directive that is rendered as an attribute on the generated class. 
  
 */
@@ -19,7 +18,7 @@ public final class RazorDirectiveAttribute //extends Attribute
 	{
 		if (StringHelper.isNullOrEmpty(name))
 		{
-			throw new IllegalArgumentException(CommonResources.getArgument_Cannot_Be_Null_Or_Empty()+ "name");
+			throw new IllegalArgumentException(RazorResources.getResources("Argument_Cannot_Be_Null_Or_Empty")+ "name");
 		}
 
 		setName(name);
