@@ -69,7 +69,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 
 	protected final void sessionStateDirectiveCore() {
 	
-		sessionStateTypeDirective(RazorResources.getParserEror_SessionDirectiveMissingValue(),
+		sessionStateTypeDirective(RazorResources.getResource(RazorResources.ParserEror_SessionDirectiveMissingValue),
 				(key, value) -> new RazorDirectiveAttributeCodeGenerator(key, value));
 	}
 
@@ -128,7 +128,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		AcceptAndMoveNext();
 
 		if (nested) {
-			getContext().OnError(getCurrentLocation().clone(), RazorResources.getParseError_Helpers_Cannot_Be_Nested());
+			getContext().OnError(getCurrentLocation().clone(), RazorResources.getResource(RazorResources.ParseError_Helpers_Cannot_Be_Nested));
 		}
 
 		// accept a single whitespace character if present, if not, we should
@@ -136,15 +136,15 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		if (!At(JavaSymbolType.WhiteSpace)) {
 			String error;
 			if (At(JavaSymbolType.NewLine)) {
-				error = RazorResources.getErrorComponent_Newline();
+				error = RazorResources.getResource(RazorResources.ErrorComponent_Newline);
 			} else if (getEndOfFile()) {
-				error = RazorResources.getErrorComponent_EndOfFile();
+				error = RazorResources.getResource(RazorResources.ErrorComponent_EndOfFile);
 			} else {
-				error = String.format(RazorResources.getErrorComponent_Character(), getCurrentSymbol().getContent());
+				error = String.format(RazorResources.getResource(RazorResources.ErrorComponent_Character), getCurrentSymbol().getContent());
 			}
 
 			getContext().OnError(getCurrentLocation().clone(),
-					RazorResources.getParseError_Unexpected_Character_At_Helper_Name_Start(), error);
+					RazorResources.getResource(RazorResources.ParseError_Unexpected_Character_At_Helper_Name_Start), error);
 			putCurrentBack();
 			Output(SpanKind.MetaCode);
 			return;
@@ -161,7 +161,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 
 		// Expecting an identifier (helper name)
 		boolean errorReported = !Required(JavaSymbolType.Identifier, true,
-				RazorResources.getParseError_Unexpected_Character_At_Helper_Name_Start());
+				RazorResources.getResource(RazorResources.ParseError_Unexpected_Character_At_Helper_Name_Start));
 		if (!errorReported) {
 			Assert(JavaSymbolType.Identifier);
 			AcceptAndMoveNext();
@@ -175,14 +175,14 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 			if (!errorReported) {
 				errorReported = true;
 				getContext().OnError(getCurrentLocation().clone(),
-						RazorResources.getParseError_MissingCharAfterHelperName(), "(");
+						RazorResources.getResource(RazorResources.ParseError_MissingCharAfterHelperName), "(");
 			}
 		} else {
 			SourceLocation bracketStart = getCurrentLocation().clone();
 			if (!balance(BalancingModes.NoErrorOnFailure, JavaSymbolType.LeftParenthesis,
 					JavaSymbolType.RightParenthesis, bracketStart)) {
 				errorReported = true;
-				getContext().OnError(bracketErrorPos, RazorResources.getParseError_UnterminatedHelperParameterList());
+				getContext().OnError(bracketErrorPos, RazorResources.getResource(RazorResources.ParseError_UnterminatedHelperParameterList));
 			}
 			Optional(JavaSymbolType.RightParenthesis);
 		}
@@ -201,7 +201,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 			nextToken();
 			AcceptWhile(isSpacingToken(false, true));
 			if (!errorReported) {
-				getContext().OnError(errorLocation, RazorResources.getParseError_MissingCharAfterHelperParameters(),
+				getContext().OnError(errorLocation, RazorResources.getResource(RazorResources.ParseError_MissingCharAfterHelperParameters),
 						getLanguage().getSample(JavaSymbolType.LeftBrace));
 			}
 		}
@@ -276,7 +276,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 
 		if (nested) {
 			getContext().OnError(getCurrentLocation().clone(), String.format(
-					RazorResources.getParseError_Sections_Cannot_Be_Nested(), RazorResources.getSectionExample_CS()));
+					RazorResources.getResource(RazorResources.ParseError_Sections_Cannot_Be_Nested), RazorResources.getResource(RazorResources.SectionExample_CS)));
 			errorReported = true;
 		}
 
@@ -285,7 +285,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		// Get the section name
 		String sectionName = "";
 		if (!Required(JavaSymbolType.Identifier, true,
-				RazorResources.getParseError_Unexpected_Character_At_Section_Name_Start())) {
+				RazorResources.getResource(RazorResources.ParseError_Unexpected_Character_At_Section_Name_Start))) {
 			if (!errorReported) {
 				errorReported = true;
 			}
@@ -308,7 +308,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		if (!sawStartingBrace) {
 			if (!errorReported) {
 				errorReported = true;
-				getContext().OnError(errorLocation, RazorResources.getParseError_MissingOpenBraceAfterSection());
+				getContext().OnError(errorLocation, RazorResources.getResource(RazorResources.ParseError_MissingOpenBraceAfterSection));
 			}
 
 			putCurrentBack();
@@ -338,7 +338,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		// Check for the terminating "}"
 		if (!Optional(JavaSymbolType.RightBrace)) {
 			editHandler.setAutoCompleteString("}");
-			getContext().OnError(getCurrentLocation().clone(), RazorResources.getParseError_Expected_X(),
+			getContext().OnError(getCurrentLocation().clone(), RazorResources.getResource(RazorResources.ParseError_Expected_X),
 					getLanguage().getSample(JavaSymbolType.RightBrace));
 		} else {
 			getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.None);
@@ -360,7 +360,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		AcceptWhile(isSpacingToken(true, false));
 
 		if (!At(JavaSymbolType.LeftBrace)) {
-			getContext().OnError(getCurrentLocation().clone(), RazorResources.getParseError_Expected_X(),
+			getContext().OnError(getCurrentLocation().clone(), RazorResources.getResource(RazorResources.ParseError_Expected_X),
 					getLanguage().getSample(JavaSymbolType.LeftBrace));
 			completeBlock();
 			Output(SpanKind.MetaCode);
@@ -384,7 +384,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		if (!At(JavaSymbolType.RightBrace)) {
 			editHandler.setAutoCompleteString("}");
 			getContext().OnError(block.getStart().clone(),
-					RazorResources.getParseError_Expected_CloseBracket_Before_EOF(), block.getName(), "}", "{");
+					RazorResources.getResource(RazorResources.ParseError_Expected_CloseBracket_Before_EOF), block.getName(), "}", "{");
 			completeBlock();
 			Output(SpanKind.Code);
 		} else {
@@ -413,7 +413,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 	}
 
 	protected final void inheritsDirectiveCore() {
-		baseTypeDirective(RazorResources.getParseError_InheritsKeyword_Must_Be_Followed_By_TypeName(),
+		baseTypeDirective(RazorResources.getResource(RazorResources.ParseError_InheritsKeyword_Must_Be_Followed_By_TypeName),
 				baseType -> new SetBaseTypeCodeGenerator(baseType));
 	}
 
@@ -472,7 +472,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 
 	protected void reservedDirective(boolean topLevel) {
 		getContext().OnError(getCurrentLocation().clone(),
-				String.format(RazorResources.getParseError_ReservedWord(), getCurrentSymbol().getContent()));
+				String.format(RazorResources.getResource(RazorResources.ParseError_ReservedWord), getCurrentSymbol().getContent()));
 		AcceptAndMoveNext();
 		getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.None);
 		getSpan().setCodeGenerator(SpanCodeGenerator.Null);
@@ -540,7 +540,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 			tryStatement(topLevel);
 			/*if (!topLevel) {
 				getContext().OnError(block.getStart().clone(),
-						RazorResources.getParseError_NamespaceImportAndTypeAlias_Cannot_Exist_Within_CodeBlock());
+						RazorResources.getResource(RazorResources.ParseError_NamespaceImportAndTypeAlias_Cannot_Exist_Within_CodeBlock());
 				standardStatement();
 			} else {
 				//UsingDeclaration();
@@ -564,7 +564,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 			// Set block type to directive
 			if(!isTopLevel){//import should be topLevel @import
 				getContext().OnError(block.getStart().clone(),
-						RazorResources.getParseError_NamespaceImportAndTypeAlias_Cannot_Exist_Within_CodeBlock());
+						RazorResources.getResource(RazorResources.ParseError_NamespaceImportAndTypeAlias_Cannot_Exist_Within_CodeBlock));
 				standardStatement();
 				
 			}else{
@@ -734,7 +734,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 			// Check for "{" to make sure we're at a block
 			if (!At(JavaSymbolType.LeftBrace)) {
 				getContext().OnError(getCurrentLocation().clone(),
-						RazorResources.getParseError_SingleLine_ControlFlowStatements_Not_Allowed(),
+						RazorResources.getResource(RazorResources.ParseError_SingleLine_ControlFlowStatements_Not_Allowed),
 						getLanguage().getSample(JavaSymbolType.LeftBrace), getCurrentSymbol().getContent());
 			}
 
@@ -827,7 +827,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		if (isMarkup) {
 			if (type == JavaSymbolType.Transition && !isSingleLineMarkup) {
 				getContext().OnError(loc,
-						RazorResources.getParseError_AtInCode_Must_Be_Followed_By_Colon_Paren_Or_Identifier_Start());
+						RazorResources.getResource(RazorResources.ParseError_AtInCode_Must_Be_Followed_By_Colon_Paren_Or_Identifier_Start));
 			}
 
 			// Markup block
@@ -854,7 +854,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		case LeftBrace:
 			// Verbatim Block
 			block = (block != null) ? block
-					: new Block(RazorResources.getBlockName_Code(), getCurrentLocation().clone());
+					: new Block(RazorResources.getResource(RazorResources.BlockName_Code), getCurrentLocation().clone());
 			AcceptAndMoveNext();
 			codeBlock(block);
 			break;
@@ -901,11 +901,11 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 			// Throw errors as necessary, but continue parsing
 			if (At(JavaSymbolType.Keyword)) {
 				getContext().OnError(getCurrentLocation().clone(),
-						RazorResources.getParseError_Unexpected_Keyword_After_At(),
+						RazorResources.getResource(RazorResources.ParseError_Unexpected_Keyword_After_At),
 						JavaLanguageCharacteristics.getKeyword(getCurrentSymbol().getKeyword()));
 			} else if (At(JavaSymbolType.LeftBrace)) {
 				getContext().OnError(getCurrentLocation().clone(),
-						RazorResources.getParseError_Unexpected_Nested_CodeBlock());
+						RazorResources.getResource(RazorResources.ParseError_Unexpected_Nested_CodeBlock));
 			}
 
 			// @( or @foo - Nested expression, parse a child block
@@ -978,7 +978,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 
 		if (getEndOfFile()) {
 			getContext().OnError(block.getStart().clone(),
-					RazorResources.getParseError_Expected_CloseBracket_Before_EOF(), block.getName(), '}', '{');
+					RazorResources.getResource(RazorResources.ParseError_Expected_CloseBracket_Before_EOF), block.getName(), '}', '{');
 		} else if (acceptTerminatingBrace) {
 			Assert(JavaSymbolType.RightBrace);
 			getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.None);
@@ -1164,7 +1164,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		try(AutoCloseable disposable=PushSpanConfig((p) -> defaultSpanConfig(p))) {
 			if (getContext() == null) {
 				
-				//throw new InvalidOperationException(RazorResources.getParser_Context_Not_Set());
+				//throw new InvalidOperationException(RazorResources.getResource(RazorResources.Parser_Context_Not_Set());
 			}
 
 			// Unless changed, the block is a statement block
@@ -1268,13 +1268,13 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 				getSpan().setEditHandler(tempVar2);
 				if (At(JavaSymbolType.WhiteSpace) || At(JavaSymbolType.NewLine)) {
 					getContext().OnError(getCurrentLocation().clone(),
-							RazorResources.getParseError_Unexpected_WhiteSpace_At_Start_Of_CodeBlock_CS());
+							RazorResources.getResource(RazorResources.ParseError_Unexpected_WhiteSpace_At_Start_Of_CodeBlock_CS));
 				} else if (getEndOfFile()) {
 					getContext().OnError(getCurrentLocation().clone(),
-							RazorResources.getParseError_Unexpected_EndOfFile_At_Start_Of_CodeBlock());
+							RazorResources.getResource(RazorResources.ParseError_Unexpected_EndOfFile_At_Start_Of_CodeBlock));
 				} else {
 					getContext().OnError(getCurrentLocation().clone(),
-							RazorResources.getParseError_Unexpected_Character_At_Start_Of_CodeBlock_CS(),
+							RazorResources.getResource(RazorResources.ParseError_Unexpected_Character_At_Start_Of_CodeBlock_CS),
 							getCurrentSymbol().getContent());
 				}
 			} finally {
@@ -1289,7 +1289,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 
 	private void verbatimBlock() {
 		// Assert(JavaSymbolType.LeftBrace);
-		Block block = new Block(RazorResources.getBlockName_Code(), getCurrentLocation().clone());
+		Block block = new Block(RazorResources.getResource(RazorResources.BlockName_Code), getCurrentLocation().clone());
 		AcceptAndMoveNext();
 
 		// Set up the "{" span and output
@@ -1451,7 +1451,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 	}
 
 	private void explicitExpression() {
-		Block block = new Block(RazorResources.getBlockName_ExplicitExpression(), getCurrentLocation().clone());
+		Block block = new Block(RazorResources.getResource(RazorResources.BlockName_ExplicitExpression), getCurrentLocation().clone());
 		Assert(JavaSymbolType.LeftParenthesis);
 		AcceptAndMoveNext();
 		getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.None);
@@ -1468,7 +1468,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 			if (!success) {
 				AcceptUntil(JavaSymbolType.LessThan);
 				getContext().OnError(block.getStart().clone(),
-						RazorResources.getParseError_Expected_EndOfBlock_Before_EOF(), block.getName(), ")", "(");
+						RazorResources.getResource(RazorResources.ParseError_Expected_EndOfBlock_Before_EOF), block.getName(), ")", "(");
 			}
 
 			// If necessary, put an empty-content marker symbol here
@@ -1499,7 +1499,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 	private void template() {
 		if (getContext().IsWithin(BlockType.Template)) {
 			getContext().OnError(getCurrentLocation().clone(),
-					RazorResources.getParseError_InlineMarkup_Blocks_Cannot_Be_Nested());
+					RazorResources.getResource(RazorResources.ParseError_InlineMarkup_Blocks_Cannot_Be_Nested));
 		}
 		Output(SpanKind.Code);
 

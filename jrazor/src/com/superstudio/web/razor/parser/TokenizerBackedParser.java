@@ -166,7 +166,7 @@ public abstract class TokenizerBackedParser<TTokenizer extends Tokenizer<TSymbol
 		SourceLocation start = getCurrentLocation().clone();
 		AcceptAndMoveNext();
 		if (getEndOfFile() && !mode.HasFlag(BalancingModes.NoErrorOnFailure)) {
-			getContext().OnError(start, RazorResources.getParseError_Expected_CloseBracket_Before_EOF(),
+			getContext().OnError(start, RazorResources.getResource(RazorResources.ParseError_Expected_CloseBracket_Before_EOF),
 					getLanguage().getSample(left), getLanguage().getSample(right));
 		}
 
@@ -201,7 +201,7 @@ public abstract class TokenizerBackedParser<TTokenizer extends Tokenizer<TSymbol
 
 			if (nesting > 0) {
 				if (!mode.HasFlag(BalancingModes.NoErrorOnFailure)) {
-					getContext().OnError(start, RazorResources.getParseError_Expected_CloseBracket_Before_EOF(),
+					getContext().OnError(start, RazorResources.getResource(RazorResources.ParseError_Expected_CloseBracket_Before_EOF),
 							getLanguage().getSample(left), getLanguage().getSample(right));
 				}
 				if (mode.HasFlag(BalancingModes.BacktrackOnFailure)) {
@@ -402,13 +402,13 @@ public abstract class TokenizerBackedParser<TTokenizer extends Tokenizer<TSymbol
 		if (!found && errorIfNotFound) {
 			String error;
 			if (getLanguage().isNewLine(getCurrentSymbol())) {
-				error = RazorResources.getErrorComponent_Newline();
+				error = RazorResources.getResource(RazorResources.ErrorComponent_Newline);
 			} else if (getLanguage().isWhiteSpace(getCurrentSymbol())) {
-				error = RazorResources.getErrorComponent_Whitespace();
+				error = RazorResources.getResource(RazorResources.ErrorComponent_Whitespace);
 			} else if (getEndOfFile()) {
-				error = RazorResources.getErrorComponent_EndOfFile();
+				error = RazorResources.getResource(RazorResources.ErrorComponent_EndOfFile);
 			} else {
-				error = String.format(RazorResources.getErrorComponent_Character(), getCurrentSymbol().getContent());
+				error = String.format(RazorResources.getResource(RazorResources.ErrorComponent_Character), getCurrentSymbol().getContent());
 			}
 
 			getContext().OnError(getCurrentLocation().clone(), errorBase, error);
@@ -568,7 +568,7 @@ public abstract class TokenizerBackedParser<TTokenizer extends Tokenizer<TSymbol
 	}
 
 	protected void outputSpanBeforeRazorComment() throws Exception {
-		throw new InvalidOperationException(RazorResources.getLanguage_Does_Not_Support_RazorComment());
+		throw new InvalidOperationException(RazorResources.getResource(RazorResources.Language_Does_Not_Support_RazorComment));
 	}
 
 	private void CommentSpanConfig(SpanBuilder span) {
@@ -581,7 +581,7 @@ public abstract class TokenizerBackedParser<TTokenizer extends Tokenizer<TSymbol
 				|| !getLanguage().knowsSymbolType(KnownSymbolType.CommentStar)
 				|| !getLanguage().knowsSymbolType(KnownSymbolType.CommentBody)) {
 			// throw new
-			// InvalidOperationException(RazorResources.getLanguage_Does_Not_Support_RazorComment());
+			// InvalidOperationException(RazorResources.getResource(RazorResources.Language_Does_Not_Support_RazorComment());
 		}
 		try {
 			outputSpanBeforeRazorComment();
@@ -611,7 +611,7 @@ public abstract class TokenizerBackedParser<TTokenizer extends Tokenizer<TSymbol
 				boolean errorReported = false;
 				if (!Optional(KnownSymbolType.CommentStar)) {
 					errorReported = true;
-					getContext().OnError(start, RazorResources.getParseError_RazorComment_Not_Terminated());
+					getContext().OnError(start, RazorResources.getResource(RazorResources.ParseError_RazorComment_Not_Terminated));
 				} else {
 					Output(SpanKind.MetaCode, AcceptedCharacters.None);
 				}
@@ -619,7 +619,7 @@ public abstract class TokenizerBackedParser<TTokenizer extends Tokenizer<TSymbol
 				if (!Optional(KnownSymbolType.CommentStart)) {
 					if (!errorReported) {
 						errorReported = true;
-						getContext().OnError(start, RazorResources.getParseError_RazorComment_Not_Terminated());
+						getContext().OnError(start, RazorResources.getResource(RazorResources.ParseError_RazorComment_Not_Terminated));
 					}
 				} else {
 					Output(SpanKind.Transition, AcceptedCharacters.None);

@@ -1,5 +1,7 @@
 package com.superstudio.web;
 
+import com.superstudio.web.razor.parser.ParserContext;
+
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -36,14 +38,19 @@ public class RazorResources {
     }
 
 
-    public String getResource(String key) {
+    public String getMessage(String key) {
 
         return this.resourceBundle.getString(key);
     }
 
+    public static String getResource(String key){
+       // ParserContext.getLocale();
+        return  new RazorResources(Locale.getDefault()).getMessage(key);
+    }
+
 
     public static final String getResources(String key, Locale locale) {
-        return new RazorResources(locale).getResource(key);
+        return new RazorResources(locale).getMessage(key);
     }
 
 

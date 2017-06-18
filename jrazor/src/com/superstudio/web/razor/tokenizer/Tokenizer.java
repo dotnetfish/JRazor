@@ -186,7 +186,7 @@ implements ITokenizer
 		// Verify the symbol can be resumed
 		if (previous.getStart().getAbsoluteIndex() + previous.getContent().length() != getCurrentStart().getAbsoluteIndex())
 		{
-			throw new InvalidOperationException(RazorResources.getTokenizer_CannotResumeSymbolUnlessIsPrevious());
+			throw new InvalidOperationException(RazorResources.getResource(RazorResources.Tokenizer_CannotResumeSymbolUnlessIsPrevious));
 		}
 
 		// reset the start point

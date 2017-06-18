@@ -38,7 +38,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 	public void parseBlock() {
 		if (getContext() == null) {
 			// throw new
-			// InvalidOperationException(RazorResources.getParser_Context_Not_Set());
+			// InvalidOperationException(RazorResources.getResource(RazorResources.Parser_Context_Not_Set());
 		}
 
 
@@ -77,7 +77,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 					afterTransition();
 				} else {
 					getContext().OnError(getCurrentSymbol().getStart(),
-							RazorResources.getParseError_MarkupBlock_Must_Start_With_Tag());
+							RazorResources.getResource(RazorResources.ParseError_MarkupBlock_Must_Start_With_Tag));
 				}
 				Output(SpanKind.Markup);
 			}catch (Exception ex){
@@ -187,7 +187,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			}
 		}
 		if (tags.empty()) {
-			getContext().OnError(getCurrentLocation().clone(), RazorResources.getParseError_OuterTagMissingName());
+			getContext().OnError(getCurrentLocation().clone(), RazorResources.getResource(RazorResources.ParseError_OuterTagMissingName));
 		}
 		return false;
 	}
@@ -276,7 +276,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		boolean seenCloseAngle = Optional(HtmlSymbolType.CloseAngle);
 
 		if (!seenCloseAngle) {
-			getContext().OnError(start, RazorResources.getParseError_TextTagCannotContainAttributes());
+			getContext().OnError(start, RazorResources.getResource(RazorResources.ParseError_TextTagCannotContainAttributes));
 		} else {
 			getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.None);
 		}
@@ -601,7 +601,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			if (!Optional(HtmlSymbolType.CloseAngle)) {
 				getContext().getSource().setPosition(bookmark);
 				nextToken();
-				getContext().OnError(tag.getItem2(), RazorResources.getParseError_TextTagCannotContainAttributes());
+				getContext().OnError(tag.getItem2(), RazorResources.getResource(RazorResources.ParseError_TextTagCannotContainAttributes));
 			} else {
 				Accept(tokens);
 				getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.None);
@@ -638,7 +638,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		// Check for the '>' to determine if the tag is finished
 		boolean seenClose = Optional(HtmlSymbolType.CloseAngle);
 		if (!seenClose) {
-			getContext().OnError(tag.getItem2(), RazorResources.getParseError_UnfinishedTag(),
+			getContext().OnError(tag.getItem2(), RazorResources.getResource(RazorResources.ParseError_UnfinishedTag),
 					tag.getItem1().getContent());
 		} else {
 			if (!isEmpty) {
@@ -712,7 +712,8 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 					// </script!
 					SkipToAndParseCode(HtmlSymbolType.CloseAngle);
 					if (!Optional(HtmlSymbolType.CloseAngle)) {
-						getContext().OnError(tagStart, RazorResources.getParseError_UnfinishedTag(), "script");
+						getContext().OnError(tagStart,
+								RazorResources.getResource(RazorResources.ParseError_UnfinishedTag), "script");
 					}
 					seenEndScript = true;
 				}
@@ -744,10 +745,10 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			}
 		}
 		if (currentTag != null) {
-			getContext().OnError(currentTag.getItem2(), RazorResources.getParseError_MissingEndTag(),
+			getContext().OnError(currentTag.getItem2(), RazorResources.getResource(RazorResources.ParseError_MissingEndTag),
 					currentTag.getItem1().getContent());
 		} else {
-			getContext().OnError(tagStart, RazorResources.getParseError_UnexpectedEndTag(), tagName);
+			getContext().OnError(tagStart, RazorResources.getResource(RazorResources.ParseError_UnexpectedEndTag), tagName);
 		}
 		return false;
 	}
@@ -760,7 +761,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				tags.pop();
 			}
 			Tuple<HtmlSymbol, SourceLocation> tag = tags.pop();
-			getContext().OnError(tag.getItem2(), RazorResources.getParseError_MissingEndTag(),
+			getContext().OnError(tag.getItem2(), RazorResources.getResource(RazorResources.ParseError_MissingEndTag),
 					tag.getItem1().getContent());
 		} else if (complete) {
 			getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.None);
@@ -786,7 +787,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 	@Override
 	public void ParseDocument() throws InvalidOperationException {
 		if (getContext() == null) {
-			throw new InvalidOperationException(RazorResources.getParser_Context_Not_Set());
+			throw new InvalidOperationException(RazorResources.getResource(RazorResources.Parser_Context_Not_Set));
 		}
 
 
@@ -992,7 +993,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 	@Override
 	public void parseSection(Tuple<String, String> nestingSequences, boolean caseSensitive) {
 		if (getContext() == null) {
-			//throw new InvalidOperationException(RazorResources.getParser_Context_Not_Set());
+			//throw new InvalidOperationException(RazorResources.getResource(RazorResources.Parser_Context_Not_Set());
 		}
 
 

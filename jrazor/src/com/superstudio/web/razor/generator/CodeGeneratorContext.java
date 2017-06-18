@@ -1,20 +1,17 @@
 package com.superstudio.web.razor.generator;
 
-import com.superstudio.commons.csharpbridge.action.ActionOne;
+import com.superstudio.codedom.*;
+import com.superstudio.commons.CollectionHelper;
+import com.superstudio.commons.csharpbridge.RefObject;
+import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.csharpbridge.action.ActionTwo;
 import com.superstudio.commons.csharpbridge.action.Func;
 import com.superstudio.commons.exception.InvalidOperationException;
-import com.superstudio.web.*;
-import com.superstudio.web.razor.*;
-import com.superstudio.web.razor.parser.syntaxTree.*;
-import com.superstudio.web.razor.resources.RazorResources;
-import com.superstudio.web.razor.text.*;
+import com.superstudio.web.RazorResources;
+import com.superstudio.web.razor.RazorEngineHost;
+import com.superstudio.web.razor.parser.syntaxTree.Span;
+import com.superstudio.web.razor.text.SourceLocation;
 import com.superstudio.web.razor.utils.DisposableAction;
-import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.codedom.*;
-import com.superstudio.commons.CollectionHelper;
-
-import com.superstudio.commons.csharpbridge.RefObject;
 
 import java.util.function.Consumer;
 
@@ -360,7 +357,7 @@ public class CodeGeneratorContext {
 		if (getCodeWriterFactory() == null) {
 			// return null;
 			try {
-				throw new InvalidOperationException(RazorResources.getCreateCodeWriter_NoCodeWriter());
+				throw new InvalidOperationException(RazorResources.getResource(RazorResources.CreateCodeWriter_NoCodeWriter));
 			} catch (InvalidOperationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

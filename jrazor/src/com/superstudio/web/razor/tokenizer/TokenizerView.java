@@ -61,7 +61,7 @@ TSymbol extends SymbolBase<TSymbolType>, TSymbolType>
 		{
 			// We've already passed this symbol
 			
-			//throw new InvalidOperationException(String.format( RazorResources.getTokenizerView_CannotPutBack(), symbol.getStart().getAbsoluteIndex() + symbol.getContent().length(), getSource().getPosition()));
+			//throw new InvalidOperationException(String.format( RazorResources.getResource(RazorResources.TokenizerView_CannotPutBack(), symbol.getStart().getAbsoluteIndex() + symbol.getContent().length(), getSource().getPosition()));
 		}
 		getSource().setPosition(getSource().getPosition() - symbol.getContent().length());
 		setCurrent(null);

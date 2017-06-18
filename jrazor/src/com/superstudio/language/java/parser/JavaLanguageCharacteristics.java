@@ -190,25 +190,25 @@ public class JavaLanguageCharacteristics extends LanguageCharacteristics<JavaTok
 			switch (type)
 			{
 				case Identifier:
-					return RazorResources.getJavaSymbol_Identifier();
+					return RazorResources.getResource(RazorResources.JavaSymbol_Identifier);
 				case Keyword:
-					return RazorResources.getJavaSymbol_Keyword();
+					return RazorResources.getResource(RazorResources.JavaSymbol_Keyword);
 				case IntegerLiteral:
-					return RazorResources.getJavaSymbol_IntegerLiteral();
+					return RazorResources.getResource(RazorResources.JavaSymbol_IntegerLiteral);
 				case NewLine:
-					return RazorResources.getJavaSymbol_Newline();
+					return RazorResources.getResource(RazorResources.JavaSymbol_Newline);
 				case WhiteSpace:
-					return RazorResources.getJavaSymbol_Whitespace();
+					return RazorResources.getResource(RazorResources.JavaSymbol_Whitespace);
 				case Comment:
-					return RazorResources.getJavaSymbol_Comment();
+					return RazorResources.getResource(RazorResources.JavaSymbol_Comment);
 				case RealLiteral:
-					return RazorResources.getJavaSymbol_RealLiteral();
+					return RazorResources.getResource(RazorResources.JavaSymbol_RealLiteral);
 				case CharacterLiteral:
-					return RazorResources.getJavaSymbol_CharacterLiteral();
+					return RazorResources.getResource(RazorResources.JavaSymbol_CharacterLiteral);
 				case StringLiteral:
-					return RazorResources.getJavaSymbol_StringLiteral();
+					return RazorResources.getResource(RazorResources.JavaSymbol_StringLiteral);
 				default:
-					return RazorResources.getSymbol_Unknown();
+					return RazorResources.getResource(RazorResources.Symbol_Unknown);
 			}
 		}
 		return sample;

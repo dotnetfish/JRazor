@@ -36,7 +36,7 @@ public final class RazorEditorTrace
 	{
 		if (isEnabled())
 		{
-			Trace.WriteLine(String.format( RazorResources.getTrace_Format(), String.format( format, args)));
+			Trace.WriteLine(String.format( RazorResources.getResource(RazorResources.Trace_Format), String.format( format, args)));
 		}
 	}
 }

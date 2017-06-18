@@ -168,7 +168,7 @@ public class BackgroundParser implements AutoCloseable {
 		}
 
 		public final void QueueChange(TextChange change) {
-			RazorEditorTrace.traceLine(RazorResources.getTrace_QueuingParse(), Path.GetFileName(_fileName), change);
+			RazorEditorTrace.traceLine(RazorResources.getResource(RazorResources.Trace_QueuingParse), Path.GetFileName(_fileName), change);
 			ensureOnThread();
 			synchronized (_stateLock) {
 				// CurrentParcel token source is not null =-> There's a parse
@@ -275,13 +275,13 @@ public class BackgroundParser implements AutoCloseable {
 			String fileNameOnly = Path.GetFileName(_fileName);
 
 			try {
-				RazorEditorTrace.traceLine(RazorResources.getTrace_BackgroundThreadStart(), fileNameOnly);
+				RazorEditorTrace.traceLine(RazorResources.getResource(RazorResources.Trace_BackgroundThreadStart), fileNameOnly);
 				ensureOnThread();
 				while (!_shutdownToken.isCancellationRequested()) {
 					// Grab the parcel of work to do
 					WorkParcel parcel = _main.GetParcel();
 					if (!parcel.getChanges().isEmpty()) {
-						RazorEditorTrace.traceLine(RazorResources.getTrace_ChangesArrived(), fileNameOnly,
+						RazorEditorTrace.traceLine(RazorResources.getResource(RazorResources.Trace_ChangesArrived), fileNameOnly,
 								parcel.getChanges().size());
 						DocumentParseCompleteEventArgs args = null;
 
@@ -291,7 +291,7 @@ public class BackgroundParser implements AutoCloseable {
 							if (!linkedCancel.IsCancellationRequested()) {
 
 								if (_previouslyDiscarded != null && _previouslyDiscarded.size()>0) {
-									RazorEditorTrace.traceLine(RazorResources.getTrace_CollectedDiscardedChanges(),
+									RazorEditorTrace.traceLine(RazorResources.getResource(RazorResources.Trace_CollectedDiscardedChanges),
 											fileNameOnly, _previouslyDiscarded.size());
 								}
 
@@ -321,7 +321,7 @@ public class BackgroundParser implements AutoCloseable {
 													allChanges, parcel.getCancelToken());
 
 									_currentParseTree = results.getDocument();
-																	//RazorEditorTrace.traceLine(RazorResources.getTrace_TreesCompared(),
+																	//RazorEditorTrace.traceLine(RazorResources.getResource(RazorResources.Trace_TreesCompared(),
 									//	fileNameOnly, elapsedMs != null
 									//			? elapsedMs.toString(CultureInfo.InvariantCulture) : "?",
 									//	treeStructureChanged);
@@ -336,7 +336,7 @@ public class BackgroundParser implements AutoCloseable {
 									// parse completed but we were cancelled
 									// in the mean time. add these to the
 									// discarded changes set
-									RazorEditorTrace.traceLine(RazorResources.getTrace_ChangesDiscarded(),
+									RazorEditorTrace.traceLine(RazorResources.getResource(RazorResources.Trace_ChangesDiscarded),
 											fileNameOnly, allChanges.size());
 									_previouslyDiscarded = allChanges;
 								}
@@ -358,13 +358,13 @@ public class BackgroundParser implements AutoCloseable {
 							_main.ReturnParcel(args);
 						}
 					} else {
-						RazorEditorTrace.traceLine(RazorResources.getTrace_NoChangesArrived(), fileNameOnly,
+						RazorEditorTrace.traceLine(RazorResources.getResource(RazorResources.Trace_NoChangesArrived), fileNameOnly,
 								parcel.getChanges().size());
 						Thread.yield();
 					}
 				}
 			} finally {
-				RazorEditorTrace.traceLine(RazorResources.getTrace_BackgroundThreadShutdown(), fileNameOnly);
+				RazorEditorTrace.traceLine(RazorResources.getResource(RazorResources.Trace_BackgroundThreadShutdown), fileNameOnly);
 _main.close();
 			}
 		}

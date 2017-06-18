@@ -15,9 +15,9 @@ public class Block extends SyntaxTreeNode {
 	public Block(BlockBuilder source) {
 		if (source.getType() == null) {
 			// throw new
-			// InvalidOperationException(RazorResources.getBlock_Type_Not_Specified());
+			// InvalidOperationException(RazorResources.getResource(RazorResources.Block_Type_Not_Specified());
 			// throw new
-			// InvalidOperationException(RazorResources.getBlock_Type_Not_Specified());
+			// InvalidOperationException(RazorResources.getResource(RazorResources.Block_Type_Not_Specified());
 		}
 		setType(source.getType());
 		setChildren(source.getChildren());

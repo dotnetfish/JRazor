@@ -2,6 +2,7 @@ package com.superstudio.web.razor.parser;
 
 import com.superstudio.commons.CollectionHelper;
 
+import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.InvalidOperationException;
 import com.superstudio.web.RazorResources;
 import com.superstudio.web.razor.ParserResults;
@@ -45,7 +46,7 @@ public class ParserContext
 		}
 		if (activeParser != codeParser && activeParser != markupParser)
 		{
-			throw new IllegalArgumentException(RazorResources.getActiveParser_Must_Be_Code_Or_Markup_Parser()+ "activeParser");
+			throw new IllegalArgumentException(StringHelper.format(RazorResources.getResource(RazorResources.ActiveParser_Must_Be_Code_Or_Markup_Parser), "activeParser"));
 		}
 
 		CaptureOwnerTask();
@@ -181,7 +182,7 @@ public class ParserContext
 		EnusreNotTerminated();
 		if (_blockStack.empty())
 		{
-			throw new InvalidOperationException(RazorResources.getParserContext_NoCurrentBlock());
+			throw new InvalidOperationException(RazorResources.getResource(RazorResources.ParserContext_NoCurrentBlock));
 		}
 		_blockStack.peek().getChildren().add(span);
 		setLastSpan(span);
@@ -237,7 +238,7 @@ public class ParserContext
 
 		if (_blockStack.empty())
 		{
-			//throw new InvalidOperationException(RazorResources.getEndBlock_Called_Without_Matching_StartBlock());
+			//throw new InvalidOperationException(RazorResources.getResource(RazorResources.EndBlock_Called_Without_Matching_StartBlock());
 		}
 		if (_blockStack.size() > 1)
 		{
@@ -314,11 +315,11 @@ public class ParserContext
 	{
 		if (_blockStack.empty())
 		{
-			throw new InvalidOperationException(RazorResources.getParserContext_CannotCompleteTree_NoRootBlock());
+			throw new InvalidOperationException(RazorResources.getResource(RazorResources.ParserContext_CannotCompleteTree_NoRootBlock));
 		}
 		if (_blockStack.size() != 1)
 		{
-			throw new InvalidOperationException(RazorResources.getParserContext_CannotCompleteTree_OutstandingBlocks());
+			throw new InvalidOperationException(RazorResources.getResource(RazorResources.ParserContext_CannotCompleteTree_OutstandingBlocks));
 		}
 		return new ParserResults(_blockStack.pop().build(), getErrors());
 	}
@@ -355,7 +356,7 @@ public class ParserContext
 	{
 		if (_terminated)
 		{
-			throw new InvalidOperationException(RazorResources.getParserContext_ParseComplete());
+			throw new InvalidOperationException(RazorResources.getResource(RazorResources.ParserContext_ParseComplete));
 		}
 	}
 

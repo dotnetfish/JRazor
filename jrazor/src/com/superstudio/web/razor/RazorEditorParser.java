@@ -83,7 +83,7 @@ public class RazorEditorParser implements AutoCloseable
 		if (StringHelper.isNullOrEmpty(sourceFileName))
 		{
 			throw new IllegalArgumentException(
-					RazorResources.getResources("getArgument_Cannot_Be_Null_Or_Empty")+ "sourceFileName");
+					StringHelper.format(RazorResources.getResource(RazorResources.Argument_Cannot_Be_Null_Or_Empty),sourceFileName));
 		}
 
 		setHost(host);
@@ -169,10 +169,10 @@ public class RazorEditorParser implements AutoCloseable
 		//Stopwatch sw = new Stopwatch();
 		//sw.start();
 //#endif
-		RazorEditorTrace.traceLine(RazorResources.getTrace_EditorReceivedChange(), Path.GetFileName(getFileName()), change);
+		RazorEditorTrace.traceLine(RazorResources.getResource(RazorResources.Trace_EditorReceivedChange), Path.GetFileName(getFileName()), change);
 		if (change.getNewBuffer() == null)
 		{
-			throw new IllegalArgumentException(String.format(RazorResources.getStructure_Member_CannotBeNull(), "Buffer", "TextChange")+"change");
+			throw new IllegalArgumentException(String.format(RazorResources.getResource(RazorResources.Structure_Member_CannotBeNull), "Buffer", "TextChange")+"change");
 		}
 
 		PartialParseResult result = PartialParseResult.Rejected;
@@ -212,7 +212,7 @@ public class RazorEditorParser implements AutoCloseable
 		//elapsedMs = sw.ElapsedMilliseconds;
 		//sw.reset();
 //#endif
-		//RazorEditorTrace.traceLine(RazorResources.getTrace_EditorProcessedChange(), Path.GetFileName(getFileName()), changeString, elapsedMs != null ? elapsedMs.toString(CultureInfo.InvariantCulture) : "?", result.toString());
+		//RazorEditorTrace.traceLine(RazorResources.getResource(RazorResources.Trace_EditorProcessedChange(), Path.GetFileName(getFileName()), changeString, elapsedMs != null ? elapsedMs.toString(CultureInfo.InvariantCulture) : "?", result.toString());
 		return result;
 	}
 

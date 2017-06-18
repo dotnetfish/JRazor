@@ -28,16 +28,16 @@ public abstract class RazorCodeGenerator extends ParserVisitor
 	{
 		if (StringHelper.isNullOrEmpty(className))
 		{
-			throw new IllegalArgumentException(
-					RazorResources.getResources("Argument_Cannot_Be_Null_Or_Empty")+ "className");
+			throw new IllegalArgumentException(StringHelper.format(
+					RazorResources.getResource(RazorResources.Argument_Cannot_Be_Null_Or_Empty),className));
 		}
 		if (rootNamespaceName == null)
 		{
-			//throw new ArgumentNullException("rootNamespaceName");
+			throw new ArgumentNullException("rootNamespaceName");
 		}
 		if (host == null)
 		{
-			//throw new ArgumentNullException("host");
+			throw new ArgumentNullException("host");
 		}
 
 		setClassName(className);

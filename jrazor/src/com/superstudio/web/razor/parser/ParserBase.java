@@ -7,6 +7,7 @@ import com.superstudio.web.RazorResources;
 import com.superstudio.web.razor.parser.syntaxTree.SpanBuilder;
 import com.superstudio.web.razor.text.SourceLocation;
 
+import java.util.Locale;
 
 
 public abstract class ParserBase
@@ -19,7 +20,6 @@ public abstract class ParserBase
 	}
 	public void setContext(ParserContext value)
 	{
-		//Debug.Assert(_context == null, "Context has already been set for this parser!");
 		_context = value;
 		_context.AssertOnOwnerTask();
 	}
@@ -40,12 +40,12 @@ public abstract class ParserBase
 	public void ParseDocument() throws NotSupportedException, InvalidOperationException
 	{
 		assert getIsMarkupParser();
-		throw new NotSupportedException(RazorResources.getParserIsNotAMarkupParser());
+		throw new NotSupportedException(RazorResources.getResource(RazorResources.ParserIsNotAMarkupParser));
 	}
 
 	public void parseSection(Tuple<String, String> nestingSequences, boolean caseSensitive) throws NotSupportedException
 	{
 		assert getIsMarkupParser();
-		throw new NotSupportedException(RazorResources.getParserIsNotAMarkupParser());
+		throw new NotSupportedException(RazorResources.getResource(RazorResources.ParserIsNotAMarkupParser));
 	}
 }

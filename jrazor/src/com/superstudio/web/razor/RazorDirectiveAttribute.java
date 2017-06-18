@@ -18,7 +18,7 @@ public final class RazorDirectiveAttribute //extends Attribute
 	{
 		if (StringHelper.isNullOrEmpty(name))
 		{
-			throw new IllegalArgumentException(RazorResources.getResources("Argument_Cannot_Be_Null_Or_Empty")+ "name");
+			throw new IllegalArgumentException(StringHelper.format(RazorResources.getResource(RazorResources.Argument_Cannot_Be_Null_Or_Empty),name));
 		}
 
 		setName(name);

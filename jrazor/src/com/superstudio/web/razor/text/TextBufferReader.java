@@ -104,7 +104,7 @@ public class TextBufferReader extends LookaheadTextReader
 	{
 		if (_bookmarks.empty())
 		{
-			//throw new InvalidOperationException(RazorResources.getCancelBacktrack_Must_Be_Called_Within_Lookahead());
+			//throw new InvalidOperationException(RazorResources.getResource(RazorResources.CancelBacktrack_Must_Be_Called_Within_Lookahead());
 		}
 		_bookmarks.pop();
 	}

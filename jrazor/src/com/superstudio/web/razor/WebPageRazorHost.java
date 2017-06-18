@@ -180,7 +180,7 @@ public class WebPageRazorHost extends RazorEngineHost {
 		this();
 		if (StringHelper.isNullOrEmpty(virtualPath)) {
 			 throw new IllegalArgumentException(StringHelper.format(CultureInfo.CurrentCulture,
-			 RazorResources.Argument_Cannot_Be_Null_Or_Empty(), new Object[]
+			 RazorResources.getResource(RazorResources.Argument_Cannot_Be_Null_Or_Empty), new Object[]
 			 {"virtualPath"}));
 		}
 		this.setVirtualPath(virtualPath);

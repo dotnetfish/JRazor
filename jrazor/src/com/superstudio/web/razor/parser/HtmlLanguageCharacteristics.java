@@ -28,11 +28,11 @@ public class HtmlLanguageCharacteristics extends LanguageCharacteristics<HtmlTok
 		switch (type)
 		{
 			case Text:
-				return RazorResources.getHtmlSymbol_Text();
+				return RazorResources.getResource(RazorResources.HtmlSymbol_Text);
 			case WhiteSpace:
-				return RazorResources.getHtmlSymbol_WhiteSpace();
+				return RazorResources.getResource(RazorResources.HtmlSymbol_WhiteSpace);
 			case NewLine:
-				return RazorResources.getHtmlSymbol_NewLine();
+				return RazorResources.getResource(RazorResources.HtmlSymbol_NewLine);
 			case OpenAngle:
 				return "<";
 			case Bang:
@@ -60,13 +60,13 @@ public class HtmlLanguageCharacteristics extends LanguageCharacteristics<HtmlTok
 			case Colon:
 				return ":";
 			case RazorComment:
-				return RazorResources.getHtmlSymbol_RazorComment();
+				return RazorResources.getResource(RazorResources.HtmlSymbol_RazorComment);
 			case RazorCommentStar:
 				return "*";
 			case RazorCommentTransition:
 				return "@";
 			default:
-				return RazorResources.getSymbol_Unknown();
+				return RazorResources.getResource(RazorResources.Symbol_Unknown);
 		}
 	}
 
