@@ -52,8 +52,6 @@
     String style="even";
     }
     @for(StockModel item : getModel()){
-
-
                  <tr class="@(index%2==0?"odd":"even")">
             <td>@index</td>
             <td>@item.getId()</td>

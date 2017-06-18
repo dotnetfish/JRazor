@@ -6,13 +6,28 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
+		<resources>
+
+		<resource>
+			<directory>src</directory>
+			<includes>
+				<include >**/*.properties</include>
+
+			</includes>
+		</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
 				<configuration>
-					<source />
-					<target />
+					<source >
+						1.8
+					</source>
+					<target >1.8
+					</target>
+
 				</configuration>
 			</plugin>
 		</plugins>
