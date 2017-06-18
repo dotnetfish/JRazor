@@ -110,7 +110,7 @@ public final class CompilerInfo
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//return (CodeDomProvider)Activator.CreateInstance(this.getCodeDomProviderType());
+		//return (CodeDomProvider)Activator.createInstance(this.getCodeDomProviderType());
 		return (CodeDomProvider)this.getCodeDomProviderType().newInstance();
 		//return (CodeDomProvider)Class.forName(_codeDomProviderTypeName).newInstance();
 	}

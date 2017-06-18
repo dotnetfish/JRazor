@@ -1,5 +1,6 @@
 package com.superstudio.template.templatepages;
 
+import com.superstudio.commons.CodeExecuteTimeStatistic;
 import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.csharpbridge.action.ActionOne;
@@ -8,14 +9,8 @@ import com.superstudio.commons.exception.HttpException;
 import com.superstudio.template.mvc.context.HostContext;
 import org.apache.commons.io.IOUtils;
 
-import java.io.FileNotFoundException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Stack;
+import java.io.*;
+import java.util.*;
 import java.util.function.Predicate;
 
 
@@ -199,7 +194,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 	}
 
 	@Override
-	public void executePageHierarchy() throws ArgumentNullException {
+	public void executePageHierarchy() throws Exception {
 		// Unlike InitPages, for a WebPage there is no hierarchy - it is always
 		// the last file to execute in the chain. There can still be layout
 		// pages
@@ -226,12 +221,14 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 		}
 
 		TemplateStack.push(getContext(), this);
-		try {
-			// execute the developer-written code of the WebPage
+
+		try{	// execute the developer-written code of the WebPage
+			long time=System.currentTimeMillis();
 			execute();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			long time2=System.currentTimeMillis();
+			CodeExecuteTimeStatistic.evalute(this.getClass().getName()+".execute Page ",time2-time);
+
+
 		} finally {
 			TemplateStack.pop(getContext());
 		}
@@ -267,6 +264,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 					// _tempWriter.copyTo(p);
 				} catch (Exception e) {
 					e.printStackTrace();
+					//throw e;
 				}
 			});
 			getOutputStack().pop();
@@ -274,7 +272,8 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 			// Otherwise, just render the page.
 			// _tempWriter.copyTo(_currentWriter);
 			StringReader stream = new StringReader(_tempWriter.getBuffer().toString());
-			IOUtils.copy(stream, _currentWriter);
+				IOUtils.copy(stream, _currentWriter);
+				//_currentWriter.write(_tempWriter.getBuffer().)
 		}
 
 		verifyRenderedBodyOrSections();
@@ -491,6 +490,34 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 
 		}
 	}
+
+	public  void write(int value) throws IOException{
+		getOutput().write(String.valueOf(value));
+	}
+	public  void write(long value) throws IOException{
+		getOutput().write(String.valueOf(value));
+	}
+	public  void write(boolean value) throws IOException{
+		getOutput().write(String.valueOf(value));
+	}
+
+	public  void write(byte value) throws IOException{
+		getOutput().write(value);
+	}
+
+	public  void write(double value) throws IOException{
+		getOutput().write(String.valueOf(value));
+	}
+
+	public  void write(short value) throws IOException{
+		getOutput().write(String.valueOf(value));
+	}
+
+	public void write(Date value) throws  IOException{
+
+		getOutput().write(String.valueOf(value));
+	}
+
 
 	@Override
 	public void writeLiteral(Object value) {

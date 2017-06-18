@@ -1,7 +1,9 @@
 package com.superstudio.template.mvc;
 
+import com.superstudio.commons.CodeExecuteTimeStatistic;
 import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.MvcResources;
+import com.superstudio.commons.RuntimeCache;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.template.mvc.context.RenderContext;
 
@@ -75,10 +77,18 @@ public abstract class BuildManagerCompiledTemplate implements ITemplate
 
 		Object instance = null;
 
-		java.lang.Class type = getBuildManager().getCompiledType(getTemplatePath());
-		if (type != null)
-		{
-			instance = templatePageActivator.create(renderContext, type);
+		String key="_instance_"+getTemplatePath().replace("~","__").replace("/",".");
+		instance=RuntimeCache.getInstance().get(key);
+		if(instance==null){
+			java.lang.Class type = getBuildManager().getCompiledType(getTemplatePath());
+			if (type != null)
+			{
+				instance = templatePageActivator.create(renderContext, type);
+			}
+			if(instance!=null){
+				RuntimeCache.getInstance().set(key,instance);
+			}
+
 		}
 
 		if (instance == null)
@@ -89,7 +99,11 @@ public abstract class BuildManagerCompiledTemplate implements ITemplate
 		}
 
 		try {
+			long timeStart=System.currentTimeMillis();
 			renderTemplate(templateContext, writer, instance);
+			long timeend=System.currentTimeMillis();
+			CodeExecuteTimeStatistic.evalute(this.getClass().getName()+".renderTemplate",timeend-timeStart);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -226,7 +226,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 				}
 			}
 
-			if (i > 0 && i % 80 == 0) {
+			/*if (i > 0 && i % 80 == 0) {
 				if (Character.isHighSurrogate(value.charAt(i)) && i < value.length() - 1
 						&& Character.isLowSurrogate(value.charAt(i + 1))) {
 					StringBuilder.append(value.charAt(++i));
@@ -235,7 +235,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 				StringBuilder.append(Environment.NewLine);
 				StringBuilder.append(indentation.getIndentationString());
 				StringBuilder.append('"');
-			}
+			}*/
 			i++;
 			continue;
 
@@ -250,11 +250,12 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		for (int i = 0; i < value.length(); i++) {
 			if (value.charAt(i) == '"') {
 				StringBuilder.append("\"\"");
-			} else if ((value.charAt(i) == '\r' && value.charAt(i + 1) == '\n')) {// \r\n
+				//we dont need to split text with mutil line.one line will be ok
+			/*} else if ((value.charAt(i) == '\r' && value.charAt(i + 1) == '\n')) {// \r\n
 				StringBuilder.append("\"+\r\n+\"");
 				i++;
 			} else if (value.charAt(i) == '\n' || value.charAt(i) == '\n') {
-				StringBuilder.append("\"+\r\n+\"");
+				StringBuilder.append("\"+\r\n+\"");*/
 			} else {
 				StringBuilder.append(value.charAt(i));
 			}
@@ -809,7 +810,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		if (e.getValue() instanceof Long) {
 			// this.output.write(((Long)e.getValue()).toString(CultureInfo.InvariantCulture));
 			this.output.write(String.valueOf(e.getValue()));
-			this.output.write("l");
+			this.output.write("L");
 			return;
 		}
 		this.generatePrimitiveExpressionBase(e);
@@ -861,10 +862,10 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		 * this.generateDecimalValue((decimal)e.getValue()); return; }
 		 */
 		if (!(e.getValue() instanceof Boolean)) {
-			/*
-			 * throw new ArgumentException(SR.GetString("InvalidPrimitiveType",
-			 * new object[] { e.getValue().GetType().ToString() }));
-			 */
+
+			  throw new ArgumentException(SR.GetString("InvalidPrimitiveType",
+			  new Object[] { e.getValue().getClass().getName() }));
+
 		}
 		if ((boolean) e.getValue()) {
 			this.output.write("true");

@@ -329,7 +329,7 @@ public class CodeGeneratorContext {
 
 	public final void AddContextCall(Span contentSpan, String methodName, boolean isLiteral) {
 
-		AddStatement(BuildCodeString(cw -> {
+		/*AddStatement(BuildCodeString(cw -> {
 			cw.writeStartMethodInvoke(methodName);
 			if (!StringHelper.isNullOrEmpty(getTargetWriterName())) {
 				cw.writeSnippet(getTargetWriterName());
@@ -349,7 +349,7 @@ public class CodeGeneratorContext {
 			cw.writeSnippet((new Boolean(isLiteral)).toString().toLowerCase());
 			cw.writeEndMethodInvoke();
 			cw.writeEndStatement();
-		}));
+		}));*/
 	}
 
 	public final CodeWriter CreateCodeWriter() {

@@ -28,10 +28,11 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class JavaBuildManager {
 
-	private static Map<String, Class> mapper = new HashMap<String, Class>();
+	private static ConcurrentHashMap<String, Class> mapper = new ConcurrentHashMap<>();
 
 	public static IWebObjectFactory getObjectFactory(String virtualPath, boolean b) {
 		virtualPath=StringHelper.trimStart(virtualPath, '~', '/');
@@ -94,66 +95,6 @@ public class JavaBuildManager {
 
 	}
 
-	public static Class renderTemplates(String codePath, String templatePath) throws Exception {
-
-		// FileInputStream writer=new FileInputStream("d:\\test.java");
-		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
-		// URI uri=new URI("file://d:/ _Page_java_cshtml.java");
-		StandardJavaFileManager javaFileManager = javaCompiler.getStandardFileManager(null, null, Charset.forName("UTF-8"));
-		// 5.文件管理器根与文件连接起来
-		/*
-		 * String classPath="./jua/WEB-INF/lib/mvc-0.0.1-SNAPSHOT.jar";
-		 * javaFileManager.setLocation(StandardLocation.CLASS_PATH,
-		 * Arrays.asList( new java.io.File(classPath)));
-		 */
-		System.out.println(codePath);
-		Iterable it = javaFileManager.getJavaFileObjects(new java.io.File(codePath));
-
-		String root = HostContext.getCurrent().mapPath("/");
-		java.io.File file = new java.io.File(root + "WEB-INF/lib");
-		java.io.File[] tempList = file.listFiles();
-		//System.out.println(file.getAbsolutePath());
-		String classPaths = "";
-		URL[] urlItem = new URL[tempList.length + 1];
-		for (int i = 0; i < tempList.length; i++) {
-			if (tempList[i].isFile()) {
-				classPaths += (tempList[i].getAbsolutePath() + ";");
-			}
-			urlItem[i] = tempList[i].toURL();
-		}
-		classPaths += root + "WEB-INF/classes";
-		//urlItem[tempList.length] = new URL("file:/" + root + "/WEB-INF/classes/");
-		System.out.print("classPath:");
-		System.out.println(classPaths);
-		Iterable<String> options = Arrays.asList("-classpath", classPaths,
-				"-d",
-				root + "WEB-INF/classes");
-
-		CompilationTask task = javaCompiler.getTask(null, null,
-                null,
-                options, null, it);
-		boolean success = task.call();
-		if (!success) {
-			System.out.println("编译失败");
-		} else {
-			System.out.println("编译成功");
-		}
-
-
-
-
-		//URL[] urls = urlItem;
-
-		List<java.io.File> files = Arrays.asList(tempList);
-
-
-		String className = ParserHelpers
-				.sanitizeClassName("_Page_" + StringHelper.trimStart(templatePath, '~', '/'));
-		File.Delete(codePath);
-		return Class.forName("JRazor." + className);
-
-
-	}
 
 	public static Collection getReferencedAssemblies() {
 		// TODO Auto-generated method stub

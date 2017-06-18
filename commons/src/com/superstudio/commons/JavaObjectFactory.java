@@ -9,7 +9,7 @@ public class JavaObjectFactory implements IWebObjectFactory {
 	}
 
 	@Override
-	public Object CreateInstance() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public Object createInstance() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		// TODO Auto-generated method stub
 		return Class.forName(className).newInstance();
 	}

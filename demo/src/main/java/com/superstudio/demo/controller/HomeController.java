@@ -1,5 +1,6 @@
 package com.superstudio.demo.controller;
 
+import com.superstudio.commons.CodeExecuteTimeStatistic;
 import com.superstudio.template.JRazorTemplateEngine;
 import com.superstudio.template.mvc.actionresult.TemplateDataDictionary;
 import com.superstudio.template.mvc.context.TemplateInfo;
@@ -16,8 +17,9 @@ import java.util.Map;
  * Created by kenqu on 2016/1/9.
  */
 @Controller
+@RequestMapping({"/home","/"})
 public class HomeController {
-    @RequestMapping("/home")
+    @RequestMapping({"/index","/"})
     public ModelAndView index(@RequestParam(value="name", defaultValue="performence") String name,@RequestParam(value="test", defaultValue="no")String test) throws Exception {
 
       //  HostContext host =HostContext.getCurrent();
@@ -47,7 +49,7 @@ public class HomeController {
        // data.setTemplateData(templateData);
         data.setModel(StockModel.dummyItems());
 
-
+        CodeExecuteTimeStatistic.reset();
         JRazorTemplateEngine.render(template,data,writer);
         String result1=writer.toString();
         if("yes".equals(test)){
@@ -58,6 +60,11 @@ public class HomeController {
                 JRazorTemplateEngine.render(template,data,writer2);
             }
             long timeEnd= System.currentTimeMillis();
+                 Map<String,Long> result= CodeExecuteTimeStatistic.getList();
+            for (Map.Entry v: result.entrySet()
+                 ) {
+                result1+="<br/> time evalute:"+v.getKey()+"="+String.valueOf(v.getValue());
+            }
            result1+= result1+" it took "+String.valueOf(timeEnd-timeStart);
         }
 

@@ -53,8 +53,7 @@ public class JavaCodeWriter extends BaseCodeWriter {
 	}
 
 	private void writeVerbatimStringLiteral(String literal) {
-		// From CSharpCodeGenerator.QuoteSnippetStringVerbatim in CodeDOM
-		getInnerWriter().write("@\"");
+		//getInnerWriter().write("@\"");
 		for (int i = 0; i < literal.length(); i++) {
 			if (literal.charAt(i) == '\"') {
 				getInnerWriter().write("\"\"");
@@ -66,8 +65,7 @@ public class JavaCodeWriter extends BaseCodeWriter {
 	}
 
 	private void writeCStyleStringLiteral(String literal) {
-		// From JavaCodeGenerator.QuoteSnippetStringCStyle in CodeDOM
-		getInnerWriter().write("\"");
+			getInnerWriter().write("\"");
 		for (int i = 0; i < literal.length(); i++) {
 
 			// ORIGINAL LINE: case '\r':
@@ -109,7 +107,7 @@ public class JavaCodeWriter extends BaseCodeWriter {
 			} else {
 				getInnerWriter().write(literal.charAt(i));
 			}
-			if (i > 0 && i % 80 == 0) {
+			/*if (i > 0 && i % 80 == 0) {
 				// If current character is a high surrogate and the following
 				// character is a low surrogate, don't break them.
 				// Otherwise when we write the string to a file, we might lose
@@ -122,7 +120,7 @@ public class JavaCodeWriter extends BaseCodeWriter {
 				getInnerWriter().write("\" +");
 				getInnerWriter().write(Environment.NewLine);
 				getInnerWriter().write('\"');
-			}
+			}*/
 		}
 
 	getInnerWriter().write("\"");

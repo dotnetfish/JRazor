@@ -121,18 +121,15 @@ protected void configurePage(WebPageBase parentPage)
 	}
 
 	@Override
-	public void executePageHierarchy()
+	public void executePageHierarchy() throws Exception
 	{
 		// change the Writer so that things like html.BeginForm work correctly
 		Writer oldWriter = getTemplateContext().getWriter();
 		getTemplateContext().setWriter(getOutput());
 
-		try {
+
 			super.executePageHierarchy();
-		} catch (ArgumentNullException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 
 		// Overwrite LayoutPage so that returning a template with a custom master page works.
 		if (!StringHelper.isNullOrEmpty(getOverridenLayoutPath()))

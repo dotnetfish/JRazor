@@ -33,7 +33,7 @@ public abstract class ParserBase
 
 	public abstract void buildSpan(SpanBuilder span, SourceLocation start, String content);
 
-	public abstract void parseBlock() ;
+	public abstract void parseBlock() throws InvalidOperationException ;
 
 	// Markup Parsers need the ParseDocument and parseSection methods since the markup parser is the first parser to hit the document
 	// and the logic may be different than the parseBlock method.

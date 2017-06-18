@@ -7,6 +7,7 @@ import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.csharpbridge.action.Action;
 import com.superstudio.commons.csharpbridge.action.Func2;
 import com.superstudio.commons.exception.ArgumentNullException;
+import com.superstudio.commons.exception.InvalidOperationException;
 import com.superstudio.language.java.symbols.JavaKeyword;
 import com.superstudio.language.java.symbols.JavaSymbol;
 import com.superstudio.language.java.symbols.JavaSymbolType;
@@ -1514,8 +1515,14 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 		}
 	}
 
-	private void otherParserBlock() {
-		parseWithOtherParser(p -> p.parseBlock());
+	private void otherParserBlock()  {
+		parseWithOtherParser(p -> {
+			try {
+				p.parseBlock();
+			} catch (InvalidOperationException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	private void sectionBlock(String left, String right, boolean caseSensitive)  {

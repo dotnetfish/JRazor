@@ -60,7 +60,7 @@ public class AttributeBlockCodeGenerator extends BlockCodeGenerator
 			return; // Don't generate anything!
 		}
 		context.FlushBufferedStatement();
-			// In VB, we need a line continuation
+
 		context.AddStatement(context.BuildCodeString(cw ->
 		{
 			if (!StringHelper.isNullOrEmpty(context.getTargetWriterName()))

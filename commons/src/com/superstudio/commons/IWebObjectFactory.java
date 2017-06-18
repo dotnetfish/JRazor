@@ -2,6 +2,6 @@ package com.superstudio.commons;
 
 public interface IWebObjectFactory {
 
-	Object CreateInstance() throws InstantiationException, IllegalAccessException, ClassNotFoundException;
+	Object createInstance() throws InstantiationException, IllegalAccessException, ClassNotFoundException;
 
 }

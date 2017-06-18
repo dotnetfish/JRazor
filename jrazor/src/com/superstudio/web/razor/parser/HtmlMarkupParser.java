@@ -35,13 +35,11 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 	private HtmlSymbol _bufferedOpenAngle;
 
 	@Override
-	public void parseBlock() {
+	public void parseBlock() throws InvalidOperationException {
 		if (getContext() == null) {
-			// throw new
-			// InvalidOperationException(RazorResources.getResource(RazorResources.Parser_Context_Not_Set());
+			 throw new
+			InvalidOperationException(RazorResources.getResource(RazorResources.Parser_Context_Not_Set));
 		}
-
-
 		try( AutoCloseable	disposable= PushSpanConfig((t) -> defaultMarkupSpan(t))) {
 
 			try(AutoCloseable	disposable2=getContext().startBlock(BlockType.Markup)) {
@@ -333,8 +331,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 		// http://dev.w3.org/html5/spec/tokenization.html#attribute-name-state
 		// read the 'name' (i.e. read until the '=' or whitespace/newline)
-		// C# TO JAVA CONVERTER TODO TASK: There is no equivalent to implicit
-		// typing in Java:
+
 		List<HtmlSymbol> name = Collections.emptyList();
 		if (At(HtmlSymbolType.Text)) {
 
@@ -481,8 +478,10 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			// repeats some of the checks above but for now that's ok)
 		
 			List<HtmlSymbol> value = ReadWhile(
-					sym -> sym.getType() != HtmlSymbolType.WhiteSpace && sym.getType() != HtmlSymbolType.NewLine
-							&& sym.getType() != HtmlSymbolType.Transition && !isEndOfAttributeValue(quote, sym));
+					sym -> sym.getType() != HtmlSymbolType.WhiteSpace
+							&& sym.getType() != HtmlSymbolType.NewLine
+							&& sym.getType() != HtmlSymbolType.Transition
+							&& !isEndOfAttributeValue(quote, sym));
 			Accept(value);
 			getSpan().setCodeGenerator(LiteralAttributeCodeGenerator.create(
 					ISymbol.getContent(prefix,prefixStart),

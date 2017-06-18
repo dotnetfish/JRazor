@@ -6,7 +6,6 @@ import com.superstudio.commons.io.Path;
 import com.superstudio.template.mvc.JavaBuildManager;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Supplier;
 /** 
  Wraps the caching and instantiation of paths of the BuildManager. 
@@ -105,7 +104,7 @@ public final class BuildManagerWrapper implements IVirtualPathFactory
 			if (buildManagerResult != null)
 			{
 				//Debug.Assert(buildManagerResult.getExists() && buildManagerResult.getObjectFactory() != null, "This method must only be called if the file exists.");
-				Object tempVar = buildManagerResult.getObjectFactory().CreateInstance();
+				Object tempVar = buildManagerResult.getObjectFactory().createInstance();
 				return (T)tempVar;
 			}
 		T result= JavaBuildManager.<T>createInstanceFromVirtualPath(virtualPath);
@@ -114,7 +113,6 @@ public final class BuildManagerWrapper implements IVirtualPathFactory
 		buildResult.setObjectFactory(objectFactory);
 		buildResult.setExists(objectFactory != null);
 		RuntimeCache.getInstance().set(getKeyFromVirtualPath(virtualPath),buildResult);
-		//System.out.println(result.getClass().getName());
 		return  result;
 	}
 

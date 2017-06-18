@@ -1,5 +1,6 @@
 package com.superstudio.template.mvc.actionresult;
 
+import com.superstudio.commons.CodeExecuteTimeStatistic;
 import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.MvcResources;
 import com.superstudio.commons.csharpbridge.StringHelper;
@@ -24,8 +25,10 @@ public class TemplateResult extends TemplateResultBase {
 	protected TemplateEngineResult findTemplate(RenderContext context)
 			throws InvalidOperationException, ArgumentNullException, ArgumentException, InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
-
+	long time=System.currentTimeMillis();
 		TemplateEngineResult result = getTemplateEngine().findTemplate(context, getTemplateName(), getMasterName());
+		long time2=System.currentTimeMillis();
+		CodeExecuteTimeStatistic.evalute(this.getClass().getName()+"findTemplate",time2-time);
 		if (result.getTemplate() != null) {
 			return result;
 		}
