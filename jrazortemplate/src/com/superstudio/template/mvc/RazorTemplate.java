@@ -102,7 +102,7 @@ public class RazorTemplate extends BuildManagerCompiledTemplate {
 		WebTemplatePage webTemplatePage = (WebTemplatePage) ((instance instanceof WebTemplatePage) ? instance : null);
 		if (webTemplatePage == null) {
 			throw new IllegalStateException(StringHelper.format(CultureInfo.CurrentCulture,
-					MvcResources.CshtmlTemplate_WrongTemplateBase, new Object[] { getTemplatePath() }));
+					MvcResources.JhtmlTemplate_WrongTemplateBase, new Object[] { getTemplatePath() }));
 		}
 
 		// An overriden master layout might have been specified when the

@@ -7,7 +7,7 @@ public interface IVirtualPathFactory
 {
 	boolean exists(String virtualPath);
 	//Object createInstance(String virtualPath);
-	default <T> T createInstance(String virtualPath) throws InstantiationException, IllegalAccessException, ClassNotFoundException
+	default <T> T createInstance(String virtualPath) throws InstantiationException, IllegalAccessException, ClassNotFoundException,Exception
 	{
 		VirtualPathFactoryManager virtualPathFactoryManager = (VirtualPathFactoryManager)((this instanceof VirtualPathFactoryManager) ? this : null);
 		if (virtualPathFactoryManager != null)

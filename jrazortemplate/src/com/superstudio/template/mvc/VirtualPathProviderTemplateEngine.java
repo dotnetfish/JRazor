@@ -168,7 +168,6 @@ public abstract class VirtualPathProviderTemplateEngine implements ITemplateEngi
 	}
 
 	public String createCacheKey(String prefix, String name, String controllerName, String areaName) {
-		//TODO it does not applicable for the c# string format {0}
 		return String.format(CacheKeyFormat, this.getClass().getSigners(), prefix, name, controllerName, areaName);
 	}
 
@@ -225,8 +224,14 @@ public abstract class VirtualPathProviderTemplateEngine implements ITemplateEngi
 
 		String controllerName = renderContext.getTemplateInfo().getTemplateCategory();
 		RefObject<String[]> tempRef_templateLocationsSearched = new RefObject<String[]>(templateLocationsSearched);
-		String templatePath = getPath(renderContext, getTemplateLocationFormats(), getAreaTemplateLocationFormats(),
-				"templateLocationFormats", templateName, controllerName, CacheKeyPrefixTemplate, useCache,
+		String templatePath = getPath(renderContext,
+				getTemplateLocationFormats(),
+				getAreaTemplateLocationFormats(),
+				"templateLocationFormats",
+				templateName,
+				controllerName,
+				CacheKeyPrefixTemplate,
+				useCache,
 				tempRef_templateLocationsSearched);
 		templateLocationsSearched = tempRef_templateLocationsSearched.getRefObj();
 		RefObject<String[]> tempRef_masterLocationsSearched = new RefObject<String[]>(masterLocationsSearched);
@@ -297,11 +302,11 @@ public abstract class VirtualPathProviderTemplateEngine implements ITemplateEngi
 
 			// getPath is called again without using the cache.
 			return null;
-		} else {
+		}
 			return nameRepresentsPath ? getPathFromSpecificName(renderContext, name, cacheKey, searchedLocations)
 					: getPathFromGeneralName(renderContext, templateLocations, name, controllerName, areaName, cacheKey,
 							searchedLocations);
-		}
+
 	}
 
 	private String getPathFromGeneralName(RenderContext renderContext, ArrayList<TemplateLocation> locations,

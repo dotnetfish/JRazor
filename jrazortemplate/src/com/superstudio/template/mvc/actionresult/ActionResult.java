@@ -12,5 +12,5 @@ import java.io.IOException;
  */
 public abstract class ActionResult {
 
-    public abstract  void execute(RenderContext context) throws IOException, ArgumentNullException, InvalidOperationException, ArgumentException, InstantiationException, IllegalAccessException, ClassNotFoundException;
+    public abstract  void execute(RenderContext context) throws IOException, ArgumentNullException, InvalidOperationException, ArgumentException, InstantiationException, IllegalAccessException, ClassNotFoundException,Exception;
 }

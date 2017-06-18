@@ -55,16 +55,19 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 							| GeneratorSupport.ReturnTypeAttributes.getValue()
 							| GeneratorSupport.DeclareValueTypes.getValue() | GeneratorSupport.DeclareEnums.getValue()
 							| GeneratorSupport.DeclareDelegates.getValue()
-							| GeneratorSupport.DeclareInterfaces.getValue() | GeneratorSupport.DeclareEvents.getValue()
-							| GeneratorSupport.AssemblyAttributes.getValue()
+							| GeneratorSupport.DeclareInterfaces.getValue()
+							//| GeneratorSupport.DeclareEvents.getValue()
+							//| GeneratorSupport.AssemblyAttributes.getValue()
 							| GeneratorSupport.ParameterAttributes.getValue()
-							| GeneratorSupport.ReferenceParameters.getValue()
+							//| GeneratorSupport.ReferenceParameters.getValue()
 							| GeneratorSupport.ChainedConstructorArguments.getValue()
 							| GeneratorSupport.NestedTypes.getValue() | GeneratorSupport.MultipleInterfaceMembers
 									.getValue()
 							| GeneratorSupport.PublicStaticMembers.getValue()
 							| GeneratorSupport.ComplexExpressions.getValue()
-							| GeneratorSupport.Win32Resources.getValue() | GeneratorSupport.Resources.getValue()
+							//| GeneratorSupport.Win32Resources.getValue()
+
+							| GeneratorSupport.Resources.getValue()
 							| GeneratorSupport.PartialTypes.getValue()
 							| GeneratorSupport.GenericTypeReference.getValue()
 							| GeneratorSupport.GenericTypeDeclaration.getValue()
@@ -74,19 +77,19 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	private final static String[][] keywords = new String[][] { null, new String[] { "do", "if", "in", "instanceof" },
 			new String[] { "for", "int", "new", "try" },
 			new String[] { "super", "boolean", "byte", "case", "char", "else", "enum", "lock", "long", "null", "this",
-					"true", "uint", "void", "synchonrized" },
+					"true",  "void", "synchonrized" },
 			new String[] { "break", "catch", "class", "final", "false", "float", "sbyte", "short", "throw", "throws",
 					"try", "while" },
-			new String[] { "double", "extern", "object", "params", "public", "return", "sealed", "sizeof", "static",
-					"String", "struct", "switch", "typeof", "ushort" },
-			new String[] { "checked", "decimal", "default", "finally", "for", "private" },
-			new String[] { "abstract", "continue", "explicit", "implicit", "internal", "operator", "override",
+			new String[] { "double", "object", "params", "public", "return", "final", "sizeof", "static",
+					"String", "struct", "switch" },
+			new String[] { "default", "finally", "for", "private" },
+			new String[] { "abstract", "continue",   "override",
 					"readonly", "volatile" },
-			new String[] { "__arglist", "__makeref", "__reftype", "interface", "namespace", "protected", "unchecked" },
+			new String[] { "__arglist", "__makeref", "__reftype", "interface","package","import", "protected" },
 			new String[] { "__refvalue", "stackalloc" } };
 	private boolean generatingForLoop;
 
-	private String getFileExtension() {
+	private  String getFileExtension() {
 
 		return ".java";
 
@@ -235,9 +238,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			}
 			i++;
 			continue;
-			// IL_10C:
 
-			// goto IL_11A;
 		}
 		StringBuilder.append("\"");
 		return StringBuilder.toString();

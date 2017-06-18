@@ -111,7 +111,7 @@ protected void configurePage(WebPageBase parentPage)
 		{
 				throw new IllegalStateException(
 						String.format(CultureInfo.CurrentCulture,
-								MvcResources.CshtmlTemplate_WrongTemplateBase, parentPage.getVirtualPath()));
+								MvcResources.JhtmlTemplate_WrongTemplateBase, parentPage.getVirtualPath()));
 		}
 
 		// Set TemplateContext and TemplateData here so that the layout page inherits TemplateData from the main page

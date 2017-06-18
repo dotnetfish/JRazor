@@ -6,6 +6,7 @@ import com.superstudio.codedom.compiler.CodeGeneratorOptions;
 import com.superstudio.codedom.compiler.ICodeGenerator;
 import com.superstudio.commons.IWebObjectFactory;
 import com.superstudio.commons.JavaObjectFactory;
+import com.superstudio.commons.StreamReader;
 import com.superstudio.commons.TextReader;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.io.File;
@@ -15,13 +16,15 @@ import com.superstudio.template.language.mvc.MvcJavaWebPageRazorHost;
 import com.superstudio.template.mvc.context.HostContext;
 import com.superstudio.web.razor.GeneratorResults;
 import com.superstudio.web.razor.parser.ParserHelpers;
+import org.apache.commons.lang3.StringUtils;
 
-import javax.tools.JavaCompiler;
+import javax.tools.*;
 import javax.tools.JavaCompiler.CompilationTask;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -39,9 +42,9 @@ public class JavaBuildManager {
 		return new JavaObjectFactory("JRazor." +className);
 	}
 
-	public static Class getCompiledType(String virtualPath) {
+	public static Class getCompiledType(String virtualPath) throws Exception {
 
-		Class clazz = mapper.get(virtualPath);
+/**/		Class clazz = mapper.get(virtualPath);
 		if (null == clazz) {
 			clazz=compilerPath(virtualPath);
 			mapper.put(virtualPath, clazz) ;
@@ -50,17 +53,17 @@ public class JavaBuildManager {
 		return clazz;
 	}
 
-	private static Class compilerPath(String virtualPath) {
+	private static Class compilerPath(String virtualPath) throws Exception {
 
 		return compileTemplate(virtualPath);
 	}
 
-	public static Class compileTemplate(String templatePath) {
+	public static Class compileTemplate(String templatePath) throws Exception {
 
-		try {
+
 			templatePath=StringHelper.trimStart(templatePath, '~', '/');
 			String root = HostContext.getCurrent().mapPath("/");
-			System.out.println(root);
+
 			String className = ParserHelpers
 					.sanitizeClassName("_Page_" + templatePath);
 
@@ -74,7 +77,7 @@ public class JavaBuildManager {
 			GeneratorResults result = engine.GenerateCode(reader);
 
 			CodeDomProvider provider = JavaCodeProvider.createProvider("java");
-			String codePath = root + "WEB-INF/templates/" + className + ".java";
+			String codePath = root + "WEB-INF/Templates/" + className + ".java";
 
 			TextWriter writer = new TextWriter(codePath, "UTF-8");
 			ICodeGenerator generator = provider.createGenerator(writer);
@@ -84,12 +87,10 @@ public class JavaBuildManager {
 			generator.generateCodeFromCompileUnit(result.getGeneratedCode(), writer, options);
 			writer.flush();
 			writer.close();
-			return renderTemplates(codePath, templatePath);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+        //StreamReader reader=new StreamReader(writer);
+        JavaBuilder builder = JavaBuilder.getInstance();
+        Class clazz=builder.compilePath(codePath,templatePath);
+        return  clazz;
 
 	}
 
@@ -105,12 +106,13 @@ public class JavaBuildManager {
 		 * javaFileManager.setLocation(StandardLocation.CLASS_PATH,
 		 * Arrays.asList( new java.io.File(classPath)));
 		 */
+		System.out.println(codePath);
 		Iterable it = javaFileManager.getJavaFileObjects(new java.io.File(codePath));
 
 		String root = HostContext.getCurrent().mapPath("/");
-		java.io.File file = new java.io.File(root + "/WEB-INF/lib");
+		java.io.File file = new java.io.File(root + "WEB-INF/lib");
 		java.io.File[] tempList = file.listFiles();
-		System.out.println(file.getAbsolutePath());
+		//System.out.println(file.getAbsolutePath());
 		String classPaths = "";
 		URL[] urlItem = new URL[tempList.length + 1];
 		for (int i = 0; i < tempList.length; i++) {
@@ -119,11 +121,17 @@ public class JavaBuildManager {
 			}
 			urlItem[i] = tempList[i].toURL();
 		}
-		classPaths += root + "/WEB-INF/classes";
-		urlItem[tempList.length] = new URL("file:/" + root + "/WEB-INF/classes/");
-		Iterable<String> options = Arrays.asList("-classpath", classPaths, "-d", root + "/WEB-INF/classes");
+		classPaths += root + "WEB-INF/classes";
+		//urlItem[tempList.length] = new URL("file:/" + root + "/WEB-INF/classes/");
+		System.out.print("classPath:");
+		System.out.println(classPaths);
+		Iterable<String> options = Arrays.asList("-classpath", classPaths,
+				"-d",
+				root + "WEB-INF/classes");
 
-		CompilationTask task = javaCompiler.getTask(null, null, null, options, null, it);
+		CompilationTask task = javaCompiler.getTask(null, null,
+                null,
+                options, null, it);
 		boolean success = task.call();
 		if (!success) {
 			System.out.println("编译失败");
@@ -131,7 +139,10 @@ public class JavaBuildManager {
 			System.out.println("编译成功");
 		}
 
-		URL[] urls = urlItem;
+
+
+
+		//URL[] urls = urlItem;
 
 		List<java.io.File> files = Arrays.asList(tempList);
 
@@ -159,7 +170,7 @@ public class JavaBuildManager {
 		return null;
 	}
 
-	public static <T> T createInstanceFromVirtualPath(String virtualPath) {
+	public static <T> T createInstanceFromVirtualPath(String virtualPath) throws Exception {
 
 		Class clazz=compilerPath(virtualPath);
 		try {
@@ -172,13 +183,28 @@ public class JavaBuildManager {
 		return  null;
 	}
 private static   HashMap<String, Class> virtualPathCache=new HashMap<>();
-	private static Class getCompiledPath(String virtualPath) {
+	private static Class getCompiledPath(String virtualPath) throws Exception {
 		 Class clazz=virtualPathCache.get(virtualPath);
 		if(clazz==null){
 			clazz=compilerPath(virtualPath);
 			virtualPathCache.put(virtualPath,clazz);
 		}
 		return  clazz;
+	}
+
+	static class  StringJavaFileObject extends SimpleJavaFileObject {
+
+		final String code;
+
+		StringJavaFileObject(String className, String code) {
+			super(URI.create(className + Kind.SOURCE.extension), Kind.SOURCE);
+			this.code = code;
+		}
+
+		@Override
+		public CharSequence getCharContent(boolean ignoreEncodingErrors) {
+			return code;
+		}
 	}
 
 }

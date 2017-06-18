@@ -59,12 +59,12 @@ public class VirtualPathFactoryManager implements IVirtualPathFactory
 		return false;
 	}
 
-	public final Object createInstance(String virtualPath) throws InstantiationException, IllegalAccessException, ClassNotFoundException
+	public final Object createInstance(String virtualPath) throws InstantiationException, IllegalAccessException, ClassNotFoundException,Exception
 	{
 		return this.createInstanceOfType(virtualPath);
 	}
 
-	public final <T> T createInstanceOfType(String virtualPath) throws InstantiationException, IllegalAccessException, ClassNotFoundException
+	public final <T> T createInstanceOfType(String virtualPath) throws InstantiationException, IllegalAccessException, ClassNotFoundException,Exception
 	{
 		Optional<IVirtualPathFactory> virtualPathFactory = _virtualPathFactories.stream().filter(f -> f.exists(virtualPath)).findFirst();//FirstOrDefault(f -> f.exists(virtualPath));
 		if (virtualPathFactory.isPresent())

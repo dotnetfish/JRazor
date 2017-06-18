@@ -18,7 +18,7 @@ import java.util.Map;
 @Controller
 public class HomeController {
     @RequestMapping("/home")
-    public ModelAndView index(@RequestParam(value="name", defaultValue="performence") String name) throws Exception {
+    public ModelAndView index(@RequestParam(value="name", defaultValue="performence") String name,@RequestParam(value="test", defaultValue="no")String test) throws Exception {
 
       //  HostContext host =HostContext.getCurrent();
 
@@ -46,20 +46,26 @@ public class HomeController {
        // templateData.put("myVariant","variantValue");
        // data.setTemplateData(templateData);
         data.setModel(StockModel.dummyItems());
-      //  JRazorTemplateEngine.render(template,data,writer);
-        String result1=writer.toString();
-        long timeStart=System.currentTimeMillis();
-        for (int i = 0;
-        i<200000;i++){
-           StringWriter writer2=new StringWriter();
-           JRazorTemplateEngine.render(template,data,writer2);
-      }
 
-        long timeEnd= System.currentTimeMillis();
+
+        JRazorTemplateEngine.render(template,data,writer);
+        String result1=writer.toString();
+        if("yes".equals(test)){
+            long timeStart=System.currentTimeMillis();
+            for (int i = 0;
+                 i<200000;i++){
+                StringWriter writer2=new StringWriter();
+                JRazorTemplateEngine.render(template,data,writer2);
+            }
+            long timeEnd= System.currentTimeMillis();
+           result1+= result1+" it took "+String.valueOf(timeEnd-timeStart);
+        }
+
+
       //  StringReader sr=new StringReader();
 
         Map<String, String> map = new HashMap<String, String>();
-        map.put("html", result1+" it took "+String.valueOf(timeEnd-timeStart));
+        map.put("html", result1);
         return new ModelAndView("/render",map);
     }
 

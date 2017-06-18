@@ -1451,7 +1451,8 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 	}
 
 	private void explicitExpression() {
-		Block block = new Block(RazorResources.getResource(RazorResources.BlockName_ExplicitExpression), getCurrentLocation().clone());
+		Block block = new Block(RazorResources.getResource(RazorResources.BlockName_ExplicitExpression),
+				getCurrentLocation().clone());
 		Assert(JavaSymbolType.LeftParenthesis);
 		AcceptAndMoveNext();
 		getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.None);
@@ -1468,7 +1469,8 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
 			if (!success) {
 				AcceptUntil(JavaSymbolType.LessThan);
 				getContext().OnError(block.getStart().clone(),
-						RazorResources.getResource(RazorResources.ParseError_Expected_EndOfBlock_Before_EOF), block.getName(), ")", "(");
+						RazorResources.getResource(RazorResources.ParseError_Expected_EndOfBlock_Before_EOF),
+						block.getName(), ")", "(");
 			}
 
 			// If necessary, put an empty-content marker symbol here

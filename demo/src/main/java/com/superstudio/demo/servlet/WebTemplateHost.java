@@ -14,10 +14,10 @@ public class WebTemplateHost extends HostContext {
     }
     @Override
     public String mapPath(String path){
-      String root=  StringUtils.removeStart(this.getClass()
+      String root=  this.getClass()
               .getClassLoader()
               .getResource("../../")
-              .getPath(),pathSplit);
+              .getPath();
 
 return root+StringUtils.removeStart(path,pathSplit);
 

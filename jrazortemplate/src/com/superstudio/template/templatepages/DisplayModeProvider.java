@@ -20,11 +20,13 @@ public final class DisplayModeProvider {
 														// IDisplayMode[]
 
 	public DisplayModeProvider() {
-		/*DefaultDisplayMode mobile = new DefaultDisplayMode(MobileDisplayModeId);
-		mobile.setContextCondition((c) ->{ return c.GetOverriddenBrowser().isMobileDevice();});
-*/
+		DefaultDisplayMode mobile = new DefaultDisplayMode(MobileDisplayModeId);
+		mobile.setContextCondition((c) ->{
+			return c.isMobileDevice();
+		});
+
 		_displayModes = new ArrayList<IDisplayMode>(
-				Arrays.asList(new IDisplayMode[] {  new DefaultDisplayMode() }));
+				Arrays.asList(new IDisplayMode[] {  new DefaultDisplayMode(),mobile }));
 		// The type is a psuedo-singleton. A user would gain nothing from
 		// constructing it since we won't use anything but
 		// DisplayModeProvider.Instance internally.
@@ -76,14 +78,7 @@ public final class DisplayModeProvider {
 	public Iterable<IDisplayMode> getAvailableDisplayModesForContext(HostContext httpContext, IDisplayMode currentDisplayMode, boolean requireConsistentDisplayMode)
 	{
 		final int first = findFirstAvailableDisplayMode(currentDisplayMode, requireConsistentDisplayMode);
-		/*for (int i = first; i < _displayModes.size(); i++)
-		{
-			IDisplayMode mode = _displayModes.get(i);
-			if (mode.canHandleContext(httpContext))
-			{
-				yield return mode;
-			}
-		}*/
+
 		return new Iterable<IDisplayMode>(){
 
 			@Override

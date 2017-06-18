@@ -100,7 +100,8 @@ public abstract class StartPage extends WebPageRenderingBase {
 	 */
 	
 	public static WebPageRenderingBase getStartPage(WebPageRenderingBase page, String fileName,
-													Iterable<String> supportedExtensions) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+													Iterable<String> supportedExtensions)
+			throws InstantiationException, IllegalAccessException, ClassNotFoundException,Exception {
 		if (page == null) {
 			throw new IllegalArgumentException("page");
 		}
@@ -119,7 +120,8 @@ public abstract class StartPage extends WebPageRenderingBase {
 	}
 
 	public static WebPageRenderingBase getStartPage(WebPageRenderingBase page, IVirtualPathFactory virtualPathFactory,
-													String appDomainAppVirtualPath, String fileName, Iterable<String> supportedExtensions) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+													String appDomainAppVirtualPath, String fileName, Iterable<String> supportedExtensions)
+			throws InstantiationException, IllegalAccessException, ClassNotFoundException ,Exception{
 		// build up a list of pages to execute, such as one of the following:
 		// ~/somepage.cshtml
 		// ~/_pageStart.cshtml --> ~/somepage.cshtml

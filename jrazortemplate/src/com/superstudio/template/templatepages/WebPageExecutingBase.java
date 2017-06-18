@@ -209,7 +209,6 @@ public abstract class WebPageExecutingBase
 
 				if (val.getValue() == null)
 				{
-					// Nothing to write
 					continue;
 				}
 
@@ -283,7 +282,6 @@ public abstract class WebPageExecutingBase
 		writePositionTaggedLiteral(writer, pageVirtualPath, value.getValue(), value.getPosition());
 	}
 
-	// This method is called by generated code and needs to stay in sync with the parser
 	public static void writeTo(Writer writer, HelperResult content)
 	{
 		if (content != null)
@@ -292,7 +290,6 @@ public abstract class WebPageExecutingBase
 		}
 	}
 
-	// This method is called by generated code and needs to stay in sync with the parser
 	public static void writeTo(Writer writer, Object content) throws IOException
 	{
 		if(content==null)return;
@@ -300,7 +297,6 @@ public abstract class WebPageExecutingBase
 		writer.write(StringEscapeUtils.escapeHtml4(content.toString()));
 	}
 
-	// This method is called by generated code and needs to stay in sync with the parser
 	public static void writeLiteralTo(Writer writer, Object content) throws IOException
 	{
 		if(content==null)return;

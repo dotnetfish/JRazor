@@ -170,16 +170,16 @@ public class RazorParser {
 		getCodeParser().setContext(context);
 
 		// Execute the parse
-		try {
+		//try {
 			getMarkupParser().ParseDocument();
 			//getCodeParser().ParseDocument();
-		} catch (NotSupportedException e1) {
+	//	} catch (NotSupportedException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (InvalidOperationException e) {
+		//	e1.printStackTrace();
+		//} catch (InvalidOperationException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			//e.printStackTrace();
+		//}
 
 		// Get the result
 		ParserResults results = null;

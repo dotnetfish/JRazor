@@ -63,6 +63,10 @@ public  class HostContext {
         return null;
     }*/
 
+   public boolean isMobileDevice(){
+       return  false;
+   }
+
     public boolean isDebuggingEnabled() {
         // TODO Auto-generated method stub
         return false;

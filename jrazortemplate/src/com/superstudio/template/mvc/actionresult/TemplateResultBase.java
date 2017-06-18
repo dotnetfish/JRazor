@@ -76,7 +76,7 @@ public abstract class TemplateResultBase extends ActionResult {
 
 	@Override
 	public void execute(RenderContext context) throws IOException, ArgumentNullException, InvalidOperationException,
-			ArgumentException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+			ArgumentException, InstantiationException, IllegalAccessException, ClassNotFoundException,Exception {
 		if (context == null) {
 			throw new ArgumentNullException("context");
 		}

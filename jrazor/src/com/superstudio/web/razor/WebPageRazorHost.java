@@ -194,10 +194,10 @@ public class WebPageRazorHost extends RazorEngineHost {
 
 	public static void addGlobalImport(String ns) {
 		if (StringHelper.isNullOrEmpty(ns)) {
-			// throw new
-			// IllegalArgumentException(String.format(CultureInfo.CurrentCulture,
-			// CommonResources.Argument_Cannot_Be_Null_Or_Empty, new Object[]
-			// {"ns"}), "ns");
+			 throw new
+			 IllegalArgumentException(String.format(
+			 RazorResources.Argument_Cannot_Be_Null_Or_Empty, new Object[]
+			 {"ns"}));
 		}
 			WebPageRazorHost._importedNamespaces.put(ns, null);// (ns, null);
 	}

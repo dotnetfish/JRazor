@@ -66,7 +66,7 @@ public abstract class BuildManagerCompiledTemplate implements ITemplate
 	}
 
 	@Override
-	public void render(TemplateContext templateContext, Writer writer) throws InstantiationException, IllegalAccessException
+	public void render(TemplateContext templateContext, Writer writer) throws InstantiationException, IllegalAccessException,Exception
 	{
 		if (templateContext == null)
 		{
@@ -84,7 +84,7 @@ public abstract class BuildManagerCompiledTemplate implements ITemplate
 		if (instance == null)
 		{
 			throw new IllegalStateException(StringHelper.format(CultureInfo.CurrentCulture,
-					MvcResources.CshtmlTemplate_TemplateCouldNotBeCreated,
+					MvcResources.JhtmlTemplate_TemplateCouldNotBeCreated,
 					new Object[]{getTemplatePath()}));
 		}
 

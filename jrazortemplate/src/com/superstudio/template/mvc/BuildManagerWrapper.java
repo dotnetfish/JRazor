@@ -13,7 +13,7 @@ public final class BuildManagerWrapper implements IBuildManager
 		return JavaBuildManager.getObjectFactory(virtualPath, false) != null;
 	}
 
-	public java.lang.Class getCompiledType(String virtualPath)
+	public java.lang.Class getCompiledType(String virtualPath) throws Exception
 	{
 		return JavaBuildManager.getCompiledType(virtualPath);
 	}

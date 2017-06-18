@@ -745,7 +745,8 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			}
 		}
 		if (currentTag != null) {
-			getContext().OnError(currentTag.getItem2(), RazorResources.getResource(RazorResources.ParseError_MissingEndTag),
+			getContext().OnError(currentTag.getItem2(),
+					RazorResources.getResource(RazorResources.ParseError_MissingEndTag),
 					currentTag.getItem1().getContent());
 		} else {
 			getContext().OnError(tagStart, RazorResources.getResource(RazorResources.ParseError_UnexpectedEndTag), tagName);

@@ -1,7 +1,7 @@
 package com.superstudio.language.java.mvc;
 
+import com.superstudio.language.java.JavaRazorCodeGenerator;
 import com.superstudio.web.razor.WebPageRazorHost;
-import com.superstudio.web.razor.generator.CSharpRazorCodeGenerator;
 import com.superstudio.web.razor.generator.RazorCodeGenerator;
 import com.superstudio.web.razor.parser.ParserBase;
 
@@ -20,7 +20,7 @@ public class MvcJavaWebPageRazorHost extends WebPageRazorHost {
 
 	 @Override
 	public RazorCodeGenerator decorateCodeGenerator(RazorCodeGenerator incomingCodeGenerator) throws Exception {
-		if (incomingCodeGenerator instanceof CSharpRazorCodeGenerator) {
+		if (incomingCodeGenerator instanceof JavaRazorCodeGenerator) {
 			return new MvcJavaRazorCodeGenerator(incomingCodeGenerator.getClassName(),
 					incomingCodeGenerator.getRootNamespaceName(), incomingCodeGenerator.getSourceFileName(),
 					incomingCodeGenerator.getHost());

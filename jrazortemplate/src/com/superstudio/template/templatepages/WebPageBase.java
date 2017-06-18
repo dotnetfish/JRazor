@@ -93,12 +93,12 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 	protected void configurePage(WebPageBase parentPage) {
 	}
 
-	public static WebPageBase createInstanceFromVirtualPath(String virtualPath) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public static WebPageBase createInstanceFromVirtualPath(String virtualPath) throws InstantiationException, IllegalAccessException, ClassNotFoundException,Exception {
 		return createInstanceFromVirtualPath(virtualPath, VirtualPathFactoryManager.getInstance());
 	}
 
 	public static WebPageBase createInstanceFromVirtualPath(String virtualPath,
-															IVirtualPathFactory virtualPathFactory) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+															IVirtualPathFactory virtualPathFactory) throws InstantiationException, IllegalAccessException, ClassNotFoundException,Exception {
 		WebPageBase webPage = virtualPathFactory.createInstance(virtualPath);
 
 		// Give it its virtual path
@@ -119,7 +119,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 	 */
 	protected WebPageBase createPageFromVirtualPath(String virtualPath, HostContext httpContext,
 													Predicate<String> virtualPathExists, DisplayModeProvider displayModeProvider, IDisplayMode displayMode)
-					throws HttpException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+					throws HttpException, InstantiationException, IllegalAccessException, ClassNotFoundException,Exception {
 		DisplayInfo resolvedDisplayInfo = displayModeProvider.getDisplayInfoForVirtualPath(virtualPath, httpContext,
 				virtualPathExists, displayMode);
 

@@ -13,13 +13,13 @@ public class WebVirtualPathProvider extends VirtualPathProvider {
 		try {
 			
 			path = HostContext.getCurrent().mapPath("/");
-			path+=virtualPath.toLowerCase().replace("~/", "web-inf/").replace("\\", "//");
+			path+=virtualPath.replace("~/", "WEB-INF/").replace("\\", "//");
 		} catch (Exception e) {
 
 			e.printStackTrace();
 			return false;
 		}
-		
+		System.out.println(path);
 		return new File(path).exists();
 	}
 }

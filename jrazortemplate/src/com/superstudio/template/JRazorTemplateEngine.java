@@ -25,7 +25,7 @@ public class JRazorTemplateEngine implements AutoCloseable {
         this.hostContext = hostContext;
     }
 
-    public String renderTemplate(RenderContext context, String templateName, String masterName) throws IllegalAccessException, IOException, ArgumentNullException, InvalidOperationException, InstantiationException, ArgumentException, ClassNotFoundException {
+    public String renderTemplate(RenderContext context, String templateName, String masterName) throws IllegalAccessException, IOException, ArgumentNullException, InvalidOperationException, InstantiationException, ArgumentException, ClassNotFoundException,Exception {
       /*  if (model != null) {
             getViewData().setModel(model);
         }*/
@@ -48,8 +48,8 @@ public class JRazorTemplateEngine implements AutoCloseable {
 
     }
 
-    public static void render(TemplateInfo template, TemplateDataDictionary templateData, Writer writer) {
-       try {
+    public static void render(TemplateInfo template, TemplateDataDictionary templateData, Writer writer) throws Exception {
+
            HostContext host = HostContext.getCurrent();
            RenderContext context = new RenderContext(host, template, null);
 
@@ -68,8 +68,6 @@ public class JRazorTemplateEngine implements AutoCloseable {
 
            result.execute(context);
 
-       }catch (Exception ex){
 
-       }
     }
 }

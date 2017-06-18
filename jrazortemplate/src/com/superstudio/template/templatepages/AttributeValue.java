@@ -12,17 +12,14 @@ public class AttributeValue {
 	private PositionTagged<Object> value;
 	private Boolean literal ;
 	public PositionTagged<Object> getValue() {
-		// TODO Auto-generated method stub
-		return this.value;
+			return this.value;
 	}
 
 	public PositionTagged<String> getPrefix() {
-		// TODO Auto-generated method stub
 		return this.prefix;
 	}
 
 	public boolean getLiteral() {
-		// TODO Auto-generated method stub
 		return this.literal;
 	}
 
