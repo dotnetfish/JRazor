@@ -1,9 +1,12 @@
 package com.superstudio.web.razor.parser;
 
+import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.csharpbridge.action.ActionThree;
 import com.superstudio.web.razor.parser.syntaxTree.*;
 import com.superstudio.web.razor.text.*;
 import com.superstudio.commons.CollectionHelper;
+
+
 
 
 public class WhiteSpaceRewriter extends MarkupRewriter
@@ -54,12 +57,16 @@ public class WhiteSpaceRewriter extends MarkupRewriter
 	{
 		BlockBuilder newBlock = new BlockBuilder(block);
 		newBlock.getChildren().clear();
-		Object tempVar = CollectionHelper.firstOrDefault(block.getChildren());//.FirstOrDefault();
-		Span ws = (Span)((tempVar instanceof Span) ? tempVar : null);
+
+		//Object tempVar = CollectionHelper.firstOrDefault(block.getChildren());//.FirstOrDefault();
+		Object firstChild=block.getChildren().stream().findFirst().get();
+		Span ws = (Span)((firstChild instanceof Span) ? firstChild : null);
 		Iterable<SyntaxTreeNode> newNodes = block.getChildren();
 		String content= ws.getContent();
-		
+
+
 		if (CollectionHelper.all(content.toCharArray(),(p)->Character.isWhitespace(p)))
+		//if(Stream.of(content.toCharArray()).anyMatch((p)->Character.isWhitespace(p)))
 		{
 			// add this node to the parent
 			SpanBuilder builder = new SpanBuilder(ws);

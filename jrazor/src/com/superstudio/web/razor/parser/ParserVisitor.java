@@ -61,7 +61,7 @@ public abstract class ParserVisitor
 			throw new OperationCanceledException();
 		}
 	}
-	
+
 	public  void visit(ParserResults result) throws Exception
 	{
 		

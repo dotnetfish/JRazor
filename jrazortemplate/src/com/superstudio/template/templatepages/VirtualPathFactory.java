@@ -5,6 +5,7 @@ public class VirtualPathFactory implements IVirtualPathFactory {
 	
 	public boolean exists(String virtualPath) {
 		// TODO Auto-generated method stub
+		System.out.println("invoke VirtualPathFactory.exists");
 		return false;
 	}
 

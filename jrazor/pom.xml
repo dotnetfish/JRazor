@@ -38,11 +38,16 @@
 			<artifactId>commons</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		<!--<dependency>
-			<groupId>com.superstudio.web</groupId>
-			<artifactId>web</artifactId>
-			<scope>compile</scope>
-		</dependency>-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>com.superstudio.web</groupId>
+            <artifactId>web</artifactId>
+            <scope>compile</scope>
+        </dependency>-->
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

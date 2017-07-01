@@ -14,7 +14,7 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 
 	protected abstract String getCompilerName();
 
-	public final CompilerResults compileAssemblyFromDom(CompilerParameters options, CodeCompileUnit e) {
+	/*public final CompilerResults compileAssemblyFromDom(CompilerParameters options, CodeCompileUnit e) {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
@@ -26,8 +26,8 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 		return result;
 	}
-
-	public final CompilerResults compileAssemblyFromFile(CompilerParameters options, String fileName) throws Exception {
+*/
+	/*public final CompilerResults compileAssemblyFromFile(CompilerParameters options, String fileName) throws Exception {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
@@ -39,7 +39,8 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 		return result;
 	}
-
+*/
+/*
 	public final CompilerResults compileAssemblyFromSource(CompilerParameters options, String source) throws Exception {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
@@ -52,7 +53,9 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 		return result;
 	}
+*/
 
+/*
 	public final CompilerResults compileAssemblyFromSourceBatch(CompilerParameters options, String[] sources) throws Exception {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
@@ -65,8 +68,9 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 		return result;
 	}
+*/
 
-	public final CompilerResults compileAssemblyFromFileBatch(CompilerParameters options, String[] fileNames)
+	/*public final CompilerResults compileAssemblyFromFileBatch(CompilerParameters options, String[] fileNames)
 			throws Exception {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
@@ -77,17 +81,17 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		CompilerResults result;
 		try {
 
-		/*	try (AutoCloseable closeable = com.superstudio.commons.io.File.OpenRead(fileNames)) {
+		*//*	try (AutoCloseable closeable = com.superstudio.commons.io.File.OpenRead(fileNames)) {
 
-			}*/
+			}*//*
 			result = this.fromFileBatch(options, fileNames);
 		} finally {
 			options.getTempFiles().safeDelete();
 		}
 		return result;
-	}
+	}*/
 
-	public final CompilerResults compileAssemblyFromDomBatch(CompilerParameters options, CodeCompileUnit[] ea) {
+	/*public final CompilerResults compileAssemblyFromDomBatch(CompilerParameters options, CodeCompileUnit[] ea) {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
@@ -99,7 +103,7 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 		return result;
 	}
-
+*/
 	public final void compile(CompilerParameters options, String compilerDirectory, String compilerExe,
 							  String arguments, RefObject<String> outputFile, RefObject<Integer> nativeReturnValue,
 							  String trueArgs) throws Exception {
@@ -121,7 +125,7 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		throw new IllegalStateException(SR.GetString("CompilerNotFound", new Object[] { text2 }));
 	}
 
-	protected CompilerResults fromDom(CompilerParameters options, CodeCompileUnit e) {
+	/*protected CompilerResults fromDom(CompilerParameters options, CodeCompileUnit e) {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
@@ -129,7 +133,8 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		// SecurityPermission(SecurityPermissionFlag.UnmanagedCode)).Demand();
 		return this.fromDomBatch(options, new CodeCompileUnit[] { e });
 	}
-
+*/
+/*
 	protected CompilerResults fromFile(CompilerParameters options, String fileName)
 			throws Exception {
 		if (options == null) {
@@ -140,24 +145,30 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 		// (new
 		// SecurityPermission(SecurityPermissionFlag.UnmanagedCode)).Demand();
-		/*
+		*/
+/*
 		 * try (File.OpenRead(fileName)) { }
-		 */
-		/*try (AutoCloseable closeable = File.OpenRead(fileName)) {
+		 *//*
 
-		}*/
+		*/
+/*try (AutoCloseable closeable = File.OpenRead(fileName)) {
+
+		}*//*
+
 		return this.fromFileBatch(options, new String[] { fileName });
 	}
+*/
 
-	protected CompilerResults fromSource(CompilerParameters options, String source) throws Exception {
+	/*protected CompilerResults fromSource(CompilerParameters options, String source) throws Exception {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
 		// (new
 		// SecurityPermission(SecurityPermissionFlag.UnmanagedCode)).Demand();
 		return this.fromSourceBatch(options, new String[] { source });
-	}
+	}*/
 
+/*
 	protected CompilerResults fromDomBatch(CompilerParameters options, CodeCompileUnit[] ea) {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
@@ -202,6 +213,7 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 		return result;
 	}
+*/
 
 	private void resolveReferencedAssemblies(CompilerParameters options, CodeCompileUnit e) {
 		if (e.getReferencedAssemblies().size() > 0) {
@@ -213,7 +225,7 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 	}
 
-	protected CompilerResults fromFileBatch(CompilerParameters options, String[] fileNames) throws Exception {
+	/*protected CompilerResults fromFileBatch(CompilerParameters options, String[] fileNames) throws Exception {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
@@ -305,7 +317,7 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		compilerResults.setPathToAssembly(options.getOutputAssembly());
 		return compilerResults;
 	}
-
+*/
 	protected abstract void processCompilerOutputLine(CompilerResults results, String line);
 
 	protected abstract String cmdArgsFromParameters(CompilerParameters options);
@@ -324,7 +336,7 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		return "@\"" + text + "\"";
 	}
 
-	protected CompilerResults fromSourceBatch(CompilerParameters options, String[] sources) throws Exception {
+	/*protected CompilerResults fromSourceBatch(CompilerParameters options, String[] sources) throws Exception {
 		if (options == null) {
 			throw new IllegalArgumentException("options");
 		}
@@ -362,7 +374,7 @@ public abstract class CodeCompiler extends CodeGenerator implements ICodeCompile
 		}
 		return result;
 	}
-
+*/
 	protected static String joinStringArray(String[] sa, String separator) {
 		if (sa == null || sa.length == 0) {
 			return "";

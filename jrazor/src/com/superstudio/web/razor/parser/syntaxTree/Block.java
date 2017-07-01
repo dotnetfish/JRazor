@@ -98,7 +98,8 @@ public class Block extends SyntaxTreeNode {
 	public int getLength() {
 
 		// methods are not converted
-		return CollectionHelper.sum(getChildren(), child -> child.getLength());
+		return getChildren().stream().mapToInt(i->i.getLength()).sum();
+		//return CollectionHelper.sum(getChildren(), child -> child.getLength());
 	}
 
 	public final Span findFirstDescendentSpan() {

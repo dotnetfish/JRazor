@@ -7,7 +7,8 @@ import java.util.function.Consumer;
 // by using explicitly registered factories (which happens through ApplicationPart.Register).
 public class VirtualPathFactoryManager implements IVirtualPathFactory
 {
-	private static final Lazy<VirtualPathFactoryManager> _instance = new Lazy<VirtualPathFactoryManager>(() -> new VirtualPathFactoryManager(new BuildManagerWrapper()));
+	private static final Lazy<VirtualPathFactoryManager> _instance = new Lazy<VirtualPathFactoryManager>(() ->
+			new VirtualPathFactoryManager(new BuildManagerWrapper()));
 	private static Consumer<String> _instancePathExists;
 	private final LinkedList<IVirtualPathFactory> _virtualPathFactories = new LinkedList<IVirtualPathFactory>();
 

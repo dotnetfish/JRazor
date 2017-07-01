@@ -109,7 +109,7 @@ public abstract class CodeDomProvider extends Component {
 		return TypeDescriptor.GetConverter(type);
 	}
 
-	public CompilerResults compileAssemblyFromDom(CompilerParameters options, CodeCompileUnit... compilationUnits)
+	/*public CompilerResults compileAssemblyFromDom(CompilerParameters options, CodeCompileUnit... compilationUnits)
 			throws Exception {
 		return this.createCompilerHelper().compileAssemblyFromDomBatch(options, compilationUnits);
 	}
@@ -122,7 +122,7 @@ public abstract class CodeDomProvider extends Component {
 	public CompilerResults compileAssemblyFromSource(CompilerParameters options, String... sources) throws Exception {
 		return this.createCompilerHelper().compileAssemblyFromSourceBatch(options, sources);
 	}
-
+*/
 	public boolean isValidIdentifier(String value) {
 		return this.createGeneratorHelper().isValidIdentifier(value);
 	}

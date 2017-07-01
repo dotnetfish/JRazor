@@ -31,4 +31,12 @@ public class CodeExecuteTimeStatistic {
 
         times.put(key,0L);
     }
+
+    public  static void evaluteTick(String key){
+        System.out.println(key);
+        Long oldValue=  times.get(key);
+        if(oldValue==null)oldValue=0L;
+        oldValue+=1;
+        times.put("_count_"+key,oldValue);
+    }
 }

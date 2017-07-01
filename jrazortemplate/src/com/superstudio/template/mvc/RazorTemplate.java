@@ -1,7 +1,5 @@
 package com.superstudio.template.mvc;
 
-import com.superstudio.commons.CodeExecuteTimeStatistic;
-import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.MvcResources;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.template.mvc.context.RenderContext;
@@ -102,8 +100,7 @@ public class RazorTemplate extends BuildManagerCompiledTemplate {
 
 		WebTemplatePage webTemplatePage = (WebTemplatePage) ((instance instanceof WebTemplatePage) ? instance : null);
 		if (webTemplatePage == null) {
-			throw new IllegalStateException(StringHelper.format(CultureInfo.CurrentCulture,
-					MvcResources.JhtmlTemplate_WrongTemplateBase, new Object[] { getTemplatePath() }));
+			throw new IllegalStateException(StringHelper.format(MvcResources.JhtmlTemplate_WrongTemplateBase, new Object[] { getTemplatePath() }));
 		}
 
 		// An overriden master layout might have been specified when the
@@ -129,14 +126,12 @@ public class RazorTemplate extends BuildManagerCompiledTemplate {
 			startPage = startPageLookup.invoke(webTemplatePage, RazorTemplateEngine.TemplateStartFileName,
 					getTemplateStartFileExtensions());
 		}
-		long time=System.currentTimeMillis();
+
 		webTemplatePage.executePageHierarchy(
 				new WebPageContext(templateContext.getHttpContext(),
 						null,
 						null), writer,
 				startPage);
-		long time2=System.currentTimeMillis();
-		CodeExecuteTimeStatistic.evalute(this.getClass().getName()+".executePageHierarchy",time2-time);
 
 
 	}

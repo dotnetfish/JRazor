@@ -1,74 +1,80 @@
 package com.superstudio.web.razor.parser;
 
+
+//import com.superstudio.commons.CollectionHelper;
+
 import com.superstudio.commons.csharpbridge.action.ActionThree;
-import com.superstudio.web.razor.editor.*;
+import com.superstudio.web.razor.editor.SpanEditHandler;
 import com.superstudio.web.razor.generator.*;
 import com.superstudio.web.razor.parser.syntaxTree.*;
-import com.superstudio.web.razor.text.*;
-import com.superstudio.web.razor.tokenizer.*;
-import com.superstudio.commons.CollectionHelper;
-import com.superstudio.commons.csharpbridge.StringHelper;
+import com.superstudio.web.razor.text.SourceLocation;
+import com.superstudio.web.razor.tokenizer.HtmlTokenizer;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConditionalAttributeCollapser extends MarkupRewriter {
-	public ConditionalAttributeCollapser(ActionThree<SpanBuilder, SourceLocation, String> markupSpanFactory)
-			throws Exception {
-		super(markupSpanFactory);
-	}
+    public ConditionalAttributeCollapser(ActionThree<SpanBuilder, SourceLocation, String> markupSpanFactory)
+            throws Exception {
+        super(markupSpanFactory);
+    }
 
-	protected boolean canRewrite(Block block) {
-		IBlockCodeGenerator tempVar = block.getCodeGenerator();
-		AttributeBlockCodeGenerator gen = (AttributeBlockCodeGenerator) ((tempVar instanceof AttributeBlockCodeGenerator)
-				? tempVar : null);
-		return gen != null && !block.getChildren().isEmpty()
-				&& CollectionHelper.all(block.getChildren(), (p) -> isLiteralAttributeValue(p));
-	}
+    protected boolean canRewrite(Block block) {
+        IBlockCodeGenerator tempVar = block.getCodeGenerator();
+        AttributeBlockCodeGenerator gen = (AttributeBlockCodeGenerator) ((tempVar instanceof AttributeBlockCodeGenerator)
+                ? tempVar : null);
 
-	protected SyntaxTreeNode rewriteBlock(BlockBuilder parent, Block block) {
-		// Collect the content of this node
+        return gen != null && !block.getChildren().isEmpty()
+                && block.getChildren().stream().allMatch(i -> isLiteralAttributeValue(i));
+    }
 
-		// methods are not converted
-		String content = StringHelper
-				.concat(CollectionHelper.select(block.getChildren(), (p) -> ((Span) p).getContent()));// (block.getChildren().Select(s
-																										// ->
-																										// s.Content));
+    protected SyntaxTreeNode rewriteBlock(BlockBuilder parent, Block block) {
+        // Collect the content of this node
+        List<String> contentList = block.getChildren().stream().map(i -> {
+            return ((Span) i).getContent();
+        }).collect(Collectors.toList());
 
-		// create a new span containing this content
-		SpanBuilder span = new SpanBuilder();
-		span.setEditHandler(new SpanEditHandler((p) -> {
-			try {
-				return HtmlTokenizer.tokenize(p);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			return null;
-		}));
-		FillSpan(span, CollectionHelper.firstOrDefault(block.getChildren()).getStart(), content);
-		return span.build();
-		// string content = String.Concat(block.Children.Cast<Span>().Select(s
-		// -> s.Content));
+        String contents = StringUtils.join(contentList, "");
 
-		// create a new span containing this content
-		/*
+        // create a new span containing this content
+        SpanBuilder span = new SpanBuilder();
+        span.setEditHandler(new SpanEditHandler((p) -> {
+            try {
+                return HtmlTokenizer.tokenize(p);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return null;
+        }));
+        SourceLocation sourceLocation = block.getChildren().stream().findFirst().get().getStart();
+        FillSpan(span, sourceLocation, contents);
+        return span.build();
+        // string content = String.Concat(block.Children.Cast<Span>().Select(s
+        // -> s.Content));
+
+        // create a new span containing this content
+        /*
 		 * SpanBuilder span = new SpanBuilder(); span.EditHandler = new
 		 * SpanEditHandler(HtmlTokenizer.tokenize); FillSpan(span,
 		 * block.Children.Cast<Span>().First().start, content); return
 		 * span.build();
 		 */
-	}
+    }
 
-	private boolean isLiteralAttributeValue(SyntaxTreeNode node) {
-		if (node.getIsBlock()) {
-			return false;
-		}
-		Span span = (Span) ((node instanceof Span) ? node : null);
-		assert span != null;
+    private boolean isLiteralAttributeValue(SyntaxTreeNode node) {
+        if (node.getIsBlock()) {
+            return false;
+        }
+        Span span = (Span) ((node instanceof Span) ? node : null);
+        assert span != null;
 
-		ISpanCodeGenerator tempVar = span.getCodeGenerator();
-		LiteralAttributeCodeGenerator litGen = (LiteralAttributeCodeGenerator) ((tempVar instanceof LiteralAttributeCodeGenerator)
-				? tempVar : null);
+        ISpanCodeGenerator tempVar = span.getCodeGenerator();
+        LiteralAttributeCodeGenerator litGen = (LiteralAttributeCodeGenerator) ((tempVar instanceof LiteralAttributeCodeGenerator)
+                ? tempVar : null);
 
-		return span != null && ((litGen != null && litGen.getValueGenerator() == null)
-				|| span.getCodeGenerator() == SpanCodeGenerator.Null
-				|| span.getCodeGenerator() instanceof MarkupCodeGenerator);
-	}
+        return span != null && ((litGen != null && litGen.getValueGenerator() == null)
+                || span.getCodeGenerator() == SpanCodeGenerator.Null
+                || span.getCodeGenerator() instanceof MarkupCodeGenerator);
+    }
 }

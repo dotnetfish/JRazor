@@ -7,7 +7,7 @@ import com.superstudio.commons.exception.ArgumentNullException;
 
 public interface ICodeCompiler
 {
-	CompilerResults compileAssemblyFromDom(CompilerParameters options, CodeCompileUnit compilationUnit) throws ArgumentNullException;
+	/*CompilerResults compileAssemblyFromDom(CompilerParameters options, CodeCompileUnit compilationUnit) throws ArgumentNullException;
 
 	CompilerResults compileAssemblyFromFile(CompilerParameters options, String fileName) throws Exception;
 
@@ -18,4 +18,4 @@ public interface ICodeCompiler
 	CompilerResults compileAssemblyFromFileBatch(CompilerParameters options, String[] fileNames) throws Exception;
 
 	CompilerResults compileAssemblyFromSourceBatch(CompilerParameters options, String[] sources) throws Exception;
-}
+*/}

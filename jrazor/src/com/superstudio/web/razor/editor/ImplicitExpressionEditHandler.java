@@ -270,6 +270,7 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 		char[] charArray=content.substring(content.length() - 1).toCharArray();
 		//ArrayList list=new ArrayList<Char>();
 		//list.
+
 		return (content.length() == 1 && content.charAt(0) == '.') 
 				|| (content.charAt(content.length() - 1) == '.'
 				&& CollectionHelper.all(charArray,(t)->ParserHelpers.isIdentifierPart(t)));

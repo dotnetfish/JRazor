@@ -9,6 +9,7 @@ public class WebVirtualPathProvider extends VirtualPathProvider {
 
 	@Override
 	public boolean fileExists(String virtualPath) {
+		//CodeExecuteTimeStatistic.evaluteTick(this.getClass().getName());
 		String path;
 		try {
 			
@@ -19,7 +20,7 @@ public class WebVirtualPathProvider extends VirtualPathProvider {
 			e.printStackTrace();
 			return false;
 		}
-		System.out.println(path);
+		//System.out.println(path);
 		return new File(path).exists();
 	}
 }

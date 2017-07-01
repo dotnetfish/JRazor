@@ -6,6 +6,7 @@ import java.io.Writer;
 
 import com.superstudio.commons.csharpbridge.action.ActionOne;
 import com.superstudio.commons.exception.ArgumentNullException;
+import com.superstudio.commons.exception.HttpException;
 
 public class HelperResult {
 	private final ActionOne<Writer> _action;
@@ -43,7 +44,7 @@ public class HelperResult {
    
 
 	public void writeTo(Writer writer) {
-		// TODO Auto-generated method stub
+
 		_action.execute(writer);
 	}
 }

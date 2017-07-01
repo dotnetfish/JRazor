@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
 
 import com.superstudio.codedom.*;
 import com.superstudio.codedom.compiler.*;
-import com.superstudio.commons.Assembly;
 import com.superstudio.commons.Encoding;
 import com.superstudio.commons.Environment;
 import com.superstudio.commons.FixedStringLookup;
@@ -2835,7 +2834,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		this.output.writeLine(" {");
 	}
 
-	private CompilerResults fromFileBatch(CompilerParameters options, String[] fileNames) throws Exception {
+	/*private CompilerResults fromFileBatch(CompilerParameters options, String[] fileNames) throws Exception {
 		if (options == null) {
 			// throw new ArgumentNullException("options");
 		}
@@ -2921,7 +2920,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		return compilerResults;
 	}
-
+*/
 	private static String[] readAllLines(String file, String encoding, FileShare share)
 			throws Exception {
 		String[] result = null;
@@ -2938,7 +2937,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		return result;
 	}
 
-	public CompilerResults compileAssemblyFromDom(CompilerParameters options, CodeCompileUnit e)
+	/*public CompilerResults compileAssemblyFromDom(CompilerParameters options, CodeCompileUnit e)
 			throws ArgumentNullException {
 		if (options == null) {
 			throw new ArgumentNullException("options");
@@ -2951,8 +2950,8 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		return result;
 	}
-
-	public CompilerResults compileAssemblyFromFile(CompilerParameters options, String fileName) throws Exception {
+*/
+	/*public CompilerResults compileAssemblyFromFile(CompilerParameters options, String fileName) throws Exception {
 		if (options == null) {
 			throw new ArgumentNullException("options");
 		}
@@ -2991,8 +2990,8 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		return result;
 	}
-
-	public CompilerResults compileAssemblyFromFileBatch(CompilerParameters options, String[] fileNames)
+*/
+	/*public CompilerResults compileAssemblyFromFileBatch(CompilerParameters options, String[] fileNames)
 			throws Exception {
 		if (options == null) {
 			throw new ArgumentNullException("options");
@@ -3011,9 +3010,9 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			options.getTempFiles().safeDelete();
 		}
 		return result;
-	}
+	}*/
 
-	public CompilerResults compileAssemblyFromDomBatch(CompilerParameters options, CodeCompileUnit[] ea)
+	/*public CompilerResults compileAssemblyFromDomBatch(CompilerParameters options, CodeCompileUnit[] ea)
 			throws Exception {
 		if (options == null) {
 			throw new ArgumentNullException("options");
@@ -3025,7 +3024,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			options.getTempFiles().safeDelete();
 		}
 		return result;
-	}
+	}*/
 
 	void compile(CompilerParameters options, String compilerDirectory, String compilerExe, String arguments,
 				 RefObject<String> outputFile, RefObject<Integer> nativeReturnValue, String trueArgs) throws Exception {
@@ -3049,7 +3048,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		throw new InvalidOperationException(SR.GetString("CompilerNotFound", new Object[] { text2 }));
 	}
 
-	private CompilerResults fromDom(CompilerParameters options, CodeCompileUnit e) throws ArgumentNullException {
+	/*private CompilerResults fromDom(CompilerParameters options, CodeCompileUnit e) throws ArgumentNullException {
 		if (options == null) {
 			throw new ArgumentNullException("options");
 		}
@@ -3057,7 +3056,8 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		// SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Demand();
 		return this.fromDomBatch(options, new CodeCompileUnit[] { e });
 	}
-
+*/
+/*
 	private CompilerResults fromFile(CompilerParameters options, String fileName) throws Exception {
 		if (options == null) {
 			throw new ArgumentNullException("options");
@@ -3071,8 +3071,9 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		return this.fromFileBatch(options, new String[] { fileName });
 	}
+*/
 
-	private CompilerResults fromSource(CompilerParameters options, String source) throws Exception {
+	/*private CompilerResults fromSource(CompilerParameters options, String source) throws Exception {
 		if (options == null) {
 			// throw new ArgumentNullException("options");
 		}
@@ -3080,8 +3081,8 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		// SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Demand();
 		return this.fromSourceBatch(options, new String[] { source });
 	}
-
-	private CompilerResults fromDomBatch(CompilerParameters options, CodeCompileUnit[] ea) {
+*/
+	/*private CompilerResults fromDomBatch(CompilerParameters options, CodeCompileUnit[] ea) {
 		if (options == null) {
 			// throw new ArgumentNullException("options");
 		}
@@ -3120,7 +3121,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		return result;
 	}
-
+*/
 	private void resolveReferencedAssemblies(CompilerParameters options, CodeCompileUnit e) {
 		if (e.getReferencedAssemblies().size() > 0) {
 			for (String current : e.getReferencedAssemblies()) {
@@ -3131,7 +3132,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 	}
 
-	private CompilerResults fromSourceBatch(CompilerParameters options, String[] sources) throws ArgumentNullException {
+	/*private CompilerResults fromSourceBatch(CompilerParameters options, String[] sources) throws ArgumentNullException {
 		if (options == null) {
 			throw new ArgumentNullException("options");
 		}
@@ -3168,7 +3169,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		return result;
 	}
-
+*/
 	private static String joinStringArray(String[] sa, String separator) {
 		if (sa == null || sa.length == 0) {
 			return StringHelper.Empty;

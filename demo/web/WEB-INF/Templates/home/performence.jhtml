@@ -47,19 +47,11 @@
     </tr>
     </thead>
     <tbody>
-    @{
-    int index=0;
-    String style="even";
-    }
+    @{    int index=0;    String style="even"; }
     @for(StockModel item : getModel()){
-                 <tr class="@(index%2==0?"odd":"even")">
-            <td>@index</td>
-            <td>@item.getId()</td>
-            <td>@item.getCode()</td>
-            <td style="text-align: left;">@item.getName()</td>
-            <td>@item.getPrice()</td>
-            <td >@(item.getRange())%</td>
-            <td>@(item.getAmount())</td>
+            <tr class="@(index%2==0?"odd":"even")">
+            <td>@index</td><td>@item.getId()</td><td>@item.getCode()</td><td style="text-align: left;">@item.getName()</td>
+            <td>@item.getPrice()</td><td >@(item.getRange())%</td><td>@(item.getAmount())</td>
             @if(item.getGravity() >= 20) {
             <td style="color: red;">@(item.getGravity())%</td>
            } else {

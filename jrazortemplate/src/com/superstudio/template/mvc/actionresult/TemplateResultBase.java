@@ -95,10 +95,7 @@ public abstract class TemplateResultBase extends ActionResult {
 
 		Writer writer = context.getWriter();
 		TemplateContext templateContext = new TemplateContext(context, template, _templateData, getTempData(), writer);
-		long time=System.currentTimeMillis();
-		template.render(templateContext, writer);
-		long time2=System.currentTimeMillis();
-		CodeExecuteTimeStatistic.evalute(this.getClass().getName()+".renderTemplate",time2-time);
+			template.render(templateContext, writer);
 
 		if (result != null) {
 			result.getTemplateEngine().releaseTemplate(context, template);

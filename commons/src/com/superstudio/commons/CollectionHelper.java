@@ -7,11 +7,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.superstudio.commons.csharpbridge.action.Func2;
 
 public class CollectionHelper {
 	public static <T> T firstOrDefault(Iterable<T> source) {
+
 		if (source == null || !source.iterator().hasNext())
 			return null;
 		return source.iterator().next();
@@ -110,8 +112,8 @@ public class CollectionHelper {
 
 	}
 
-	public static <T> int sum(Iterable<T> source, Function<T, Integer> func) {
-		// TODO Auto-generated method stub
+	/*public static <T> int sum(Iterable<T> source, Function<T, Integer> func) {
+
 		if (source == null || !source.iterator().hasNext())
 			return 0;
 		Iterator<T> it = source.iterator();
@@ -119,22 +121,27 @@ public class CollectionHelper {
 		for(T item:source){
 			count += func.apply(item);
 		}
-		/*for (T item = it.next(); it.hasNext();it.) {
+		*//*for (T item = it.next(); it.hasNext();it.) {
 			count += func.apply(item);
-		}*/
+		}*//*
 		return count;
 
 	}
-
+*/
 	public static <TSource, TAccumulate, TResult> TResult aggregate(List<TSource> source, TAccumulate seed,
 			Func2<TAccumulate, TSource, TAccumulate> func, Function<TAccumulate, TResult> resultSelector) {
+
+
+
 		// public static String aggregate(List<ISymbol> symbols, StringBuilder
 		// stringBuilder, Object object, Object object2) {
-		// TODO Auto-generated method stub
+
 		for(TSource item:source){
 			func.execute(seed, item);
 		}
 		return resultSelector.apply(seed);
+
+
 	}
 
 	public static <TSource, TKey, TResult> List<GroupCollection<TKey, TResult>> groupBy(Iterable<TSource> source,

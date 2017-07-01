@@ -35,9 +35,11 @@ public interface ISymbol {
 		}
 	}
 
+default  LocationTagged<String> getLocationTaggedContent(){
+		return  new LocationTagged<String>(getContent(),getStart().clone());
+}
 
-
-	default LocationTagged<String> GetContent() {
-		return new LocationTagged<String>(getContent(), getStart().clone());
-	}
+	//default LocationTagged<String> GetContent() {
+		//return new LocationTagged<String>(getContent(), getStart().clone());
+	//}
 }

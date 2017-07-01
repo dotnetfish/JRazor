@@ -15,6 +15,7 @@ import com.superstudio.web.razor.text.SourceLocationTracker;
 import com.superstudio.web.razor.tokenizer.symbols.ISymbol;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class Span extends SyntaxTreeNode {
@@ -134,8 +135,10 @@ public class Span extends SyntaxTreeNode {
 		builder.reset();
 
 		// Calculate other properties
-
-		// methods are not converted
+getSymbols().stream().reduce("",(sym,i)->i.getContent(),String::concat);
+/*getSymbols().stream().collect(StringBuilder::new,
+		(sb,sym)->sb.append(sym.getContent()),
+		(result,source)->result.append(source.toString())).toString();*/
 		setContent(CollectionHelper.aggregate(getSymbols(), new StringBuilder(),
 				(sb, sym) -> sb.append(sym.getContent()), sb -> sb.toString()));
 	}

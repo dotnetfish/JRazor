@@ -1,7 +1,5 @@
 package com.superstudio.codedom.compiler;
 
-import com.superstudio.commons.Assembly;
-import com.superstudio.commons.AssemblyName;
 import com.superstudio.commons.Evidence;
 
 import java.io.Serializable;
@@ -19,7 +17,7 @@ public class CompilerResults implements Serializable {
 	// private List<String> output = new List<String>();
 	private List<String> output = new ArrayList<String>();
 
-	private Assembly compiledAssembly;
+	//private Assembly compiledAssembly;
 
 	private String pathToAssembly;
 
@@ -55,18 +53,18 @@ public class CompilerResults implements Serializable {
 		this.evidence = null;
 	}
 
-	 public Assembly getCompiledAssembly() {
+	 /*public Assembly getCompiledAssembly() {
 		if (this.compiledAssembly == null && this.pathToAssembly != null) {
 			AssemblyName tempVar = new AssemblyName();
 			tempVar.setCodeBase(this.pathToAssembly);
 			this.compiledAssembly = Assembly.Load(tempVar, this.evidence);
 		}
 		return this.compiledAssembly;
-	}
+	}*/
 
-	public void setCompiledAssembly(Assembly value) {
+	/*public void setCompiledAssembly(Assembly value) {
 		this.compiledAssembly = value;
-	}
+	}*/
 
 	public final CompilerErrorCollection getErrors() {
 		return this.errors;

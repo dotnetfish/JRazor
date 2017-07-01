@@ -132,7 +132,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 		}
 		// The page is missing, could not be compiled or is of an invalid type.
 		throw new HttpException(
-				String.format(CultureInfo.CurrentCulture, WebPageResources.WebPage_InvalidPageType, virtualPath));
+				String.format(WebPageResources.WebPage_InvalidPageType, virtualPath));
 	}
 
 	private WebPageContext createPageContextFromParameters(boolean isLayoutPage, Object... data) {
@@ -161,8 +161,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 
 	public final void ensurePageCanBeRequestedDirectly(String methodName) throws HttpException {
 		if (getPreviousSectionWriters() == null) {
-			throw new HttpException(String.format(CultureInfo.CurrentCulture,
-					WebPageResources.WebPage_CannotRequestDirectly, getVirtualPath(), methodName));
+			throw new HttpException(String.format(WebPageResources.WebPage_CannotRequestDirectly, getVirtualPath(), methodName));
 		}
 	}
 
@@ -175,6 +174,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 	public final void executePageHierarchy(WebPageContext pageContext,
 										   Writer writer, WebPageRenderingBase startPage)
 			throws Exception {
+
 		pushContext(pageContext, writer);
 
 		if (startPage != null) {
@@ -190,7 +190,11 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 		} else {
 			executePageHierarchy();
 		}
+
+
 		popContext();
+
+
 	}
 
 	@Override
@@ -223,10 +227,8 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 		TemplateStack.push(getContext(), this);
 
 		try{	// execute the developer-written code of the WebPage
-			long time=System.currentTimeMillis();
+
 			execute();
-			long time2=System.currentTimeMillis();
-			CodeExecuteTimeStatistic.evalute(this.getClass().getName()+".execute Page ",time2-time);
 
 
 		} finally {
@@ -261,7 +263,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 
 					StringReader stream = new StringReader(_tempWriter.getBuffer().toString());
 					IOUtils.copy(stream, p);
-					// _tempWriter.copyTo(p);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 					//throw e;
@@ -271,9 +273,12 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 		} else {
 			// Otherwise, just render the page.
 			// _tempWriter.copyTo(_currentWriter);
+			//long time=System.currentTimeMillis();
 			StringReader stream = new StringReader(_tempWriter.getBuffer().toString());
-				IOUtils.copy(stream, _currentWriter);
-				//_currentWriter.write(_tempWriter.getBuffer().)
+			IOUtils.copy(stream, _currentWriter);
+			//long time2=System.currentTimeMillis();
+			//CodeExecuteTimeStatistic.evalute(this.getClass().getName()+".copyStream",time2-time);
+
 		}
 
 		verifyRenderedBodyOrSections();
@@ -319,8 +324,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 			if (_body != null) {
 				return new HelperResult(tw -> _body.execute(tw));
 			} else {
-				throw new HttpException(String.format(CultureInfo.CurrentCulture,
-						WebPageResources.WebPage_CannotRequestDirectly, getVirtualPath(), "renderBody"));
+				throw new HttpException(String.format(WebPageResources.WebPage_CannotRequestDirectly, getVirtualPath(), "renderBody"));
 			}
 		}catch (Exception ex){
 			return  null;
@@ -362,24 +366,21 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 		});
 	}
 
-	public final HelperResult renderSection(String name) {//throws ArgumentNullException, HttpException {
+	public final HelperResult renderSection(String name)  throws ArgumentNullException, HttpException {
 		return renderSection(name, true);
 	}
 
-	public final HelperResult renderSection(String name, boolean required) {//throws ArgumentNullException, HttpException {
-		try{
+	public final HelperResult renderSection(String name, boolean required) throws ArgumentNullException, HttpException {
+
 		ensurePageCanBeRequestedDirectly("renderSection");
 
 		if (getPreviousSectionWriters().containsKey(name)) {
 			HelperResult result = new HelperResult(tw -> {
 				if (_renderedSections.contains(name)) {
-					try {
-						throw new HttpException(String.format(CultureInfo.InvariantCulture,
-								WebPageResources.WebPage_SectionAleadyRendered, name));
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+return;
+						//throw new HttpException(String.format(
+						//		WebPageResources.WebPage_SectionAleadyRendered, name));
+
 				}
 				SectionWriter body = getPreviousSectionWriters().get(name);
 				// Since the body can also call renderSection, we need to
@@ -414,9 +415,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 			// If the section is optional and not found, then don't do anything.
 			return null;
 		}
-		}catch (Exception ex){
-			return  null;
-		}
+
 	}
 
 	private void renderSurrounding(String partialTemplateName, ActionOne<Writer> body) throws Exception {
@@ -520,14 +519,15 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 
 
 	@Override
-	public void writeLiteral(Object value) {
-		try {
-			if (value == null)
-				return;
-			getOutput().write(value.toString());
-		} catch (Exception e) {
+	public void writeLiteral(Object value) throws IOException {
 
-		}
+			if (value == null || StringHelper.isNullOrEmpty(value.toString())){
+				return;
+			}
+		//	getOutput().
+
+			getOutput().write(value.toString());
+
 	}
 
 	@Override

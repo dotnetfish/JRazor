@@ -1,5 +1,6 @@
 package com.superstudio.demo.servlet;
 
+import com.superstudio.commons.CodeExecuteTimeStatistic;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.template.mvc.context.HostContext;
 import org.apache.commons.lang3.StringUtils;
@@ -10,16 +11,20 @@ import org.apache.commons.lang3.StringUtils;
 public class WebTemplateHost extends HostContext {
     static  final  String pathSplit="/";
     public  WebTemplateHost(){
+
         super();
+        this.rootPath= this.getClass()
+                .getClassLoader()
+                .getResource("../../")
+                .getPath();
     }
+    private String rootPath="";
     @Override
     public String mapPath(String path){
-      String root=  this.getClass()
-              .getClassLoader()
-              .getResource("../../")
-              .getPath();
 
-return root+StringUtils.removeStart(path,pathSplit);
+        CodeExecuteTimeStatistic.evaluteTick(this.getClass().getName());
+
+return this.rootPath+StringUtils.removeStart(path,pathSplit);
 
     }
 }

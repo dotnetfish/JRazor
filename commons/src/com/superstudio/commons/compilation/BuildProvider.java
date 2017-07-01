@@ -96,9 +96,9 @@ public abstract class BuildProvider
 	{
 		return null;
 	}*/
-	public void generateCode(AssemblyBuilder assemblyBuilder) throws  Exception
+	/*public void generateCode(AssemblyBuilder assemblyBuilder) throws  Exception
 	{
-	}
+	}*/
 	public java.lang.Class getGeneratedType(CompilerResults results) throws HttpException
 	{
 		return null;

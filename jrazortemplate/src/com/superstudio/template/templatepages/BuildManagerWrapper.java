@@ -26,7 +26,10 @@ public final class BuildManagerWrapper implements IVirtualPathFactory
 
 	public BuildManagerWrapper()
 	{
-		this(() -> {return HostingEnvironment.getVirtualPathProvider();}, new VirtualPathUtilityWrapper());
+		this(() -> {
+			return
+				HostingEnvironment.getVirtualPathProvider();},
+				new VirtualPathUtilityWrapper());
 	}
 
 	public BuildManagerWrapper(VirtualPathProvider vpp, IVirtualPathUtility virtualPathUtility)
@@ -99,7 +102,8 @@ public final class BuildManagerWrapper implements IVirtualPathFactory
 
 	public <T> T createInstanceOfType(String virtualPath) throws InstantiationException, IllegalAccessException, ClassNotFoundException,Exception
 	{
-			BuildManagerResult buildManagerResult = (BuildManagerResult)RuntimeCache.getInstance().get(getKeyFromVirtualPath(virtualPath));
+			BuildManagerResult buildManagerResult =
+					(BuildManagerResult)RuntimeCache.getInstance().get(getKeyFromVirtualPath(virtualPath));
 			// The cache could have evicted our results. In this case, we'll simply fall through to createInstanceFromVirtualPath
 			if (buildManagerResult != null)
 			{

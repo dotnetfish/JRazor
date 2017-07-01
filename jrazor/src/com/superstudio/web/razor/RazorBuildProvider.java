@@ -1,10 +1,11 @@
 package com.superstudio.web.razor;
 
 import com.superstudio.codedom.CodeCompileUnit;
-import com.superstudio.codedom.compiler.CompilerResults;
-import com.superstudio.commons.*;
+import com.superstudio.commons.CollectionHelper;
+import com.superstudio.commons.CompilerType;
+import com.superstudio.commons.EventHandler;
+import com.superstudio.commons.TextReader;
 import com.superstudio.commons.compilation.BuildProvider;
-import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.HttpException;
 import com.superstudio.commons.exception.HttpParseException;
 import com.superstudio.web.razor.generator.CodeGenerationCompleteEventArgs;
@@ -19,7 +20,7 @@ public class RazorBuildProvider extends BuildProvider
 	private CodeCompileUnit _generatedCode;
 	private WebPageRazorHost _host;
 	private List<String> _virtualPathDependencies;
-	private IAssemblyBuilder _assemblyBuilder;
+//	private IAssemblyBuilder _assemblyBuilder;
 	public static  EventHandler<CodeGenerationCompleteEventArgs> CodeGenerationCompleted;
 
 
@@ -27,6 +28,7 @@ public class RazorBuildProvider extends BuildProvider
 
 
 	public static  EventHandler<CompilingPathEventArgs> CompilingPath;
+
 	private  EventHandler<CodeGenerationCompleteEventArgs> codeGenerationCompletedInternal;
 	private  EventHandler<CodeGenerationCompleteEventArgs> codeGenerationStartedInternal;
 	
@@ -57,7 +59,7 @@ public class RazorBuildProvider extends BuildProvider
 	{
 		return super.getVirtualPath();
 	}
-	public final AssemblyBuilder getAssemblyBuilder()
+	/*public final AssemblyBuilder getAssemblyBuilder()
 	{
 		AssemblyBuilderWrapper assemblyBuilderWrapper = (AssemblyBuilderWrapper)((this._assemblyBuilder instanceof AssemblyBuilderWrapper) ? this._assemblyBuilder : null);
 		if (assemblyBuilderWrapper != null)
@@ -70,7 +72,7 @@ public class RazorBuildProvider extends BuildProvider
 	{
 		return this._assemblyBuilder;
 	}
-	public final CodeCompileUnit getGeneratedCode() throws Exception
+*/	public final CodeCompileUnit getGeneratedCode() throws Exception
 	{
 		this.EnsureGeneratedCode();
 		return this._generatedCode;
@@ -106,12 +108,12 @@ public class RazorBuildProvider extends BuildProvider
 		}
 		this._virtualPathDependencies.add(dependency);
 	}
-	@Override
+	/*@Override
 	public java.lang.Class getGeneratedType(CompilerResults results) throws HttpException
 	{
 		return results.getCompiledAssembly().GetType((StringHelper.format(CultureInfo.CurrentCulture, "%1$s.%2$s", new Object[] {this.getHost().getDefaultNamespace(), this.getHost().getDefaultClassName()})));
-	}
-	@Override
+	}*/
+	/*@Override
 	public void generateCode(AssemblyBuilder assemblyBuilder)
 	{
 		try {
@@ -120,13 +122,13 @@ public class RazorBuildProvider extends BuildProvider
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	public void GenerateCodeCore(IAssemblyBuilder assemblyBuilder) throws Exception
+	}*/
+/*	public void GenerateCodeCore(IAssemblyBuilder assemblyBuilder) throws Exception
 	{
 		this.OnCodeGenerationStarted(assemblyBuilder);
 		assemblyBuilder.addCodeCompileUnit(this, this.getGeneratedCode());
 		assemblyBuilder.generateTypeFactory(String.format(CultureInfo.InvariantCulture, "%1$s.%2$s", new Object[] {this.getHost().getDefaultNamespace(), this.getHost().getDefaultClassName()}));
-	}
+	}*/
 	protected TextReader InternalOpenReader()
 	{
 		return super.openReader();
@@ -150,16 +152,16 @@ public class RazorBuildProvider extends BuildProvider
 			compilingPath.execute(this, args);
 		}
 	}
-	private void OnCodeGenerationStarted(IAssemblyBuilder assemblyBuilder)
+	/*private void OnCodeGenerationStarted(IAssemblyBuilder assemblyBuilder)
 	{
-		this._assemblyBuilder = assemblyBuilder;
+		//this._assemblyBuilder = assemblyBuilder;
 		EventHandler<?> eventHandler = (this.codeGenerationStartedInternal != null) ?
 				this.codeGenerationStartedInternal : RazorBuildProvider.CodeGenerationStarted;
 		if (eventHandler != null)
 		{
 			eventHandler.execute(this, null);
 		}
-	}
+	}*/
 	private void OnCodeGenerationCompleted(CodeCompileUnit generatedCode) throws HttpException
 	{
 		EventHandler<CodeGenerationCompleteEventArgs> eventHandler = 

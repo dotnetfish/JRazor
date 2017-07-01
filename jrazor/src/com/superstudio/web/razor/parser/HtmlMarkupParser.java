@@ -388,11 +388,8 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		LocationTagged<String> prefix = getSpan().getContent();
 
 		if (attributeCanBeConditional) {
-			getSpan().setCodeGenerator(SpanCodeGenerator.Null); // The block
-																// code
-																// generator
-																// will render
-																// the prefix
+			// The block code generator will render the prefix
+			getSpan().setCodeGenerator(SpanCodeGenerator.Null);
 			Output(SpanKind.Markup);
 
 			// read the values
@@ -403,7 +400,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			// Capture the suffix
 			LocationTagged<String> suffix = new LocationTagged<String>("", getCurrentLocation().clone());
 			if (quote != HtmlSymbolType.Unknown && At(quote)) {
-				suffix = getCurrentSymbol().GetContent();
+				suffix = getCurrentSymbol().getLocationTaggedContent();
 				AcceptAndMoveNext();
 			}
 

@@ -99,10 +99,8 @@ public abstract class BuildManagerCompiledTemplate implements ITemplate
 		}
 
 		try {
-			long timeStart=System.currentTimeMillis();
+
 			renderTemplate(templateContext, writer, instance);
-			long timeend=System.currentTimeMillis();
-			CodeExecuteTimeStatistic.evalute(this.getClass().getName()+".renderTemplate",timeend-timeStart);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
