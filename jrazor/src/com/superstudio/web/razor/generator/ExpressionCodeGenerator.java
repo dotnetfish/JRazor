@@ -3,6 +3,7 @@ package com.superstudio.web.razor.generator;
 import com.superstudio.commons.CollectionHelper;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.razor.parser.syntaxTree.*;
+import org.apache.commons.lang3.StringUtils;
 
 public class ExpressionCodeGenerator extends HybridCodeGenerator {
 	@Override
@@ -14,19 +15,19 @@ public class ExpressionCodeGenerator extends HybridCodeGenerator {
 					s -> ((Span) s).getKind() == SpanKind.Code || ((Span) s).getKind() == SpanKind.Markup);
 
 			if (contentSpan != null) {
-				context.AddContextCall(contentSpan,
+				context.addContextCall(contentSpan,
 						context.getHost().getGeneratedClassContext().getBeginContextMethodName(), false);
 			}
 		}
 
 
 		// methods are not converted
-		String writeInvocation = context.BuildCodeString(cw -> {
+		String writeInvocation = context.buildCodeString(cw -> {
 			if (context.getHost().getDesignTimeMode()) {
-				context.EnsureExpressionHelperVariable();
+				context.ensureExpressionHelperVariable();
 				cw.writeStartAssignment("__o");
 			} else if (context.getExpressionRenderingMode() == ExpressionRenderingMode.WriteToOutput) {
-				if (!StringHelper.isNullOrEmpty(context.getTargetWriterName())) {
+				if (!StringUtils.isBlank(context.getTargetWriterName())) {
 					cw.writeStartMethodInvoke(context.getHost().getGeneratedClassContext().getWriteToMethodName());
 					cw.writeSnippet(context.getTargetWriterName());
 					cw.writeParameterSeparator();
@@ -36,15 +37,15 @@ public class ExpressionCodeGenerator extends HybridCodeGenerator {
 			}
 		});
 
-		context.BufferStatementFragment(writeInvocation);
-		context.MarkStartOfGeneratedCode();
+		context.bufferStatementFragment(writeInvocation);
+		context.markStartOfGeneratedCode();
 	}
 
 	@Override
 	public void generateEndBlockCode(Block target, CodeGeneratorContext context) {
 
 		// methods are not converted
-		String endBlock = context.BuildCodeString(cw -> {
+		String endBlock = context.buildCodeString(cw -> {
 			if (context.getExpressionRenderingMode() == ExpressionRenderingMode.WriteToOutput) {
 				if (!context.getHost().getDesignTimeMode()) {
 					cw.writeEndMethodInvoke();
@@ -55,9 +56,9 @@ public class ExpressionCodeGenerator extends HybridCodeGenerator {
 			}
 		});
 
-		context.MarkEndOfGeneratedCode();
-		context.BufferStatementFragment(endBlock);
-		context.FlushBufferedStatement();
+		context.markEndOfGeneratedCode();
+		context.bufferStatementFragment(endBlock);
+		context.flushBufferedStatement();
 
 		if (context.getHost().getEnableInstrumentation()
 				&& context.getExpressionRenderingMode() == ExpressionRenderingMode.WriteToOutput) {
@@ -65,7 +66,7 @@ public class ExpressionCodeGenerator extends HybridCodeGenerator {
 					s -> ((Span) s).getKind() == SpanKind.Code || ((Span) s).getKind() == SpanKind.Markup);// .FirstOrDefault();
 
 			if (contentSpan != null) {
-				context.AddContextCall(contentSpan,
+				context.addContextCall(contentSpan,
 						context.getHost().getGeneratedClassContext().getendContextMethodName(), false);
 			}
 		}
@@ -78,7 +79,7 @@ public class ExpressionCodeGenerator extends HybridCodeGenerator {
 				|| context.getExpressionRenderingMode() == ExpressionRenderingMode.WriteToOutput) {
 			sourceSpan = target;
 		}
-		context.BufferStatementFragment(target.getContent(), sourceSpan);
+		context.bufferStatementFragment(target.getContent(), sourceSpan);
 	}
 
 	@Override

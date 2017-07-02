@@ -12,6 +12,7 @@ import com.superstudio.web.razor.RazorEngineHost;
 import com.superstudio.web.razor.parser.syntaxTree.Span;
 import com.superstudio.web.razor.text.SourceLocation;
 import com.superstudio.web.razor.utils.DisposableAction;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.Consumer;
 
@@ -180,22 +181,22 @@ public class CodeGeneratorContext {
 		return context;
 	}
 
-	public final void AddDesignTimeHelperStatement(CodeSnippetStatement statement) {
+	public final void addDesignTimeHelperStatement(CodeSnippetStatement statement) {
 		if (_designTimeHelperMethod == null) {
 			CodeMemberMethod tempVar = new CodeMemberMethod();
 			tempVar.setName(DesignTimeHelperMethodName);
 			tempVar.setAttributes( MemberAttributes.forValue(MemberAttributes.Private));
 			_designTimeHelperMethod = tempVar;
 			_designTimeHelperMethod.getStatements()
-					.add(new CodeSnippetStatement(BuildCodeString(cw -> cw.writeDisableUnusedFieldWarningPragma())));
+					.add(new CodeSnippetStatement(buildCodeString(cw -> cw.writeDisableUnusedFieldWarningPragma())));
 				_designTimeHelperMethod.getStatements()
-					.add(new CodeSnippetStatement(BuildCodeString(cw -> cw.writeRestoreUnusedFieldWarningPragma())));
+					.add(new CodeSnippetStatement(buildCodeString(cw -> cw.writeRestoreUnusedFieldWarningPragma())));
 			getGeneratedClass().getMembers().add(0, _designTimeHelperMethod);
 		}
 		_designTimeHelperMethod.getStatements().add(_designTimeHelperMethod.getStatements().size() - 1, statement);
 	}
 
-	public final int AddCodeMapping(SourceLocation sourceLocation, int generatedCodeStart, int generatedCodeLength) {
+	public final int addCodeMapping(SourceLocation sourceLocation, int generatedCodeStart, int generatedCodeLength) {
 		if (generatedCodeStart == Integer.MAX_VALUE) {
 			// throw new ArgumentOutOfRangeException("generatedCodeStart");
 		}
@@ -209,22 +210,22 @@ public class CodeGeneratorContext {
 		return id;
 	}
 
-	public final CodeLinePragma GenerateLinePragma(Span target) {
-		return GenerateLinePragma(target, 0);
+	public final CodeLinePragma generateLinePragma(Span target) {
+		return generateLinePragma(target, 0);
 	}
 
-	public final CodeLinePragma GenerateLinePragma(Span target, int generatedCodeStart) {
-		return GenerateLinePragma(target, generatedCodeStart, target.getContent().length());
+	public final CodeLinePragma generateLinePragma(Span target, int generatedCodeStart) {
+		return generateLinePragma(target, generatedCodeStart, target.getContent().length());
 	}
 
-	public final CodeLinePragma GenerateLinePragma(Span target, int generatedCodeStart, int codeLength) {
-		return GenerateLinePragma(target.getStart(), generatedCodeStart, codeLength);
+	public final CodeLinePragma generateLinePragma(Span target, int generatedCodeStart, int codeLength) {
+		return generateLinePragma(target.getStart(), generatedCodeStart, codeLength);
 	}
 
-	public final CodeLinePragma GenerateLinePragma(SourceLocation start, int generatedCodeStart, int codeLength) {
-		if (!StringHelper.isNullOrEmpty(getSourceFile())) {
+	public final CodeLinePragma generateLinePragma(SourceLocation start, int generatedCodeStart, int codeLength) {
+		if (!StringUtils.isBlank(getSourceFile())) {
 			if (getHost().getDesignTimeMode()) {
-				int mappingId = AddCodeMapping(start, generatedCodeStart, codeLength);
+				int mappingId = addCodeMapping(start, generatedCodeStart, codeLength);
 				return new CodeLinePragma(getSourceFile(), mappingId);
 			}
 			return new CodeLinePragma(getSourceFile(), start.getLineIndex() + 1);
@@ -232,15 +233,15 @@ public class CodeGeneratorContext {
 		return null;
 	}
 
-	public final void BufferStatementFragment(Span sourceSpan) {
-		BufferStatementFragment(sourceSpan.getContent(), sourceSpan);
+	public final void bufferStatementFragment(Span sourceSpan) {
+		bufferStatementFragment(sourceSpan.getContent(), sourceSpan);
 	}
 
-	public final void BufferStatementFragment(String fragment) {
-		BufferStatementFragment(fragment, null);
+	public final void bufferStatementFragment(String fragment) {
+		bufferStatementFragment(fragment, null);
 	}
 
-	public final void BufferStatementFragment(String fragment, Span sourceSpan) {
+	public final void bufferStatementFragment(String fragment, Span sourceSpan) {
 		if (sourceSpan != null && _currentBuffer.getLinePragmaSpan() == null) {
 			_currentBuffer.setLinePragmaSpan(sourceSpan);
 
@@ -256,10 +257,11 @@ public class CodeGeneratorContext {
 			// (padded.Length - _currentBuffer.Builder.Length)
 
 			RefObject<Integer> tempRef_paddingLength = new RefObject<Integer>(paddingLength);
-			String padded = CodeGeneratorPaddingHelper.pad(getHost(), _currentBuffer.getBuilder().toString(),
+			String padded = CodeGeneratorPaddingHelper.pad(getHost(),
+					_currentBuffer.getBuilder().toString(),
 					sourceSpan, start, tempRef_paddingLength);
 			
-			paddingLength = tempRef_paddingLength.getRefObj();
+			//paddingLength = tempRef_paddingLength.getRefObj();
 			_currentBuffer.GeneratedCodeStart = start + (padded.length() - _currentBuffer.getBuilder().length());
 			_currentBuffer.getBuilder().delete(0, _currentBuffer.getBuilder().length());
 			_currentBuffer.getBuilder().append(padded);
@@ -267,15 +269,15 @@ public class CodeGeneratorContext {
 		_currentBuffer.getBuilder().append(fragment);
 	}
 
-	public final void MarkStartOfGeneratedCode() {
+	public final void markStartOfGeneratedCode() {
 		_currentBuffer.MarkStart();
 	}
 
-	public final void MarkEndOfGeneratedCode() {
+	public final void markEndOfGeneratedCode() {
 		_currentBuffer.MarkEnd();
 	}
 
-	public final void FlushBufferedStatement() {
+	public final void flushBufferedStatement() {
 		if (_currentBuffer.getBuilder().length() > 0) {
 			CodeLinePragma pragma = null;
 			if (_currentBuffer.getLinePragmaSpan() != null) {
@@ -287,18 +289,18 @@ public class CodeGeneratorContext {
 				if (_currentBuffer.CodeLength != null) {
 					len = _currentBuffer.CodeLength;
 				}
-				pragma = GenerateLinePragma(_currentBuffer.getLinePragmaSpan(), start, len);
+				pragma = generateLinePragma(_currentBuffer.getLinePragmaSpan(), start, len);
 			}
-			AddStatement(_currentBuffer.getBuilder().toString(), pragma);
+			addStatement(_currentBuffer.getBuilder().toString(), pragma);
 			_currentBuffer.Reset();
 		}
 	}
 
-	public final void AddStatement(String generatedCode) {
-		AddStatement(generatedCode, null);
+	public final void addStatement(String generatedCode) {
+		addStatement(generatedCode, null);
 	}
 
-	public final void AddStatement(String body, CodeLinePragma pragma) {
+	public final void addStatement(String body, CodeLinePragma pragma) {
 		if (getStatementCollector() == null) {
 			CodeSnippetStatement tempVar = new CodeSnippetStatement(body);
 			tempVar.setLinePragma(pragma);
@@ -308,7 +310,7 @@ public class CodeGeneratorContext {
 		}
 	}
 
-	public final void EnsureExpressionHelperVariable() {
+	public final void ensureExpressionHelperVariable() {
 		if (!_expressionHelperVariableWriten) {
 			CodeMemberField tempVar = new CodeMemberField(Object.class, "__o");
 			tempVar.setAttributes(MemberAttributes
@@ -318,7 +320,7 @@ public class CodeGeneratorContext {
 		}
 	}
 
-	public final AutoCloseable ChangeStatementCollector(ActionTwo<String, CodeLinePragma> collector) {
+	public final AutoCloseable changeStatementCollector(ActionTwo<String, CodeLinePragma> collector) {
 		ActionTwo<String, CodeLinePragma> oldCollector = getStatementCollector();
 		setStatementCollector(collector);
 
@@ -327,11 +329,11 @@ public class CodeGeneratorContext {
 		});
 	}
 
-	public final void AddContextCall(Span contentSpan, String methodName, boolean isLiteral) {
+	public final void addContextCall(Span contentSpan, String methodName, boolean isLiteral) {
 
-		/*AddStatement(BuildCodeString(cw -> {
+		/*addStatement(buildCodeString(cw -> {
 			cw.writeStartMethodInvoke(methodName);
-			if (!StringHelper.isNullOrEmpty(getTargetWriterName())) {
+			if (!StringUtils.isBlank(getTargetWriterName())) {
 				cw.writeSnippet(getTargetWriterName());
 				cw.writeParameterSeparator();
 			}
@@ -367,7 +369,7 @@ public class CodeGeneratorContext {
 		return getCodeWriterFactory().execute();
 	}
 
-final String BuildCodeString(Consumer<CodeWriter> action) {
+final String buildCodeString(Consumer<CodeWriter> action) {
 
 		// using (CodeWriter cw = CodeWriterFactory())
 		CodeWriter cw = getCodeWriterFactory().execute();

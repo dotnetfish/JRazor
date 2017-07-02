@@ -5,6 +5,7 @@ import com.superstudio.codedom.*;
 
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.razor.parser.syntaxTree.*;
+import org.apache.commons.lang3.StringUtils;
 
 public class SetLayoutCodeGenerator extends SpanCodeGenerator
 {
@@ -26,7 +27,7 @@ public class SetLayoutCodeGenerator extends SpanCodeGenerator
 	@Override
 	public void generateCode(Span target, CodeGeneratorContext context)
 	{
-		if (!context.getHost().getDesignTimeMode() && !StringHelper.isNullOrEmpty(context.getHost().getGeneratedClassContext().getLayoutPropertyName()))
+		if (!context.getHost().getDesignTimeMode() && !StringUtils.isBlank(context.getHost().getGeneratedClassContext().getLayoutPropertyName()))
 		{
 			context.getTargetMethod().getStatements().add(
 					new CodeAssignStatement(new CodePropertyReferenceExpression(null, context.getHost().getGeneratedClassContext().getLayoutPropertyName()), new CodePrimitiveExpression(getLayoutPath())));
@@ -43,7 +44,7 @@ public class SetLayoutCodeGenerator extends SpanCodeGenerator
 	public boolean equals(Object obj)
 	{
 		SetLayoutCodeGenerator other = (SetLayoutCodeGenerator)((obj instanceof SetLayoutCodeGenerator) ? obj : null);
-		return other != null && StringHelper.stringsEqual(other.getLayoutPath(), getLayoutPath());
+		return other != null && StringUtils.equals(other.getLayoutPath(), getLayoutPath());
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.template.mvc.actionresult.ITemplateEngine;
 import com.superstudio.template.mvc.actionresult.TemplateEngineResult;
 import com.superstudio.template.mvc.context.RenderContext;
+import org.apache.commons.lang3.StringUtils;
 
 public class TemplateEngineCollection extends ArrayList<ITemplateEngine> {
 
@@ -129,7 +130,7 @@ public class TemplateEngineCollection extends ArrayList<ITemplateEngine> {
 		if (renderContext == null) {
 			throw new ArgumentNullException("renderContext");
 		}
-		if (StringHelper.isNullOrEmpty(partialTemplateName)) {
+		if (StringUtils.isBlank(partialTemplateName)) {
 			throw new ArgumentException(MvcResources.Common_NullOrEmpty, "partialTemplateName");
 		}
 
@@ -159,7 +160,7 @@ public class TemplateEngineCollection extends ArrayList<ITemplateEngine> {
 		if (renderContext == null) {
 			throw new ArgumentNullException("renderContext");
 		}
-		if (StringHelper.isNullOrEmpty(templateName)) {
+		if (StringUtils.isBlank(templateName)) {
 			throw new ArgumentException(MvcResources.Common_NullOrEmpty, "templateName");
 		}
 

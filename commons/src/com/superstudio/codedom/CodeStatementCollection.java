@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeStatementCollection : CollectionBase
 public class CodeStatementCollection extends CollectionBase implements Serializable
 {
 	public final CodeStatement getItem(int index)

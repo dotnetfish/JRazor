@@ -1,10 +1,9 @@
 package com.superstudio.language.java;
 
-import com.sun.deploy.util.StringUtils;
-import com.superstudio.commons.Environment;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.web.razor.generator.BaseCodeWriter;
+import org.apache.commons.lang3.StringUtils;
 
 public class JavaCodeWriter extends BaseCodeWriter {
 
@@ -23,7 +22,7 @@ public class JavaCodeWriter extends BaseCodeWriter {
 		getInnerWriter().write(type);
 		getInnerWriter().write(" ");
 		getInnerWriter().write(name);
-		if (!StringHelper.isNullOrEmpty(value)) {
+		if (!StringUtils.isBlank(value)) {
 			getInnerWriter().write(" = ");
 			getInnerWriter().write(value);
 		} else {
@@ -101,7 +100,8 @@ public class JavaCodeWriter extends BaseCodeWriter {
 
 				getInnerWriter().write("\\u");
 				String result=Integer.toHexString(new Integer(literal.charAt(i)));
-				StringHelper.padLeft(result.toUpperCase(),4,"0");
+				//StringHelper.padLeft(result.toUpperCase(),4,"0");
+				StringUtils.leftPad(result.toLowerCase(),4,"0");
 				getInnerWriter().write(result);
 
 			} else {

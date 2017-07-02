@@ -10,7 +10,7 @@ public class TypeMemberCodeGenerator extends SpanCodeGenerator
 	public void generateCode(Span target, CodeGeneratorContext context)
 	{
 
-		String generatedCode = context.BuildCodeString(cw ->
+		String generatedCode = context.buildCodeString(cw ->
 		{
 			cw.writeSnippet(target.getContent());
 		}
@@ -24,7 +24,7 @@ public class TypeMemberCodeGenerator extends SpanCodeGenerator
 		//Contract.Assert(paddingCharCount > 0);
 
 		CodeSnippetTypeMember tempVar = new CodeSnippetTypeMember(paddedCode);
-		tempVar.setLinePragma(context.GenerateLinePragma(target, paddingCharCount));
+		tempVar.setLinePragma(context.generateLinePragma(target, paddingCharCount));
 		context.getGeneratedClass().getMembers().add(tempVar);
 	}
 

@@ -6,6 +6,10 @@ import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.language.java.parser.JavaCodeParser;
 import com.superstudio.web.razor.generator.SpanCodeGenerator;
 import com.superstudio.web.razor.text.SourceLocation;
+
+import java.text.MessageFormat;
+import java.util.Locale;
+
 public class MvcJavaRazorCodeParser extends JavaCodeParser
 {
 	private static final String ModelKeyword = "model";
@@ -38,11 +42,14 @@ public class MvcJavaRazorCodeParser extends JavaCodeParser
 	{
 		super.AcceptAndMoveNext();
 		SourceLocation currentLocation = super.getCurrentLocation();
-		super.baseTypeDirective(StringHelper.format(CultureInfo.CurrentCulture, MvcResources.MvcRazorCodeParser_ModelKeywordMustBeFollowedByTypeName, new Object[] {"model"}),
+		MessageFormat formattor=new MessageFormat("", Locale.getDefault());
+		super.baseTypeDirective(
+				formattor.format(MvcResources.MvcRazorCodeParser_ModelKeywordMustBeFollowedByTypeName, new Object[] {"model"}),
 				(a)->this.createModelCodeGenerator(a));
 		if (this._modelStatementFound)
 		{
-			this.getContext().OnError(currentLocation, String.format(CultureInfo.CurrentCulture, MvcResources.MvcRazorCodeParser_OnlyOneModelStatementIsAllowed, new Object[] {"model"}));
+			this.getContext().OnError(currentLocation,
+					formattor.format(MvcResources.MvcRazorCodeParser_OnlyOneModelStatementIsAllowed, new Object[] {"model"}));
 		}
 		this._modelStatementFound = true;
 		this.checkForInheritsAndModelStatements();

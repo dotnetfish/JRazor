@@ -4,6 +4,7 @@ import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.language.java.JavaRazorCodeLanguage;
 import com.superstudio.web.razor.generator.RazorCodeGenerator;
 import com.superstudio.web.razor.parser.ParserBase;
+import org.apache.commons.lang3.StringUtils;
 
 
 /**
@@ -49,8 +50,8 @@ public abstract class RazorCodeLanguage {
 	 * @return The language registered for that extension
 	 */
 	public static RazorCodeLanguage getLanguageByExtension(String fileExtension) {
-		RazorCodeLanguage service = null;
-		service = getLanguages().get(StringHelper.trimStart(fileExtension, '.'));
+		//StringUtils.removeStart()
+		RazorCodeLanguage service = getLanguages().get(StringHelper.trimStart(fileExtension, '.'));
 		return service;
 	}
 

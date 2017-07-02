@@ -2,6 +2,7 @@ package com.superstudio.template.templatepages;
 
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.HttpException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -167,7 +168,7 @@ public abstract class WebPageRenderingBase extends WebPageExecutingBase implemen
 	}
 	public final void setCulture(String value)
 	{
-		if (StringHelper.isNullOrEmpty(value))
+		if (StringUtils.isBlank(value))
 		{
 				// GetCultureInfo accepts empty strings but throws for null strings. To maintain consistency in our string handling behavior, throw
 			throw new IllegalArgumentException(CommonResources.Argument_Cannot_Be_Null_Or_Empty+"value");
@@ -182,7 +183,7 @@ public abstract class WebPageRenderingBase extends WebPageExecutingBase implemen
 	}
 	public final void setUICulture(String value)
 	{
-		if (StringHelper.isNullOrEmpty(value))
+		if (StringUtils.isBlank(value))
 		{
 				// GetCultureInfo accepts empty strings but throws for null strings. To maintain consistency in our string handling behavior, throw
 			throw new IllegalArgumentException(CommonResources.Argument_Cannot_Be_Null_Or_Empty+"value");

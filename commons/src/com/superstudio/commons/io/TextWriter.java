@@ -192,8 +192,8 @@ public class TextWriter {
 	
 	public void write(String format, Object... arg) throws IOException
 	{
-		
-		this.writer.write(StringHelper.format(format, arg));
+		this.writer.write(String.format(format,arg));
+		//this.writer.write(StringHelper.format(format, arg));
 	}
 
 	
@@ -313,7 +313,7 @@ public class TextWriter {
 	public void writeLine(String format, Object arg0) throws IOException
 	{
 		//this.writer.write("\r\n");
-		this.writer.write(StringHelper.format(format,arg0));
+		this.writer.write(String.format(format,arg0));
 		this.writer.write("\r\n");
 		//this.writer.writeLine(format, arg0);
 		
@@ -326,7 +326,7 @@ public class TextWriter {
 	public void writeLine(String format, Object... arg) throws IOException
 	{
 		//this.writer.write("\r\n");
-		this.writer.write(StringHelper.format(format,arg));
+		this.writer.write(String.format(format,arg));
 		this.writer.write("\r\n");
 	}
 

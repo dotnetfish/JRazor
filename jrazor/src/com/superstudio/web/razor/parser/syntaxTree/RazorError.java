@@ -7,7 +7,7 @@ import com.superstudio.web.razor.*;
 import com.superstudio.web.razor.text.*;
 import com.superstudio.web.razor.tokenizer.*;
 import com.superstudio.web.razor.tokenizer.symbols.*;
-
+import org.apache.commons.lang3.StringUtils;
 
 
 public class RazorError implements IEquatable<RazorError>
@@ -83,7 +83,7 @@ public class RazorError implements IEquatable<RazorError>
 
 	public final boolean equals(RazorError other)
 	{
-		return StringHelper.stringsEqual(other.getMessage(), getMessage()) && getLocation().equals(other.getLocation().clone());
+		return StringUtils.equals(other.getMessage(), getMessage()) && getLocation().equals(other.getLocation().clone());
 	}
 
 	@Override

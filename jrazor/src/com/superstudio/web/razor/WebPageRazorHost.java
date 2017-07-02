@@ -13,6 +13,7 @@ import com.superstudio.web.razor.generator.GeneratedClassContext;
 import com.superstudio.web.razor.parser.HtmlMarkupParser;
 import com.superstudio.web.razor.parser.ParserBase;
 import com.superstudio.web.razor.parser.ParserHelpers;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -178,8 +179,8 @@ public class WebPageRazorHost extends RazorEngineHost {
 
 	public WebPageRazorHost(String virtualPath, String physicalPath) {
 		this();
-		if (StringHelper.isNullOrEmpty(virtualPath)) {
-			 throw new IllegalArgumentException(StringHelper.format(CultureInfo.CurrentCulture,
+		if (StringUtils.isBlank(virtualPath)) {
+			 throw new IllegalArgumentException(String.format(
 			 RazorResources.getResource(RazorResources.Argument_Cannot_Be_Null_Or_Empty), new Object[]
 			 {"virtualPath"}));
 		}
@@ -193,7 +194,7 @@ public class WebPageRazorHost extends RazorEngineHost {
 	}
 
 	public static void addGlobalImport(String ns) {
-		if (StringHelper.isNullOrEmpty(ns)) {
+		if (StringUtils.isBlank(ns)) {
 			 throw new
 			 IllegalArgumentException(String.format(
 			 RazorResources.Argument_Cannot_Be_Null_Or_Empty, new Object[]
@@ -204,7 +205,7 @@ public class WebPageRazorHost extends RazorEngineHost {
 
 	private void checkForSpecialPage() {
 		if (this._isSpecialPage == null) {
-			String fileNameWithoutExtension = Path.GetFileNameWithoutExtension(this.getVirtualPath());
+			String fileNameWithoutExtension = Path.getFileNameWithoutExtension(this.getVirtualPath());
 			String specialFileBaseClass = null;
 			if (this._specialFileBaseTypes.containsKey(fileNameWithoutExtension)
 					? (specialFileBaseClass = this._specialFileBaseTypes.get(fileNameWithoutExtension))
@@ -224,8 +225,9 @@ public class WebPageRazorHost extends RazorEngineHost {
 	}
 
 	private static RazorCodeLanguage determineCodeLanguage(String fileName) {
-		String text = Path.GetExtension(fileName);
-		if (StringHelper.isNullOrEmpty(text)) {
+		String text = Path.getExtension(fileName);
+
+		if (StringUtils.isBlank(text)) {
 			return null;
 		}
 		if (text.charAt(0) == '.') {
@@ -241,11 +243,11 @@ public class WebPageRazorHost extends RazorEngineHost {
 
 	protected RazorCodeLanguage GetCodeLanguage() {
 		RazorCodeLanguage razorCodeLanguage = WebPageRazorHost.determineCodeLanguage(this.getVirtualPath());
-		if (razorCodeLanguage == null && !StringHelper.isNullOrEmpty(this.getPhysicalPath())) {
+		if (razorCodeLanguage == null && !StringUtils.isBlank(this.getPhysicalPath())) {
 			razorCodeLanguage = WebPageRazorHost.determineCodeLanguage(this.getPhysicalPath());
 		}
 		if (razorCodeLanguage == null) {
-			throw new IllegalStateException(StringHelper.format(CultureInfo.CurrentCulture,
+			throw new IllegalStateException(String.format(
 					RazorWebResources.BuildProvider_No_CodeLanguageService_For_Path,
 					new Object[] { this.getVirtualPath() }));
 		}
@@ -265,7 +267,7 @@ public class WebPageRazorHost extends RazorEngineHost {
 	private void mapPhysicalPath() {
 		if (this._physicalPath == null && HostingEnvironment.getIsHosted()) {
 			String text = HostingEnvironment.MapPath(this.getVirtualPath());
-			if (!StringHelper.isNullOrEmpty(text) && (new java.io.File(text)).isFile()) {
+			if (!StringUtils.isBlank(text) && (new java.io.File(text)).isFile()) {
 				this._physicalPath = text;
 			}
 		}
@@ -304,13 +306,13 @@ public class WebPageRazorHost extends RazorEngineHost {
 	}
 
 	protected final void registerSpecialFile(String fileName, String baseTypeName) {
-		if (StringHelper.isNullOrEmpty(fileName)) {
+		if (StringUtils.isBlank(fileName)) {
 			// throw new
 			// IllegalArgumentException(StringHelper.format(CultureInfo.CurrentCulture,
 			// CommonResources.Argument_Cannot_Be_Null_Or_Empty, new Object[]
 			// {"fileName"}), "fileName");
 		}
-		if (StringHelper.isNullOrEmpty(baseTypeName)) {
+		if (StringUtils.isBlank(baseTypeName)) {
 			// throw new
 			// IllegalArgumentException(StringHelper.format(CultureInfo.CurrentCulture,
 			// CommonResources.Argument_Cannot_Be_Null_Or_Empty, new Object[]

@@ -41,7 +41,7 @@ public class TemplateResult extends TemplateResultBase {
 			locationsText.append(location);
 		}
 		throw new InvalidOperationException(
-				StringHelper.format(CultureInfo.CurrentCulture,
+				String.format(
 				MvcResources.Common_TemplateNotFound,
 						new Object[] { getTemplateName(), locationsText }));
 	}

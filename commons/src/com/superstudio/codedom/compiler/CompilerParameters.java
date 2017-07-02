@@ -7,48 +7,42 @@ import java.util.List;
 import com.superstudio.commons.*;
 
 
-//ORIGINAL LINE: [PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust"), PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")][Serializable] public class CompilerParameters
 public class CompilerParameters implements Serializable
 {
 
-//ORIGINAL LINE: [OptionalField] private string coreAssemblyFileName = string.Empty;
-	private String coreAssemblyFileName = "";
+	//private String coreAssemblyFileName = "";
 
 	private List<String> assemblyNames = new ArrayList<String>();
 
 
-//ORIGINAL LINE: [OptionalField] private List<String> embeddedResources = new List<String>();
-	private List<String> embeddedResources = new ArrayList<String>();
+	//private List<String> embeddedResources = new ArrayList<String>();
 
+	//private List<String> linkedResources = new ArrayList<String>();
 
-//ORIGINAL LINE: [OptionalField] private List<String> linkedResources = new List<String>();
-	private List<String> linkedResources = new ArrayList<String>();
+	//private String outputName;
 
-	private String outputName;
+	//private String mainClass;
 
-	private String mainClass;
-
-	private boolean generateInMemory;
+	//private boolean generateInMemory;
 
 	private boolean includeDebugInformation;
 
 	private int warningLevel = -1;
 
-	private String compilerOptions;
+	//private String compilerOptions;
 
-	private String win32Resource;
+	//private String win32Resource;
 
 	private boolean treatWarningsAsErrors;
 
-	private boolean generateExecutable;
+	//private boolean generateExecutable;
 
-	private TempFileCollection tempFiles;
+	//private TempFileCollection tempFiles;
 
-	private transient SafeUserTokenHandle userToken;
 
-	private Evidence evidence;
+	//private Evidence evidence;
 
-	public final String getCoreAssemblyFileName()
+	/*public final String getCoreAssemblyFileName()
 	{
 		return this.coreAssemblyFileName;
 	}
@@ -74,13 +68,13 @@ public class CompilerParameters implements Serializable
 	{
 		this.generateInMemory = value;
 	}
-
+*/
 	public final List<String> getReferencedAssemblies()
 	{
 		return this.assemblyNames;
 	}
 
-	public final String getMainClass()
+	/*public final String getMainClass()
 	{
 		return this.mainClass;
 	}
@@ -110,7 +104,7 @@ public class CompilerParameters implements Serializable
 	{
 		this.tempFiles = value;
 	}
-
+*/
 	public final boolean getIncludeDebugInformation()
 	{
 		return this.includeDebugInformation;
@@ -147,7 +141,7 @@ public class CompilerParameters implements Serializable
 		this.setCompilerOptions(value);// = value;
 	}
 
-	public final String getWin32Resource()
+	/*public final String getWin32Resource()
 	{
 		return this.win32Resource;
 	}
@@ -157,7 +151,6 @@ public class CompilerParameters implements Serializable
 	}
 
 
-//ORIGINAL LINE: [ComVisible(false)] public List<String> EmbeddedResources
 	public final List<String> getEmbeddedResources()
 	{
 		return this.embeddedResources;
@@ -168,66 +161,20 @@ public class CompilerParameters implements Serializable
 	{
 		return this.linkedResources;
 	}
-
-	public final IntPtr getUserToken()
-	{
-		if (this.userToken != null)
-		{
-			return this.userToken.DangerousGetHandle();
-		}
-		return IntPtr.Zero;
-	}
-	public final void setUserToken(IntPtr value)
-	{
-		if (this.userToken != null)
-		{
-			this.userToken.Close();
-		}
-		this.userToken = new SafeUserTokenHandle(value, false);
-	}
-
-	public final SafeUserTokenHandle getSafeUserToken()
-	{
-		return this.userToken;
-	}
-
-	@Deprecated
-	public final Evidence getEvidence()
-	{
-		Evidence result = null;
-		if (this.evidence != null)
-		{
-			result = this.evidence.clone();
-		}
-		return result;
-	}
-	@Deprecated
-	private void setEvidence(Evidence value)
-	{
-		if (value != null)
-		{
-			this.evidence = value.clone();
-			return;
-		}
-		this.evidence = null;
-	}
+*/
 
 	public CompilerParameters()
 	{
-		this(null, null);
+		this(null);
 	}
+
 
 	public CompilerParameters(String[] assemblyNames)
 	{
-		this(assemblyNames, null, false);
+		this(assemblyNames,  false);
 	}
 
-	public CompilerParameters(String[] assemblyNames, String outputName)
-	{
-		this(assemblyNames, outputName, false);
-	}
-
-	public CompilerParameters(String[] assemblyNames, String outputName, boolean includeDebugInformation)
+	public CompilerParameters(String[] assemblyNames,  boolean includeDebugInformation)
 	{
 		if (assemblyNames != null)
 		{
@@ -236,7 +183,7 @@ public class CompilerParameters implements Serializable
 			}
 			
 		}
-		this.outputName = outputName;
+		//this.outputName = outputName;
 		this.includeDebugInformation = includeDebugInformation;
 	}
 }

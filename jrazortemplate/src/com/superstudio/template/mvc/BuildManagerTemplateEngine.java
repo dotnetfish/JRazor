@@ -1,14 +1,11 @@
 package com.superstudio.template.mvc;
 
-import java.util.function.Supplier;
-
 import com.superstudio.commons.HostingEnvironment;
 import com.superstudio.commons.VirtualPathProvider;
-import com.superstudio.commons.csharpbridge.RefObject;
 import com.superstudio.template.mvc.context.RenderContext;
 import com.superstudio.template.templatepages.FileExistenceCache;
-import com.superstudio.template.templatepages.IVirtualPathUtility;
-import com.superstudio.template.templatepages.VirtualPathUtilityWrapper;
+
+import java.util.function.Supplier;
 
 
 public abstract class BuildManagerTemplateEngine extends VirtualPathProviderTemplateEngine

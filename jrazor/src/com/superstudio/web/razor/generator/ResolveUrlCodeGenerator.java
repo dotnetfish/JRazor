@@ -2,6 +2,7 @@ package com.superstudio.web.razor.generator;
 
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.razor.parser.syntaxTree.*;
+import org.apache.commons.lang3.StringUtils;
 
 public class ResolveUrlCodeGenerator extends SpanCodeGenerator
 {
@@ -9,14 +10,14 @@ public class ResolveUrlCodeGenerator extends SpanCodeGenerator
 	public void generateCode(Span target, CodeGeneratorContext context)
 	{
 		// Check if the host supports it
-		if (StringHelper.isNullOrEmpty(context.getHost().getGeneratedClassContext().getResolveUrlMethodName()))
+		if (StringUtils.isBlank(context.getHost().getGeneratedClassContext().getResolveUrlMethodName()))
 		{
 			// Nope, just use the default MarkupCodeGenerator behavior
 			new MarkupCodeGenerator().generateCode(target, context);
 			return;
 		}
 
-		if (!context.getHost().getDesignTimeMode() && StringHelper.isNullOrEmpty(target.getContent()))
+		if (!context.getHost().getDesignTimeMode() && StringUtils.isBlank(target.getContent()))
 		{
 			return;
 		}
@@ -24,16 +25,16 @@ public class ResolveUrlCodeGenerator extends SpanCodeGenerator
 		if (context.getHost().getEnableInstrumentation() && context.getExpressionRenderingMode() == ExpressionRenderingMode.WriteToOutput)
 		{
 			// add a non-literal context call (non-literal because the expanded URL will not match the source character-by-character)
-			context.AddContextCall(target, context.getHost().getGeneratedClassContext().getBeginContextMethodName(), false);
+			context.addContextCall(target, context.getHost().getGeneratedClassContext().getBeginContextMethodName(), false);
 		}
 
-		if (!StringHelper.isNullOrEmpty(target.getContent()) && !context.getHost().getDesignTimeMode())
+		if (!StringUtils.isBlank(target.getContent()) && !context.getHost().getDesignTimeMode())
 		{
-			String code = context.BuildCodeString(cw ->
+			String code = context.buildCodeString(cw ->
 			{
 				if (context.getExpressionRenderingMode() == ExpressionRenderingMode.WriteToOutput)
 				{
-					if (!StringHelper.isNullOrEmpty(context.getTargetWriterName()))
+					if (!StringUtils.isBlank(context.getTargetWriterName()))
 					{
 						cw.writeStartMethodInvoke(context.getHost().getGeneratedClassContext().getWriteLiteralToMethodName());
 						cw.writeSnippet(context.getTargetWriterName());
@@ -65,17 +66,17 @@ public class ResolveUrlCodeGenerator extends SpanCodeGenerator
 		   );
 			if (context.getExpressionRenderingMode() == ExpressionRenderingMode.WriteToOutput)
 			{
-				context.AddStatement(code);
+				context.addStatement(code);
 			}
 			else
 			{
-				context.BufferStatementFragment(code);
+				context.bufferStatementFragment(code);
 			}
 		}
 
 		if (context.getHost().getEnableInstrumentation() && context.getExpressionRenderingMode() == ExpressionRenderingMode.WriteToOutput)
 		{
-			context.AddContextCall(target, context.getHost().getGeneratedClassContext().getendContextMethodName(), false);
+			context.addContextCall(target, context.getHost().getGeneratedClassContext().getendContextMethodName(), false);
 		}
 	}
 

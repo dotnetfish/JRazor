@@ -154,7 +154,7 @@ public abstract class WebPageExecutingBase
 		{
 			return layoutPagePath;
 		}
-		throw new HttpException(StringHelper.format(CultureInfo.CurrentCulture, 
+		throw new HttpException(String.format(
 				WebPageResources.WebPage_LayoutPageNotFound, new Object[]{layoutPagePath,layoutPagePath}
 				
 				));

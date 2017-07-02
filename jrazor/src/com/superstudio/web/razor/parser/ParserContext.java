@@ -46,7 +46,7 @@ public class ParserContext
 		}
 		if (activeParser != codeParser && activeParser != markupParser)
 		{
-			throw new IllegalArgumentException(StringHelper.format(RazorResources.getResource(RazorResources.ActiveParser_Must_Be_Code_Or_Markup_Parser), "activeParser"));
+			throw new IllegalArgumentException(String.format(RazorResources.getResource(RazorResources.ActiveParser_Must_Be_Code_Or_Markup_Parser), "activeParser"));
 		}
 
 		CaptureOwnerTask();

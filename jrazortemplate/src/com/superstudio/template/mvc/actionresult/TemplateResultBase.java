@@ -15,6 +15,7 @@ import com.superstudio.template.mvc.ITemplate;
 import com.superstudio.template.mvc.TemplateContext;
 import com.superstudio.template.mvc.context.RenderContext;
 import com.superstudio.template.mvc.templateengine.*;
+import org.apache.commons.lang3.StringUtils;
 
 public abstract class TemplateResultBase extends ActionResult {
 	private Map<String, Object> _dynamicTemplateData;
@@ -81,7 +82,7 @@ public abstract class TemplateResultBase extends ActionResult {
 		if (context == null) {
 			throw new ArgumentNullException("context");
 		}
-		if (StringHelper.isNullOrEmpty(getTemplateName())) {
+		if (StringUtils.isBlank(getTemplateName())) {
 			 throw new ArgumentNullException("templateName");
 			//templateName = context.getRouteData().getRequiredString("action");
 		}

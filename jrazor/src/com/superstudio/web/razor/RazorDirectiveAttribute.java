@@ -2,6 +2,7 @@ package com.superstudio.web.razor;
 
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.RazorResources;
+import org.apache.commons.lang3.StringUtils;
 
 
 /**
@@ -16,9 +17,9 @@ public final class RazorDirectiveAttribute //extends Attribute
 
 	public RazorDirectiveAttribute(String name, String value)
 	{
-		if (StringHelper.isNullOrEmpty(name))
+		if (StringUtils.isBlank(name))
 		{
-			throw new IllegalArgumentException(StringHelper.format(RazorResources.getResource(RazorResources.Argument_Cannot_Be_Null_Or_Empty),name));
+			throw new IllegalArgumentException(String.format(RazorResources.getResource(RazorResources.Argument_Cannot_Be_Null_Or_Empty),name));
 		}
 
 		setName(name);

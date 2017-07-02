@@ -14,7 +14,7 @@ public class TemplateBlockCodeGenerator extends BlockCodeGenerator
 	public void generateStartBlockCode(Block target, CodeGeneratorContext context)
 	{
 
-		String generatedCode = context.BuildCodeString(cw ->
+		String generatedCode = context.buildCodeString(cw ->
 		{
 			try {
 				cw.writeStartLambdaExpression(ItemParameterName);
@@ -27,9 +27,9 @@ public class TemplateBlockCodeGenerator extends BlockCodeGenerator
 		}
 	   );
 
-		context.MarkEndOfGeneratedCode();
-		context.BufferStatementFragment(generatedCode);
-		context.FlushBufferedStatement();
+		context.markEndOfGeneratedCode();
+		context.bufferStatementFragment(generatedCode);
+		context.flushBufferedStatement();
 
 		_oldTargetWriter = context.getTargetWriterName();
 		context.setTargetWriterName(TemplateWriterName);
@@ -38,7 +38,7 @@ public class TemplateBlockCodeGenerator extends BlockCodeGenerator
 	@Override
 	public void generateEndBlockCode(Block target, CodeGeneratorContext context)
 	{
-		String generatedCode = context.BuildCodeString(cw ->
+		String generatedCode = context.buildCodeString(cw ->
 		{
 			cw.writeEndLambdaDelegate();
 			cw.writeEndConstructor();
@@ -46,7 +46,7 @@ public class TemplateBlockCodeGenerator extends BlockCodeGenerator
 		}
 	   );
 
-		context.BufferStatementFragment(generatedCode);
+		context.bufferStatementFragment(generatedCode);
 		context.setTargetWriterName(_oldTargetWriter);
 	}
 

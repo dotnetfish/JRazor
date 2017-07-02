@@ -80,7 +80,7 @@ public class DependencyResolver {
 
 		if (getInstance == null || getInstance.getReturnType() != Object.class || getInstances == null
 				|| getInstances.getReturnType() != Iterable.class) {
-			throw new IllegalArgumentException(StringHelper.format(CultureInfo.CurrentCulture,
+			throw new IllegalArgumentException(String.format(
 					MvcResources.DependencyResolver_DoesNotImplementICommonServiceLocator,
 					new Object[] { locatorType.getName() }) + "commonServiceLocator");
 		}

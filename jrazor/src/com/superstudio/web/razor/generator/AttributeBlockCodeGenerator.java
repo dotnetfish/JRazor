@@ -4,7 +4,7 @@ import com.superstudio.commons.HashCodeCombiner;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.razor.parser.syntaxTree.*;
 import com.superstudio.web.razor.text.*;
-
+import org.apache.commons.lang3.StringUtils;
 
 
 public class AttributeBlockCodeGenerator extends BlockCodeGenerator
@@ -59,11 +59,11 @@ public class AttributeBlockCodeGenerator extends BlockCodeGenerator
 		{
 			return; // Don't generate anything!
 		}
-		context.FlushBufferedStatement();
+		context.flushBufferedStatement();
 
-		context.AddStatement(context.BuildCodeString(cw ->
+		context.addStatement(context.buildCodeString(cw ->
 		{
-			if (!StringHelper.isNullOrEmpty(context.getTargetWriterName()))
+			if (!StringUtils.isBlank(context.getTargetWriterName()))
 			{
 				cw.writeStartMethodInvoke(context.getHost().getGeneratedClassContext().getWriteAttributeToMethodName());
 				cw.writeSnippet(context.getTargetWriterName());
@@ -95,9 +95,9 @@ public class AttributeBlockCodeGenerator extends BlockCodeGenerator
 		{
 			return; // Don't generate anything!
 		}
-		context.FlushBufferedStatement();
+		context.flushBufferedStatement();
 
-		context.AddStatement(context.BuildCodeString(cw ->
+		context.addStatement(context.buildCodeString(cw ->
 		{
 			cw.writeEndMethodInvoke();
 			cw.writeEndStatement();
@@ -115,7 +115,7 @@ public class AttributeBlockCodeGenerator extends BlockCodeGenerator
 	public boolean equals(Object obj)
 	{
 		AttributeBlockCodeGenerator other = (AttributeBlockCodeGenerator)((obj instanceof AttributeBlockCodeGenerator) ? obj : null);
-		return other != null && StringHelper.stringsEqual(other.getName(), getName()) 
+		return other != null && StringUtils.equals(other.getName(), getName())
 				&& equals(other.getPrefix(), getPrefix()) 
 				&& equals(other.getSuffix(), getSuffix());
 	}

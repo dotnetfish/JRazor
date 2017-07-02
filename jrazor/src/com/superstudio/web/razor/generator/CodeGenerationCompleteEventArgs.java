@@ -4,12 +4,13 @@ import com.superstudio.codedom.CodeCompileUnit;
 import com.superstudio.commons.EventArgs;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.*;
+import org.apache.commons.lang3.StringUtils;
 
 public class CodeGenerationCompleteEventArgs implements EventArgs
 {
 	public CodeGenerationCompleteEventArgs(String virtualPath, String physicalPath, CodeCompileUnit generatedCode)
 	{
-		if (StringHelper.isNullOrEmpty(virtualPath))
+		if (StringUtils.isBlank(virtualPath))
 		{
 			//throw new IllegalArgumentException(CommonResources.getArgument_Cannot_Be_Null_Or_Empty(), "virtualPath");
 		}

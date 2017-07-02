@@ -21,6 +21,7 @@ import com.superstudio.web.razor.tokenizer.HtmlTokenizer;
 import com.superstudio.web.razor.tokenizer.symbols.HtmlSymbol;
 import com.superstudio.web.razor.tokenizer.symbols.HtmlSymbolType;
 import com.superstudio.web.razor.tokenizer.symbols.ISymbol;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -219,8 +220,8 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 	}
 
 	private boolean cdata() {
-		if (getCurrentSymbol().getType() == HtmlSymbolType.Text && StringHelper
-				.stringsEqual(getCurrentSymbol().getContent(), "cdata", StringComparison.OrdinalIgnoreCase)) {
+		if (getCurrentSymbol().getType() == HtmlSymbolType.Text && StringUtils
+				.equalsIgnoreCase(getCurrentSymbol().getContent(), "cdata")) {
 			if (AcceptAndMoveNext()) {
 				if (getCurrentSymbol().getType() == HtmlSymbolType.LeftBracket) {
 					return AcceptUntilAll(HtmlSymbolType.RightBracket, HtmlSymbolType.RightBracket,
@@ -247,8 +248,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			}
 			boolean matched = RemoveTag(tags, tagName, tagStart);
 
-			if (tags.empty() && StringHelper.stringsEqual(tagName, SyntaxConstants.TextTagName,
-					StringComparison.OrdinalIgnoreCase) && matched) {
+			if (tags.empty() && StringUtils.equalsIgnoreCase(tagName, SyntaxConstants.TextTagName) && matched) {
 				Output(SpanKind.Markup);
 				return endTextTag(solidus);
 			}
@@ -370,8 +370,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		// use conditional attributes)
 		
 		LocationTagged<String> name = ISymbol.getContent(nameSymbols, getSpan().getStart().clone());
-		boolean attributeCanBeConditional = !StringHelper.startWith(name.getValue(), "data-",
-				StringComparison.OrdinalIgnoreCase);
+		boolean attributeCanBeConditional = !StringUtils.startsWithIgnoreCase(name.getValue(), "data-");
 
 		// accept the whitespace and name
 		Accept(whitespace);
@@ -573,8 +572,8 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 		Tuple<HtmlSymbol, SourceLocation> tag = Tuple.create(tagName, _lastTagStart.clone());
 
-		if (tags.empty() && StringHelper.stringsEqual(tag.getItem1().getContent(), SyntaxConstants.TextTagName,
-				StringComparison.OrdinalIgnoreCase)) {
+		if (tags.empty() && StringUtils.equalsIgnoreCase(tag.getItem1().getContent(),
+				SyntaxConstants.TextTagName)) {
 			Output(SpanKind.Markup);
 			getSpan().setCodeGenerator(SpanCodeGenerator.Null);
 
@@ -659,8 +658,8 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 						Assert(HtmlSymbolType.Solidus);
 						HtmlSymbol solidus = getCurrentSymbol();
 						nextToken();
-						if (At(HtmlSymbolType.Text) && StringHelper.stringsEqual(getCurrentSymbol().getContent(),
-								tagName, StringComparison.OrdinalIgnoreCase)) {
+						if (At(HtmlSymbolType.Text) && StringUtils.equalsIgnoreCase(getCurrentSymbol().getContent(),
+								tagName)) {
 							// accept up to here
 							Accept(ws);
 							Accept(openAngle);
@@ -682,7 +681,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 					// close angle
 					getContext().getSource().setPosition(bookmark);
 					nextToken();
-				} else if (StringHelper.stringsEqual(tagName, "script", StringComparison.OrdinalIgnoreCase)) {
+				} else if (StringUtils.equalsIgnoreCase(tagName, "script")) {
 					SkipToEndScriptAndParseCode();
 				} else {
 					// Push the tag on to the stack
@@ -703,8 +702,8 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			AcceptWhile(HtmlSymbolType.WhiteSpace);
 			if (Optional(HtmlSymbolType.Solidus)) {
 				AcceptWhile(HtmlSymbolType.WhiteSpace);
-				if (At(HtmlSymbolType.Text) && StringHelper.stringsEqual(getCurrentSymbol().getContent(), "script",
-						StringComparison.OrdinalIgnoreCase)) {
+				if (At(HtmlSymbolType.Text) && StringUtils.equalsIgnoreCase(getCurrentSymbol().getContent(), "script"
+						)) {
 					// </script!
 					SkipToAndParseCode(HtmlSymbolType.CloseAngle);
 					if (!Optional(HtmlSymbolType.CloseAngle)) {
@@ -734,8 +733,8 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		Tuple<HtmlSymbol, SourceLocation> currentTag = null;
 		while (tags.size() > 0) {
 			currentTag = tags.pop();
-			if (StringHelper.stringsEqual(tagName, currentTag.getItem1().getContent(),
-					StringComparison.OrdinalIgnoreCase)) {
+			if (StringUtils.equalsIgnoreCase(tagName, currentTag.getItem1().getContent()
+					)) {
 				// Matched the tag
 				return true;
 			}
@@ -822,8 +821,8 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				xmlPI();
 				return true;
 			} else if (!At(HtmlSymbolType.Solidus)) {
-				boolean scriptTag = At(HtmlSymbolType.Text) && StringHelper
-						.stringsEqual(getCurrentSymbol().getContent(), "script", StringComparison.OrdinalIgnoreCase);
+				boolean scriptTag = At(HtmlSymbolType.Text) && StringUtils
+						.equalsIgnoreCase(getCurrentSymbol().getContent(), "script");
 				Optional(HtmlSymbolType.Text);
 				tagContent(); // parse the tag, don't care about the content
 				Optional(HtmlSymbolType.Solidus);
@@ -1049,14 +1048,21 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		}
 	}
 
+	private boolean stringEquals(String str,String strB){
+		if(getCaseSensitive())
+			return StringUtils.equals(str,strB);
+
+		return  StringUtils.equalsIgnoreCase(str,strB);
+	}
+
 	private boolean AtEnd(String[] nestingSequenceComponents) {
 		EnsureCurrent();
-		if (StringHelper.stringsEqual(getCurrentSymbol().getContent(), nestingSequenceComponents[0], getComparison())) {
+		//StringUtils.equals(getCurrentSymbol().getContent(),nestingSequenceComponents)
+		if (stringEquals(getCurrentSymbol().getContent(), nestingSequenceComponents[0])) {
 			int bookmark = getCurrentSymbol().getStart().getAbsoluteIndex();
 			try {
 				for (String component : nestingSequenceComponents) {
-					if (!getEndOfFile() && !StringHelper.stringsEqual(getCurrentSymbol().getContent(), component,
-							getComparison())) {
+					if (!getEndOfFile() && !stringEquals(getCurrentSymbol().getContent(), component)) {
 						return false;
 					}
 					nextToken();
@@ -1091,7 +1097,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		if (sequence != null && getCurrentSymbol().getContent().charAt(position) == sequence.charAt(0)
 				&& position + sequence.length() <= getCurrentSymbol().getContent().length()) {
 			String possibleStart = getCurrentSymbol().getContent().substring(position, position + sequence.length());
-			if (StringHelper.stringsEqual(possibleStart, sequence, getComparison())) {
+			if (stringEquals(possibleStart, sequence)) {
 				// Capture the current symbol and "put it back" (really we just
 				// want to clear CurrentSymbol)
 				int bookmark = getContext().getSource().getPosition();
@@ -1108,7 +1114,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 				// accept the first chunk (up to the nesting sequence we just
 				// saw)
-				if (!StringHelper.isNullOrEmpty(preSequence.getContent())) {
+				if (!StringUtils.isBlank(preSequence.getContent())) {
 					Accept(preSequence);
 				}
 

@@ -7,6 +7,7 @@ import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.template.mvc.TemplateContext;
 import com.superstudio.template.mvc.actionresult.TemplateDataDictionary;
 import com.superstudio.template.mvc.context.HostContext;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Writer;
 
@@ -132,7 +133,7 @@ protected void configurePage(WebPageBase parentPage)
 
 
 		// Overwrite LayoutPage so that returning a template with a custom master page works.
-		if (!StringHelper.isNullOrEmpty(getOverridenLayoutPath()))
+		if (!StringUtils.isBlank(getOverridenLayoutPath()))
 		{
 			setLayout(getOverridenLayoutPath());
 		}

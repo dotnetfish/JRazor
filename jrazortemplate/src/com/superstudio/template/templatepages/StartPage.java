@@ -6,6 +6,7 @@ import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.HttpException;
 import com.superstudio.commons.io.Path;
 import com.superstudio.template.mvc.context.HostContext;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -105,8 +106,8 @@ public abstract class StartPage extends WebPageRenderingBase {
 		if (page == null) {
 			throw new IllegalArgumentException("page");
 		}
-		if (StringHelper.isNullOrEmpty(fileName)) {
-			throw new IllegalArgumentException(StringHelper.format(CultureInfo.CurrentCulture,
+		if (StringUtils.isBlank(fileName)) {
+			throw new IllegalArgumentException(String.format(
 					CommonResources.Argument_Cannot_Be_Null_Or_Empty,new Object[]{ "fileName"})+ " fileName");
 		}
 		if (supportedExtensions == null) {
@@ -134,8 +135,8 @@ public abstract class StartPage extends WebPageRenderingBase {
 		// start with the requested page's directory, find the init page,
 		// and then traverse up the hierarchy to find init pages all the
 		// way up to the root of the app.
-		while (!StringHelper.isNullOrEmpty(pageDirectory) && !pageDirectory.equals("/")
-				&& Path.IsWithinAppRoot(appDomainAppVirtualPath, pageDirectory)) {
+		while (!StringUtils.isBlank(pageDirectory) && !pageDirectory.equals("/")
+				&& Path.isWithinAppRoot(appDomainAppVirtualPath, pageDirectory)) {
 			// Go through the list of  supported extensions
 		
 			for (String extension : supportedExtensions) {

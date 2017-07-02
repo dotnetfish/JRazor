@@ -5,6 +5,7 @@ import com.superstudio.commons.HashCodeCombiner;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.*;
 import com.superstudio.web.razor.generator.*;
+import org.apache.commons.lang3.StringUtils;
 
 
 public class SetModelTypeCodeGenerator extends SetBaseTypeCodeGenerator
@@ -26,7 +27,7 @@ public class SetModelTypeCodeGenerator extends SetBaseTypeCodeGenerator
 	public boolean equals(Object obj)
 	{
 		SetModelTypeCodeGenerator setModelTypeCodeGenerator = (SetModelTypeCodeGenerator)((obj instanceof SetModelTypeCodeGenerator) ? obj : null);
-		return setModelTypeCodeGenerator != null && super.equals(obj) && StringHelper.stringsEqual(this._genericTypeFormat, setModelTypeCodeGenerator._genericTypeFormat);
+		return setModelTypeCodeGenerator != null && super.equals(obj) && StringUtils.equals(this._genericTypeFormat, setModelTypeCodeGenerator._genericTypeFormat);
 	}
 	@Override
 	public int hashCode()

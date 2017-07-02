@@ -1,7 +1,5 @@
 package com.superstudio.codedom.compiler;
 
-import com.superstudio.codedom.*;
-
 public class Indentation
 {
 	private IndentedTextWriter writer;

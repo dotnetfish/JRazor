@@ -2,28 +2,29 @@ package com.superstudio.web.razor.generator;
 
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.razor.parser.syntaxTree.*;
+import org.apache.commons.lang3.StringUtils;
 
 public class MarkupCodeGenerator extends SpanCodeGenerator
 {
 	@Override
 	public void generateCode(Span target, CodeGeneratorContext context)
 	{
-		if (!context.getHost().getDesignTimeMode() && StringHelper.isNullOrEmpty(target.getContent()))
+		if (!context.getHost().getDesignTimeMode() && StringUtils.isBlank(target.getContent()))
 		{
 			return;
 		}
 
 		if (context.getHost().getEnableInstrumentation())
 		{
-			context.AddContextCall(target, context.getHost().getGeneratedClassContext().getBeginContextMethodName(), true);
+			context.addContextCall(target, context.getHost().getGeneratedClassContext().getBeginContextMethodName(), true);
 		}
 
-		if (!StringHelper.isNullOrEmpty(target.getContent()) && !context.getHost().getDesignTimeMode())
+		if (!StringUtils.isBlank(target.getContent()) && !context.getHost().getDesignTimeMode())
 		{
 
-			String code = context.BuildCodeString(cw ->
+			String code = context.buildCodeString(cw ->
 			{
-				if (!StringHelper.isNullOrEmpty(context.getTargetWriterName()))
+				if (!StringUtils.isBlank(context.getTargetWriterName()))
 				{
 					cw.writeStartMethodInvoke(context.getHost().getGeneratedClassContext().getWriteLiteralToMethodName());
 					cw.writeSnippet(context.getTargetWriterName());
@@ -43,12 +44,12 @@ public class MarkupCodeGenerator extends SpanCodeGenerator
 				cw.writeEndStatement();
 			}
 		   );
-			context.AddStatement(code);
+			context.addStatement(code);
 		}
 
 		if (context.getHost().getEnableInstrumentation())
 		{
-			context.AddContextCall(target, context.getHost().getGeneratedClassContext().getendContextMethodName(), true);
+			context.addContextCall(target, context.getHost().getGeneratedClassContext().getendContextMethodName(), true);
 		}
 	}
 

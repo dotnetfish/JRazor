@@ -4,6 +4,7 @@ import com.superstudio.codedom.compiler.CompilerResults;
 import com.superstudio.commons.*;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.HttpException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -148,7 +149,7 @@ public abstract class BuildProvider
 	}
 	public static void registerBuildProvider(String extension, java.lang.Class providerType) throws Exception
 	{
-		if (StringHelper.isNullOrEmpty(extension))
+		if (StringUtils.isBlank(extension))
 		{
 			throw ExceptionUtil.ParameterNullOrEmpty("extension");
 		}

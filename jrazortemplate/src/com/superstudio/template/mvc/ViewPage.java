@@ -132,7 +132,7 @@ public class TemplatePage extends Page implements ITemplateDataContainer
 	{
 		super.OnPreInit(e);
 
-		if (!StringHelper.isNullOrEmpty(getMasterLocation()))
+		if (!StringUtils.isBlank(getMasterLocation()))
 		{
 			this.masterPageFile = getMasterLocation();
 		}

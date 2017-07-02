@@ -2,25 +2,26 @@ package com.superstudio.commons.io;
 
 import com.superstudio.commons.Environment;
 import com.superstudio.commons.csharpbridge.StringHelper;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.UUID;
 
 
 public final class Path
 {
-	public static final char DirectorySeparatorChar = '\\';
-	public static final String DirectorySeparatorCharAsString = "\\";
+	//public static final char DirectorySeparatorChar = '\\';
+	//public static final String DirectorySeparatorCharAsString = "\\";
 	public static final char AltDirectorySeparatorChar = '/';
 	public static final char VolumeSeparatorChar = ':';
 	//@Deprecated
 	//public static final char[] InvalidPathChars = new char[] {'"', '<','>', '|','\0','\u0001','\u0002','\u0003','\u0004','\u0005','\u0006','\b','\t','\n','\f','\r','\u000e','\u000f','\u0010','\u0011','\u0012','\u0013','\u0014','\u0015','\u0016','\u0017','\u0018','\u0019','\u001a','\u001b','\u001c','\u001d','\u001e','\u001f'};
-	public static final char[] TrimEndChars = new char[] {'\t','\n','\f','\r',' ','\u0085','\u00a0'};
+	//public static final char[] TrimEndChars = new char[] {'\t','\n','\f','\r',' ','\u0085','\u00a0'};
 	private static final char[] RealInvalidPathChars = new char[] {'"','<','>','|','\0','\u0001','\u0002','\u0003','\u0004','\u0005','\u0006','\b','\t','\n','\f','\r','\u000e','\u000f','\u0010','\u0011','\u0012','\u0013','\u0014','\u0015','\u0016','\u0017','\u0018','\u0019','\u001a','\u001b','\u001c','\u001d','\u001e','\u001f'};
 	private static final char[] InvalidPathCharsWithAdditionalChecks = new char[] {'"','<','>','|','\0','\u0001','\u0002','\u0003','\u0004','\u0005','\u0006','\b','\t','\n','\f','\r','\u000e','\u000f','\u0010','\u0011','\u0012','\u0013','\u0014','\u0015','\u0016','\u0017','\u0018','\u0019','\u001a','\u001b','\u001c','\u001d','\u001e','\u001f','*','?'};
-	private static final char[] InvalidFileNameChars = new char[] {'"','<','>','|','\0','\u0001','\u0002','\u0003','\u0004','\u0005','\u0006','\b','\t','\n','\f','\r','\u000e','\u000f','\u0010','\u0011','\u0012','\u0013','\u0014','\u0015','\u0016','\u0017','\u0018','\u0019','\u001a','\u001b','\u001c','\u001d','\u001e','\u001f',':','*','?','\\','/'};
-	public static final char PathSeparator = ';';
+	//private static final char[] InvalidFileNameChars = new char[] {'"','<','>','|','\0','\u0001','\u0002','\u0003','\u0004','\u0005','\u0006','\b','\t','\n','\f','\r','\u000e','\u000f','\u0010','\u0011','\u0012','\u0013','\u0014','\u0015','\u0016','\u0017','\u0018','\u0019','\u001a','\u001b','\u001c','\u001d','\u001e','\u001f',':','*','?','\\','/'};
+	//public static final char PathSeparator = ';';
 	public static final int MaxPath = 260;
-	private static final int MaxDirectoryLength = 255;
+	/*private static final int MaxDirectoryLength = 255;
 	public static final int MAX_PATH = 260;
 	public static final int MAX_DIRECTORY_PATH = 248;
 	public static final int MaxLongPath = 32000;
@@ -28,12 +29,12 @@ public final class Path
 	private static final String UNCPathPrefix = "\\\\";
 	private static final String UNCLongPathPrefixToInsert = "?\\UNC\\";
 	private static final String UNCLongPathPrefix = "\\\\?\\UNC\\";
-	private static final char[] s_Base32Char = new char[] {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5'};
-	public static String ChangeExtension(String path, String extension)
+*/	//private static final char[] s_Base32Char = new char[] {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5'};
+	/*public static String ChangeExtension(String path, String extension)
 	{
 		if (path != null)
 		{
-			Path.CheckInvalidPathChars(path, false);
+			Path.checkInvalidPathChars(path, false);
 			String text = path;
 			int num = path.length();
 			while (--num >= 0)
@@ -60,13 +61,13 @@ public final class Path
 			return text;
 		}
 		return null;
-	}
-	public static String GetDirectoryName(String path)
+	}*/
+	/*public static String GetDirectoryName(String path)
 	{
 		if (path != null)
 		{
-			Path.CheckInvalidPathChars(path, false);
-			String text = Path.NormalizePath(path, false);
+			Path.checkInvalidPathChars(path, false);
+			String text = Path.normalizePath(path, false);
 			if (path.length() > 0)
 			{
 				try
@@ -86,18 +87,18 @@ public final class Path
 				{
 					if (path.indexOf("~") != -1)
 					{
-						text = Path.NormalizePath(path, false, false);
+						text = Path.normalizePath(path, false, false);
 					}
-				/*}
+				*//*}
 				catch (PathTooLongException e2)
-				{*/
+				{*//*
 				}
 				catch (UnsupportedOperationException e3)
 				{
 				}
-				/*catch (IOException e4)
+				*//*catch (IOException e4)
 				{
-				}*/
+				}*//*
 				catch (IllegalArgumentException e5)
 				{
 				}
@@ -119,10 +120,10 @@ public final class Path
 			}
 		}
 		return null;
-	}
-	public static int GetRootLength(String path)
+	}*/
+	/*public static int GetRootLength(String path)
 	{
-		Path.CheckInvalidPathChars(path, false);
+		Path.checkInvalidPathChars(path, false);
 		int i = 0;
 		int length = path.length();
 		if (length >= 1 && Path.IsDirectorySeparator(path.charAt(0)))
@@ -154,32 +155,29 @@ public final class Path
 			}
 		}
 		return i;
-	}
-	public static boolean IsDirectorySeparator(char c)
+	}*/
+	/*public static boolean IsDirectorySeparator(char c)
 	{
 		return c == java.io.File.separatorChar || c == Path.AltDirectorySeparatorChar;
-	}
+	}*/
 
-//ORIGINAL LINE: [__DynamicallyInvokable] public static char[] GetInvalidPathChars()
-	public static char[] GetInvalidPathChars()
+	/*public static char[] GetInvalidPathChars()
 	{
 		return Path.RealInvalidPathChars.clone();
 	}
 
-//ORIGINAL LINE: [__DynamicallyInvokable] public static char[] GetInvalidFileNameChars()
 	public static char[] GetInvalidFileNameChars()
 	{
 		return Path.InvalidFileNameChars.clone();
 	}
-
-//ORIGINAL LINE: [__DynamicallyInvokable] public static string GetExtension(string path)
-	public static String GetExtension(String path)
+*/
+	public static String getExtension(String path)
 	{
 		if (path == null)
 		{
 			return null;
 		}
-		Path.CheckInvalidPathChars(path, false);
+		checkInvalidPathChars(path, false);
 		int length = path.length();
 		int num = length;
 		while (--num >= 0)
@@ -203,59 +201,49 @@ public final class Path
 		}
 		return "";
 	}
-
-//ORIGINAL LINE: [__DynamicallyInvokable, SecuritySafeCritical] public static string GetFullPath(string path)
-	public static String GetFullPath(String path)
+/*public static String GetFullPath(String path)
 	{
-		String fullPathInternal = Path.GetFullPathInternal(path);
+		String fullPathInternal = Path.getFullPathInternal(path);
 	//	FileIOPermission.QuickDemand(FileIOPermissionAccess.PathDiscovery, fullPathInternal, false, false);
 		return fullPathInternal;
-	}
-
-//ORIGINAL LINE: [SecurityCritical] internal static string UnsafeGetFullPath(string path)
-	public static String UnsafeGetFullPath(String path)
+	}*/
+	/*public static String UnsafeGetFullPath(String path)
 	{
-		String fullPathInternal = Path.GetFullPathInternal(path);
+		String fullPathInternal = Path.getFullPathInternal(path);
 		//FileIOPermission.QuickDemand(FileIOPermissionAccess.PathDiscovery, fullPathInternal, false, false);
 		return fullPathInternal;
-	}
-	public static String GetFullPathInternal(String path)
+	}*/
+	public static String getFullPathInternal(String path)
 	{
 		if (path == null)
 		{
 			throw new IllegalArgumentException("path");
 		}
-		return Path.NormalizePath(path, true);
+		return Path.normalizePath(path, true);
 	}
-
-//ORIGINAL LINE: [SecuritySafeCritical] internal static string NormalizePath(string path, bool fullCheck)
-	public static String NormalizePath(String path, boolean fullCheck)
+public static String normalizePath(String path, boolean fullCheck)
 	{
-		return Path.NormalizePath(path, fullCheck, Path.MaxPath);
+		return normalizePath(path, fullCheck, Path.MaxPath);
 	}
-
-//ORIGINAL LINE: [SecuritySafeCritical] internal static string NormalizePath(string path, bool fullCheck, bool expandShortPaths)
-	public static String NormalizePath(String path, boolean fullCheck, boolean expandShortPaths)
+	public static String normalizePath(String path, boolean fullCheck, boolean expandShortPaths)
 	{
-		return Path.NormalizePath(path, fullCheck, Path.MaxPath, expandShortPaths);
+		return normalizePath(path, fullCheck, Path.MaxPath, expandShortPaths);
 	}
-	public static String NormalizePath(String path, boolean fullCheck, int maxPathLength)
+	public static String normalizePath(String path, boolean fullCheck, int maxPathLength)
 	{
-		return Path.NormalizePath(path, fullCheck, maxPathLength, true);
+		return normalizePath(path, fullCheck, maxPathLength, true);
 	}
 	 
-	static String NormalizePath(String path, boolean fullCheck, int maxPathLength, boolean expandShortPaths){
+	static String normalizePath(String path, boolean fullCheck, int maxPathLength, boolean expandShortPaths){
 		return path;
 	}
 
-
-//ORIGINAL LINE: [SecurityCritical] internal unsafe static string NormalizePath(string path, bool fullCheck, int maxPathLength, bool expandShortPaths)
-//	  static string NormalizePath(string path, bool fullCheck, int maxPathLength, bool expandShortPaths)
+//	  static string normalizePath(string path, bool fullCheck, int maxPathLength, bool expandShortPaths)
 //		{
 //			if (fullCheck)
 //			{
 //				path = path.TrimEnd(Path.TrimEndChars);
-//				Path.CheckInvalidPathChars(path, false);
+//				Path.checkInvalidPathChars(path, false);
 //			}
 //			int i = 0;
 //			PathHelper pathHelper;
@@ -560,7 +548,7 @@ public final class Path
 //			}
 //			return text;
 //		}
-	public static boolean HasLongPathPrefix(String path)
+	/*public static boolean HasLongPathPrefix(String path)
 	{
 		return path.startsWith("\\\\?\\");
 	}
@@ -584,6 +572,7 @@ public final class Path
 		}
 		if (path.toUpperCase().startsWith("\\\\?\\UNC\\"))
 		{
+			//StringUtils(path,2,6);
 			return StringHelper.remove(path, 2, 6);
 		}
 		return path.substring(4);
@@ -600,14 +589,12 @@ public final class Path
 			return pathSB.delete(2, 8);
 		}
 		return pathSB.delete(0, 4);
-	}
-
-//ORIGINAL LINE: [__DynamicallyInvokable] public static string GetFileName(string path)
-	public static String GetFileName(String path)
+	}*/
+	/*public static String GetFileName(String path)
 	{
 		if (path != null)
 		{
-			Path.CheckInvalidPathChars(path, false);
+			Path.checkInvalidPathChars(path, false);
 			int length = path.length();
 			int num = length;
 			while (--num >= 0)
@@ -620,10 +607,8 @@ public final class Path
 			}
 		}
 		return path;
-	}
-
-//ORIGINAL LINE: [__DynamicallyInvokable] public static string GetFileNameWithoutExtension(string path)
-	public static String GetFileNameWithoutExtension(String path)
+	}*/
+	public static String getFileNameWithoutExtension(String path)
 	{
 		path = (new java.io.File(path)).getName();
 		if (path == null)
@@ -638,37 +623,33 @@ public final class Path
 		return path.substring(0, length);
 	}
 
-//ORIGINAL LINE: [__DynamicallyInvokable] public static string GetPathRoot(string path)
-	public static String GetPathRoot(String path)
+	/*public static String GetPathRoot(String path)
 	{
 		if (path == null)
 		{
 			return null;
 		}
-		path = Path.NormalizePath(path, false);
+		path = Path.normalizePath(path, false);
 		return path.substring(0, Path.GetRootLength(path));
 	}
-
-//ORIGINAL LINE: [__DynamicallyInvokable, SecuritySafeCritical] public static string GetTempPath()
-	public static String GetTempPath()
+*/
+	public static String getTempPath()
 	{
 		//(new EnvironmentPermission(PermissionState.Unrestricted)).Demand();
 		StringBuilder stringBuilder = new StringBuilder(260);
-		//boolean arg_28_0 = Win32Native.GetTempPath(260, stringBuilder) != 0;
+		//boolean arg_28_0 = Win32Native.getTempPath(260, stringBuilder) != 0;
 		String path = stringBuilder.toString();
 		/*if (!arg_28_0)
 		{
 			__Error.WinIOError();
 		}*/
-		return Path.GetFullPathInternal(path);
+		return Path.getFullPathInternal(path);
 	}
-	public static boolean IsRelative(String path)
+	/*public static boolean IsRelative(String path)
 	{
 		return (path.length() < 3 || path.charAt(1) != Path.VolumeSeparatorChar || path.charAt(2) != java.io.File.separatorChar || ((path.charAt(0) < 'a' || path.charAt(0) > 'z') && (path.charAt(0) < 'A' || path.charAt(0) > 'Z'))) && (path.length() < 2 || path.charAt(0) != '\\' || path.charAt(1) != '\\');
-	}
-
-//ORIGINAL LINE: [__DynamicallyInvokable] public static string GetRandomFileName()
-	public static String GetRandomFileName()
+	}*/
+	public static String getRandomFileName()
 	{
 
 //ORIGINAL LINE: byte[] array = new byte[10];
@@ -694,38 +675,33 @@ public final class Path
 		return new UUID(0, 0).randomUUID().toString();
 	}
 
-//ORIGINAL LINE: [__DynamicallyInvokable, SecuritySafeCritical] public static string GetTempFileName()
-	public static String GetTempFileName()
+	/*public static String GetTempFileName()
 	{
 		return Path.InternalGetTempFileName(true);
 	}
-
-//ORIGINAL LINE: [SecurityCritical] internal static string UnsafeGetTempFileName()
 	public static String UnsafeGetTempFileName()
 	{
 		return Path.InternalGetTempFileName(false);
 	}
-
-//ORIGINAL LINE: [SecurityCritical] private static string InternalGetTempFileName(bool checkHost)
-	private static String InternalGetTempFileName(boolean checkHost)
+	*/
+	/*private static String InternalGetTempFileName(boolean checkHost)
 	{
-		String tempPath = Path.GetTempPath();
+		String tempPath = Path.getTempPath();
 		StringBuilder stringBuilder = new StringBuilder(260);
-		/*(new FileIOPermission(FileIOPermissionAccess.write, tempPath)).Demand();
+		*//*(new FileIOPermission(FileIOPermissionAccess.write, tempPath)).Demand();
 		
 		if (Win32Native.GetTempFileName(tempPath, "tmp", 0, stringBuilder) == 0)
 		{
 			__Error.WinIOError();
-		}*/
+		}*//*
 		return stringBuilder.toString();
-	}
+	}*/
 
-//ORIGINAL LINE: [__DynamicallyInvokable] public static bool HasExtension(string path)
-	public static boolean HasExtension(String path)
+	/*public static boolean HasExtension(String path)
 	{
 		if (path != null)
 		{
-			Path.CheckInvalidPathChars(path, false);
+			Path.checkInvalidPathChars(path, false);
 			int num = path.length();
 			while (--num >= 0)
 			{
@@ -741,14 +717,13 @@ public final class Path
 			}
 		}
 		return false;
-	}
+	}*/
 
-//ORIGINAL LINE: [__DynamicallyInvokable] public static bool IsPathRooted(string path)
-	public static boolean IsPathRooted(String path)
+	/*public static boolean IsPathRooted(String path)
 	{
 		if (path != null)
 		{
-			Path.CheckInvalidPathChars(path, false);
+			Path.checkInvalidPathChars(path, false);
 			int length = path.length();
 			if ((length >= 1 && (path.charAt(0) == java.io.File.separatorChar || path.charAt(0) == Path.AltDirectorySeparatorChar)) || (length >= 2 && path.charAt(1) == Path.VolumeSeparatorChar))
 			{
@@ -756,30 +731,27 @@ public final class Path
 			}
 		}
 		return false;
-	}
-
-//ORIGINAL LINE: [__DynamicallyInvokable] public static string Combine(string path1, string path2)
-	public static String Combine(String path1, String path2)
+	}*/
+	/*public static String Combine(String path1, String path2)
 	{
 		if (path1 == null || path2 == null)
 		{
 			throw new IllegalArgumentException((path1 == null) ? "path1" : "path2");
 		}
-		Path.CheckInvalidPathChars(path1, false);
-		Path.CheckInvalidPathChars(path2, false);
+		Path.checkInvalidPathChars(path1, false);
+		Path.checkInvalidPathChars(path2, false);
 		return Path.CombineNoChecks(path1, path2);
 	}
-
-//ORIGINAL LINE: [__DynamicallyInvokable] public static string Combine(string path1, string path2, string path3)
-	public static String Combine(String path1, String path2, String path3)
+*/
+	/*public static String Combine(String path1, String path2, String path3)
 	{
 		if (path1 == null || path2 == null || path3 == null)
 		{
 			throw new IllegalArgumentException((path1 == null) ? "path1" : ((path2 == null) ? "path2" : "path3"));
 		}
-		Path.CheckInvalidPathChars(path1, false);
-		Path.CheckInvalidPathChars(path2, false);
-		Path.CheckInvalidPathChars(path3, false);
+		Path.checkInvalidPathChars(path1, false);
+		Path.checkInvalidPathChars(path2, false);
+		Path.checkInvalidPathChars(path3, false);
 		return Path.CombineNoChecks(Path.CombineNoChecks(path1, path2), path3);
 	}
 	public static String Combine(String path1, String path2, String path3, String path4)
@@ -788,15 +760,14 @@ public final class Path
 		{
 			throw new IllegalArgumentException((path1 == null) ? "path1" : ((path2 == null) ? "path2" : ((path3 == null) ? "path3" : "path4")));
 		}
-		Path.CheckInvalidPathChars(path1, false);
-		Path.CheckInvalidPathChars(path2, false);
-		Path.CheckInvalidPathChars(path3, false);
-		Path.CheckInvalidPathChars(path4, false);
+		Path.checkInvalidPathChars(path1, false);
+		Path.checkInvalidPathChars(path2, false);
+		Path.checkInvalidPathChars(path3, false);
+		Path.checkInvalidPathChars(path4, false);
 		return Path.CombineNoChecks(Path.CombineNoChecks(Path.CombineNoChecks(path1, path2), path3), path4);
-	}
+	}*/
 
-//ORIGINAL LINE: [__DynamicallyInvokable] public static string Combine(params string[] paths)
-	public static String Combine(String... paths)
+	/*public static String Combine(String... paths)
 	{
 		if (paths == null)
 		{
@@ -812,7 +783,7 @@ public final class Path
 			}
 			if (paths[i].length() != 0)
 			{
-				Path.CheckInvalidPathChars(paths[i], false);
+				Path.checkInvalidPathChars(paths[i], false);
 				if (Path.IsPathRooted(paths[i]))
 				{
 					num2 = i;
@@ -873,8 +844,6 @@ public final class Path
 		}
 		return path1 + path2;
 	}
-
-//ORIGINAL LINE: internal static string ToBase32StringSuitableForDirName(byte[] buff)
 	public static String ToBase32StringSuitableForDirName(byte[] buff)
 	{
 		StringBuilder stringBuilder = new StringBuilder(16);
@@ -936,42 +905,41 @@ public final class Path
 			}
 			searchPattern = searchPattern.substring(num + 2);
 		}
-	}
-	public static boolean HasIllegalCharacters(String path, boolean checkAdditional)
+	}*/
+	public static boolean hasIllegalCharacters(String path, boolean checkAdditional)
 	{
 		if (checkAdditional)
 		{
-			return StringHelper.indexOfAny(path, Path.InvalidPathCharsWithAdditionalChecks) >= 0;
+			return StringUtils.indexOfAny(path,Path.InvalidPathCharsWithAdditionalChecks)>-1;
+			//return StringHelper.indexOfAny(path, Path.InvalidPathCharsWithAdditionalChecks) >= 0;
 		}
-		return StringHelper.indexOfAny(path, Path.RealInvalidPathChars) >= 0;
+		return StringUtils.indexOfAny(path, Path.RealInvalidPathChars) >-1;
 	}
 
-	public static void CheckInvalidPathChars(String path)
+	/*public static void checkInvalidPathChars(String path)
 	{
-		CheckInvalidPathChars(path, false);
+		checkInvalidPathChars(path, false);
 	}
-
-
-//ORIGINAL LINE: internal static void CheckInvalidPathChars(string path, bool checkAdditional = false)
-	public static void CheckInvalidPathChars(String path, boolean checkAdditional)
+*/
+	public static void checkInvalidPathChars(String path, boolean checkAdditional)
 	{
 		if (path == null)
 		{
 			throw new IllegalArgumentException("path");
 		}
-		if (Path.HasIllegalCharacters(path, checkAdditional))
+		if (Path.hasIllegalCharacters(path, checkAdditional))
 		{
 			throw new IllegalArgumentException(Environment.GetResourceString("Argument_InvalidPathChars"));
 		}
 	}
-	public static String InternalCombine(String path1, String path2)
+	/*public static String InternalCombine(String path1, String path2)
 	{
 		if (path1 == null || path2 == null)
 		{
 			throw new IllegalArgumentException((path1 == null) ? "path1" : "path2");
 		}
-		Path.CheckInvalidPathChars(path1, false);
-		Path.CheckInvalidPathChars(path2, false);
+		Path.checkInvalidPathChars(path1, false);
+		Path.checkInvalidPathChars(path2, false);
 		if (path2.length() == 0)
 		{
 			throw new IllegalArgumentException(Environment.GetResourceString("Argument_PathEmpty")+ "path2");
@@ -991,9 +959,9 @@ public final class Path
 			return path1 + "\\" + path2;
 		}
 		return path1 + path2;
-	}
-	public static boolean IsWithinAppRoot(String appDomainAppVirtualPath, String pageDirectory) {
-		// TODO Auto-generated method stub
-		return false;
+	}*/
+	public static boolean isWithinAppRoot(String appDomainAppVirtualPath, String pageDirectory) {
+
+		return pageDirectory.startsWith(appDomainAppVirtualPath);
 	}
 }

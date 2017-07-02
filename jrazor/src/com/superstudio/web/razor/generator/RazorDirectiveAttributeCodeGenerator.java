@@ -8,11 +8,12 @@ import com.superstudio.commons.Tuple;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.razor.*;
 import com.superstudio.web.razor.parser.syntaxTree.*;
+import org.apache.commons.lang3.StringUtils;
 
 
 public class RazorDirectiveAttributeCodeGenerator extends SpanCodeGenerator {
 	public RazorDirectiveAttributeCodeGenerator(String name, String value) {
-		if (StringHelper.isNullOrEmpty(name)) {
+		if (StringUtils.isBlank(name)) {
 			//throw new IllegalArgumentException(CommonResources.getArgument_Cannot_Be_Null_Or_Empty(), "name");
 		}
 		setName(name);

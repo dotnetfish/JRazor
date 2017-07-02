@@ -3,7 +3,6 @@ package com.superstudio.codedom;
 import java.io.Serializable;
 
 
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeParameterDeclarationExpressionCollection : CollectionBase
 public class CodeParameterDeclarationExpressionCollection extends CollectionBase implements Serializable
 {
 	public final CodeParameterDeclarationExpression getItem(int index)

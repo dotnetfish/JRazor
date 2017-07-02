@@ -1,8 +1,6 @@
 package com.superstudio.web.razor.parser;
 
 
-//import com.superstudio.commons.CollectionHelper;
-
 import com.superstudio.commons.csharpbridge.action.ActionThree;
 import com.superstudio.web.razor.editor.SpanEditHandler;
 import com.superstudio.web.razor.generator.*;
@@ -50,16 +48,7 @@ public class ConditionalAttributeCollapser extends MarkupRewriter {
         SourceLocation sourceLocation = block.getChildren().stream().findFirst().get().getStart();
         FillSpan(span, sourceLocation, contents);
         return span.build();
-        // string content = String.Concat(block.Children.Cast<Span>().Select(s
-        // -> s.Content));
 
-        // create a new span containing this content
-        /*
-		 * SpanBuilder span = new SpanBuilder(); span.EditHandler = new
-		 * SpanEditHandler(HtmlTokenizer.tokenize); FillSpan(span,
-		 * block.Children.Cast<Span>().First().start, content); return
-		 * span.build();
-		 */
     }
 
     private boolean isLiteralAttributeValue(SyntaxTreeNode node) {

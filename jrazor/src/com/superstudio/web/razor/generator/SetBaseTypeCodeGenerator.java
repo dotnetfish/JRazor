@@ -32,7 +32,7 @@ public class SetBaseTypeCodeGenerator extends SpanCodeGenerator {
 			// methods are not converted
 			RefObject<Integer> refObj=new RefObject<Integer>(0);
 			
-			String code = context.BuildCodeString(cw -> {
+			String code = context.buildCodeString(cw -> {
 				refObj.setRefObj( cw.writeVariableDeclaration(target.getContent(), "__inheritsHelper", null));
 				cw.writeEndStatement();
 			});
@@ -44,10 +44,10 @@ public class SetBaseTypeCodeGenerator extends SpanCodeGenerator {
 					code, target, generatedCodeStart, tempRef_paddingCharCount));
 
 			paddingCharCount = tempRef_paddingCharCount.getRefObj();
-			tempVar.setLinePragma(context.GenerateLinePragma(target, generatedCodeStart + paddingCharCount));
+			tempVar.setLinePragma(context.generateLinePragma(target, generatedCodeStart + paddingCharCount));
 			CodeSnippetStatement stmt = tempVar;
 
-			context.AddDesignTimeHelperStatement(stmt);
+			context.addDesignTimeHelperStatement(stmt);
 		}
 	}
 

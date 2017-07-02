@@ -71,7 +71,7 @@ public class LiteralAttributeCodeGenerator extends SpanCodeGenerator {
 		// In VB, we need a line continuation
 
 		// methods are not converted
-		context.BufferStatementFragment(context.BuildCodeString(cw -> {
+		context.bufferStatementFragment(context.buildCodeString(cw -> {
 			cw.writeParameterSeparator();
 			cw.writeStartMethodInvoke("toAttributeValue");
 			cw.writeLocationTaggedString(getPrefix());
@@ -91,14 +91,14 @@ public class LiteralAttributeCodeGenerator extends SpanCodeGenerator {
 		}));
 		if (getValueGenerator() != null) {
 			getValueGenerator().getValue().generateCode(target, context);
-			context.FlushBufferedStatement();
+			context.flushBufferedStatement();
 			context.setExpressionRenderingMode(oldMode);
 			// literal: false - This attribute value is not a literal value, it
 			// is dynamically generated
 			// In VB, we need a line continuation
 
 			// methods are not converted
-			context.AddStatement(context.BuildCodeString(cw -> {
+			context.addStatement(context.buildCodeString(cw -> {
 				cw.writeParameterSeparator();
 				cw.writeSnippet((new Integer(getValueGenerator().getLocation().getAbsoluteIndex())).toString());
 				cw.writeEndMethodInvoke();
@@ -108,7 +108,7 @@ public class LiteralAttributeCodeGenerator extends SpanCodeGenerator {
 				cw.writeLineContinuation();
 			}));
 		} else {
-			context.FlushBufferedStatement();
+			context.flushBufferedStatement();
 		}
 	}
 

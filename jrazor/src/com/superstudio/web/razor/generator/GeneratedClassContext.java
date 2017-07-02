@@ -1,6 +1,7 @@
 package com.superstudio.web.razor.generator;
 
 import com.superstudio.commons.csharpbridge.StringHelper;
+import org.apache.commons.lang3.StringUtils;
 
 
 public final class GeneratedClassContext {
@@ -16,17 +17,17 @@ public final class GeneratedClassContext {
 
 	public GeneratedClassContext(String executeMethodName, String writeMethodName, String writeLiteralMethodName) {
 		this();
-		if (StringHelper.isNullOrEmpty(executeMethodName)) {
+		if (StringUtils.isBlank(executeMethodName)) {
 			// throw new IllegalArgumentException(String.format(
 			// CommonResources.getArgument_Cannot_Be_Null_Or_Empty(),
 			// "executeMethodName"), "executeMethodName");
 		}
-		if (StringHelper.isNullOrEmpty(writeMethodName)) {
+		if (StringUtils.isBlank(writeMethodName)) {
 			// throw new IllegalArgumentException(String.format(
 			// CommonResources.getArgument_Cannot_Be_Null_Or_Empty(),
 			// "writeMethodName"), "writeMethodName");
 		}
-		if (StringHelper.isNullOrEmpty(writeLiteralMethodName)) {
+		if (StringUtils.isBlank(writeLiteralMethodName)) {
 			// throw new IllegalArgumentException(String.format(
 			// CommonResources.getArgument_Cannot_Be_Null_Or_Empty(),
 			// "writeLiteralMethodName"), "writeLiteralMethodName");
@@ -214,16 +215,16 @@ public final class GeneratedClassContext {
 	}
 
 	public boolean getAllowSections() {
-		return !StringHelper.isNullOrEmpty(getDefineSectionMethodName());
+		return !StringUtils.isBlank(getDefineSectionMethodName());
 	}
 
 	public boolean getAllowTemplates() {
-		return !StringHelper.isNullOrEmpty(getTemplateTypeName());
+		return !StringUtils.isBlank(getTemplateTypeName());
 	}
 
 	public boolean getSupportsInstrumentation() {
-		return !StringHelper.isNullOrEmpty(getBeginContextMethodName())
-				&& !StringHelper.isNullOrEmpty(getendContextMethodName());
+		return !StringUtils.isBlank(getBeginContextMethodName())
+				&& !StringUtils.isBlank(getendContextMethodName());
 	}
 
 	@Override
@@ -232,16 +233,16 @@ public final class GeneratedClassContext {
 			return false;
 		}
 		GeneratedClassContext other = (GeneratedClassContext) obj;
-		return StringHelper.stringsEqual(getDefineSectionMethodName(), other.getDefineSectionMethodName())
-				&& StringHelper.stringsEqual(getWriteMethodName(), other.getWriteMethodName())
-				&& StringHelper.stringsEqual(getWriteLiteralMethodName(), other.getWriteLiteralMethodName())
-				&& StringHelper.stringsEqual(getWriteToMethodName(), other.getWriteToMethodName())
-				&& StringHelper.stringsEqual(getWriteLiteralToMethodName(),
+		return StringUtils.equals(getDefineSectionMethodName(), other.getDefineSectionMethodName())
+				&& StringUtils.equals(getWriteMethodName(), other.getWriteMethodName())
+				&& StringUtils.equals(getWriteLiteralMethodName(), other.getWriteLiteralMethodName())
+				&& StringUtils.equals(getWriteToMethodName(), other.getWriteToMethodName())
+				&& StringUtils.equals(getWriteLiteralToMethodName(),
 						other.getWriteLiteralToMethodName())
-				&& StringHelper.stringsEqual(getExecuteMethodName(), other.getExecuteMethodName())
-				&& StringHelper.stringsEqual(getTemplateTypeName(), other.getTemplateTypeName())
-				&& StringHelper.stringsEqual(getBeginContextMethodName(), other.getBeginContextMethodName())
-				&& StringHelper.stringsEqual(getendContextMethodName(), other.getendContextMethodName());
+				&& StringUtils.equals(getExecuteMethodName(), other.getExecuteMethodName())
+				&& StringUtils.equals(getTemplateTypeName(), other.getTemplateTypeName())
+				&& StringUtils.equals(getBeginContextMethodName(), other.getBeginContextMethodName())
+				&& StringUtils.equals(getendContextMethodName(), other.getendContextMethodName());
 	}
 
 	@Override

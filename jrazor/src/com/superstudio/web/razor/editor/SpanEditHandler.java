@@ -10,6 +10,7 @@ import com.superstudio.web.razor.text.SourceLocation;
 import com.superstudio.web.razor.text.SourceLocationTracker;
 import com.superstudio.web.razor.text.TextChange;
 import com.superstudio.web.razor.tokenizer.symbols.ISymbol;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.function.Function;
@@ -133,7 +134,7 @@ public class SpanEditHandler
 
 	protected static boolean isAtEndOfFirstLine(Span target, TextChange change)
 	{
-		int endOfFirstLine =StringHelper.indexOfAny(target.getContent(), (char)0x000d, (char)0x000a, (char)0x2028, (char)0x2029 );
+		int endOfFirstLine = StringUtils.indexOfAny(target.getContent(), (char)0x000d, (char)0x000a, (char)0x2028, (char)0x2029 );
 		return (endOfFirstLine == -1 || (change.getOldPosition() - target.getStart().getAbsoluteIndex()) <= endOfFirstLine);
 	}
 

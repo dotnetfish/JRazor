@@ -8,8 +8,8 @@ public class StatementCodeGenerator extends SpanCodeGenerator
 	@Override
 	public void generateCode(Span target, CodeGeneratorContext context)
 	{
-		context.FlushBufferedStatement();
-		String generatedCode = context.BuildCodeString(cw ->
+		context.flushBufferedStatement();
+		String generatedCode = context.buildCodeString(cw ->
 		{
 			cw.writeSnippet(target.getContent());
 		}
@@ -23,7 +23,7 @@ public class StatementCodeGenerator extends SpanCodeGenerator
 		startGeneratedCode = tempRef_startGeneratedCode.getRefObj();
 		paddingCharCount = tempRef_paddingCharCount.getRefObj();
 
-		context.AddStatement(generatedCode, context.GenerateLinePragma(target, paddingCharCount));
+		context.addStatement(generatedCode, context.generateLinePragma(target, paddingCharCount));
 	}
 
 	@Override

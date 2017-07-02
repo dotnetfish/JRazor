@@ -43,10 +43,7 @@ public class HomeController {
         entry.setFather(father);
         StringWriter writer=new StringWriter();
 
-        //Map<String, Object> templateData=new HashMap<String,Object>();
         TemplateDataDictionary data=new TemplateDataDictionary(null);
-       // templateData.put("myVariant","variantValue");
-       // data.setTemplateData(templateData);
         data.setModel(StockModel.dummyItems());
 
         CodeExecuteTimeStatistic.reset();

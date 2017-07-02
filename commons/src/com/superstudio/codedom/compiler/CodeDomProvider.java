@@ -1,26 +1,18 @@
 package com.superstudio.codedom.compiler;
 
 import com.superstudio.codedom.*;
-import com.superstudio.commons.*;
-import com.superstudio.commons.csharpbridge.RefObject;
-import com.superstudio.commons.csharpbridge.StringComparison;
-import com.superstudio.commons.csharpbridge.StringHelper;
+import com.superstudio.commons.Component;
+import com.superstudio.commons.SR;
+import com.superstudio.commons.TypeConverter;
+import com.superstudio.commons.TypeDescriptor;
 import com.superstudio.commons.exception.ConfigurationErrorsException;
-import com.superstudio.commons.io.Path;
 import com.superstudio.commons.io.TextWriter;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class CodeDomProvider extends Component {
-	private static CodeDomCompilationConfiguration getConfig() {
-		CodeDomCompilationConfiguration codeDomCompilationConfiguration = PrivilegedConfigurationManager
-				.GetSection("codeDom");
-		if (codeDomCompilationConfiguration == null) {
-			return CodeDomCompilationConfiguration.getDefault();
-		}
-		return codeDomCompilationConfiguration;
-	}
 
 	public String getFileExtension() {
 		return "";
@@ -43,49 +35,19 @@ public abstract class CodeDomProvider extends Component {
 		return CodeDomProvider.getCompilerInfo(language).CreateProvider();
 	}
 
-	public static String getLanguageFromExtension(String extension) throws ConfigurationErrorsException {
-		CompilerInfo expr_06 = CodeDomProvider.getCompilerInfoForExtensionNoThrow(extension);
-		if (expr_06 == null) {
-			throw new ConfigurationErrorsException(SR.GetString("CodeDomProvider_NotDefined"));
-		}
-		return expr_06._compilerLanguages[0];
-	}
-
-	public static boolean isDefinedLanguage(String language) {
-		return CodeDomProvider.getCompilerInfoForLanguageNoThrow(language) != null;
-	}
-
-	public static boolean isDefinedExtension(String extension) {
-		return CodeDomProvider.getCompilerInfoForExtensionNoThrow(extension) != null;
-	}
 
 	public static CompilerInfo getCompilerInfo(String language) throws ConfigurationErrorsException {
-		CompilerInfo expr_06 = CodeDomProvider.getCompilerInfoForLanguageNoThrow(language);
-		if (expr_06 == null) {
-			throw new ConfigurationErrorsException(SR.GetString("CodeDomProvider_NotDefined"));
-		}
-		return expr_06;
+		CompilerParameters compilerParameters = new CompilerParameters();
+		String	 codeDomProviderTypeName="com.superstudio.language.java.JavaCodeProvider";
+		CompilerInfo javaCompilerInfo = new CompilerInfo(compilerParameters, codeDomProviderTypeName);
+		javaCompilerInfo._compilerLanguages = new String[] {"java"};
+		javaCompilerInfo._compilerExtensions = new String[] {".java", "java"};
+		javaCompilerInfo._providerOptions = new HashMap<String, String>();
+		return javaCompilerInfo;
 	}
 
-	private static CompilerInfo getCompilerInfoForLanguageNoThrow(String language) {
-		if (language == null) {
-			throw new IllegalArgumentException("language");
-		}
-		return CodeDomProvider.getConfig()._compilerLanguages.get(language.trim());// [language.trim()];
-	}
 
-	private static CompilerInfo getCompilerInfoForExtensionNoThrow(String extension) {
-		if (extension == null) {
-			throw new IllegalArgumentException("extension");
-		}
-		return CodeDomProvider.getConfig()._compilerExtensions.get(extension.trim());
-	}
 
-	public static CompilerInfo[] getAllCompilerInfo() {
-		CompilerInfo[] infos = new CompilerInfo[CodeDomProvider.getConfig()._allCompilerInfo.size()];
-		return CodeDomProvider.getConfig()._allCompilerInfo.toArray(infos);
-		// return infos;
-	}
 
 	public abstract ICodeGenerator createGenerator();
 
@@ -200,6 +162,7 @@ public abstract class CodeDomProvider extends Component {
 		}
 		return expr_06;
 	}*/
+/*
 
 	public static boolean tryGetProbableCoreAssemblyFilePath(CompilerParameters parameters,
 			RefObject<String> coreAssemblyFilePath) {
@@ -207,7 +170,7 @@ public abstract class CodeDomProvider extends Component {
 		// char[] separator = new char[] { java.io.File.separatorChar };
 		String value = Path.Combine("Reference Assemblies", "Microsoft", "Framework");
 		for (String current : parameters.getReferencedAssemblies()) {
-			if (StringHelper.stringsEqual((new java.io.File(current)).getName(), "mscorlib.dll",
+			if (StringUtils.equals((new java.io.File(current)).getName(), "mscorlib.dll",
 					StringComparison.OrdinalIgnoreCase)) {
 				coreAssemblyFilePath.setRefObj(""); //= "";
 				boolean result = false;
@@ -240,4 +203,5 @@ public abstract class CodeDomProvider extends Component {
 		coreAssemblyFilePath.setRefObj("");// = "";
 		return false;
 	}
+*/
 }

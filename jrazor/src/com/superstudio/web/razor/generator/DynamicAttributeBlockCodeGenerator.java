@@ -65,7 +65,7 @@ public class DynamicAttributeBlockCodeGenerator extends BlockCodeGenerator
 		{
 			_isExpression = true;
 
-			generatedCode = context.BuildCodeString(cw ->
+			generatedCode = context.buildCodeString(cw ->
 			{
 				cw.writeParameterSeparator();
 				cw.writeStartMethodInvoke("toAttributeValue");
@@ -82,7 +82,7 @@ public class DynamicAttributeBlockCodeGenerator extends BlockCodeGenerator
 		else
 		{
 
-			generatedCode = context.BuildCodeString(cw ->
+			generatedCode = context.buildCodeString(cw ->
 			{
 				try {
 					cw.writeParameterSeparator();
@@ -100,8 +100,8 @@ public class DynamicAttributeBlockCodeGenerator extends BlockCodeGenerator
 		   );
 		}
 
-		context.MarkEndOfGeneratedCode();
-		context.BufferStatementFragment(generatedCode);
+		context.markEndOfGeneratedCode();
+		context.bufferStatementFragment(generatedCode);
 
 		_oldTargetWriter = context.getTargetWriterName();
 		context.setTargetWriterName(ValueWriterName);
@@ -120,7 +120,7 @@ public class DynamicAttributeBlockCodeGenerator extends BlockCodeGenerator
 		{
 				// literal: false - This attribute value is not a literal value, it is dynamically generated
 
-			generatedCode = context.BuildCodeString(cw ->
+			generatedCode = context.buildCodeString(cw ->
 			{
 				cw.writeParameterSeparator();
 				cw.writeSnippet((new Integer(getValueStart().getAbsoluteIndex())).toString());
@@ -137,7 +137,7 @@ public class DynamicAttributeBlockCodeGenerator extends BlockCodeGenerator
 		{
 				// literal: false - This attribute value is not a literal value, it is dynamically generated
 
-			generatedCode = context.BuildCodeString(cw ->
+			generatedCode = context.buildCodeString(cw ->
 			{
 				cw.writeEndLambdaDelegate();
 				cw.writeEndConstructor();
@@ -152,7 +152,7 @@ public class DynamicAttributeBlockCodeGenerator extends BlockCodeGenerator
 		   );
 		}
 
-		context.AddStatement(generatedCode);
+		context.addStatement(generatedCode);
 		context.setTargetWriterName(_oldTargetWriter);
 	}
 

@@ -14,15 +14,10 @@ import java.util.regex.Pattern;
 
 import com.superstudio.codedom.*;
 import com.superstudio.codedom.compiler.*;
-import com.superstudio.commons.Encoding;
-import com.superstudio.commons.Environment;
 import com.superstudio.commons.FixedStringLookup;
-import com.superstudio.commons.Path;
 import com.superstudio.commons.SR;
 import com.superstudio.commons.StreamReader;
-import com.superstudio.commons.StreamWriter;
 import com.superstudio.commons.TypeAttributes;
-import com.superstudio.commons.csharpbridge.RefObject;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.ArgumentException;
 import com.superstudio.commons.exception.ArgumentNullException;
@@ -33,6 +28,7 @@ import com.superstudio.commons.io.FileMode;
 import com.superstudio.commons.io.FileShare;
 import com.superstudio.commons.io.FileStream;
 import com.superstudio.commons.io.TextWriter;
+import org.apache.commons.lang3.StringUtils;
 
 public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 
@@ -291,7 +287,8 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 				compilerError.setLine(Integer.parseInt(match.group(4)));
 				compilerError.setColumn(Integer.parseInt(match.group(5)));
 			}
-			if (StringHelper.Compare(match.group(flag ? 6 : 1), "warning", StringComparison.OrdinalIgnoreCase) == 0) {
+
+			if (StringUtils.equalsIgnoreCase(match.group(flag ? 6 : 1), "warning")) {
 				compilerError.setIsWarning(true);
 			}
 			compilerError.setErrorNumber(match.group(flag ? 7 : 2));
@@ -300,93 +297,11 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 	}
 
-	private String cmdArgsFromParameters(CompilerParameters options) {
-		StringBuilder StringBuilder = new StringBuilder(128);
-		if (options.getGenerateExecutable()) {
-			StringBuilder.append("/t:exe ");
-			if (options.getMainClass() != null && options.getMainClass().length() > 0) {
-				StringBuilder.append("/main:");
-				StringBuilder.append(options.getMainClass());
-				StringBuilder.append(" ");
-			}
-		} else {
-			StringBuilder.append("/t:library ");
-		}
-		StringBuilder.append("/utf8output ");
-		String text = options.getCoreAssemblyFileName();
-		String text2 = "";
-		RefObject<String> refObj = new RefObject<String>(text2);
-
-		if (StringHelper.isNullOrWhiteSpace(options.getCoreAssemblyFileName())
-				&& CodeDomProvider.tryGetProbableCoreAssemblyFilePath(options, refObj)) {
-			text = refObj.getRefObj();
-		}
-		if (!StringHelper.isNullOrWhiteSpace(text)) {
-			StringBuilder.append("/nostdlib+ ");
-			StringBuilder.append("/R:\"").append(text.trim()).append("\" ");
-		}
-		for (String current : options.getReferencedAssemblies()) {
-			StringBuilder.append("/R:");
-			StringBuilder.append("\"");
-			StringBuilder.append(current);
-			StringBuilder.append("\"");
-			StringBuilder.append(" ");
-		}
-		StringBuilder.append("/out:");
-		StringBuilder.append("\"");
-		StringBuilder.append(options.getOutputAssembly());
-		StringBuilder.append("\"");
-		StringBuilder.append(" ");
-		if (options.getIncludeDebugInformation()) {
-			StringBuilder.append("/D:DEBUG ");
-			StringBuilder.append("/debug+ ");
-			StringBuilder.append("/optimize- ");
-		} else {
-			StringBuilder.append("/debug- ");
-			StringBuilder.append("/optimize+ ");
-		}
-		if (options.getWin32Resource() != null) {
-			StringBuilder.append("/win32res:\"" + options.getWin32Resource() + "\" ");
-		}
-		for (String current2 : options.getEmbeddedResources()) {
-			StringBuilder.append("/res:\"");
-			StringBuilder.append(current2);
-			StringBuilder.append("\" ");
-		}
-		for (String current3 : options.getLinkedResources()) {
-			StringBuilder.append("/linkres:\"");
-			StringBuilder.append(current3);
-			StringBuilder.append("\" ");
-		}
-		if (options.getTreatWarningsAsErrors()) {
-			StringBuilder.append("/warnaserror ");
-		}
-		if (options.getWarningLevel() >= 0) {
-			StringBuilder.append("/w:" + options.getWarningLevel() + " ");
-		}
-		if (options.getCompilerOptions() != null) {
-			StringBuilder.append(options.getCompilerOptions() + " ");
-		}
-		return StringBuilder.toString();
-	}
 
 	private void continueOnNewLine(String st) throws Exception {
 		this.output.writeLine(st);
 	}
 
-	private String getResponseFileCmdArgs(CompilerParameters options, String cmdArgs) throws Exception {
-		String text = options.getTempFiles().addExtension("cmdline");
-		FileStream stream = new FileStream(text, FileMode.Create, FileAccess.Write, FileShare.Read);
-		try {
-			try (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8)) {
-				streamWriter.write(cmdArgs);
-				streamWriter.flush();
-			}
-		} finally {
-			stream.Close();
-		}
-		return "/noconfig /fullpaths @\"" + text + "\"";
-	}
 
 	private void outputIdentifier(String ident) throws Exception {
 		this.output.write(this.createEscapedIdentifier(ident));
@@ -649,18 +564,17 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		return defaultValue;
 	}
 
-	private void generateNamespace(CodeNamespace e) throws Exception {
+	private void generatePackage(CodeNamespace e) throws Exception {
 		this.generateCommentStatements(e.getComments());
-		this.generateNamespaceStart(e);
+		this.generatePackageStart(e);
 		if (this.getUserData(e, "GenerateImports", true)) {
 			this.generateNamespaceImports(e);
 		}
-		// TODO fro debug;
 
 		this.output.writeLine();
 		this.generateTypes(e);
 
-		this.generateNamespaceEnd(e);
+		this.generatePackageImportEnd(e);
 	}
 
 	private void generateStatement(CodeStatement e) throws Exception {
@@ -758,7 +672,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			if (codeNamespaceImport.getLinePragma() != null) {
 				this.generateLinePragmaStart(codeNamespaceImport.getLinePragma());
 			}
-			this.generateNamespaceImport(codeNamespaceImport);
+			this.generatePackageImport(codeNamespaceImport);
 			if (codeNamespaceImport.getLinePragma() != null) {
 				this.generateLinePragmaEnd(codeNamespaceImport.getLinePragma());
 			}
@@ -1545,7 +1459,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			this.output.write(".");
 		}
 		if (e.getParameters().size() > 0
-				&& StringHelper.Compare(e.getName(), "Item", StringComparison.OrdinalIgnoreCase) == 0) {
+				&& StringUtils.equalsIgnoreCase(e.getName(), "Item")) {
 			this.output.write("this[");
 			this.outputParameters(e.getParameters());
 			this.output.write("]");
@@ -2353,11 +2267,9 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	 * 
 	 * 
 	 */
-	private void generateNamespaceStart(CodeNamespace e) throws Exception {
+	private void generatePackageStart(CodeNamespace e) throws Exception {
 		if (e.getName() != null && e.getName().length() > 0) {
 			this.output.write("package ");
-			// String[] array = StringHelper.split(e.getName(), new char[] { '.'
-			// });
 			String[] array = e.getName().split(".");
 			if (array.length == 0)
 				this.output.write(e.getName());
@@ -2391,7 +2303,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		this.output.writeLine(SR.GetString("AutoGen_Comment_Line2"));
 		this.output.write("//     ");
 		this.output.write(SR.GetString("AutoGen_Comment_Line3"));
-		this.output.writeLine(Environment.Version.toString());
+		//this.output.writeLine(Environment.Version.toString());
 		this.output.writeLine("//");
 		this.output.write("//     ");
 		this.output.writeLine(SR.GetString("AutoGen_Comment_Line4"));
@@ -2405,7 +2317,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		SortedMap<String, String> sortedList = new TreeMap<String, String>();
 		for (Object codeNamespaceO : e.getNamespaces()) {
 			CodeNamespace codeNamespace = (CodeNamespace) codeNamespaceO;
-			if (StringHelper.isNullOrEmpty(codeNamespace.getName())) {
+			if (StringUtils.isBlank(codeNamespace.getName())) {
 				codeNamespace.getUserData().put("GenerateImports", false);
 				for (Object codeNamespaceImport1 : codeNamespace.getImports()) {
 					CodeNamespaceImport codeNamespaceImport = (CodeNamespaceImport) codeNamespaceImport1;
@@ -2457,16 +2369,12 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		this.output.write("#pragma checksum \"");
 		this.output.write(checksumPragma.getFileName());
 		this.output.write("\" \"");
-		// this.output.write(checksumPragma.getChecksumAlgorithmId().toString("B",
-		// CultureInfo.InvariantCulture));
 		this.output.write(checksumPragma.getChecksumAlgorithmId().toString());
 		this.output.write("\" \"");
 		if (checksumPragma.getChecksumData() != null) {
 			byte[] checksumData = checksumPragma.getChecksumData();
 			for (int i = 0; i < checksumData.length; i++) {
 				byte b = checksumData[i];
-				// this.output.write(b.ToString("X2",
-				// CultureInfo.InvariantCulture));
 				this.output.write(String.valueOf(b));
 			}
 		}
@@ -2484,16 +2392,11 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 	}
 
-	private void generateNamespaceEnd(CodeNamespace e) throws Exception {
-		if (e.getName() != null && e.getName().length() > 0) {
-			/*
-			 * int indent = this.getIndent(); this.setIndent(indent - 1);
-			 * this.output.writeLine("}");
-			 */
-		}
+	private void generatePackageImportEnd(CodeNamespace e) throws Exception {
+
 	}
 
-	private void generateNamespaceImport(CodeNamespaceImport e) throws Exception {
+	private void generatePackageImport(CodeNamespaceImport e) throws Exception {
 		this.output.write("import ");
 		this.outputIdentifier(e.getNamespace());
 		this.output.writeLine(";");
@@ -2524,8 +2427,9 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		boolean flag = false;
 		for (Object enumerator : attributes) {
 			CodeAttributeDeclaration codeAttributeDeclaration = (CodeAttributeDeclaration) enumerator;
-			if (StringHelper.equals(codeAttributeDeclaration.getName(), "system.paramarrayattribute",
-					StringComparison.OrdinalIgnoreCase)) {
+			if (StringUtils
+					.equalsIgnoreCase(codeAttributeDeclaration.getName(),
+							"system.paramarrayattribute")) {
 				flag = true;
 			} else {
 				this.generateAttributeDeclarationsStart(attributes);
@@ -2569,7 +2473,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 
 	private static boolean isKeyword(String value) {
 		// return false;
-		return FixedStringLookup.Contains(JavaCodeGenerator.keywords, value, false);
+		return FixedStringLookup.contains(JavaCodeGenerator.keywords, value, false);
 	}
 
 	private static boolean isPrefixTwoUnderscore(String value) {
@@ -3026,7 +2930,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		return result;
 	}*/
 
-	void compile(CompilerParameters options, String compilerDirectory, String compilerExe, String arguments,
+	/*void compile(CompilerParameters options, String compilerDirectory, String compilerExe, String arguments,
 				 RefObject<String> outputFile, RefObject<Integer> nativeReturnValue, String trueArgs) throws Exception {
 		String text = null;
 		outputFile.setRefObj(options.getTempFiles().addExtension("out"));
@@ -3047,7 +2951,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		throw new InvalidOperationException(SR.GetString("CompilerNotFound", new Object[] { text2 }));
 	}
-
+*/
 	/*private CompilerResults fromDom(CompilerParameters options, CodeCompileUnit e) throws ArgumentNullException {
 		if (options == null) {
 			throw new ArgumentNullException("options");
@@ -3122,15 +3026,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		return result;
 	}
 */
-	private void resolveReferencedAssemblies(CompilerParameters options, CodeCompileUnit e) {
-		if (e.getReferencedAssemblies().size() > 0) {
-			for (String current : e.getReferencedAssemblies()) {
-				if (!options.getReferencedAssemblies().contains(current)) {
-					options.getReferencedAssemblies().add(current);
-				}
-			}
-		}
-	}
+
 
 	/*private CompilerResults fromSourceBatch(CompilerParameters options, String[] sources) throws ArgumentNullException {
 		if (options == null) {
@@ -3265,7 +3161,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			this.output = new IndentedTextWriter(w, this.options.getIndentString());
 		}
 		try {
-			this.generateNamespace(e);
+			this.generatePackage(e);
 		} finally {
 			if (flag) {
 				this.output = null;

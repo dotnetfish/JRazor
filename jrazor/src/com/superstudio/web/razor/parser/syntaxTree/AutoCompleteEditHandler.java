@@ -10,7 +10,7 @@ import com.superstudio.web.razor.editor.SpanEditHandler;
 import com.superstudio.web.razor.parser.ParserHelpers;
 import com.superstudio.web.razor.text.TextChange;
 import com.superstudio.web.razor.tokenizer.symbols.ISymbol;
-
+import org.apache.commons.lang3.StringUtils;
 
 
 public class AutoCompleteEditHandler extends SpanEditHandler
@@ -66,7 +66,7 @@ public class AutoCompleteEditHandler extends SpanEditHandler
 	public boolean equals(Object obj)
 	{
 		AutoCompleteEditHandler other = (AutoCompleteEditHandler)((obj instanceof AutoCompleteEditHandler) ? obj : null);
-		return super.equals(obj) && other != null && StringHelper.stringsEqual(other.getAutoCompleteString(), getAutoCompleteString()) && getAutoCompleteAtEndOfSpan() == other.getAutoCompleteAtEndOfSpan();
+		return super.equals(obj) && other != null && StringUtils.equals(other.getAutoCompleteString(), getAutoCompleteString()) && getAutoCompleteAtEndOfSpan() == other.getAutoCompleteAtEndOfSpan();
 	}
 
 	@Override

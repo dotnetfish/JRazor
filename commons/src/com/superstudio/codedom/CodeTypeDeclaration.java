@@ -5,8 +5,6 @@ import com.superstudio.commons.EmptyEventArgs;
 import com.superstudio.commons.EventArgs;
 import com.superstudio.commons.EventHandler;
 import com.superstudio.commons.TypeAttributes;
-
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeTypeDeclaration : CodeTypeMember
 public class CodeTypeDeclaration extends CodeTypeMember implements Serializable
 {
 	private TypeAttributes attributes = TypeAttributes.forValue(TypeAttributes.Public);

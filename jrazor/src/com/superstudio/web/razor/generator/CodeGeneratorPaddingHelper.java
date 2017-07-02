@@ -6,12 +6,13 @@ import com.superstudio.web.razor.RazorEngineHost;
 import com.superstudio.web.razor.parser.SyntaxConstants;
 import com.superstudio.web.razor.parser.syntaxTree.Span;
 import com.superstudio.web.razor.parser.syntaxTree.SpanKind;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 public final class CodeGeneratorPaddingHelper
 {
 	private static final char[] _newLineChars = { '\r', '\n' };
-
+private static final CharSequence[] _newLineString={"\r","\n"};
 	// there is some duplicity of code here, but its very simple and since this is a host path, I'd rather not create another class to encapsulate the data.
 	public static int paddingCharCount(RazorEngineHost host, Span target, int generatedStart)
 	{
@@ -143,7 +144,8 @@ public final class CodeGeneratorPaddingHelper
 			
 			paddingCharCount.setRefObj(padding);
 			//return code.padLeft(padding + code.length(), ' ');
-			return StringHelper.padLeft(code, padding+code.length(), " ");
+			return StringUtils.leftPad(code,padding+code.length()," ");
+			//return StringHelper.padLeft(code, padding+code.length(), " ");
 		}
 	}
 
@@ -160,7 +162,7 @@ public final class CodeGeneratorPaddingHelper
 			String tempVar = firstSpanInLine.getPrevious().getContent();
 			String previousContent = (tempVar != null) ? tempVar : "";
 
-			int lastNewLineIndex = StringHelper.lastIndexOfAny(previousContent,_newLineChars);
+			int lastNewLineIndex = StringUtils.lastIndexOfAny(previousContent,_newLineString);
 
 			if (lastNewLineIndex < 0)
 			{

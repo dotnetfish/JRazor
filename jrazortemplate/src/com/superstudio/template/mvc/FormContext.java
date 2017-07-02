@@ -4,7 +4,7 @@ import java.util.*;
 
 import com.alibaba.fastjson.JSON;
 import com.superstudio.commons.csharpbridge.StringHelper;
-
+import org.apache.commons.lang3.StringUtils;
 
 
 public class FormContext
@@ -54,7 +54,7 @@ public class FormContext
 		TreeMap<String, Object> dict = new TreeMap<String, Object>();
 		dict.put("Fields", getFieldValidators().values());
 		dict.put("FormId", getFormId());
-		if (!StringHelper.isNullOrEmpty(getValidationSummaryId()))
+		if (!StringUtils.isBlank(getValidationSummaryId()))
 		{
 			dict.put("validationSummaryId", getValidationSummaryId());
 		}
@@ -70,7 +70,7 @@ public class FormContext
 
 	public final FieldValidationMetadata getValidationMetadataForField(String fieldName, boolean createIfNotFound)
 	{
-		if (StringHelper.isNullOrEmpty(fieldName))
+		if (StringUtils.isBlank(fieldName))
 		{
 			//throw Error.ParameterCannotBeNullOrEmpty("fieldName");
 		}

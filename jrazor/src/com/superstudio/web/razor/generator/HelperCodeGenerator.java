@@ -7,6 +7,7 @@ import com.superstudio.commons.HashCodeCombiner;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.razor.parser.syntaxTree.Block;
 import com.superstudio.web.razor.text.LocationTagged;
+import org.apache.commons.lang3.StringUtils;
 
 
 public class HelperCodeGenerator extends BlockCodeGenerator {
@@ -57,11 +58,11 @@ public class HelperCodeGenerator extends BlockCodeGenerator {
 
 
 		// methods are not converted
-		String prefix = context.BuildCodeString(
+		String prefix = context.buildCodeString(
 				cw -> cw.writeHelperHeaderPrefix(context.getHost().getGeneratedClassContext().getTemplateTypeName(),
 						context.getHost().getStaticHelpers()));
 
-		_writer.writeLinePragma(context.GenerateLinePragma(getSignature().getLocation().clone(), prefix.length(),
+		_writer.writeLinePragma(context.generateLinePragma(getSignature().getLocation().clone(), prefix.length(),
 				getSignature().getValue().length()));
 		_writer.writeSnippet(prefix);
 		_writer.writeSnippet(getSignature().toString());
@@ -75,7 +76,7 @@ public class HelperCodeGenerator extends BlockCodeGenerator {
 			_writer.writeStartLambdaDelegate(HelperWriterName);
 		}
 
-		_statementCollectorToken = context.ChangeStatementCollector((p, m) -> AddStatementToHelper(p, m));
+		_statementCollectorToken = context.changeStatementCollector((p, m) -> AddStatementToHelper(p, m));
 		_oldWriter = context.getTargetWriterName();
 		context.setTargetWriterName(HelperWriterName);
 	}
@@ -88,8 +89,8 @@ public class HelperCodeGenerator extends BlockCodeGenerator {
 			_writer.writeEndConstructor();
 			_writer.writeEndStatement();
 		}
-		if (getFooter() != null && !StringHelper.isNullOrEmpty(getFooter().getValue())) {
-			_writer.writeLinePragma(context.GenerateLinePragma(getFooter().getLocation().clone(), 0,
+		if (getFooter() != null && !StringUtils.isBlank(getFooter().getValue())) {
+			_writer.writeLinePragma(context.generateLinePragma(getFooter().getLocation().clone(), 0,
 					getFooter().getValue().length()));
 			_writer.writeSnippet(getFooter().toString());
 			_writer.writeLinePragma();

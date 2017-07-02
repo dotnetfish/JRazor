@@ -8,6 +8,7 @@ import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.commons.exception.HttpException;
 import com.superstudio.template.mvc.context.HostContext;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.util.*;
@@ -251,7 +252,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 		// object heap.
 		getOutputStack().pop();
 
-		if (!StringHelper.isNullOrEmpty(getLayout())) {
+		if (!StringUtils.isBlank(getLayout())) {
 
 			String layoutPagePath = getLayout();//normalizeLayoutPagePath(getLayout());
 
@@ -337,7 +338,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 	}
 
 	private HelperResult renderPageCore(final String path1, boolean isLayoutPage, Object[] data) throws Exception {
-		if (StringHelper.isNullOrEmpty(path1)) {
+		if (StringUtils.isBlank(path1)) {
 			throw new IllegalArgumentException(CommonResources.Argument_Cannot_Be_Null_Or_Empty + "path");
 		}
 
@@ -521,7 +522,7 @@ return;
 	@Override
 	public void writeLiteral(Object value) throws IOException {
 
-			if (value == null || StringHelper.isNullOrEmpty(value.toString())){
+			if (value == null || StringUtils.isBlank(value.toString())){
 				return;
 			}
 		//	getOutput().

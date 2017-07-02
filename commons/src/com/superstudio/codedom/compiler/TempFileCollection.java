@@ -1,10 +1,10 @@
 package com.superstudio.codedom.compiler;
 
-import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.io.FileAccess;
 import com.superstudio.commons.io.FileMode;
 import com.superstudio.commons.io.FileStream;
 import com.superstudio.commons.io.Path;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -218,10 +218,11 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 	}
 
 	private static String getTempFileName(String tempDir) {
-		if (StringHelper.isNullOrEmpty(tempDir)) {
-			tempDir = Path.GetTempPath();
+		//if (StringUtils.isBlank(tempDir)) {
+		if(StringUtils.isBlank(tempDir)){
+			tempDir = Path.getTempPath();
 		}
-		String fileNameWithoutExtension = Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
+		String fileNameWithoutExtension = Path.getFileNameWithoutExtension(Path.getRandomFileName());
 		String result;
 		if (tempDir.endsWith("\\")) {
 			result = tempDir + fileNameWithoutExtension;

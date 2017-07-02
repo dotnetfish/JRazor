@@ -7,6 +7,7 @@ import com.superstudio.commons.WebConfigurationManager;
 import com.superstudio.commons.csharpbridge.StringComparison;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.csharpbridge.action.Func;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.function.Function;
@@ -35,7 +36,7 @@ public class WebRazorHostFactory {
 	}
 
 	public static WebPageRazorHost createHostFromConfig(String virtualPath, String physicalPath) {
-		if (StringHelper.isNullOrEmpty(virtualPath)) {
+		if (StringUtils.isBlank(virtualPath)) {
 			// throw new
 			// IllegalArgumentException(String.format(CultureInfo.CurrentCulture,
 			// CommonResources.Argument_Cannot_Be_Null_Or_Empty, new Object[] {
@@ -54,7 +55,7 @@ public class WebRazorHostFactory {
 		if (config == null) {
 			throw new IllegalArgumentException("config");
 		}
-		if (StringHelper.isNullOrEmpty(virtualPath)) {
+		if (StringUtils.isBlank(virtualPath)) {
 			// throw new
 			// IllegalArgumentException(String.format(CultureInfo.CurrentCulture,
 			// CommonResources.Argument_Cannot_Be_Null_Or_Empty, new Object[] {
@@ -67,12 +68,13 @@ public class WebRazorHostFactory {
 															String physicalPath) {
 		virtualPath = WebRazorHostFactory.ensureAppRelative(virtualPath);
 		WebPageRazorHost webPageRazorHost;
-		if (StringHelper.startWith(virtualPath, "~/App_Code", StringComparison.OrdinalIgnoreCase)) {
+
+		if (StringUtils.startsWithIgnoreCase(virtualPath, "~/App_Code")) {
 			webPageRazorHost = new WebCodeRazorHost(virtualPath, physicalPath);
 		} else {
 			WebRazorHostFactory webRazorHostFactory = null;
 			if (config != null && config.getHost() != null
-					&& !StringHelper.isNullOrEmpty(config.getHost().getFactoryType())) {
+					&& !StringUtils.isBlank(config.getHost().getFactoryType())) {
 				Func<WebRazorHostFactory> orAdd = WebRazorHostFactory._factories
 						.putIfAbsent(config.getHost().getFactoryType(), () -> {
 							try {

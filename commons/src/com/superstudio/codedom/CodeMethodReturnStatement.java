@@ -1,7 +1,6 @@
 package com.superstudio.codedom;
 import java.io.Serializable;
 
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeMethodReturnStatement : CodeStatement
 public class CodeMethodReturnStatement extends CodeStatement implements Serializable
 {
 	private CodeExpression expression;

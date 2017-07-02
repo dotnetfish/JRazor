@@ -2,10 +2,7 @@ package com.superstudio.web.razor.text;
 
 import com.superstudio.commons.HashCodeCombiner;
 import com.superstudio.commons.csharpbridge.StringHelper;
-
-
-
-
+import org.apache.commons.lang3.StringUtils;
 
 
 //[//DebuggerDisplay("({Location})\"{Value}\"")]
@@ -78,7 +75,7 @@ public class LocationTagged<T> //implements IFormattable
 
 	public final String toString(String format, String formatProvider)
 	{
-		if (StringHelper.isNullOrEmpty(format))
+		if (StringUtils.isBlank(format))
 		{
 			format = "P";
 		}

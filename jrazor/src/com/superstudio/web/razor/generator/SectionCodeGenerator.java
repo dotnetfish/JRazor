@@ -20,7 +20,7 @@ public class SectionCodeGenerator extends BlockCodeGenerator {
 
 	@Override
 	public void generateStartBlockCode(Block target, CodeGeneratorContext context) throws Exception{
-		String startBlock = context.BuildCodeString(cw -> {
+		String startBlock = context.buildCodeString(cw -> {
 			cw.writeStartMethodInvoke(context.getHost().getGeneratedClassContext().getDefineSectionMethodName());
 			try {
 				cw.writeStringLiteral(getSectionName());
@@ -32,17 +32,17 @@ public class SectionCodeGenerator extends BlockCodeGenerator {
 			}
 
 		});
-		context.AddStatement(startBlock);
+		context.addStatement(startBlock);
 	}
 
 	@Override
 	public void generateEndBlockCode(Block target, CodeGeneratorContext context) {
-		String startBlock = context.BuildCodeString(cw -> {
+		String startBlock = context.buildCodeString(cw -> {
 			cw.writeEndLambdaDelegate();
 			cw.writeEndMethodInvoke();
 			cw.writeEndStatement();
 		});
-		context.AddStatement(startBlock);
+		context.addStatement(startBlock);
 	}
 
 	@Override

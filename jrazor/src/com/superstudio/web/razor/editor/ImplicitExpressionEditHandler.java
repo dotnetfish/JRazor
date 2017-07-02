@@ -10,6 +10,7 @@ import com.superstudio.web.razor.parser.syntaxTree.AcceptedCharacters;
 import com.superstudio.web.razor.parser.syntaxTree.Span;
 import com.superstudio.web.razor.text.TextChange;
 import com.superstudio.web.razor.tokenizer.symbols.ISymbol;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -144,7 +145,7 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 	private static boolean isSecondaryDotlessCommitInsertion(Span target, TextChange change) {
 		// Do not need to worry about other punctuation, just looking for double
 		// '.' (after change)
-		return change.getNewLength() == 1 && !StringHelper.isNullOrEmpty(target.getContent())
+		return change.getNewLength() == 1 && !StringUtils.isBlank(target.getContent())
 				&& target.getContent().endsWith(".") && change.getNewText().equals(".") && change.getOldLength() == 0;
 	}
 
@@ -194,7 +195,7 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 
 	private static boolean remainingIsWhitespace(Span target, TextChange change) {
 		int offset = (change.getOldPosition() - target.getStart().getAbsoluteIndex()) + change.getOldLength();
-		return StringHelper.isNullOrWhiteSpace(target.getContent().substring(offset));
+		return StringUtils.isBlank(target.getContent().substring(offset));
 	}
 
 	private PartialParseResult handleDotlessCommitInsertion(Span target) {

@@ -2,8 +2,6 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
-
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeTypeDeclarationCollection : CollectionBase
 public class CodeTypeDeclarationCollection extends CollectionBase implements Serializable
 {
 	public final CodeTypeDeclaration getItem(int index)

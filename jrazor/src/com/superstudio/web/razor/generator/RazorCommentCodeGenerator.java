@@ -3,6 +3,7 @@ package com.superstudio.web.razor.generator;
 
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.razor.parser.syntaxTree.*;
+import org.apache.commons.lang3.StringUtils;
 
 public class RazorCommentCodeGenerator extends BlockCodeGenerator
 {
@@ -10,13 +11,13 @@ public class RazorCommentCodeGenerator extends BlockCodeGenerator
 	public void generateStartBlockCode(Block target, CodeGeneratorContext context)
 	{
 		// flush the buffered statement since we're interrupting it with a comment.
-		if (!StringHelper.isNullOrEmpty(context.getCurrentBufferedStatement()))
+		if (!StringUtils.isBlank(context.getCurrentBufferedStatement()))
 		{
-			context.MarkEndOfGeneratedCode();
+			context.markEndOfGeneratedCode();
 
-			context.BufferStatementFragment(context.BuildCodeString(cw -> cw.writeLineContinuation()));
+			context.bufferStatementFragment(context.buildCodeString(cw -> cw.writeLineContinuation()));
 		}
-		context.FlushBufferedStatement();
+		context.flushBufferedStatement();
 	}
 
 	@Override

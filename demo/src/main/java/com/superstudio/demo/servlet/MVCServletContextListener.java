@@ -27,7 +27,7 @@ public class MVCServletContextListener implements ServletContextListener {
         WebTemplateHost templateHost=new WebTemplateHost();
        HostContext host= builder.useHost(templateHost)
                .useAutoCompiler(templateHost.mapPath("/web-inf/templates"))
-                .useTemplateEngine(new RazorTemplateEngine()).build();
+               .useTemplateEngine(new RazorTemplateEngine()).build();
 
     }
 

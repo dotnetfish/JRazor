@@ -3,6 +3,7 @@ package com.superstudio.template.templatepages;
 import com.superstudio.commons.Path;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.template.mvc.context.HostContext;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.Predicate;
 
@@ -73,7 +74,7 @@ public class DefaultDisplayMode implements IDisplayMode
 	*/
 	protected String transformPath(String virtualPath, String suffix)
 	{
-		if (StringHelper.isNullOrEmpty(suffix))
+		if (StringUtils.isBlank(suffix))
 		{
 			return virtualPath;
 		}

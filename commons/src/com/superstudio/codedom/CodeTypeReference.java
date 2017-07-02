@@ -7,31 +7,22 @@ import java.util.*;
 
 import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.csharpbridge.StringHelper;
+import org.apache.commons.lang3.StringUtils;
 
-
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeTypeReference : CodeObject
 public class CodeTypeReference extends CodeObject implements Serializable
 {
 	private String baseType;
 
-
-//ORIGINAL LINE: [OptionalField] private bool isInterface;
 	private boolean isInterface;
 
 	private int arrayRank;
 
 	private CodeTypeReference arrayElementType;
 
-
-//ORIGINAL LINE: [OptionalField] private CodeTypeReferenceCollection typeArguments;
 	private CodeTypeReferenceCollection typeArguments;
 
-
-//ORIGINAL LINE: [OptionalField] private CodeTypeReferenceOptions referenceOptions;
 	private CodeTypeReferenceOptions referenceOptions = CodeTypeReferenceOptions.forValue(1);
 
-
-//ORIGINAL LINE: [OptionalField] private bool needsFixup;
 	private boolean needsFixup;
 
 	public final CodeTypeReference getArrayElementType()
@@ -67,7 +58,8 @@ public class CodeTypeReference extends CodeObject implements Serializable
 		{
 			return this.arrayElementType.getBaseType();
 		}
-		if (StringHelper.isNullOrEmpty(this.baseType))
+		//if (StringUtils.isBlank(this.baseType))
+		if(StringUtils.isBlank(this.baseType))
 		{
 			return "";
 		}
@@ -84,9 +76,7 @@ public class CodeTypeReference extends CodeObject implements Serializable
 		this.Initialize(this.baseType);
 	}
 
-
-//ORIGINAL LINE: [ComVisible(false)] public CodeTypeReferenceOptions Options
-	public final CodeTypeReferenceOptions getOptions()
+public final CodeTypeReferenceOptions getOptions()
 	{
 		return this.referenceOptions;
 	}
@@ -95,8 +85,6 @@ public class CodeTypeReference extends CodeObject implements Serializable
 		this.referenceOptions = value;
 	}
 
-
-//ORIGINAL LINE: [ComVisible(false)] public CodeTypeReferenceCollection TypeArguments
 	public final CodeTypeReferenceCollection getTypeArguments()
 	{
 		if (this.arrayRank > 0 && this.arrayElementType != null)
@@ -175,7 +163,8 @@ public class CodeTypeReference extends CodeObject implements Serializable
 				type2 = type2.getDeclaringClass();
 				this.baseType = type2.getSimpleName() + "+" + this.baseType;
 			}*/
-			if (!StringHelper.isNullOrEmpty(type.getPackage().getName()))
+			//if (!StringUtils.isBlank(type.getPackage().getName()))
+			if(StringUtils.isNotBlank(type.getPackage().getName()))
 			{
 				this.baseType = type.getPackage().getName() + "." + this.baseType;
 			}

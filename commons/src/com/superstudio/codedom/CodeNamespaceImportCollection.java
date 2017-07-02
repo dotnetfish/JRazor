@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.*;
 
 
-
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeNamespaceImportCollection : IList, ICollection, IEnumerable
 public class CodeNamespaceImportCollection implements  Iterable, Serializable
 {
 	private ArrayList<CodeNamespaceImport> data = new ArrayList<CodeNamespaceImport>();

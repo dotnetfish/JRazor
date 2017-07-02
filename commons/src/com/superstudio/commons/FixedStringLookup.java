@@ -1,10 +1,10 @@
 package com.superstudio.commons;
 
-import com.superstudio.commons.csharpbridge.RefObject;
+import com.superstudio.codedom.compiler.MutilReturn;
 
 public class FixedStringLookup
 {
-	public static boolean Contains(String[][] lookupTable, String value, boolean ignoreCase)
+	public static boolean contains(String[][] lookupTable, String value, boolean ignoreCase)
 	{
 		int length = value.length();
 		if (length <= 0 || length - 1 >= lookupTable.length)
@@ -12,27 +12,25 @@ public class FixedStringLookup
 			return false;
 		}
 		String[] array = lookupTable[length - 1];
-		return array != null && FixedStringLookup.Contains(array, value, ignoreCase);
+		return array != null && FixedStringLookup.contains(array, value, ignoreCase);
 	}
-	private static boolean Contains(String[] array, String value, boolean ignoreCase)
+	private static boolean contains(String[] array, String value, boolean ignoreCase)
 	{
-		int num = 0;
-		int num2 = array.length;
+		int indexNum = 0;
+		int length = array.length;
 		int i = 0;
+		//if(ignoreCase)value=value.toLowerCase();
 		while (i < value.length())
 		{
-			char c;
+			char c =value.charAt(i);
 			if (ignoreCase)
 			{
-				c =Character.toLowerCase(value.charAt(i)); //Character.ToLower(value.charAt(i));
+				c =Character.toLowerCase(c); //Character.ToLower(value.charAt(i));
 			}
-			else
+
+			if (length - indexNum <= 1)
 			{
-				c = value.charAt(i);
-			}
-			if (num2 - num <= 1)
-			{
-				if (c != array[num].charAt(i))
+				if (c != array[indexNum].charAt(i))
 				{
 					return false;
 				}
@@ -40,26 +38,30 @@ public class FixedStringLookup
 			}
 			else
 			{
-				RefObject<Integer> refNum=new RefObject<Integer>(num);
-				RefObject<Integer> refNum2=new RefObject<Integer>(num2);
-				if (!FixedStringLookup.FindCharacter(array, c, i, refNum, refNum2))
+                MutilReturn<Boolean,MutilReturn<Integer,Integer>> findResult=FixedStringLookup.findCharacter(array,c,i,indexNum,length);
+                indexNum=findResult.gettRef().gettReturn();
+                length=findResult.gettRef().gettRef();
+
+				if(!findResult.gettReturn())
 				{
-					num=refNum.getRefObj();
-					num2=refNum2.getRefObj();
-					return false;
+
+                    return false;
 				}
-				num=refNum.getRefObj();
-				num2=refNum2.getRefObj();
 				i++;
 			}
 		}
 		return true;
 	}
-	private static boolean FindCharacter(String[] array, char value, int pos, RefObject<Integer> minRef, RefObject<Integer>  maxRef)
+
+	private static MutilReturn<Boolean,MutilReturn<Integer,Integer>> findCharacter(String[] array,
+																				   char value,
+																				   int pos,
+																				   Integer minRef,
+																				   Integer maxRef)
 	{
-		int num = minRef.getRefObj();
-		int max=maxRef.getRefObj();
-		int min=minRef.getRefObj();
+		int num = minRef;
+		int max=maxRef;
+		int min=minRef;
 		while (min < max)
 		{
 			num = (min + max) / 2;
@@ -78,10 +80,8 @@ public class FixedStringLookup
 					num3++;
 				}
 				max = num3;
-				maxRef.setRefObj(max);
-				minRef.setRefObj(min);
-				return true;
-			}
+				return MutilReturn.Return(true,MutilReturn.Return(max,min));
+            }
 			if (value < c)
 			{
 				max = num;
@@ -91,9 +91,9 @@ public class FixedStringLookup
 				min = num + 1;
 			}
 		}
-		maxRef.setRefObj(max);
-		minRef.setRefObj(min);
-		return false;
+		return MutilReturn.Return(false,MutilReturn.Return(max,min));
+
 	}
+
 }
 

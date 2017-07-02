@@ -36,7 +36,7 @@ public class MvcJavaRazorCodeParser extends JavaCodeParser
 	{
 		super.AcceptAndMoveNext();
 		SourceLocation currentLocation = super.getCurrentLocation();
-		super.baseTypeDirective(StringHelper.format(CultureInfo.CurrentCulture, MvcResources.MvcRazorCodeParser_ModelKeywordMustBeFollowedByTypeName, new Object[] {"model"}),
+		super.baseTypeDirective(String.format(MvcResources.MvcRazorCodeParser_ModelKeywordMustBeFollowedByTypeName, new Object[] {"model"}),
 				(a)->this.CreateModelCodeGenerator(a));
 		if (this._modelStatementFound)
 		{

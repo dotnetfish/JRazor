@@ -1,7 +1,5 @@
 package com.superstudio.codedom;
 
-
-//ORIGINAL LINE: [ComVisible(true)][Serializable] public enum CodeRegionMode
 public enum CodeRegionMode
 {
 	None,

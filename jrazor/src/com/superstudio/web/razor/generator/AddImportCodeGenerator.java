@@ -6,6 +6,7 @@ import com.superstudio.commons.HashCodeCombiner;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.razor.parser.syntaxTree.Span;
 import com.superstudio.web.razor.text.LocationTagged;
+import org.apache.commons.lang3.StringUtils;
 
 
 public class AddImportCodeGenerator extends SpanCodeGenerator {
@@ -43,7 +44,7 @@ public class AddImportCodeGenerator extends SpanCodeGenerator {
 	public void generateCode(Span target, CodeGeneratorContext context) {
 		// Try to find the namespace in the existing imports
 		String ns = getNamespace();
-		if (!StringHelper.isNullOrEmpty(ns) && Character.isWhitespace(ns.charAt(0))) {
+		if (!StringUtils.isBlank(ns) && Character.isWhitespace(ns.charAt(0))) {
 			ns = ns.substring(1);
 		}
 		final String tempNS = ns;
@@ -61,7 +62,7 @@ public class AddImportCodeGenerator extends SpanCodeGenerator {
 		}
 
 		// Attach our info to the existing/new import.
-		importNamespace.setLinePragma(context.GenerateLinePragma(target));
+		importNamespace.setLinePragma(context.generateLinePragma(target));
 	}
 
 	@Override

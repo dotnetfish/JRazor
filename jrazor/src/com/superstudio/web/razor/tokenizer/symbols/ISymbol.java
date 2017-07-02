@@ -6,6 +6,7 @@ import com.superstudio.web.razor.text.LocationTagged;
 import com.superstudio.web.razor.text.SourceLocation;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ISymbol {
@@ -20,15 +21,11 @@ public interface ISymbol {
 	static LocationTagged<String> getContent(List<? extends ISymbol> symbols, SourceLocation spanStart) {
 		if (symbols != null && symbols.iterator().hasNext()) {
 
-			ISymbol first = CollectionHelper.firstOrDefault(symbols);
-			List<String> symbolContents = CollectionHelper.select(symbols, s -> s.getContent());
-			String contents = StringHelper.concat(symbolContents);
-			
-			SourceLocation firstStart=null;
-		/*	if(first==null){
-				firstStart=first.getStart();
-			}*/
-			firstStart=first.getStart();
+			//ISymbol first = CollectionHelper.firstOrDefault(symbols);
+			ISymbol first=symbols.stream().findFirst().get();
+				String contents=symbols.stream().collect(StringBuilder::new,
+					(StringBuilder builder,ISymbol sym)->builder.append(sym.getContent()),StringBuilder::append).toString();
+			SourceLocation firstStart=first.getStart();
 			return new LocationTagged<String>(contents, SourceLocation.opAddition(spanStart, firstStart));
 		} else {
 			return new LocationTagged<String>("", spanStart);

@@ -1,5 +1,7 @@
 package com.superstudio.commons.csharpbridge;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,44 +10,12 @@ public final class StringHelper
 	public static final String Empty = "";
 
 
-	public static boolean isNullOrEmpty(String string)
-	{
-		return string == null || string.equals("");
-	}
-	
-	public static boolean isNullOrWhiteSpace(String string)
-	{
-		return string == null || string.equals("");
-	}
 
 
-	public static String join(String separator, String[] stringarray)
-	{
-		if (stringarray == null)
-			return null;
-		else
-			return join(separator, stringarray, 0, stringarray.length);
-	}
 
 
-	public static String join(String separator, String[] stringarray, int startindex, int count)
-	{
-		String result = "";
 
-		if (stringarray == null)
-			return null;
 
-		for (int index = startindex; index < stringarray.length && index - startindex < count; index++)
-		{
-			if (separator != null && index > startindex)
-				result += separator;
-
-			if (stringarray[index] != null)
-				result += stringarray[index];
-		}
-
-		return result;
-	}
 
 
 	public static String trimEnd(String string, Character... charsToTrim)
@@ -90,7 +60,8 @@ public final class StringHelper
 			return string;
 
 		int startingIndex = 0;
-		for (int index = 0; index < string.length(); index++)
+		int len=string.length();
+		for (int index = 0; index < len; index++)
 		{
 			boolean removeChar = false;
 			if (charsToTrim.length == 0)
@@ -120,27 +91,9 @@ public final class StringHelper
 	}
 
 
-	public static String trim(String string, Character... charsToTrim)
-	{
-		return trimEnd(trimStart(string, charsToTrim), charsToTrim);
-	}
 
-	public static boolean stringsEqual(String s1, String s2)
-	{
-		return stringsEqual(s1,s2,StringComparison.Ordinal);
-	}
 
-	public static boolean stringsEqual(String s1, String s2,StringComparison com)
-	{
-		if(com==StringComparison.OrdinalIgnoreCase){
-			s1=s1.toLowerCase();
-			s2=s2.toLowerCase();
-		}
-		if (s1 == null && s2 == null)
-			return true;
-		else
-			return s1 != null && s1.equals(s2);
-	}
+
 	
 	public static int indexOfAny(String str,char... chars){
 		int index=0;
@@ -206,6 +159,7 @@ public final class StringHelper
 
 	public static int lastIndexOfAny(String previousContent, char[] newlinechars) {
 		// TODO Auto-generated method stub、
+		//StringUtils.lastIndexOfAny()
 		List<Character> list=new ArrayList<Character>();
 		for(char ch :newlinechars){
 			list.add(ch);
@@ -237,22 +191,16 @@ public final class StringHelper
 		return value.startsWith(prefix);
 	}
 
-	public static int Compare(String name, String string, StringComparison ordinalignorecase) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
-	public static boolean equals(String string, String string2, StringComparison ordinalignorecase) {
-		// TODO Auto-generated method stub
-		return stringsEqual(string,string2,ordinalignorecase);
-	}
+
+
 
 	/*public static String[] split(String current, char[] separator) {
 		// TODO Auto-generated method stub
 		return current.split(separator);
 	}
 */
-	public static String format(String pattern,Object str){
+	/*public static String format(String pattern,Object str){
 		return java.text.MessageFormat.format(pattern, str);
 	}
 	public static String format(String pattern,String str){
@@ -262,32 +210,31 @@ public final class StringHelper
 			Object[] objects) {
 		return java.text.MessageFormat.format(pattern, objects);
 		//return String.format(pattern, objects);
-	}
+	}*/
 
-	public static String format(String currentculture, String pattern,
+	/*public static String format(String currentculture, String pattern,
 			String... others) {
 		
 		return java.text.MessageFormat.format(pattern, others);
-	}
-	public static int indexOf(String virtualPath, String string, StringComparison ordinalignorecase) {
+	}*/
+	/*public static int indexOf(String virtualPath, String string, StringComparison ordinalignorecase) {
 		// TODO Auto-generated method stub
 		if(ordinalignorecase==StringComparison.OrdinalIgnoreCase)
 			return virtualPath.toLowerCase().indexOf(string.toLowerCase());
 		return virtualPath.indexOf(string);
-	}
+	}*/
 
-	public static int HashCode(String virtualPathString, StringComparison ordinalignorecase) {
+	/*public static int HashCode(String virtualPathString, StringComparison ordinalignorecase) {
 		// TODO Auto-generated method stub
 		if(ordinalignorecase==StringComparison.OrdinalIgnoreCase)
 			return virtualPathString.toLowerCase().hashCode();
 		return virtualPathString.hashCode();
 		
-	}
+	}*/
 
-	public static String remove(String path, int i, int j) {
-		// TODO Auto-generated method stub
+	/*public static String remove(String path, int i, int j) {
 		return path.substring(0,i)+path.substring(j,path.length());
-	}
+	}*/
 
 
 }

@@ -7,6 +7,7 @@ import com.superstudio.commons.csharpbridge.StringComparison;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.razor.generator.CodeGeneratorContext;
 import com.superstudio.web.razor.parser.ParserHelpers;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 
@@ -57,7 +58,7 @@ public class WebCodeRazorHost extends WebPageRazorHost {
 	private static String determineNamespace(String virtualPath) {
 		virtualPath = virtualPath.replace(java.io.File.separatorChar, '/');
 		virtualPath = WebCodeRazorHost.getDirectory(virtualPath);
-		int num = StringHelper.indexOf(virtualPath, "App_Code", StringComparison.OrdinalIgnoreCase);
+		int num = StringUtils.indexOfIgnoreCase(virtualPath, "App_Code");
 		if (num != -1) {
 			virtualPath = virtualPath.substring(num + "App_Code".length());
 		}
@@ -67,9 +68,9 @@ public class WebCodeRazorHost extends WebPageRazorHost {
 		// Iterable<String> enumerable =virtualPath.split("/");
 		// if (!enumerable.<String>Any())
 		if (enumerable == null || enumerable.length == 0) {
-			return "ASP";
+			return "jrazor";
 		}
-		return "ASP." + StringHelper.join(".", enumerable);
+		return "jrazor." + StringUtils.join(enumerable,".");
 	}
 
 	private static String getDirectory(String virtualPath) {

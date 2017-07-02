@@ -1,9 +1,8 @@
 package com.superstudio.codedom;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 
-import com.superstudio.commons.csharpbridge.StringHelper;
-
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeGotoStatement : CodeStatement
 public class CodeGotoStatement extends CodeStatement implements Serializable
 {
 	private String label;
@@ -14,7 +13,8 @@ public class CodeGotoStatement extends CodeStatement implements Serializable
 	}
 	public final void setLabel(String value)
 	{
-		if (StringHelper.isNullOrEmpty(value))
+
+		if(StringUtils.isBlank(value))
 		{
 			throw new IllegalArgumentException("value");
 		}

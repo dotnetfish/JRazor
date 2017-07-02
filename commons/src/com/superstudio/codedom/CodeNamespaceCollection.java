@@ -3,7 +3,6 @@ package com.superstudio.codedom;
 import java.io.Serializable;
 
 
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeNamespaceCollection : CollectionBase
 public class CodeNamespaceCollection extends CollectionBase implements Serializable, Iterable {
 	public final CodeNamespace getItem(int index)
 	{

@@ -64,8 +64,6 @@ public class CodeGeneratorOptions
 		this.options.put("BlankLinesBetweenMembers", value);
 	}
 
-
-//ORIGINAL LINE: [ComVisible(false)] public bool VerbatimOrder
 	public final boolean getVerbatimOrder()
 	{
 		Object obj = this.options.get("VerbatimOrder");

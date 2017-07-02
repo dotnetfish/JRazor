@@ -1,13 +1,13 @@
 package com.superstudio.codedom.compiler;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
+import java.util.Locale;
 
 import com.superstudio.codedom.*;
 import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.csharpbridge.StringHelper;
 
-
-//ORIGINAL LINE: [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")][Serializable] public class CompilerError
 public class CompilerError implements Serializable
 {
 	private int line;
@@ -97,10 +97,11 @@ public class CompilerError implements Serializable
 	@Override
 	public String toString()
 	{
+		MessageFormat formattor=new MessageFormat("", Locale.getDefault());
 		if (this.getFileName().length() > 0)
 		{
-			return StringHelper.format(CultureInfo.InvariantCulture, "%1$s(%2$s,%3$s) : %4$s %5$s: %6$s", new Object[] {this.getFileName(), this.getLine(), this.getColumn(), this.getIsWarning() ? "warning" : "error", this.getErrorNumber(), this.getErrorText()});
+			return formattor.format("%1$s(%2$s,%3$s) : %4$s %5$s: %6$s", new Object[] {this.getFileName(), this.getLine(), this.getColumn(), this.getIsWarning() ? "warning" : "error", this.getErrorNumber(), this.getErrorText()});
 		}
-		return StringHelper.format(CultureInfo.InvariantCulture, "%1$s %2$s: %3$s", new Object[] {this.getIsWarning() ? "warning" : "error", this.getErrorNumber(), this.getErrorText()});
+		return formattor.format( "%1$s %2$s: %3$s", new Object[] {this.getIsWarning() ? "warning" : "error", this.getErrorNumber(), this.getErrorText()});
 	}
 }

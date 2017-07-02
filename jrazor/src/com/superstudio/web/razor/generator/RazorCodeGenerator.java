@@ -15,6 +15,7 @@ import com.superstudio.web.razor.parser.ParserVisitor;
 import com.superstudio.web.razor.parser.syntaxTree.Block;
 import com.superstudio.web.razor.parser.syntaxTree.RazorError;
 import com.superstudio.web.razor.parser.syntaxTree.Span;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -26,9 +27,9 @@ public abstract class RazorCodeGenerator extends ParserVisitor
 
 	protected RazorCodeGenerator(String className, String rootNamespaceName, String sourceFileName, RazorEngineHost host) throws Exception
 	{
-		if (StringHelper.isNullOrEmpty(className))
+		if (StringUtils.isBlank(className))
 		{
-			throw new IllegalArgumentException(StringHelper.format(
+			throw new IllegalArgumentException(String.format(
 					RazorResources.getResource(RazorResources.Argument_Cannot_Be_Null_Or_Empty),className));
 		}
 		if (rootNamespaceName == null)
@@ -43,7 +44,7 @@ public abstract class RazorCodeGenerator extends ParserVisitor
 		setClassName(className);
 		setRootNamespaceName(rootNamespaceName);
 		setSourceFileName(sourceFileName);
-		setGenerateLinePragmas(StringHelper.isNullOrEmpty(getSourceFileName()) ? false : true);
+		setGenerateLinePragmas(StringUtils.isBlank(getSourceFileName()) ? false : true);
 		setHost(host);
 	}
 
@@ -136,7 +137,7 @@ public abstract class RazorCodeGenerator extends ParserVisitor
 	@Override
 	public void onComplete()
 	{
-		getContext().FlushBufferedStatement();
+		getContext().flushBufferedStatement();
 	}
 
 	private void ensureContextInitialized()
@@ -169,7 +170,7 @@ public abstract class RazorCodeGenerator extends ParserVisitor
 		List<CodeNamespaceImport> imports=CollectionHelper.select(getHost().getNamespaceImports(),s -> new CodeNamespaceImport(s));
 		context.getNamespace().getImports().AddRange(imports.toArray(new CodeNamespaceImport[imports.size()]));
 
-		if (!StringHelper.isNullOrEmpty(getHost().getDefaultBaseClass()))
+		if (!StringUtils.isBlank(getHost().getDefaultBaseClass()))
 		{
 			context.getGeneratedClass().getBaseTypes().add(new CodeTypeReference(getHost().getDefaultBaseClass()));
 		}

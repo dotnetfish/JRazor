@@ -1,9 +1,9 @@
 package com.superstudio.template.templatepages;
 
 import com.superstudio.commons.*;
-import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.io.Path;
 import com.superstudio.template.mvc.JavaBuildManager;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -125,8 +125,8 @@ public final class BuildManagerWrapper implements IVirtualPathFactory
 	*/
 	public boolean isPathExtensionSupported(String virtualPath)
 	{
-		String extension = Path.GetExtension(virtualPath);
-		return !StringHelper.isNullOrEmpty(extension) && 
+		String extension = Path.getExtension(virtualPath);
+		return !StringUtils.isBlank(extension) &&
 				getSupportedExtensions().stream().anyMatch(p->p.toLowerCase().equals(extension.substring(1).toLowerCase()));
 	}
 

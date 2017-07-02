@@ -13,10 +13,10 @@ import com.superstudio.web.razor.parser.syntaxTree.AutoCompleteEditHandler;
 import com.superstudio.web.razor.parser.syntaxTree.Block;
 import com.superstudio.web.razor.parser.syntaxTree.Span;
 import com.superstudio.web.razor.text.TextChange;
+import org.apache.commons.lang3.StringUtils;
 
 
-
-/** 
+/**
  Parser used by editors to avoid reparsing the entire document on each text change
  
  
@@ -80,10 +80,10 @@ public class RazorEditorParser implements AutoCloseable
 		{
 			//throw new ArgumentNullException("host");
 		}
-		if (StringHelper.isNullOrEmpty(sourceFileName))
+		if (StringUtils.isBlank(sourceFileName))
 		{
 			throw new IllegalArgumentException(
-					StringHelper.format(RazorResources.getResource(RazorResources.Argument_Cannot_Be_Null_Or_Empty),sourceFileName));
+					String.format(RazorResources.getResource(RazorResources.Argument_Cannot_Be_Null_Or_Empty),sourceFileName));
 		}
 
 		setHost(host);

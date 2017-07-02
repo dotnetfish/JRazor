@@ -1,7 +1,5 @@
 package com.superstudio.codedom;
 import java.io.Serializable;
-
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeRemoveEventStatement : CodeStatement
 public class CodeRemoveEventStatement extends CodeStatement implements Serializable
 {
 	private CodeEventReferenceExpression eventRef;

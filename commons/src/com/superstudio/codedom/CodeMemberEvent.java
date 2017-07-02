@@ -2,8 +2,6 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
-
-//ORIGINAL LINE: [ClassInterface(ClassInterfaceType.AutoDispatch), ComVisible(true)][Serializable] public class CodeMemberEvent : CodeTypeMember
 public class CodeMemberEvent extends CodeTypeMember implements Serializable
 {
 	/**

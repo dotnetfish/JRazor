@@ -13,6 +13,7 @@ import com.superstudio.web.razor.parser.ParserVisitor;
 import com.superstudio.web.razor.text.SourceLocation;
 import com.superstudio.web.razor.text.SourceLocationTracker;
 import com.superstudio.web.razor.tokenizer.symbols.ISymbol;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -183,7 +184,8 @@ getSymbols().stream().reduce("",(sym,i)->i.getContent(),String::concat);
 		//String.concat()
 		//"".concat（":"）.concat(String.valueOf(23));
 		if(symString.size()>0){
-			builder.append(StringHelper.join(";", symString.toArray(new String[symString.size()])));
+			builder.append(StringUtils.join(symString.toArray(new String[symString.size()]),";"
+					));
 		}
 		
 		builder.append("}");

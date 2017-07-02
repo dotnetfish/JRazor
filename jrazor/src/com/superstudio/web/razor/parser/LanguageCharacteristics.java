@@ -2,7 +2,6 @@ package com.superstudio.web.razor.parser;
 
 import com.superstudio.commons.IEquatable;
 import com.superstudio.commons.Tuple;
-import com.superstudio.commons.csharpbridge.RefObject;
 import com.superstudio.web.razor.parser.syntaxTree.RazorError;
 import com.superstudio.web.razor.text.ITextDocument;
 import com.superstudio.web.razor.text.SeekableTextReader;
@@ -37,21 +36,17 @@ implements IEquatable<Object>
 	{
 		SeekableTextReader reader = new SeekableTextReader(input);
 		TTokenizer tok = createTokenizer(reader);
-		//TSymbol sym;
-		final RefObject<TSymbol> refObj=new RefObject<TSymbol>(null);
 		return new Iterable<TSymbol>(){
 
 			@Override
 			public Iterator<TSymbol> iterator() {
-				// TODO Auto-generated method stub
-				//private TSymbol current=null;
-				return new Iterator<TSymbol>(){
 
+					return new Iterator<TSymbol>(){
+						private TSymbol current=null;
 					@Override
 					public boolean hasNext() {
-						// TODO Auto-generated method stub
-						TSymbol current = tok.nextSymbol();
-						refObj.setRefObj(current);
+						 current = tok.nextSymbol();
+
 						if(current==null){
 							reader.close();
 						}
@@ -60,8 +55,7 @@ implements IEquatable<Object>
 
 					@Override
 					public TSymbol next() {
-						// TODO Auto-generated method stub
-						TSymbol current=refObj.getRefObj();
+
 						current.offsetStart(start);
 						return current;
 					}
@@ -70,25 +64,7 @@ implements IEquatable<Object>
 			}
 			
 		};
-		
 
-//		using (SeekableTextReader reader = new SeekableTextReader(input))
-		/*
-		try
-		{
-			
-			while ((sym = (TSymbol) tok.nextSymbol()) != null)
-			{
-				sym.offsetStart(start);
-
-				//yield return ]]t ;
-			}
-		}
-		finally
-		{
-			reader.close();
-			//reader.dispose();
-		}*/
 	}
 
 	public boolean isWhiteSpace(TSymbol symbol) {
