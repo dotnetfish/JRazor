@@ -4,6 +4,7 @@ package com.superstudio.web.razor;
 import com.superstudio.commons.Path;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.csharpbridge.action.ActionTwo;
+import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.web.RazorResources;
 import com.superstudio.web.razor.editor.BackgroundParser;
 import com.superstudio.web.razor.editor.EditResult;
@@ -14,6 +15,8 @@ import com.superstudio.web.razor.parser.syntaxTree.Block;
 import com.superstudio.web.razor.parser.syntaxTree.Span;
 import com.superstudio.web.razor.text.TextChange;
 import org.apache.commons.lang3.StringUtils;
+
+import java.io.IOException;
 
 
 /**
@@ -212,7 +215,7 @@ public class RazorEditorParser implements AutoCloseable
 		//elapsedMs = sw.ElapsedMilliseconds;
 		//sw.reset();
 //#endif
-		//RazorEditorTrace.traceLine(RazorResources.getResource(RazorResources.Trace_EditorProcessedChange(), Path.GetFileName(getFileName()), changeString, elapsedMs != null ? elapsedMs.toString(CultureInfo.InvariantCulture) : "?", result.toString());
+		//RazorEditorTrace.traceLine(RazorResources.getResource(RazorResources.Trace_EditorProcessedChange(), Path.GetFileName(getFileName()), changeString, elapsedMs != null ? elapsedMs.toString(Locale.InvariantCulture) : "?", result.toString());
 		return result;
 	}
 
@@ -230,7 +233,7 @@ protected void dispose(boolean disposing)
 		}
 	}
 
-	private PartialParseResult tryPartialParse(TextChange change)
+	private PartialParseResult tryPartialParse(TextChange change)  throws IOException,ArgumentNullException
 	{
 		PartialParseResult result = PartialParseResult.Rejected;
 

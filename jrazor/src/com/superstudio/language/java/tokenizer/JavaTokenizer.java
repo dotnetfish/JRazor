@@ -1,6 +1,5 @@
 package com.superstudio.language.java.tokenizer;
 
-import com.superstudio.commons.csharpbridge.action.Func;
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.language.java.JavaHelpers;
 import com.superstudio.language.java.symbols.JavaKeyword;
@@ -13,19 +12,19 @@ import com.superstudio.web.razor.text.ITextDocument;
 import com.superstudio.web.razor.text.SourceLocation;
 import com.superstudio.web.razor.tokenizer.Tokenizer;
 
-
+import java.util.function.Supplier;
 
 
 public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 {
-	private java.util.HashMap<Character, Func<JavaSymbolType>> _operatorHandlers;
+	private java.util.HashMap<Character, Supplier<JavaSymbolType>> _operatorHandlers;
 
 	public JavaTokenizer(ITextDocument source) throws Exception
 	{
 		super(source);
 		setCurrentState(()->Data());
 
-		_operatorHandlers = new java.util.HashMap<Character, Func<JavaSymbolType>>();
+		_operatorHandlers = new java.util.HashMap<Character, Supplier<JavaSymbolType>>();
 		_operatorHandlers.put('-',()-> minusOperator());
 		_operatorHandlers.put('<', ()-> lessThanOperator());
 		_operatorHandlers.put('>',()-> greaterThanOperator());
@@ -190,10 +189,10 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 	{
 		char first = getCurrentCharacter();
 		TakeCurrent();
-		Func<JavaSymbolType> handler = null;
+		Supplier<JavaSymbolType> handler = null;
 		if ((handler = _operatorHandlers.get(first)) != null)
 		{
-			return handler.execute();
+			return handler.get();
 		}
 		return JavaSymbolType.Unknown;
 	}
@@ -238,7 +237,7 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 		return JavaSymbolType.Minus;
 	}
 
-	private Func<JavaSymbolType> createTwoCharOperatorHandler(JavaSymbolType typeIfOnlyFirst, char second, JavaSymbolType typeIfBoth)
+	private Supplier<JavaSymbolType> createTwoCharOperatorHandler(JavaSymbolType typeIfOnlyFirst, char second, JavaSymbolType typeIfBoth)
 	{
 
 		return () ->
@@ -252,7 +251,7 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 		};
 	}
 
-	private Func<JavaSymbolType> createTwoCharOperatorHandler(JavaSymbolType typeIfOnlyFirst, char option1, JavaSymbolType typeIfOption1, char option2, JavaSymbolType typeIfOption2)
+	private Supplier<JavaSymbolType> createTwoCharOperatorHandler(JavaSymbolType typeIfOnlyFirst, char option1, JavaSymbolType typeIfOption1, char option2, JavaSymbolType typeIfOption2)
 	{
 
 		return () ->

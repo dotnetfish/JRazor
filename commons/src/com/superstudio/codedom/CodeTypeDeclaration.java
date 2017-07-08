@@ -1,9 +1,9 @@
 package com.superstudio.codedom;
 import java.io.Serializable;
 
-import com.superstudio.commons.EmptyEventArgs;
+
 import com.superstudio.commons.EventArgs;
-import com.superstudio.commons.EventHandler;
+import com.superstudio.commons.EventListener;
 import com.superstudio.commons.TypeAttributes;
 public class CodeTypeDeclaration extends CodeTypeMember implements Serializable
 {
@@ -29,8 +29,8 @@ public class CodeTypeDeclaration extends CodeTypeMember implements Serializable
 
 
 
-//ORIGINAL LINE: [method: CompilerGenerated][CompilerGenerated] public event EventHandler PopulateBaseTypes;
-	private  EventHandler<EmptyEventArgs> populateBaseTypes;
+//ORIGINAL LINE: [method: CompilerGenerated][CompilerGenerated] public event EventListener PopulateBaseTypes;
+	private EventListener<EventArgs.EmptyEventArgs> populateBaseTypes;
 
 public final TypeAttributes getTypeAttributes()
 	{
@@ -159,10 +159,10 @@ public final TypeAttributes getTypeAttributes()
 	{
 		super.setName(name);
 	}
-	public EventHandler<EmptyEventArgs> getPopulateBaseTypes() {
+	public EventListener<EventArgs.EmptyEventArgs> getPopulateBaseTypes() {
 		return populateBaseTypes;
 	}
-	public void setPopulateBaseTypes(EventHandler<EmptyEventArgs> populateBaseTypes) {
+	public void setPopulateBaseTypes(EventListener<EventArgs.EmptyEventArgs> populateBaseTypes) {
 		this.populateBaseTypes = populateBaseTypes;
 	}
 }

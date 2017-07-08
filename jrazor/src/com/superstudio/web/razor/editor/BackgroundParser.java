@@ -3,6 +3,7 @@ package com.superstudio.web.razor.editor;
 
 import com.superstudio.commons.*;
 import com.superstudio.commons.csharpbridge.action.ActionTwo;
+import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.web.RazorResources;
 import com.superstudio.web.razor.DocumentParseCompleteEventArgs;
 import com.superstudio.web.razor.GeneratorResults;
@@ -14,6 +15,7 @@ import com.superstudio.web.razor.text.ITextBuffer;
 import com.superstudio.web.razor.text.TextChange;
 import com.superstudio.web.razor.utils.DisposableAction;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
@@ -71,12 +73,12 @@ public class BackgroundParser implements AutoCloseable {
 		}
 	}
 
-	public static boolean treesAreDifferent(Block leftTree, Block rightTree, Iterable<TextChange> changes) {
+	public static boolean treesAreDifferent(Block leftTree, Block rightTree, Iterable<TextChange> changes)  throws IOException,ArgumentNullException{
 		return treesAreDifferent(leftTree, rightTree, changes, CancellationToken.None);
 	}
 
 	public static boolean treesAreDifferent(Block leftTree, Block rightTree, Iterable<TextChange> changes,
-											CancellationToken cancelToken) {
+											CancellationToken cancelToken)  throws IOException,ArgumentNullException {
 		// Apply all the pending changes to the original tree
 		// PERF: If this becomes a bottleneck, we can probably do it the other
 		// way around,
@@ -323,7 +325,7 @@ public class BackgroundParser implements AutoCloseable {
 									_currentParseTree = results.getDocument();
 																	//RazorEditorTrace.traceLine(RazorResources.getResource(RazorResources.Trace_TreesCompared(),
 									//	fileNameOnly, elapsedMs != null
-									//			? elapsedMs.toString(CultureInfo.InvariantCulture) : "?",
+									//			? elapsedMs.toString(Locale.InvariantCulture) : "?",
 									//	treeStructureChanged);
 
 									// build Arguments

@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-import com.superstudio.codedom.*;
-import com.superstudio.commons.CultureInfo;
-import com.superstudio.commons.csharpbridge.StringHelper;
-
 public class CompilerError implements Serializable
 {
 	private int line;

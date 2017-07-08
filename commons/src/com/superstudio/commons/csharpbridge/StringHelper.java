@@ -1,22 +1,11 @@
 package com.superstudio.commons.csharpbridge;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 public final class StringHelper
 {
 	public static final String Empty = "";
-
-
-
-
-
-
-
-
-
 
 	public static String trimEnd(String string, Character... charsToTrim)
 	{
@@ -56,6 +45,7 @@ public final class StringHelper
 
 	public static String trimStart(String string, Character... charsToTrim)
 	{
+
 		if (string == null || charsToTrim == null)
 			return string;
 
@@ -89,152 +79,5 @@ public final class StringHelper
 		}
 		return string.substring(startingIndex);
 	}
-
-
-
-
-
-	
-	public static int indexOfAny(String str,char... chars){
-		int index=0;
-		for(char c:chars){
-			
-			if(str.contains(String.valueOf(c)))
-				return index;
-			index++;
-		}
-		return -1;
-	}
-	
-	/**
-	* 右补位，左对齐 
-	* 
-	* @param oriStr
-	*            原字符串 
-	* @param len
-	*            目标字符串长度 
-	* @param alexin
-	*            补位字符 
-	* @return 目标字符串 
-	*/
-	public static String padRight(String oriStr, int len, String alexin) {
-		String str = "";
-		int strlen = oriStr.length();
-		if (strlen < len) {
-			for (int i = 0; i < len - strlen; i++) {
-				str = str + alexin;
-			}
-		}
-		str = str + oriStr;
-		return str;
-	}
-
-	/**
-	* 左补位，右对齐
-	* 
-	* @param oriStr
-	*            原字符串
-	* @param len
-	*            目标字符串长度
-	* @param alexin
-	*            补位字符
-	* @return 目标字符串
-	*/
-	public static String padLeft(String oriStr, int len, String alexin) {
-		String str = "";
-		int strlen = oriStr.length();
-		if (strlen < len) {
-			for (int i = 0; i < len - strlen; i++) {
-				str = str + alexin;
-			}
-		}
-		str = oriStr + str;
-		return str;
-	}
-
-	public static int endsWithAny(String previousContent, char[] newlinechars) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public static int lastIndexOfAny(String previousContent, char[] newlinechars) {
-		// TODO Auto-generated method stub、
-		//StringUtils.lastIndexOfAny()
-		List<Character> list=new ArrayList<Character>();
-		for(char ch :newlinechars){
-			list.add(ch);
-		}
-		//char[] chars=previousContent.toCharArray();
-		int len=previousContent.length();
-		//new ArrayList<Character>(newlinechars);
-		for(int i=len-1;i>-1;i--){
-			if(list.contains(previousContent.charAt(i))){
-				return i;
-			}
-		}
-		return -1;
-	}
-	
-	public static String concat(List<String> obj){
-		StringBuilder builder=new StringBuilder();
-		for(String item :obj){
-			builder.append(item);
-		}
-		
-		return builder.toString();
-	}
-
-	public static boolean startWith(String value, String prefix, StringComparison ordinalignorecase) {
-		// TODO Auto-generated method stub
-		if(ordinalignorecase==StringComparison.OrdinalIgnoreCase)
-			return value.toLowerCase().startsWith(prefix.toLowerCase());
-		return value.startsWith(prefix);
-	}
-
-
-
-
-
-	/*public static String[] split(String current, char[] separator) {
-		// TODO Auto-generated method stub
-		return current.split(separator);
-	}
-*/
-	/*public static String format(String pattern,Object str){
-		return java.text.MessageFormat.format(pattern, str);
-	}
-	public static String format(String pattern,String str){
-		return java.text.MessageFormat.format(pattern, str);
-	}
-	public static String format(String currentculture, String pattern,
-			Object[] objects) {
-		return java.text.MessageFormat.format(pattern, objects);
-		//return String.format(pattern, objects);
-	}*/
-
-	/*public static String format(String currentculture, String pattern,
-			String... others) {
-		
-		return java.text.MessageFormat.format(pattern, others);
-	}*/
-	/*public static int indexOf(String virtualPath, String string, StringComparison ordinalignorecase) {
-		// TODO Auto-generated method stub
-		if(ordinalignorecase==StringComparison.OrdinalIgnoreCase)
-			return virtualPath.toLowerCase().indexOf(string.toLowerCase());
-		return virtualPath.indexOf(string);
-	}*/
-
-	/*public static int HashCode(String virtualPathString, StringComparison ordinalignorecase) {
-		// TODO Auto-generated method stub
-		if(ordinalignorecase==StringComparison.OrdinalIgnoreCase)
-			return virtualPathString.toLowerCase().hashCode();
-		return virtualPathString.hashCode();
-		
-	}*/
-
-	/*public static String remove(String path, int i, int j) {
-		return path.substring(0,i)+path.substring(j,path.length());
-	}*/
-
 
 }

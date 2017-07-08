@@ -2,9 +2,6 @@ package com.superstudio.language.java.parser;
 
 import com.superstudio.commons.CollectionHelper;
 import com.superstudio.commons.Tuple;
-import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.commons.csharpbridge.action.Action;
-import com.superstudio.commons.csharpbridge.action.Func2;
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.commons.exception.InvalidOperationException;
 import com.superstudio.language.java.symbols.JavaKeyword;
@@ -21,13 +18,12 @@ import com.superstudio.web.razor.parser.syntaxTree.*;
 import com.superstudio.web.razor.text.LocationTagged;
 import com.superstudio.web.razor.text.SourceLocation;
 import com.superstudio.web.razor.tokenizer.symbols.ISymbol;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 
 public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSymbol, JavaSymbolType> {
@@ -75,7 +71,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
     }
 
     protected final void sessionStateTypeDirective(String noValueError,
-                                                   Func2<String, String, SpanCodeGenerator> createCodeGenerator) {
+                                                   BiFunction<String, String, SpanCodeGenerator> createCodeGenerator) {
         // Set the block type
         getContext().getCurrentBlock().setType(BlockType.Directive);
 
@@ -104,13 +100,9 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
                 StringBuilder::new,(StringBuilder builder,ISymbol sym)->builder.append(sym.getContent()),StringBuilder::append
         )).toString();
 
-        /*String sessionStateValue = StringHelper
-                .concat(
-                        CollectionHelper.select(getSpan().getSymbols(),
-                                sym -> sym.getContent())).trim();
-*/
+
         // Set up code generation
-        getSpan().setCodeGenerator(createCodeGenerator.execute(SyntaxConstants.Java.SessionStateKeyword, sessionStateValue));
+        getSpan().setCodeGenerator(createCodeGenerator.apply(SyntaxConstants.Java.SessionStateKeyword, sessionStateValue));
 
         // Output the span and finish the block
         completeBlock();
@@ -991,7 +983,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
         }
     }
 
-    private void handleKeyword(boolean topLevel, Action fallback) {
+    private void handleKeyword(boolean topLevel, Runnable fallback) {
         assert getCurrentSymbol().getType() == JavaSymbolType.Keyword && getCurrentSymbol().getKeyword() != null;
         Consumer<Boolean> handler = null;
         JavaKeyword keyword = getCurrentSymbol().getKeyword();
@@ -1002,7 +994,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
             handler.accept(topLevel);
         } else {
 
-            fallback.execute();
+            fallback.run();
         }
 
     }
@@ -1070,7 +1062,7 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
             .asList(new String[]{"if", "do", "try", "for", "foreach", "while", "switch", "lock", "import", "section",
                     "inherits", "helper", "functions", "package", "class", "layout", "sessionstate"}));
 
-    private java.util.HashMap<String, Action> _directiveParsers = new java.util.HashMap<String, Action>();
+    private java.util.HashMap<String, Runnable> _directiveParsers = new java.util.HashMap<String, Runnable>();
     private java.util.HashMap<JavaKeyword, Consumer<Boolean>> _keywordParsers = new java.util.HashMap<JavaKeyword, Consumer<Boolean>>();
 
     public JavaCodeParser() {
@@ -1109,14 +1101,17 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
         return JavaLanguageCharacteristics.getInstance();
     }
 
-    protected final void mapDirectives(Action handler, String... directives) {
+    protected final void mapDirectives(Runnable handler, String... directives) {
+       // java.util.function.Operator
+      //Runnable  act=() -> System.out.print("dd");
+      //act.execute();
         for (String directive : directives) {
             _directiveParsers.put(directive, handler);
             getKeywords().add(directive);
         }
     }
 
-    protected final Action getDirectiveHandler(String directive) {
+    protected final Runnable getDirectiveHandler(String directive) {
         //handler.setRefObj(_directiveParsers.get(directive));
         return _directiveParsers.get(directive);
     }
@@ -1239,10 +1234,12 @@ public class JavaCodeParser extends TokenizerBackedParser<JavaTokenizer, JavaSym
                         explicitExpression();
                         return;
                     } else if (getCurrentSymbol().getType() == JavaSymbolType.Identifier) {
-                        Action handler = getDirectiveHandler(getCurrentSymbol().getContent());
+
+                        Runnable handler = getDirectiveHandler(getCurrentSymbol().getContent());
+                        //Consumer handler =getDirectiveHandler()
                         if (handler != null) {
                             getSpan().setCodeGenerator(SpanCodeGenerator.Null);
-                            handler.execute();
+                            handler.run();
                             return;
                         } else {
                             getContext().getCurrentBlock().setType(BlockType.Expression);

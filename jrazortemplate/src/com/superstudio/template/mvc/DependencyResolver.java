@@ -1,8 +1,8 @@
 package com.superstudio.template.mvc;
 
-import com.superstudio.commons.CultureInfo;
+
 import com.superstudio.commons.MvcResources;
-import com.superstudio.commons.csharpbridge.StringHelper;
+
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;

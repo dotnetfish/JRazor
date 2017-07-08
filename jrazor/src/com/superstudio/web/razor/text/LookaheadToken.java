@@ -1,15 +1,12 @@
 package com.superstudio.web.razor.text;
 
 
-import com.superstudio.commons.csharpbridge.action.Action;
-
-
 public class LookaheadToken implements AutoCloseable
 {
-	private Action _cancelAction;
+	private Runnable _cancelAction;
 	private boolean _accepted;
 
-	public LookaheadToken(Action cancelAction)
+	public LookaheadToken(Runnable cancelAction)
 	{
 		_cancelAction = cancelAction;
 	}
@@ -27,7 +24,7 @@ public  void  close(){
 	{
 		if (!_accepted)
 		{
-			_cancelAction.execute();
+			_cancelAction.run();
 		}
 	}
 

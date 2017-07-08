@@ -1,7 +1,6 @@
 package com.superstudio.codedom.compiler;
 
 import com.superstudio.codedom.*;
-import com.superstudio.commons.Component;
 import com.superstudio.commons.SR;
 import com.superstudio.commons.TypeConverter;
 import com.superstudio.commons.TypeDescriptor;
@@ -12,7 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class CodeDomProvider extends Component {
+public abstract class CodeDomProvider  {
 
 	public String getFileExtension() {
 		return "";
@@ -36,7 +35,7 @@ public abstract class CodeDomProvider extends Component {
 	}
 
 
-	public static CompilerInfo getCompilerInfo(String language) throws ConfigurationErrorsException {
+	public static CompilerInfo getCompilerInfo(String language)  {
 		CompilerParameters compilerParameters = new CompilerParameters();
 		String	 codeDomProviderTypeName="com.superstudio.language.java.JavaCodeProvider";
 		CompilerInfo javaCompilerInfo = new CompilerInfo(compilerParameters, codeDomProviderTypeName);

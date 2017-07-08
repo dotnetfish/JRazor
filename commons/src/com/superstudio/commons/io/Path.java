@@ -223,6 +223,7 @@ public final class Path
 	}
 public static String normalizePath(String path, boolean fullCheck)
 	{
+
 		return normalizePath(path, fullCheck, Path.MaxPath);
 	}
 	public static String normalizePath(String path, boolean fullCheck, boolean expandShortPaths)

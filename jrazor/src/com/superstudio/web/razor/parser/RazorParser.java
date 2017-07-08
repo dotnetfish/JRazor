@@ -1,13 +1,8 @@
 package com.superstudio.web.razor.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-
 import com.superstudio.commons.CancellationToken;
 import com.superstudio.commons.SynchronizationContext;
 import com.superstudio.commons.TextReader;
-import com.superstudio.commons.csharpbridge.action.Action;
 import com.superstudio.commons.exception.InvalidOperationException;
 import com.superstudio.web.razor.ParserResults;
 import com.superstudio.web.razor.parser.syntaxTree.Block;
@@ -16,6 +11,10 @@ import com.superstudio.web.razor.parser.syntaxTree.Span;
 import com.superstudio.web.razor.text.ITextDocument;
 import com.superstudio.web.razor.text.LookaheadTextReader;
 import com.superstudio.web.razor.text.SeekableTextReader;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 
 public class RazorParser {
@@ -117,25 +116,25 @@ public class RazorParser {
 		return ParseCore(new SeekableTextReader(input));
 	}
 	
-	public Action CreateParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback) {
+	public Runnable CreateParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback) {
 		return CreateParseTask(input, new CallbackVisitor(spanCallback, errorCallback));
 	}
 
-	public Action CreateParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
+	public Runnable CreateParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
 			SynchronizationContext context) {
 		CallbackVisitor tempVar = new CallbackVisitor(spanCallback, errorCallback);
 		tempVar.setSynchronizationContext(context);
 		return CreateParseTask(input, tempVar);
 	}
 
-	public Action CreateParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
+	public Runnable CreateParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
 			CancellationToken cancelToken) {
 		CallbackVisitor tempVar = new CallbackVisitor(spanCallback, errorCallback);
 		tempVar.setCancelToken(cancelToken);
 		return CreateParseTask(input, tempVar);
 	}
 
-	public Action CreateParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
+	public Runnable CreateParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
 			SynchronizationContext context, CancellationToken cancelToken) {
 		CallbackVisitor tempVar = new CallbackVisitor(spanCallback, errorCallback);
 		tempVar.setSynchronizationContext(context);
@@ -144,19 +143,18 @@ public class RazorParser {
 	}
 
 
-		public Action CreateParseTask(TextReader input, ParserVisitor consumer) {
+		public Runnable CreateParseTask(TextReader input, ParserVisitor consumer) {
 
 		// methods are not converted
-		return new Action() {
-			@Override
-			public void execute() {
+			return () ->{
 				try {
 					Parse(input, consumer);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-			}
-		};
+			};
+
+
 	}
 
 	private ParserResults ParseCore(ITextDocument input) throws Exception  {

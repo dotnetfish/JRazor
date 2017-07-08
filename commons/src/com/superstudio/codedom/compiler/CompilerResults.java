@@ -1,7 +1,5 @@
 package com.superstudio.codedom.compiler;
 
-import com.superstudio.commons.Evidence;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,6 @@ public class CompilerResults implements Serializable {
 
 	private TempFileCollection tempFiles;
 
-	private Evidence evidence;
 
 	public TempFileCollection getTempFiles() {
 		return this.tempFiles;
@@ -35,23 +32,6 @@ public class CompilerResults implements Serializable {
 		this.tempFiles = value;
 	}
 
-	@Deprecated
-	private Evidence getEvidence() {
-		Evidence result = null;
-		if (this.evidence != null) {
-			result = this.evidence.clone();
-		}
-		return result;
-	}
-
-	@Deprecated
-	public void setEvidence(Evidence value) {
-		if (value != null) {
-			this.evidence = value.clone();
-			return;
-		}
-		this.evidence = null;
-	}
 
 	 /*public Assembly getCompiledAssembly() {
 		if (this.compiledAssembly == null && this.pathToAssembly != null) {

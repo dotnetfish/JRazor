@@ -1,7 +1,6 @@
 package com.superstudio.web.razor.generator;
 
-import com.sun.deploy.util.StringUtils;
-import com.superstudio.commons.csharpbridge.action.ActionOne;
+import java.util.function.Consumer;
 
 public abstract class BaseCodeWriter extends CodeWriter
 {
@@ -72,7 +71,7 @@ public abstract class BaseCodeWriter extends CodeWriter
 		getInnerWriter().write(", ");
 	}
 
-	protected final <T> void writeCommaSeparatedList(T[] items, ActionOne<T> writeItemAction)
+	protected final <T> void writeCommaSeparatedList(T[] items, Consumer<T> writeItemAction)
 	{
 		for (int i = 0; i < items.length; i++)
 		{
@@ -80,7 +79,7 @@ public abstract class BaseCodeWriter extends CodeWriter
 			{
 				getInnerWriter().write(", ");
 			}
-			writeItemAction.execute(items[i]);
+			writeItemAction.accept(items[i]);
 		}
 	}
 

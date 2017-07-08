@@ -4,12 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Paths;
-import java.util.Date;
-
-
-import com.superstudio.commons.io.CacheDependency;
 
 //
 // 摘要:
@@ -107,8 +102,8 @@ import com.superstudio.commons.io.CacheDependency;
 	File file=new File(url);
 		Boolean result=file.exists();
 		//String relative
-		Trace.WriteLine(url);
-		Trace.WriteLine("----------------------------");
+		//Trace.WriteLine(url);
+		//Trace.WriteLine("----------------------------");
 		//Trace.writeLine(" virtualpath="+getClass().getResource("/").getPath().+ "  result="+result);
 		//Trace.writeLine(" virtualpath="+result+"  result"+Paths.get("./jua/WEB-INF/views/home/index.jhtml").toFile().exists());
 		//Trace.writeLine(" virtualpath=/jua/WEB-INF/views/home/index.jhtml  result"+Paths.get("/jua/WEB-INF/views/home/index.jhtml").toFile().exists());
@@ -134,9 +129,9 @@ import com.superstudio.commons.io.CacheDependency;
 	// 返回结果:
 	// A System.Web.Caching.CacheDependency object for the specified virtual
 	// resources.
-	public CacheDependency GetCacheDependency(String virtualPath, Iterable virtualPathDependencies, Date utcStart) {
+	/*public CacheDependency GetCacheDependency(String virtualPath, Iterable virtualPathDependencies, Date utcStart) {
 		return new CacheDependency();
-	}
+	}*/
 
 	//
 	// 摘要:
@@ -152,7 +147,7 @@ import com.superstudio.commons.io.CacheDependency;
 		return virtualPath.hashCode() + virtualPath.replace('/', '_');
 	}
 
-	//
+	/*//
 	// 摘要:
 	// Gets a virtual directory from the virtual file system.
 	//
@@ -169,7 +164,7 @@ import com.superstudio.commons.io.CacheDependency;
 		if (file.exists() && file.isDirectory())
 			return new VirtualDirectory(virtualDir);
 		return null;
-	}
+	}*/
 
 	//
 	// 摘要:

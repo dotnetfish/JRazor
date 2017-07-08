@@ -1,17 +1,16 @@
 package com.superstudio.template.templatepages;
 
+import com.superstudio.commons.exception.ArgumentNullException;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-
-import com.superstudio.commons.csharpbridge.action.ActionOne;
-import com.superstudio.commons.exception.ArgumentNullException;
-import com.superstudio.commons.exception.HttpException;
+import java.util.function.Consumer;
 
 public class HelperResult {
-	private final ActionOne<Writer> _action;
+	private final Consumer<Writer> _action;
 
-    public HelperResult(ActionOne<Writer> action) throws ArgumentNullException
+    public HelperResult(Consumer<Writer> action) throws ArgumentNullException
     {
         if (action == null)
         {
@@ -29,7 +28,7 @@ public class HelperResult {
     {
         try (StringWriter writer = new StringWriter())
         {
-            _action.execute(writer);
+            _action.accept(writer);
             return writer.getBuffer().toString();
         }catch(IOException e){
         	e.printStackTrace();
@@ -45,6 +44,6 @@ public class HelperResult {
 
 	public void writeTo(Writer writer) {
 
-		_action.execute(writer);
+		_action.accept(writer);
 	}
 }

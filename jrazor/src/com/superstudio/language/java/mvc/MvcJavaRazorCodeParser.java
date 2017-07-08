@@ -1,8 +1,7 @@
 package com.superstudio.language.java.mvc;
 
-import com.superstudio.commons.CultureInfo;
+
 import com.superstudio.commons.MvcResources;
-import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.language.java.parser.JavaCodeParser;
 import com.superstudio.web.razor.generator.SpanCodeGenerator;
 import com.superstudio.web.razor.text.SourceLocation;
@@ -33,8 +32,7 @@ public class MvcJavaRazorCodeParser extends JavaCodeParser
 	{
 		if (this._modelStatementFound && this._endInheritsLocation != null)
 		{
-			this.getContext().OnError(this._endInheritsLocation, String.format(CultureInfo.CurrentCulture,
-					MvcResources.MvcRazorCodeParser_CannotHaveModelAndInheritsKeyword, new Object[] {"model"}));
+			this.getContext().OnError(this._endInheritsLocation, String.format(MvcResources.MvcRazorCodeParser_CannotHaveModelAndInheritsKeyword, new Object[] {"model"}));
 		}
 	}
 

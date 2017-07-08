@@ -24,15 +24,15 @@ public class SimpleBitVector32 {
 		}
 	}
 
-	void Set(int bit) {
+	void set(int bit) {
 		data |= bit;
 	}
 
-	void Clear(int bit) {
+	void clear(int bit) {
 		data &= ~bit;
 	}
 
-	void Toggle(int bit) {
+	void toggle(int bit) {
 		data ^= bit;
 	}
 
@@ -47,7 +47,7 @@ public class SimpleBitVector32 {
 	 * fieldDst fieldSrc inner xor outer xor 0 0 0 0 0 1 1 1 1 0 1 0 1 1 0 1
 	 */
 
-	void Copy(SimpleBitVector32 src, int bit) {
+	void copy(SimpleBitVector32 src, int bit) {
 		data ^= (data ^ src.data) & bit;
 	}
 

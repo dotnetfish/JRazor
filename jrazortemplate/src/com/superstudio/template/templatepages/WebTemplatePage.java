@@ -1,6 +1,6 @@
 package com.superstudio.template.templatepages;
 
-import com.superstudio.commons.CultureInfo;
+
 import com.superstudio.commons.MvcResources;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.ArgumentNullException;
@@ -111,7 +111,7 @@ protected void configurePage(WebPageBase parentPage)
 		if (baseTemplatePage == null)
 		{
 				throw new IllegalStateException(
-						String.format(CultureInfo.CurrentCulture,
+						String.format(
 								MvcResources.JhtmlTemplate_WrongTemplateBase, parentPage.getVirtualPath()));
 		}
 

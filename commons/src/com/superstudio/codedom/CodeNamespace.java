@@ -2,10 +2,9 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
-import com.superstudio.commons.EmptyEventArgs;
+
 import com.superstudio.commons.EventArgs;
-import com.superstudio.commons.EventHandler;
-import com.superstudio.commons.SerializationInfo;
+import com.superstudio.commons.EventListener;
 
 public class CodeNamespace extends CodeObject implements Serializable
 {
@@ -27,11 +26,11 @@ public class CodeNamespace extends CodeObject implements Serializable
 
 	private static final int TypesCollection = 4;
 
-		private EventHandler<EmptyEventArgs> populateComments;
+		private EventListener<EventArgs.EmptyEventArgs> populateComments;
 
-	private EventHandler<EmptyEventArgs> populateImports;
+	private EventListener<EventArgs.EmptyEventArgs> populateImports;
 
-private EventHandler<EmptyEventArgs> populateTypes;
+private EventListener<EventArgs.EmptyEventArgs> populateTypes;
 
 	public final CodeTypeDeclarationCollection getTypes()
 	{
@@ -94,31 +93,31 @@ private EventHandler<EmptyEventArgs> populateTypes;
 		this.setName(name);
 	}
 
-	private CodeNamespace(SerializationInfo info, StreamingContext context)
+	/*private CodeNamespace(SerializationInfo info, StreamingContext context)
 	{
 	}
-
-	public EventHandler<EmptyEventArgs> getPopulateComments() {
+*/
+	public EventListener<EventArgs.EmptyEventArgs> getPopulateComments() {
 		return populateComments;
 	}
 
-	public void setPopulateComments(EventHandler<EmptyEventArgs> populateComments) {
+	public void setPopulateComments(EventListener<EventArgs.EmptyEventArgs> populateComments) {
 		this.populateComments = populateComments;
 	}
 
-	public EventHandler<EmptyEventArgs> getPopulateImports() {
+	public EventListener<EventArgs.EmptyEventArgs> getPopulateImports() {
 		return populateImports;
 	}
 
-	public void setPopulateImports(EventHandler<EmptyEventArgs> populateImports) {
+	public void setPopulateImports(EventListener<EventArgs.EmptyEventArgs> populateImports) {
 		this.populateImports = populateImports;
 	}
 
-	public EventHandler<EmptyEventArgs> getPopulateTypes() {
+	public EventListener<EventArgs.EmptyEventArgs> getPopulateTypes() {
 		return populateTypes;
 	}
 
-	public void setPopulateTypes(EventHandler<EmptyEventArgs> populateTypes) {
+	public void setPopulateTypes(EventListener<EventArgs.EmptyEventArgs> populateTypes) {
 		this.populateTypes = populateTypes;
 	}
 }

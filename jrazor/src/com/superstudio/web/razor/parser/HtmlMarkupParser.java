@@ -2,8 +2,6 @@ package com.superstudio.web.razor.parser;
 
 
 import com.superstudio.commons.Tuple;
-import com.superstudio.commons.csharpbridge.StringComparison;
-import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.commons.exception.InvalidOperationException;
 import com.superstudio.web.RazorResources;
@@ -982,9 +980,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		privateCaseSensitive = value;
 	}
 
-	private StringComparison getComparison() {
-		return getCaseSensitive() ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
-	}
+
 
 	@Override
 	public void parseSection(Tuple<String, String> nestingSequences, boolean caseSensitive) {

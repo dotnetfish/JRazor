@@ -3,7 +3,7 @@ package com.superstudio.web.razor;
 import com.superstudio.codedom.CodeCompileUnit;
 import com.superstudio.commons.CollectionHelper;
 import com.superstudio.commons.CompilerType;
-import com.superstudio.commons.EventHandler;
+import com.superstudio.commons.EventListener;
 import com.superstudio.commons.TextReader;
 import com.superstudio.commons.compilation.BuildProvider;
 import com.superstudio.commons.exception.HttpException;
@@ -21,16 +21,16 @@ public class RazorBuildProvider extends BuildProvider
 	private WebPageRazorHost _host;
 	private List<String> _virtualPathDependencies;
 //	private IAssemblyBuilder _assemblyBuilder;
-	public static  EventHandler<CodeGenerationCompleteEventArgs> CodeGenerationCompleted;
+	public static EventListener<CodeGenerationCompleteEventArgs> CodeGenerationCompleted;
 
 
-	public static  EventHandler<?> CodeGenerationStarted;
+	public static EventListener<?> CodeGenerationStarted;
 
 
-	public static  EventHandler<CompilingPathEventArgs> CompilingPath;
+	public static EventListener<CompilingPathEventArgs> CompilingPath;
 
-	private  EventHandler<CodeGenerationCompleteEventArgs> codeGenerationCompletedInternal;
-	private  EventHandler<CodeGenerationCompleteEventArgs> codeGenerationStartedInternal;
+	private EventListener<CodeGenerationCompleteEventArgs> codeGenerationCompletedInternal;
+	private EventListener<CodeGenerationCompleteEventArgs> codeGenerationStartedInternal;
 	
 	
 	public final WebPageRazorHost getHost() throws HttpException
@@ -111,7 +111,7 @@ public class RazorBuildProvider extends BuildProvider
 	/*@Override
 	public java.lang.Class getGeneratedType(CompilerResults results) throws HttpException
 	{
-		return results.getCompiledAssembly().GetType((StringHelper.format(CultureInfo.CurrentCulture, "%1$s.%2$s", new Object[] {this.getHost().getDefaultNamespace(), this.getHost().getDefaultClassName()})));
+		return results.getCompiledAssembly().GetType((StringHelper.format(Locale.CurrentCulture, "%1$s.%2$s", new Object[] {this.getHost().getDefaultNamespace(), this.getHost().getDefaultClassName()})));
 	}*/
 	/*@Override
 	public void generateCode(AssemblyBuilder assemblyBuilder)
@@ -127,7 +127,7 @@ public class RazorBuildProvider extends BuildProvider
 	{
 		this.OnCodeGenerationStarted(assemblyBuilder);
 		assemblyBuilder.addCodeCompileUnit(this, this.getGeneratedCode());
-		assemblyBuilder.generateTypeFactory(String.format(CultureInfo.InvariantCulture, "%1$s.%2$s", new Object[] {this.getHost().getDefaultNamespace(), this.getHost().getDefaultClassName()}));
+		assemblyBuilder.generateTypeFactory(String.format(Locale.InvariantCulture, "%1$s.%2$s", new Object[] {this.getHost().getDefaultNamespace(), this.getHost().getDefaultClassName()}));
 	}*/
 	protected TextReader InternalOpenReader()
 	{
@@ -146,7 +146,7 @@ public class RazorBuildProvider extends BuildProvider
 	}
 	protected void OnBeforeCompilePath(CompilingPathEventArgs args)
 	{
-		EventHandler<CompilingPathEventArgs> compilingPath = RazorBuildProvider.CompilingPath;
+		EventListener<CompilingPathEventArgs> compilingPath = RazorBuildProvider.CompilingPath;
 		if (compilingPath != null)
 		{
 			compilingPath.execute(this, args);
@@ -155,16 +155,16 @@ public class RazorBuildProvider extends BuildProvider
 	/*private void OnCodeGenerationStarted(IAssemblyBuilder assemblyBuilder)
 	{
 		//this._assemblyBuilder = assemblyBuilder;
-		EventHandler<?> eventHandler = (this.codeGenerationStartedInternal != null) ?
+		EventListener<?> eventHandler = (this.codeGenerationStartedInternal != null) ?
 				this.codeGenerationStartedInternal : RazorBuildProvider.CodeGenerationStarted;
 		if (eventHandler != null)
 		{
-			eventHandler.execute(this, null);
+			eventHandler.get(this, null);
 		}
 	}*/
 	private void OnCodeGenerationCompleted(CodeCompileUnit generatedCode) throws HttpException
 	{
-		EventHandler<CodeGenerationCompleteEventArgs> eventHandler = 
+		EventListener<CodeGenerationCompleteEventArgs> eventHandler =
 				(this.codeGenerationCompletedInternal != null) ? 
 						this.codeGenerationCompletedInternal 
 						: RazorBuildProvider.CodeGenerationCompleted;

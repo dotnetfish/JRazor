@@ -1,34 +1,24 @@
 package com.superstudio.language.java;
 
-import com.superstudio.commons.csharpbridge.StringComparison;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.superstudio.codedom.*;
 import com.superstudio.codedom.compiler.*;
 import com.superstudio.commons.FixedStringLookup;
 import com.superstudio.commons.SR;
-import com.superstudio.commons.StreamReader;
 import com.superstudio.commons.TypeAttributes;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.ArgumentException;
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.commons.exception.InvalidOperationException;
-import com.superstudio.commons.io.File;
-import com.superstudio.commons.io.FileAccess;
-import com.superstudio.commons.io.FileMode;
-import com.superstudio.commons.io.FileShare;
-import com.superstudio.commons.io.FileStream;
 import com.superstudio.commons.io.TextWriter;
 import org.apache.commons.lang3.StringUtils;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 
@@ -715,13 +705,13 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		/*
 		 * if (e.getValue() instanceof ) {
-		 * this.output.write(((ushort)e.getValue()).ToString(CultureInfo.
+		 * this.output.write(((ushort)e.getValue()).ToString(Locale.
 		 * InvariantCulture)); return; } if (e.getValue() instanceof uint) {
-		 * this.output.write(((uint)e.getValue()).ToString(CultureInfo.
+		 * this.output.write(((uint)e.getValue()).ToString(Locale.
 		 * InvariantCulture)); this.output.write("u"); return; }
 		 */
 		if (e.getValue() instanceof Long) {
-			// this.output.write(((Long)e.getValue()).toString(CultureInfo.InvariantCulture));
+			// this.output.write(((Long)e.getValue()).toString(Locale.InvariantCulture));
 			this.output.write(String.valueOf(e.getValue()));
 			this.output.write("L");
 			return;
@@ -749,17 +739,17 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		if (e.getValue() instanceof Short) {
 			this.output.write(String.valueOf(e.getValue()));
-			// this.output.write(((Short)e.getValue()).toString(CultureInfo.InvariantCulture));
+			// this.output.write(((Short)e.getValue()).toString(Locale.InvariantCulture));
 			return;
 		}
 		if (e.getValue() instanceof Integer) {
 			this.output.write(String.valueOf(e.getValue()));
-			// this.output.write(((int)e.getValue()).ToString(CultureInfo.InvariantCulture));
+			// this.output.write(((int)e.getValue()).ToString(Locale.InvariantCulture));
 			return;
 		}
 		if (e.getValue() instanceof Long) {
 			this.output.write(String.valueOf(e.getValue()));
-			// this.output.write(((long)e.getValue()).ToString(CultureInfo.InvariantCulture));
+			// this.output.write(((long)e.getValue()).ToString(Locale.InvariantCulture));
 			return;
 		}
 		/*
@@ -860,12 +850,12 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			// TextWriter arg_2C_0 = this.output;
 			num = (int) value;
 			this.output.write(String.valueOf(num));
-			// arg_2C_0.write(num.toString("X4", CultureInfo.InvariantCulture));
+			// arg_2C_0.write(num.toString("X4", Locale.InvariantCulture));
 			return;
 		}
 		b.append("\\u");
 		num = (int) value;
-		// b.append(num.ToString("X4", CultureInfo.InvariantCulture));
+		// b.append(num.ToString("X4", Locale.InvariantCulture));
 		b.append(String.valueOf(num));
 	}
 
@@ -1535,7 +1525,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			this.output.write("double.PositiveInfinity");
 			return;
 		}
-		// this.output.write(d.ToString("R", CultureInfo.InvariantCulture));
+		// this.output.write(d.ToString("R", Locale.InvariantCulture));
 		this.output.write(String.valueOf(d));
 		this.output.write("D");
 	}
@@ -2547,7 +2537,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		if (text.length() == 0 || text == "void") {
 			return "void";
 		}
-		String text2 = text.toLowerCase();// (CultureInfo.InvariantCulture).Trim();
+		String text2 = text.toLowerCase();// (Locale.InvariantCulture).Trim();
 		// unit num =
 		// <PrivateImplementationDetails>.$$method0x6000001-ComputeStringHash(text2);
 		long num = text2.hashCode();
@@ -2767,7 +2757,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		String text = "pdb";
 		// if (options.getCompilerOptions() != null && -1 !=
-		// CultureInfo.InvariantCulture.CompareInfo.IndexOf(options.CompilerOptions,
+		// Locale.InvariantCulture.CompareInfo.IndexOf(options.CompilerOptions,
 		// "/debug:pdbonly", CompareOptions.IgnoreCase))
 		if (options.getCompilerOptions() != null && true) {
 			compilerResults.getTempFiles().addExtension(text, true);
@@ -2825,7 +2815,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		return compilerResults;
 	}
 */
-	private static String[] readAllLines(String file, String encoding, FileShare share)
+	/*private static String[] readAllLines(String file, String encoding, FileShare share)
 			throws Exception {
 		String[] result = null;
 		try (FileStream fileStream = File.Open(file, FileMode.Open, FileAccess.Read, share)) {
@@ -2839,7 +2829,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			result = list.toArray(result);
 		}
 		return result;
-	}
+	}*/
 
 	/*public CompilerResults compileAssemblyFromDom(CompilerParameters options, CodeCompileUnit e)
 			throws ArgumentNullException {
@@ -3144,6 +3134,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			}
 		} finally {
 			if (flag) {
+
 				this.output = null;
 				this.options = null;
 			}
@@ -3164,6 +3155,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			this.generatePackage(e);
 		} finally {
 			if (flag) {
+
 				this.output = null;
 				this.options = null;
 			}

@@ -1,6 +1,5 @@
 package com.superstudio.template.templatepages;
 
-import com.superstudio.commons.csharpbridge.action.ActionOne;
 import com.superstudio.template.mvc.context.HostContext;
 import com.superstudio.template.mvc.context.HttpContextWrapper;
 
@@ -9,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Stack;
+import java.util.function.Consumer;
 
 
 // Class for containing various pieces of data required by a WebPage
@@ -98,12 +98,12 @@ public class WebPageContext
 		_validation = value;
 	}
 */
-	private ActionOne<Writer> bodyAction;
-	public final ActionOne<Writer> getBodyAction()
+	private Consumer<Writer> bodyAction;
+	public final Consumer<Writer> getBodyAction()
 	{
 		return bodyAction;
 	}
-	public final void setBodyAction(ActionOne<Writer> value)
+	public final void setBodyAction(Consumer<Writer> value)
 	{
 		bodyAction = value;
 	}

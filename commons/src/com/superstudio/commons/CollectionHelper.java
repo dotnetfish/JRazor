@@ -5,11 +5,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import com.superstudio.commons.csharpbridge.action.Func2;
 
 public class CollectionHelper {
 	public static <T> T firstOrDefault(Iterable<T> source) {
@@ -129,7 +127,7 @@ public class CollectionHelper {
 	}
 */
 	public static <TSource, TAccumulate, TResult> TResult aggregate(List<TSource> source, TAccumulate seed,
-			Func2<TAccumulate, TSource, TAccumulate> func, Function<TAccumulate, TResult> resultSelector) {
+																	BiFunction<TAccumulate, TSource, TAccumulate> func, Function<TAccumulate, TResult> resultSelector) {
 
 
 
@@ -137,7 +135,7 @@ public class CollectionHelper {
 		// stringBuilder, Object object, Object object2) {
 
 		for(TSource item:source){
-			func.execute(seed, item);
+			func.apply(seed, item);
 		}
 		return resultSelector.apply(seed);
 
@@ -146,7 +144,7 @@ public class CollectionHelper {
 
 	public static <TSource, TKey, TResult> List<GroupCollection<TKey, TResult>> groupBy(Iterable<TSource> source,
 			Function<TSource, TKey> keySelector, 
-			Func2<TKey, TSource, TResult> resultSelector) {
+			BiFunction<TKey, TSource, TResult> resultSelector) {
 		
 		List<GroupCollection<TKey, TResult>> list = new ArrayList<GroupCollection<TKey, TResult>>();
 		// List<TKey>
@@ -157,14 +155,14 @@ public class CollectionHelper {
 				group = new GroupCollection<TKey, TResult>();
 				List<TResult> result = new ArrayList<TResult>();
 
-				result.add(resultSelector.execute(key, item));
+				result.add(resultSelector.apply(key, item));
 				group.setItems(result);
 				group.setKey(key);
 				list.add(group);
 			} else {
 				List<TResult> result2 = group.getItems();
 
-				result2.add(resultSelector.execute(key, item));
+				result2.add(resultSelector.apply(key, item));
 				group.setItems(result2);
 			}
 
@@ -176,12 +174,14 @@ public class CollectionHelper {
 	public static <TSource, TKey> List<GroupCollection<TKey, TSource>>
 	groupBy(Iterable<TSource> source,
 			Function<TSource, TKey> keySelector) {
+
+
 		return groupBy(source,keySelector,(t,t2)->t2);
 
 	}
 
 	public static <T> boolean sequeceEqual(List<T> list, List<T> other) {
-		// TODO Auto-generated method stub
+
 		if(list==null || other==null)return false;
 		if(list.size()!=other.size())return false;
 		 int len=list.size();
@@ -194,7 +194,6 @@ public class CollectionHelper {
 	}
 	
 	public static <T> boolean sequeceEqual(List<T> list, List<T> other,IEqualityComparer<T> comparer) {
-		// TODO Auto-generated method stub
 		if(list==null || other==null)return false;
 		if(list.size()!=other.size())return false;
 		 int len=list.size();

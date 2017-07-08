@@ -1,11 +1,12 @@
 package com.superstudio.language.java;
 
 import com.superstudio.codedom.CodeSnippetTypeMember;
-import com.superstudio.commons.csharpbridge.action.Func;
 import com.superstudio.web.razor.RazorEngineHost;
 import com.superstudio.web.razor.generator.CodeGeneratorContext;
 import com.superstudio.web.razor.generator.CodeWriter;
 import com.superstudio.web.razor.generator.RazorCodeGenerator;
+
+import java.util.function.Supplier;
 
 public class JavaRazorCodeGenerator extends RazorCodeGenerator {
 	private static final String HiddenLinePragma = "//#line hidden";
@@ -16,7 +17,7 @@ public class JavaRazorCodeGenerator extends RazorCodeGenerator {
 	}
 
 	@Override
-	public Func<CodeWriter> getCodeWriterFactory() {
+	public Supplier<CodeWriter> getCodeWriterFactory() {
 		
 		return () -> new JavaCodeWriter();
 	}

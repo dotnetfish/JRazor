@@ -170,7 +170,7 @@ public abstract class WebPageRenderingBase extends WebPageExecutingBase implemen
 	{
 		if (StringUtils.isBlank(value))
 		{
-				// GetCultureInfo accepts empty strings but throws for null strings. To maintain consistency in our string handling behavior, throw
+				// GetLocale accepts empty strings but throws for null strings. To maintain consistency in our string handling behavior, throw
 			throw new IllegalArgumentException(CommonResources.Argument_Cannot_Be_Null_Or_Empty+"value");
 		}
 		//CultureUtil.SetCulture(Thread.currentThread(), getContext(), value);
@@ -185,13 +185,13 @@ public abstract class WebPageRenderingBase extends WebPageExecutingBase implemen
 	{
 		if (StringUtils.isBlank(value))
 		{
-				// GetCultureInfo accepts empty strings but throws for null strings. To maintain consistency in our string handling behavior, throw
+				// GetLocale accepts empty strings but throws for null strings. To maintain consistency in our string handling behavior, throw
 			throw new IllegalArgumentException(CommonResources.Argument_Cannot_Be_Null_Or_Empty+"value");
 		}
 		//CultureUtil.SetUICulture(Thread.currentThread(), getContext(), value);
 	}
 
-	// Calls the execute() method, and calls runPage() if the page is an InitPage but
+	// Calls the get() method, and calls runPage() if the page is an InitPage but
 	// did not call runPage().
 	public abstract void executePageHierarchy() throws Exception;
 

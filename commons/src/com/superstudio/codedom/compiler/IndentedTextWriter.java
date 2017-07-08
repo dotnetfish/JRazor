@@ -1,10 +1,10 @@
 package com.superstudio.codedom.compiler;
 
-import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.io.TextWriter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Locale;
 
 public class IndentedTextWriter extends TextWriter {
 	private TextWriter writer;
@@ -57,7 +57,8 @@ public class IndentedTextWriter extends TextWriter {
 	}
 
 	public IndentedTextWriter(TextWriter writer, String tabString) throws FileNotFoundException {
-		super(CultureInfo.InvariantCulture);
+		//super(Locale.getDefault().getDisplayName());
+		super("");
 		this.writer = writer;
 		this.tabString = tabString;
 		this.indentLevel = 0;
@@ -81,7 +82,7 @@ public class IndentedTextWriter extends TextWriter {
 					this.writer.write(this.tabString);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 			}
 			this.tabsPending = false;

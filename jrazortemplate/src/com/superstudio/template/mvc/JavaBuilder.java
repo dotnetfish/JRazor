@@ -77,26 +77,14 @@ public class JavaBuilder {
 
 
     public  Class compilePath(String codePath,String templatePath){
-        System.out.println("start compilePath");
-       // long start = System.currentTimeMillis();
+
 String fullClassName="JRazor." +  ParserHelpers
                 .sanitizeClassName("_Page_" + StringHelper.trimStart(templatePath, '~', '/'));
-        com.superstudio.commons.io.File.Delete(codePath);
 
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
         ClassFileManager fileManager = new ClassFileManager(compiler.getStandardFileManager(diagnostics, null, null));
-       // StandardJavaFileManager javaFileManager = javaCompiler.getStandardFileManager(null, null, Charset.forName("UTF-8"));
-        // 5.文件管理器根与文件连接起来
-		/*
-		 * String classPath="./jua/WEB-INF/lib/mvc-0.0.1-SNAPSHOT.jar";
-		 * javaFileManager.setLocation(StandardLocation.CLASS_PATH,
-		 * Arrays.asList( new java.io.File(classPath)));
-		 */
-        System.out.println(codePath);
-        Iterable jfiles = fileManager.getJavaFileObjects(codePath);
-
-
+         Iterable jfiles = fileManager.getJavaFileObjects(codePath);
 
         List<String> options = new ArrayList<String>();
         options.add("-encoding");
@@ -111,6 +99,8 @@ String fullClassName="JRazor." +  ParserHelpers
             JavaClassObject jco = fileManager.getJavaClassObject();
             DynamicClassLoader dynamicClassLoader = new DynamicClassLoader(this.parentClassLoader);
             Class clazz = dynamicClassLoader.loadClass(fullClassName,jco);
+             File file=new File(codePath);
+            file.delete();
             return clazz;
         } else {
             String error = "";

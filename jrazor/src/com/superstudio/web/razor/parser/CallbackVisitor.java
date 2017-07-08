@@ -1,7 +1,6 @@
 package com.superstudio.web.razor.parser;
 
 import com.superstudio.commons.SynchronizationContext;
-import com.superstudio.commons.csharpbridge.action.Action;
 import com.superstudio.web.razor.parser.syntaxTree.Block;
 import com.superstudio.web.razor.parser.syntaxTree.BlockType;
 import com.superstudio.web.razor.parser.syntaxTree.RazorError;
@@ -15,7 +14,7 @@ public class CallbackVisitor extends ParserVisitor {
 	private Consumer<RazorError> _errorCallback;
 	private Consumer<BlockType> _endBlockCallback;
 	private Consumer<BlockType> _startBlockCallback;
-	private Action _completeCallback;
+	private Runnable _completeCallback;
 
 	public CallbackVisitor(Consumer<Span> spanCallback) {
 
@@ -44,7 +43,7 @@ public class CallbackVisitor extends ParserVisitor {
 	}
 
 	public CallbackVisitor(Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
-			Consumer<BlockType> startBlockCallback, Consumer<BlockType> endBlockCallback, Action completeCallback) {
+			Consumer<BlockType> startBlockCallback, Consumer<BlockType> endBlockCallback, Runnable completeCallback) {
 		_spanCallback = spanCallback;
 		_errorCallback = errorCallback;
 		_startBlockCallback = startBlockCallback;
@@ -54,10 +53,10 @@ public class CallbackVisitor extends ParserVisitor {
 
 	private SynchronizationContext synchronizationContext;
 
-	public SynchronizationContext getSynchronizationContext() {
+	/*public SynchronizationContext getSynchronizationContext() {
 		return synchronizationContext;
 	}
-
+*/
 	public void setSynchronizationContext(SynchronizationContext context) {
 		synchronizationContext = context;
 	}
@@ -92,7 +91,7 @@ public class CallbackVisitor extends ParserVisitor {
 
 		// methods are not converted
 		raiseCallback(synchronizationContext, null, (t) -> {
-			_completeCallback.execute();
+			_completeCallback.run();
 		});
 	}
 

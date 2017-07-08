@@ -3,9 +3,7 @@ package com.superstudio.web.razor.generator;
 import com.superstudio.codedom.*;
 import com.superstudio.commons.CollectionHelper;
 import com.superstudio.commons.csharpbridge.RefObject;
-import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.csharpbridge.action.ActionTwo;
-import com.superstudio.commons.csharpbridge.action.Func;
 import com.superstudio.commons.exception.InvalidOperationException;
 import com.superstudio.web.RazorResources;
 import com.superstudio.web.razor.RazorEngineHost;
@@ -15,6 +13,7 @@ import com.superstudio.web.razor.utils.DisposableAction;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 
 public class CodeGeneratorContext {
@@ -53,13 +52,13 @@ public class CodeGeneratorContext {
 		privateStatementCollector = value;
 	}
 
-	private Func<CodeWriter> privateCodeWriterFactory;
+	private Supplier<CodeWriter> privateCodeWriterFactory;
 
-	private Func<CodeWriter> getCodeWriterFactory() {
+	private Supplier<CodeWriter> getCodeWriterFactory() {
 		return privateCodeWriterFactory;
 	}
 
-	private void setCodeWriterFactory(Func<CodeWriter> value) {
+	private void setCodeWriterFactory(Supplier<CodeWriter> value) {
 		privateCodeWriterFactory = value;
 	}
 
@@ -152,7 +151,7 @@ public class CodeGeneratorContext {
 		return create(host, null, className, rootNamespace, sourceFile, shouldGenerateLinePragmas);
 	}
 
-	public static CodeGeneratorContext create(RazorEngineHost host, Func<CodeWriter> writerFactory, String className,
+	public static CodeGeneratorContext create(RazorEngineHost host, Supplier<CodeWriter> writerFactory, String className,
 											  String rootNamespace, String sourceFile, boolean shouldGenerateLinePragmas) {
 		CodeGeneratorContext tempVar = new CodeGeneratorContext();
 		tempVar.setHost(host);
@@ -366,13 +365,13 @@ public class CodeGeneratorContext {
 				return null;
 			}
 		}
-		return getCodeWriterFactory().execute();
+		return getCodeWriterFactory().get();
 	}
 
 final String buildCodeString(Consumer<CodeWriter> action) {
 
 		// using (CodeWriter cw = CodeWriterFactory())
-		CodeWriter cw = getCodeWriterFactory().execute();
+		CodeWriter cw = getCodeWriterFactory().get();
 		try {
 			action.accept(cw);
 			return cw.getContent();

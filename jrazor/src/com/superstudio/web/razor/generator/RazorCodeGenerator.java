@@ -5,8 +5,6 @@ import com.superstudio.codedom.CodeNamespaceImport;
 import com.superstudio.codedom.CodeTypeReference;
 import com.superstudio.codedom.MemberAttributes;
 import com.superstudio.commons.CollectionHelper;
-import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.commons.csharpbridge.action.Func;
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.web.RazorResources;
 import com.superstudio.web.razor.ParserResults;
@@ -18,7 +16,7 @@ import com.superstudio.web.razor.parser.syntaxTree.Span;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-
+import java.util.function.Supplier;
 
 
 public abstract class RazorCodeGenerator extends ParserVisitor
@@ -112,7 +110,7 @@ public abstract class RazorCodeGenerator extends ParserVisitor
 		return _context;
 	}
 
-	public Func<CodeWriter> getCodeWriterFactory()
+	public Supplier<CodeWriter> getCodeWriterFactory()
 	{
 		return null;
 	}

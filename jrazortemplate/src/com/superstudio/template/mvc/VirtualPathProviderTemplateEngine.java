@@ -266,7 +266,7 @@ public abstract class VirtualPathProviderTemplateEngine implements ITemplateEngi
                 getTemplateLocations(locations, (usingAreas) ? areaLocations : null);
 
         if (templateLocations.isEmpty()) {
-            throw new IllegalStateException(String.format(CultureInfo.CurrentCulture,
+            throw new IllegalStateException(String.format(
                     MvcResources.Common_PropertyCannotBeNullOrEmpty, locationsPropertyName));
         }
 

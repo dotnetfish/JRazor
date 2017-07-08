@@ -1,11 +1,9 @@
 package com.superstudio.commons;
 
-import java.io.Serializable;
-
-import com.superstudio.commons.csharpbridge.StringComparison;
-import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.HttpException;
 import org.apache.commons.lang3.StringUtils;
+
+import java.io.Serializable;
 
 public final class VirtualPath implements java.lang.Comparable, Serializable {
     private String _appRelativeVirtualPath;
@@ -15,7 +13,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
     private static final int appRelativeAttempted = 4;
 
     private SimpleBitVector32 flags;
-    public static VirtualPath RootVirtualPath = VirtualPath.Create("/");
+    //public static VirtualPath RootVirtualPath = VirtualPath.Create("/");
 
     public String getVirtualPathString() {
         if (this._virtualPath == null) {
@@ -36,10 +34,10 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
         return UrlPath.RemoveSlashFromPathIfNeeded(this.getVirtualPathString());
     }
 
-    public String getVirtualPathStringIfAvailable() {
+   /* public String getVirtualPathStringIfAvailable() {
         return this._virtualPath;
     }
-
+*/
     public String getAppRelativeVirtualPathStringOrNull() throws HttpException {
         if (this._appRelativeVirtualPath == null) {
             if (this.flags.get(4)) {
@@ -110,11 +108,11 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
         return this._virtualPath != null && this._virtualPath.charAt(0) != '/';
     }
 
-    public boolean getIsRoot() {
+  /*  public boolean getIsRoot() {
         return this._virtualPath.equals("/");
     }
-
-    public VirtualPath getParent() {
+*/
+    /*public VirtualPath getParent() {
         this.FailIfRelativePath();
         if (this.getIsRoot()) {
             return null;
@@ -131,7 +129,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
         text = text.substring(0, num + 1);
         return new VirtualPath(text);
     }
-
+*/
     private VirtualPath() {
     }
 
@@ -154,9 +152,9 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
         return StringUtils.equalsIgnoreCase(this.getVirtualPathString(), virtualPath.getVirtualPathString()) ? 0 : 1;
     }
 
-    public VirtualPath CombineWithAppRoot() {
+   /* public VirtualPath CombineWithAppRoot() {
         return HttpRuntime.getAppDomainAppVirtualPathObject().Combine(this);
-    }
+    }*/
 
     public VirtualPath Combine(VirtualPath relativePath) {
         if (relativePath == null) {
@@ -169,7 +167,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
         return new VirtualPath(UrlPath.Combine(this.getVirtualPathStringWhicheverAvailable(), relativePath.getVirtualPathString()));
     }
 
-    public VirtualPath SimpleCombine(String relativePath) {
+   /* public VirtualPath SimpleCombine(String relativePath) {
         return this.SimpleCombine(relativePath, false);
     }
 
@@ -210,7 +208,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
     public String MapPathInternal(VirtualPath baseVirtualDir, boolean allowCrossAppMapping) {
         return HostingEnvironment.MapPathInternal(this, baseVirtualDir, allowCrossAppMapping);
     }
-
+*/
     /*public String GetFileHash(Iterable virtualPathDependencies)
     {
         return HostingEnvironment.getVirtualPathProvider().GetFileHash(this, virtualPathDependencies);
@@ -243,11 +241,11 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
 	{
 		return VirtualPathProvider.OpenFile(this);
 	}*/
-    public void FailIfNotWithinAppRoot() {
+    /*public void FailIfNotWithinAppRoot() {
         if (!this.getIsWithinAppRoot()) {
             throw new IllegalArgumentException(SR.GetString("Cross_app_not_allowed", new Object[]{this.getVirtualPathString()}));
         }
-    }
+    }*/
 
     public void FailIfRelativePath() {
         if (this.getIsRelative()) {
@@ -255,7 +253,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
         }
     }
 
-    public static VirtualPath Combine(VirtualPath v1, VirtualPath v2) {
+    /*public static VirtualPath Combine(VirtualPath v1, VirtualPath v2) {
         if (v1 == null) {
             v1 = HttpRuntime.getAppDomainAppVirtualPathObject();
         }
@@ -264,7 +262,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
             return v2;
         }
         return v1.Combine(v2);
-    }
+    }*/
 
     public static boolean equals(VirtualPath v1, VirtualPath v2) {
         return v1 == v2 || (v1 != null && v2 != null && VirtualPath.equalsHelper(v1, v2));
@@ -315,25 +313,25 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
         return null;
     }
 
-    public static String GetAppRelativeVirtualPathString(VirtualPath virtualPath) throws HttpException {
+    /*public static String GetAppRelativeVirtualPathString(VirtualPath virtualPath) throws HttpException {
         if (!(virtualPath == null)) {
             return virtualPath.getAppRelativeVirtualPathString();
         }
         return null;
-    }
+    }*/
 
-    public static String GetAppRelativeVirtualPathStringOrEmpty(VirtualPath virtualPath) throws HttpException {
+   /* public static String GetAppRelativeVirtualPathStringOrEmpty(VirtualPath virtualPath) throws HttpException {
         if (!(virtualPath == null)) {
             return virtualPath.getAppRelativeVirtualPathString();
         }
         return "";
-    }
+    }*/
 
     public static VirtualPath Create(String virtualPath) {
         return VirtualPath.Create(virtualPath, VirtualPathOptions.AllowAllPath);
     }
 
-    public static VirtualPath CreateTrailingSlash(String virtualPath) {
+    /*public static VirtualPath CreateTrailingSlash(String virtualPath) {
         return VirtualPath.Create(virtualPath, VirtualPathOptions.EnsureTrailingSlash | VirtualPathOptions.AllowAbsolutePath | VirtualPathOptions.AllowAppRelativePath | VirtualPathOptions.AllowRelativePath);
     }
 
@@ -343,9 +341,9 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
 
     public static VirtualPath CreateAbsolute(String virtualPath) {
         return VirtualPath.Create(virtualPath, VirtualPathOptions.AllowAbsolutePath);
-    }
+    }*/
 
-    public static VirtualPath CreateNonRelative(String virtualPath) {
+   /* public static VirtualPath CreateNonRelative(String virtualPath) {
         return VirtualPath.Create(virtualPath, VirtualPathOptions.AllowAbsolutePath | VirtualPathOptions.AllowAppRelativePath);
     }
 
@@ -356,8 +354,8 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
     public static VirtualPath CreateNonRelativeTrailingSlash(String virtualPath) {
         return VirtualPath.Create(virtualPath, VirtualPathOptions.EnsureTrailingSlash | VirtualPathOptions.AllowAbsolutePath | VirtualPathOptions.AllowAppRelativePath);
     }
-
-    public static VirtualPath CreateAbsoluteAllowNull(String virtualPath) {
+*/
+    /*public static VirtualPath CreateAbsoluteAllowNull(String virtualPath) {
         return VirtualPath.Create(virtualPath, VirtualPathOptions.AllowNull | VirtualPathOptions.AllowAbsolutePath);
     }
 
@@ -368,7 +366,7 @@ public final class VirtualPath implements java.lang.Comparable, Serializable {
     public static VirtualPath CreateNonRelativeTrailingSlashAllowNull(String virtualPath) {
         return VirtualPath.Create(virtualPath, VirtualPathOptions.AllowNull | VirtualPathOptions.EnsureTrailingSlash | VirtualPathOptions.AllowAbsolutePath | VirtualPathOptions.AllowAppRelativePath);
     }
-
+*/
     public static VirtualPath Create(String virtualPath, int options) {
         return new VirtualPath("F:\\Razor");//"F:\\Razor";
 			/*if (virtualPath != null)

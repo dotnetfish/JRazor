@@ -6,28 +6,21 @@ import com.superstudio.codedom.compiler.CodeGeneratorOptions;
 import com.superstudio.codedom.compiler.ICodeGenerator;
 import com.superstudio.commons.IWebObjectFactory;
 import com.superstudio.commons.JavaObjectFactory;
-import com.superstudio.commons.StreamReader;
 import com.superstudio.commons.TextReader;
 import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.commons.io.File;
 import com.superstudio.commons.io.TextWriter;
 import com.superstudio.language.java.JavaCodeProvider;
 import com.superstudio.template.language.mvc.MvcJavaWebPageRazorHost;
 import com.superstudio.template.mvc.context.HostContext;
 import com.superstudio.web.razor.GeneratorResults;
 import com.superstudio.web.razor.parser.ParserHelpers;
-import org.apache.commons.lang3.StringUtils;
 
-import javax.tools.*;
-import javax.tools.JavaCompiler.CompilationTask;
+import javax.tools.SimpleJavaFileObject;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.URI;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class JavaBuildManager {
@@ -71,8 +64,8 @@ public class JavaBuildManager {
 			MvcJavaWebPageRazorHost host = new MvcJavaWebPageRazorHost(templatePath, root);
 
 			TemplateEngine engine = new TemplateEngine(host);
-
-			String templateContent =File.readAll(root+"WEB-INF/" + templatePath);
+		String templateContent=org.apache.commons.io.FileUtils.readFileToString(new java.io.File(root+"WEB-INF/" + templatePath),"utf-8");
+			//String templateContent =File.readAll(root+"WEB-INF/" + templatePath);
 
 			TextReader reader = new TextReader(templateContent);
 			GeneratorResults result = engine.GenerateCode(reader);
@@ -88,7 +81,6 @@ public class JavaBuildManager {
 			generator.generateCodeFromCompileUnit(result.getGeneratedCode(), writer, options);
 			writer.flush();
 			writer.close();
-        //StreamReader reader=new StreamReader(writer);
         JavaBuilder builder = JavaBuilder.getInstance();
         Class clazz=builder.compilePath(codePath,templatePath);
         return  clazz;

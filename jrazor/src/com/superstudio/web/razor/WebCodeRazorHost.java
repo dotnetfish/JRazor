@@ -3,8 +3,6 @@ package com.superstudio.web.razor;
 import com.superstudio.codedom.CodeMemberProperty;
 import com.superstudio.codedom.MemberAttributes;
 import com.superstudio.commons.Path;
-import com.superstudio.commons.csharpbridge.StringComparison;
-import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.razor.generator.CodeGeneratorContext;
 import com.superstudio.web.razor.parser.ParserHelpers;
 import org.apache.commons.lang3.StringUtils;

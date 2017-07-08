@@ -3,7 +3,7 @@ package com.superstudio.web.razor;
 import com.superstudio.codedom.CodeNamespaceImport;
 import com.superstudio.codedom.CodeTypeDeclaration;
 import com.superstudio.commons.CollectionHelper;
-import com.superstudio.commons.CultureInfo;
+
 import com.superstudio.commons.HostingEnvironment;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.io.Path;
@@ -308,13 +308,13 @@ public class WebPageRazorHost extends RazorEngineHost {
 	protected final void registerSpecialFile(String fileName, String baseTypeName) {
 		if (StringUtils.isBlank(fileName)) {
 			// throw new
-			// IllegalArgumentException(StringHelper.format(CultureInfo.CurrentCulture,
+			// IllegalArgumentException(StringHelper.format(Locale.CurrentCulture,
 			// CommonResources.Argument_Cannot_Be_Null_Or_Empty, new Object[]
 			// {"fileName"}), "fileName");
 		}
 		if (StringUtils.isBlank(baseTypeName)) {
 			// throw new
-			// IllegalArgumentException(StringHelper.format(CultureInfo.CurrentCulture,
+			// IllegalArgumentException(StringHelper.format(Locale.CurrentCulture,
 			// CommonResources.Argument_Cannot_Be_Null_Or_Empty, new Object[]
 			// {"baseTypeName"}), "baseTypeName");
 		}

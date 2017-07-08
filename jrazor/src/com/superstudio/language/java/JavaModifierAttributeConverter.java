@@ -1,10 +1,11 @@
 package com.superstudio.language.java;
 
-import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.ITypeDescriptorContext;
 import com.superstudio.commons.SR;
 import com.superstudio.commons.TypeConverter;
 import com.superstudio.commons.exception.ArgumentNullException;
+
+import java.util.Locale;
 
 abstract class JavaModifierAttributeConverter extends TypeConverter {
 
@@ -20,7 +21,7 @@ abstract class JavaModifierAttributeConverter extends TypeConverter {
 	}
 
 
-	public Object convertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value) {
+	public Object convertFrom(ITypeDescriptorContext context, Locale culture, Object value) {
 		if (value instanceof String) {
 			String value2 = (String) value;
 			String[] names = this.getNames();
@@ -33,7 +34,7 @@ abstract class JavaModifierAttributeConverter extends TypeConverter {
 		return this.getDefaultValue();
 	}
 
-	public Object convertTo(ITypeDescriptorContext context, CultureInfo culture, Object value, Class destinationType) throws ArgumentNullException {
+	public Object convertTo(ITypeDescriptorContext context, Locale culture, Object value, Class destinationType) throws ArgumentNullException {
 		if (destinationType == null) {
 			
 			 throw new ArgumentNullException("destinationType");

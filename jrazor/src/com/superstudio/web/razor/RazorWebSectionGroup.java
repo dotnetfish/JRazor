@@ -1,8 +1,8 @@
 package com.superstudio.web.razor;
 
-public class RazorWebSectionGroup //extends ConfigurationSectionGroup
+public class RazorWebSectionGroup
 {
-	public static final String GroupName = "system.web.webPages.razor";
+	public static final String GROUP_NAME = "system.web.webPages.razor";
 	private boolean _hostSet;
 	private boolean _pagesSet;
 	private HostSection _host;

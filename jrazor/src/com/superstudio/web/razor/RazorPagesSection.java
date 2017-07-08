@@ -6,7 +6,7 @@ import java.util.List;
 
 public class RazorPagesSection extends ConfigurationSection
 {
-	public static final String SectionName = RazorWebSectionGroup.GroupName + "/pages";
+	public static final String SectionName = RazorWebSectionGroup.GROUP_NAME + "/pages";
 	//private static final ConfigurationProperty _pageBaseTypeProperty = new ConfigurationProperty("pageBaseType", String.class, null, ConfigurationPropertyOptions.IsRequired);
 	//private static final ConfigurationProperty _namespacesProperty = new ConfigurationProperty("namespaces", NamespaceCollection.class, null, ConfigurationPropertyOptions.IsRequired);
 	private boolean _pageBaseTypeSet;

@@ -1,12 +1,9 @@
 package com.superstudio.codedom.compiler;
 
-import com.superstudio.commons.io.FileAccess;
-import com.superstudio.commons.io.FileMode;
-import com.superstudio.commons.io.FileStream;
 import com.superstudio.commons.io.Path;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
+import java.io.File;
 import java.io.Serializable;
 import java.util.*;
 
@@ -142,20 +139,24 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 			boolean flag = false;
 			int num = 5000;
 			do {
-				try {
+				//try {
 					this.basePath = TempFileCollection.getTempFileName(this.getTempDir());
 					String fullPath = (new java.io.File(this.basePath)).getAbsolutePath();
 					// (new FileIOPermission(FileIOPermissionAccess.AllAccess,
 					// fullPath)).Demand();
 					text = this.basePath + ".tmp";
-					try (FileStream tempVar = new FileStream(text, FileMode.CreateNew, FileAccess.Write)) {
-					}
-					flag = true;
-				} catch (IOException e) {
+					java.io.File file=new File(text);
+					flag=file.exists();
+					/*try (FileStream tempVar = new FileStream(text, FileMode.CreateNew, FileAccess.Write)) {
+					}*/
+					//flag = true;
+				//} catch (IOException e) {
+				if(flag==false) {
 					num--;
+				}
 				
 
-					long num2 = 2147942480L;
+					//long num2 = 2147942480L;
 					
 					// ORIGINAL LINE: if (num == 0 ||
 					// (long)Marshal.GetHRForException(e) !=
@@ -164,8 +165,8 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 					 * if (num == 0 || (long)Marshal.GetHRForException(e) !=
 					 * (long)((long)num2)) { throw e; }
 					 */
-					flag = false;
-				}
+					//flag = false;
+				//}
 			} while (!flag);
 			this.files.put(text, this.keepFiles);
 		}

@@ -4,6 +4,7 @@ import com.superstudio.commons.CollectionHelper;
 import com.superstudio.commons.HashCodeCombiner;
 import com.superstudio.commons.TextReader;
 import com.superstudio.commons.csharpbridge.StringHelper;
+import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.web.razor.PartialParseResult;
 import com.superstudio.web.razor.parser.ParserHelpers;
 import com.superstudio.web.razor.parser.syntaxTree.AcceptedCharacters;
@@ -12,6 +13,7 @@ import com.superstudio.web.razor.text.TextChange;
 import com.superstudio.web.razor.tokenizer.symbols.ISymbol;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -67,7 +69,7 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 	}
 
 	@Override
-	protected PartialParseResult canAcceptChange(Span target, TextChange normalizedChange) {
+	protected PartialParseResult canAcceptChange(Span target, TextChange normalizedChange) throws IOException,ArgumentNullException {
 		if (getAcceptedCharacters() == AcceptedCharacters.Any) {
 			return PartialParseResult.Rejected;
 		}
@@ -227,7 +229,8 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 		return result;
 	}
 
-	private PartialParseResult handleDeletion(Span target, char previousChar, TextChange change) {
+	private PartialParseResult handleDeletion(Span target, char previousChar, TextChange change) throws IOException,ArgumentNullException
+	{
 		// What's left after deleting?
 		if (previousChar == '.') {
 			return tryAcceptChange(target, change, PartialParseResult
@@ -239,7 +242,8 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 		}
 	}
 
-	private PartialParseResult handleInsertion(Span target, char previousChar, TextChange change) {
+	private PartialParseResult handleInsertion(Span target, char previousChar, TextChange change) throws IOException,ArgumentNullException
+	{
 		// What are we inserting after?
 		if (previousChar == '.') {
 			return HandleInsertionAfterDot(target, change);
@@ -250,7 +254,8 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 		}
 	}
 
-	private PartialParseResult handleInsertionAfterIdPart(Span target, TextChange change) {
+	private PartialParseResult handleInsertionAfterIdPart(Span target, TextChange change) throws IOException,ArgumentNullException
+	{
 		// If the insertion is a full identifier part, accept it
 		if (ParserHelpers.isIdentifier(change.getNewText(), false)) {
 			return tryAcceptChange(target, change);
@@ -278,7 +283,8 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 		
 	}
 
-	private PartialParseResult HandleInsertionAfterDot(Span target, TextChange change) {
+	private PartialParseResult HandleInsertionAfterDot(Span target, TextChange change) throws IOException,ArgumentNullException
+	{
 		// If the insertion is a full identifier or another dot, accept it
 		if (ParserHelpers.isIdentifier(change.getNewText()) || change.getNewText().equals(".")) {
 			return tryAcceptChange(target, change);
@@ -287,7 +293,7 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 	}
 
 
-	private PartialParseResult tryAcceptChange(Span target, TextChange change, PartialParseResult acceptResult)
+	private PartialParseResult tryAcceptChange(Span target, TextChange change, PartialParseResult acceptResult) throws IOException,ArgumentNullException
 	{
 		String content = change.applyChange(target);
 		if (startsWithKeyword(content))
@@ -299,13 +305,13 @@ public class ImplicitExpressionEditHandler extends SpanEditHandler {
 		return acceptResult;
 	}
 	
-	private PartialParseResult tryAcceptChange(Span target, TextChange change)
+	private PartialParseResult tryAcceptChange(Span target, TextChange change) throws IOException,ArgumentNullException
 	{
 		return tryAcceptChange(target,change,PartialParseResult.Accepted);
 	}
 
 
-	private boolean startsWithKeyword(String newContent)  {
+	private boolean startsWithKeyword(String newContent) throws IOException,ArgumentNullException {
 
 		// its Java equivalent:
 		// using (StringReader reader = new StringReader(newContent))

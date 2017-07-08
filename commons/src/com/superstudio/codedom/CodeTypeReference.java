@@ -1,13 +1,12 @@
 package com.superstudio.codedom;
 
-import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.*;
-
-import com.superstudio.commons.CultureInfo;
-import com.superstudio.commons.csharpbridge.StringHelper;
 import org.apache.commons.lang3.StringUtils;
+
+import java.io.Serializable;
+import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Stack;
 
 public class CodeTypeReference extends CodeObject implements Serializable
 {

@@ -230,7 +230,7 @@ public class TemplatePage extends Page implements ITemplateDataContainer
 	{
 		public SwitchWriter()
 		{
-			super(CultureInfo.CurrentCulture);
+			super(Locale.CurrentCulture);
 		}
 
 		@Override

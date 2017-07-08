@@ -1,14 +1,16 @@
 package com.superstudio.web.razor;
 
-import com.superstudio.commons.CultureInfo;
+
 import com.superstudio.commons.ResourceManager;
+
+import java.util.Locale;
 
 public class RazorWebResources
 {
 	public static final String Could_Not_Locate_FactoryType = "Could_Not_Locate_FactoryType";
 	public static final String BuildProvider_No_CodeLanguageService_For_Path = "BuildProvider_No_CodeLanguageService_For_Path";
 	private static ResourceManager resourceMan;
-	private static CultureInfo resourceCulture;
+	private static Locale resourceCulture;
 	public static ResourceManager getResourceManager()
 	{
 		//if (Object.ReferenceEquals(RazorWebResources.resourceMan, null))
@@ -20,11 +22,11 @@ public class RazorWebResources
 		return RazorWebResources.resourceMan;
 	}
 
-	public static CultureInfo getCulture()
+	public static Locale getCulture()
 	{
 		return RazorWebResources.resourceCulture;
 	}
-	public static void setCulture(CultureInfo value)
+	public static void setCulture(Locale value)
 	{
 		RazorWebResources.resourceCulture = value;
 	}

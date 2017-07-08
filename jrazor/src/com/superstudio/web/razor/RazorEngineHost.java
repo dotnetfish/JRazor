@@ -4,7 +4,6 @@ import com.superstudio.codedom.CodeCompileUnit;
 import com.superstudio.codedom.CodeMemberMethod;
 import com.superstudio.codedom.CodeNamespace;
 import com.superstudio.codedom.CodeTypeDeclaration;
-import com.superstudio.commons.csharpbridge.action.Func;
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.web.razor.generator.CodeGeneratorContext;
 import com.superstudio.web.razor.generator.GeneratedClassContext;
@@ -14,10 +13,10 @@ import com.superstudio.web.razor.parser.ParserBase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 
-
-/** 
+/**
  Defines the environment in which a Razor template will live
  
  
@@ -38,7 +37,7 @@ public class RazorEngineHost
 	public static final String InternalDefaultNamespace = "Razor";
 
 	private boolean _instrumentationActive = false;
-	private Func<ParserBase> _markupParserFactory;
+	private Supplier<ParserBase> _markupParserFactory;
 
 	private int _tabSize = 4;
 
@@ -61,15 +60,10 @@ public class RazorEngineHost
 	public RazorEngineHost(RazorCodeLanguage codeLanguage) throws Exception
 	{
 
-		this(codeLanguage, new Func<ParserBase>(){
-			@Override
-			public ParserBase execute(){
-			return new HtmlMarkupParser();
-			}
-			});
+		this(codeLanguage, ()->new HtmlMarkupParser());
 	}
 
-	public RazorEngineHost(RazorCodeLanguage codeLanguage, Func<ParserBase> markupParserFactory) throws Exception
+	public RazorEngineHost(RazorCodeLanguage codeLanguage, Supplier<ParserBase> markupParserFactory) throws Exception
 	{
 		this();
 		if (codeLanguage == null)
@@ -80,7 +74,7 @@ public class RazorEngineHost
 		{
 			//throw new ArgumentNullException("markupParserFactory");
 		}
-	//item=	markupParserFactory.execute();
+	//item=	markupParserFactory.get();
 		setCodeLanguage(codeLanguage);
 		_markupParserFactory = markupParserFactory;
 	}
@@ -261,7 +255,7 @@ public class RazorEngineHost
 	{
 		if (_markupParserFactory != null)
 		{
-			return _markupParserFactory.execute();
+			return _markupParserFactory.get();
 		}
 		return null;
 	}

@@ -1,9 +1,6 @@
 package com.superstudio.template.templatepages;
 
-import com.superstudio.commons.CodeExecuteTimeStatistic;
-import com.superstudio.commons.CultureInfo;
-import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.commons.csharpbridge.action.ActionOne;
+
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.commons.exception.HttpException;
 import com.superstudio.template.mvc.context.HostContext;
@@ -12,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 
@@ -20,8 +18,8 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 	private final HashSet<String> _renderedSections = new HashSet<String>();
 	// Keep track of whether renderBody has been called
 	private boolean _renderedBody = false;
-	// Action for rendering the body within a layout page
-	private ActionOne<Writer> _body;
+	// Runnable for rendering the body within a layout page
+	private Consumer<Writer> _body;
 
 	private StringWriter _tempWriter;
 	private Writer _currentWriter;
@@ -155,7 +153,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 	public final void defineSection(String name, SectionWriter action)  {
 		if (getSectionWriters().containsKey(name)) {
 		//	throw new HttpException(
-				//	String.format(CultureInfo.InvariantCulture, WebPageResources.WebPage_SectionAleadyDefined, name));
+				//	String.format(Locale.InvariantCulture, WebPageResources.WebPage_SectionAleadyDefined, name));
 		}
 		getSectionWriters().put(name, action);
 	}
@@ -201,7 +199,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 	@Override
 	public void executePageHierarchy() throws Exception {
 		// Unlike InitPages, for a WebPage there is no hierarchy - it is always
-		// the last file to execute in the chain. There can still be layout
+		// the last file to get in the chain. There can still be layout
 		// pages
 		// and partial pages, but they are never part of the hierarchy.
 
@@ -227,7 +225,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 
 		TemplateStack.push(getContext(), this);
 
-		try{	// execute the developer-written code of the WebPage
+		try{	// get the developer-written code of the WebPage
 
 			execute();
 
@@ -323,7 +321,7 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 			// Render(TemplateContext,TextWriter) if it
 			// was available in the TemplateData.
 			if (_body != null) {
-				return new HelperResult(tw -> _body.execute(tw));
+				return new HelperResult(tw -> _body.accept(tw));
 			} else {
 				throw new HttpException(String.format(WebPageResources.WebPage_CannotRequestDirectly, getVirtualPath(), "renderBody"));
 			}
@@ -411,7 +409,7 @@ return;
 			// If the section is not found, and it is not optional, throw an
 			// error.
 			throw new HttpException(
-					String.format(CultureInfo.InvariantCulture, WebPageResources.WebPage_SectionNotDefined, name));
+					String.format(WebPageResources.WebPage_SectionNotDefined, name));
 		} else {
 			// If the section is optional and not found, then don't do anything.
 			return null;
@@ -419,13 +417,13 @@ return;
 
 	}
 
-	private void renderSurrounding(String partialTemplateName, ActionOne<Writer> body) throws Exception {
+	private void renderSurrounding(String partialTemplateName, Consumer<Writer> body) throws Exception {
 		// Save the previous body action and set ours instead.
 		// This value will be retrieved by the sub-page being rendered when it
 		// runs
 		// Render(TemplateData, TextWriter).
 
-		ActionOne<Writer> priorValue = getPageContext().getBodyAction();
+		Consumer<Writer> priorValue = getPageContext().getBodyAction();
 		getPageContext().setBodyAction(body);
 
 		// Render the layout file
@@ -462,14 +460,14 @@ return;
 				}
 				if (sectionsNotRendered.length() > 0) {
 					throw new HttpException(
-							String.format(CultureInfo.CurrentCulture, WebPageResources.WebPage_SectionsNotRendered,
+							String.format( WebPageResources.WebPage_SectionsNotRendered,
 									getVirtualPath(), sectionsNotRendered.toString()));
 				}
 			} else if (!_renderedBody) {
 				// There are no sections defined, but renderBody was NOT called.
 				// If a body was defined, then renderBody should have been
 				// called.
-				throw new HttpException(String.format(CultureInfo.CurrentCulture,
+				throw new HttpException(String.format(
 						WebPageResources.WebPage_RenderBodyNotCalled, getVirtualPath()));
 			}
 		}

@@ -3,8 +3,6 @@ package com.superstudio.web.razor.parser.syntaxTree;
 import com.superstudio.commons.CollectionHelper;
 import com.superstudio.commons.GroupCollection;
 import com.superstudio.commons.HashCodeCombiner;
-import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.commons.csharpbridge.action.ActionOne;
 import com.superstudio.commons.exception.OperationCanceledException;
 import com.superstudio.web.razor.editor.SpanEditHandler;
 import com.superstudio.web.razor.generator.ISpanCodeGenerator;
@@ -16,7 +14,7 @@ import com.superstudio.web.razor.tokenizer.symbols.ISymbol;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Consumer;
 
 
 public class Span extends SyntaxTreeNode {
@@ -112,9 +110,9 @@ public class Span extends SyntaxTreeNode {
 		privateContent = value;
 	}
 
-	public final void change(ActionOne<SpanBuilder> changes) {
+	public final void change(Consumer<SpanBuilder> changes) {
 		SpanBuilder builder = new SpanBuilder(this);
-		changes.execute(builder);
+		changes.accept(builder);
 		replaceWith(builder);
 	}
 
@@ -179,6 +177,7 @@ getSymbols().stream().reduce("",(sym,i)->i.getContent(),String::concat);
 
 		List<GroupCollection<Class<?>, ISymbol>> groups = CollectionHelper.groupBy(getSymbols(),
 				sym -> sym.getClass());
+
 		List<String> symString = CollectionHelper.select(groups,
 				grp -> grp.getKey().getName().concat(":").concat(String.valueOf(grp.getItems().size())));
 		//String.concat()

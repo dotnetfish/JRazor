@@ -1,5 +1,5 @@
 package com.superstudio.commons;
 
-public interface EventHandler<TArgs extends EventArgs> {
+public interface EventListener<TArgs extends EventArgs> {
 	void execute(Object sender,TArgs args);
 }

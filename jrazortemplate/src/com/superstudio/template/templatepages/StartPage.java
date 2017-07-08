@@ -1,8 +1,7 @@
 package com.superstudio.template.templatepages;
 
-import com.superstudio.commons.CultureInfo;
+
 import com.superstudio.commons.HttpRuntime;
-import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.HttpException;
 import com.superstudio.commons.io.Path;
 import com.superstudio.template.mvc.context.HostContext;
@@ -78,7 +77,7 @@ public abstract class StartPage extends WebPageRenderingBase {
 		// push the current pagestart on the stack.
 		TemplateStack.push(getContext(), this);
 		try {
-			// execute the developer-written code of the InitPage
+			// get the developer-written code of the InitPage
 			execute();
 
 			// If the child page wasn't explicitly run by the developer of the
@@ -123,7 +122,7 @@ public abstract class StartPage extends WebPageRenderingBase {
 	public static WebPageRenderingBase getStartPage(WebPageRenderingBase page, IVirtualPathFactory virtualPathFactory,
 													String appDomainAppVirtualPath, String fileName, Iterable<String> supportedExtensions)
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException ,Exception{
-		// build up a list of pages to execute, such as one of the following:
+		// build up a list of pages to get, such as one of the following:
 		// ~/somepage.cshtml
 		// ~/_pageStart.cshtml --> ~/somepage.cshtml
 		// ~/_pageStart.cshtml --> ~/sub/_pageStart.cshtml -->

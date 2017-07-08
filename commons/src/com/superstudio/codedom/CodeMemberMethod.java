@@ -1,9 +1,8 @@
 package com.superstudio.codedom;
 
-import com.sun.org.apache.bcel.internal.classfile.CodeException;
-import com.superstudio.commons.EmptyEventArgs;
+
 import com.superstudio.commons.EventArgs;
-import com.superstudio.commons.EventHandler;
+import com.superstudio.commons.EventListener;
 
 import java.io.Serializable;
 
@@ -34,13 +33,14 @@ public class CodeMemberMethod extends CodeTypeMember implements Serializable
 	private static final int ImplTypesCollection = 4;
 
 
-	private EventHandler<EmptyEventArgs> populateParameters;
+
+	private EventListener<EventArgs.EmptyEventArgs> populateParameters;
 
 
-	private EventHandler<EmptyEventArgs> populateStatements;
+	private EventListener<EventArgs.EmptyEventArgs> populateStatements;
 
 
-	private  EventHandler<EmptyEventArgs> populateImplementationTypes;
+	private EventListener<EventArgs.EmptyEventArgs> populateImplementationTypes;
 
 	public final CodeTypeReference getReturnType()
 	{
@@ -131,16 +131,16 @@ public class CodeMemberMethod extends CodeTypeMember implements Serializable
 		}
 		return this.typeParameters;
 	}
-	public EventHandler<EmptyEventArgs> getPopulateImplementationTypes() {
+	public EventListener<EventArgs.EmptyEventArgs> getPopulateImplementationTypes() {
 		return populateImplementationTypes;
 	}
-	public void setPopulateImplementationTypes(EventHandler<EmptyEventArgs> populateImplementationTypes) {
+	public void setPopulateImplementationTypes(EventListener<EventArgs.EmptyEventArgs> populateImplementationTypes) {
 		this.populateImplementationTypes = populateImplementationTypes;
 	}
-	public EventHandler<EmptyEventArgs> getPopulateParameters() {
+	public EventListener<EventArgs.EmptyEventArgs> getPopulateParameters() {
 		return populateParameters;
 	}
-	public void setPopulateParameters(EventHandler<EmptyEventArgs> populateParameters) {
+	public void setPopulateParameters(EventListener<EventArgs.EmptyEventArgs> populateParameters) {
 		this.populateParameters = populateParameters;
 	}
 }

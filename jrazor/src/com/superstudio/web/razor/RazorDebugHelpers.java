@@ -1,18 +1,8 @@
 package com.superstudio.web.razor;
 
-import com.superstudio.codedom.CodeCompileUnit;
 import com.superstudio.commons.Environment;
 import com.superstudio.commons.Path;
 import com.superstudio.commons.TaskFactory;
-import com.superstudio.commons.csharpbridge.action.Action;
-import com.superstudio.commons.io.File;
-import com.superstudio.web.razor.parser.syntaxTree.Block;
-import com.superstudio.web.razor.parser.syntaxTree.SyntaxTreeNode;
-import com.superstudio.web.razor.text.TextChange;
-
-import java.io.StringWriter;
-
-
 
 
 public final class RazorDebugHelpers
@@ -41,7 +31,7 @@ public final class RazorDebugHelpers
 	}
 
 
-	public static void writeGeneratedCode(String sourceFile, CodeCompileUnit codeCompileUnit)
+	/*public static void writeGeneratedCode(String sourceFile, CodeCompileUnit codeCompileUnit)
 	{
 		if (!getOutputDebuggingEnabled())
 		{
@@ -84,9 +74,9 @@ public final class RazorDebugHelpers
 			}
 		}
 	   );
-	}
+	}*/
 
-	public static void writeDebugTree(String sourceFile, Block document, PartialParseResult result, TextChange change, RazorEditorParser parser, boolean treeStructureChanged)
+	/*public static void writeDebugTree(String sourceFile, Block document, PartialParseResult result, TextChange change, RazorEditorParser parser, boolean treeStructureChanged)
 	{
 		if (!getOutputDebuggingEnabled())
 		{
@@ -130,13 +120,13 @@ public final class RazorDebugHelpers
 			}
 		}
 	   );
-	}
+	}*/
 
-	private static void writeTree(SyntaxTreeNode node, StringBuilder treeBuilder){
+	/*private static void writeTree(SyntaxTreeNode node, StringBuilder treeBuilder){
 		writeTree(node,treeBuilder,0);
 	}
-	
-	private static void writeTree(SyntaxTreeNode node, StringBuilder treeBuilder, int depth)
+	*/
+	/*private static void writeTree(SyntaxTreeNode node, StringBuilder treeBuilder, int depth)
 	{
 		if (node == null)
 		{
@@ -161,10 +151,10 @@ public final class RazorDebugHelpers
 				writeTree(child, treeBuilder, depth + 1);
 			}
 		}
-	}
+	}*/
 
 
-	private static void runTask(Action action)
+	private static void runTask(Runnable action)
 	{
 				// Catch all errors since this is just a //Debug helper
 
@@ -175,7 +165,7 @@ public final class RazorDebugHelpers
                 
           	  try
     			{
-    				action.execute();
+    				action.run();
     			}
     			catch (java.lang.Exception e)
     			{
@@ -236,4 +226,4 @@ public final class RazorDebugHelpers
 		return Boolean.parseBoolean(Environment.GetEnvironmentVariable("RAZOR_Debug"));
 	}
 }
-//#endif
+

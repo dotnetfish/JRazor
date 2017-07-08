@@ -2,6 +2,7 @@ package com.superstudio.web.razor.editor;
 
 import com.superstudio.commons.HashCodeCombiner;
 import com.superstudio.commons.csharpbridge.StringHelper;
+import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.web.razor.PartialParseResult;
 import com.superstudio.web.razor.parser.syntaxTree.AcceptedCharacters;
 import com.superstudio.web.razor.parser.syntaxTree.Span;
@@ -12,6 +13,7 @@ import com.superstudio.web.razor.text.TextChange;
 import com.superstudio.web.razor.tokenizer.symbols.ISymbol;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.function.Function;
 
@@ -80,12 +82,12 @@ public class SpanEditHandler
 		return new SpanEditHandler(tokenizer);
 	}
 
-	public EditResult applyChange(Span target, TextChange change)
+	public EditResult applyChange(Span target, TextChange change) throws IOException,ArgumentNullException
 	{
 		return applyChange(target, change, false);
 	}
 
-	public EditResult applyChange(Span target, TextChange change, boolean force)
+	public EditResult applyChange(Span target, TextChange change, boolean force) throws IOException,ArgumentNullException
 	{
 		PartialParseResult result = PartialParseResult.Accepted;
 		TextChange normalized = change.normalize().clone();
@@ -109,7 +111,7 @@ public class SpanEditHandler
 		return change.getOldPosition() >= target.getStart().getAbsoluteIndex() && (changeOldEnd < end || (changeOldEnd == end && getAcceptedCharacters() != AcceptedCharacters.None));
 	}
 
-	protected PartialParseResult canAcceptChange(Span target, TextChange normalizedChange)
+	protected PartialParseResult canAcceptChange(Span target, TextChange normalizedChange) throws IOException,ArgumentNullException
 	{
 		return PartialParseResult.Rejected;
 	}

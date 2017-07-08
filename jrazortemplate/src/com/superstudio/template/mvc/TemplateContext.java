@@ -165,7 +165,7 @@ public class TemplateContext extends RenderContext {
 
 	/*private String DefaultFormIdGenerator() {
 		int formNum = IncrementFormCount(httpContext.getItems());
-		return StringHelper.format(CultureInfo.InvariantCulture, "form{0}", formNum);
+		return StringHelper.format(Locale.InvariantCulture, "form{0}", formNum);
 	}
 
 	static boolean GetClientValidationEnabled(Map<Object, Object> scope, HttpContextBase httpContext) {
@@ -206,7 +206,7 @@ public class TemplateContext extends RenderContext {
 		// String scriptWithCorrectNewLines =
 		// ClientValidationScript.Replace("\r\n", Environment.NewLine);
 		// String validationJson = formContext.getJsonValidationMetadata();
-		// String formatted = StringHelper.format(CultureInfo.InvariantCulture,
+		// String formatted = StringHelper.format(Locale.InvariantCulture,
 		// scriptWithCorrectNewLines, validationJson);
 
 		// getWriter().write(formatted);
@@ -238,7 +238,7 @@ public class TemplateContext extends RenderContext {
 		{
 			return (TValue) scope.get(name);
 			// return (TValue) Convert.ChangeType(result, typeof(TValue),
-			// CultureInfo.InvariantCulture);
+			// Locale.InvariantCulture);
 		}
 		return defaultValue;
 	}

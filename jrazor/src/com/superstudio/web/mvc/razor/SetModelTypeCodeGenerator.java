@@ -1,10 +1,8 @@
 package com.superstudio.web.mvc.razor;
 
-import com.superstudio.commons.CultureInfo;
 import com.superstudio.commons.HashCodeCombiner;
-import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.web.*;
-import com.superstudio.web.razor.generator.*;
+import com.superstudio.web.razor.generator.CodeGeneratorContext;
+import com.superstudio.web.razor.generator.SetBaseTypeCodeGenerator;
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -19,8 +17,7 @@ public class SetModelTypeCodeGenerator extends SetBaseTypeCodeGenerator
 	@Override
 	protected String resolveType(CodeGeneratorContext context, String baseType)
 	{
-		return String.format(CultureInfo.InvariantCulture, 
-				this._genericTypeFormat, new Object[] {
+		return String.format(this._genericTypeFormat, new Object[] {
 				context.getHost().getDefaultBaseClass(), baseType});
 	}
 	@Override

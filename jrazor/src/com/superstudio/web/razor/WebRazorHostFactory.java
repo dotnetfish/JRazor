@@ -1,19 +1,17 @@
 package com.superstudio.web.razor;
 
 import com.superstudio.commons.CollectionHelper;
-import com.superstudio.commons.CultureInfo;
+
 import com.superstudio.commons.HostingEnvironment;
 import com.superstudio.commons.WebConfigurationManager;
-import com.superstudio.commons.csharpbridge.StringComparison;
-import com.superstudio.commons.csharpbridge.StringHelper;
-import com.superstudio.commons.csharpbridge.action.Func;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class WebRazorHostFactory {
-	private static java.util.concurrent.ConcurrentHashMap<String, Func<WebRazorHostFactory>> _factories = new java.util.concurrent.ConcurrentHashMap<String, Func<WebRazorHostFactory>>();
+	private static java.util.concurrent.ConcurrentHashMap<String, Supplier<WebRazorHostFactory>> _factories = new java.util.concurrent.ConcurrentHashMap<String, Supplier<WebRazorHostFactory>>();
 	public static Function<String, java.lang.Class> TypeFactory = (type) -> {
 		try {
 			return WebRazorHostFactory.defaultTypeFactory(type);
@@ -38,7 +36,7 @@ public class WebRazorHostFactory {
 	public static WebPageRazorHost createHostFromConfig(String virtualPath, String physicalPath) {
 		if (StringUtils.isBlank(virtualPath)) {
 			// throw new
-			// IllegalArgumentException(String.format(CultureInfo.CurrentCulture,
+			// IllegalArgumentException(String.format(Locale.CurrentCulture,
 			// CommonResources.Argument_Cannot_Be_Null_Or_Empty, new Object[] {
 			// "virtualPath" }), "virtualPath");
 		}
@@ -57,7 +55,7 @@ public class WebRazorHostFactory {
 		}
 		if (StringUtils.isBlank(virtualPath)) {
 			// throw new
-			// IllegalArgumentException(String.format(CultureInfo.CurrentCulture,
+			// IllegalArgumentException(String.format(Locale.CurrentCulture,
 			// CommonResources.Argument_Cannot_Be_Null_Or_Empty, new Object[] {
 			// "virtualPath" }), "virtualPath");
 		}
@@ -75,7 +73,7 @@ public class WebRazorHostFactory {
 			WebRazorHostFactory webRazorHostFactory = null;
 			if (config != null && config.getHost() != null
 					&& !StringUtils.isBlank(config.getHost().getFactoryType())) {
-				Func<WebRazorHostFactory> orAdd = WebRazorHostFactory._factories
+				Supplier<WebRazorHostFactory> orAdd = WebRazorHostFactory._factories
 						.putIfAbsent(config.getHost().getFactoryType(), () -> {
 							try {
 								return (WebRazorHostFactory) createFactory(config.getHost().getFactoryType());
@@ -84,7 +82,7 @@ public class WebRazorHostFactory {
 							}
 						});
 
-				webRazorHostFactory = orAdd.execute();
+				webRazorHostFactory = orAdd.get();
 			}
 			webPageRazorHost = ((webRazorHostFactory != null) ? webRazorHostFactory : new WebRazorHostFactory())
 					.createHost(virtualPath, physicalPath);
@@ -96,14 +94,14 @@ public class WebRazorHostFactory {
 
 	}
 
-	private static Func<WebRazorHostFactory> createFactory(String typeName)
+	private static Supplier<WebRazorHostFactory> createFactory(String typeName)
 			throws InstantiationException, IllegalAccessException {
 		java.lang.Class type = TypeFactory.apply(typeName);
 		if (type == null) {
-			throw new IllegalStateException(String.format(CultureInfo.CurrentCulture,
+			throw new IllegalStateException(String.format(
 					RazorWebResources.Could_Not_Locate_FactoryType, new Object[] { typeName }));
 		}
-		// return Expression.<Func<WebRazorHostFactory>>
+		// return Expression.<Supplier<WebRazorHostFactory>>
 		// Lambda(Expression.New(type), new ParameterExpression[0])
 		// .compile();
 		return () -> {

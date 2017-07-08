@@ -1,10 +1,9 @@
 package com.superstudio.template.language.mvc;
 
-import com.superstudio.commons.CultureInfo;
+
 import com.superstudio.commons.MvcResources;
-import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.language.java.parser.JavaCodeParser;
-import com.superstudio.web.razor.generator.*;
+import com.superstudio.web.razor.generator.SpanCodeGenerator;
 import com.superstudio.web.razor.text.SourceLocation;
 public class MvcJavaRazorCodeParser extends JavaCodeParser
 {
@@ -28,8 +27,7 @@ public class MvcJavaRazorCodeParser extends JavaCodeParser
 	{
 		if (this._modelStatementFound && this._endInheritsLocation != null)
 		{
-			this.getContext().OnError(this._endInheritsLocation, String.format(CultureInfo.CurrentCulture,
-					MvcResources.MvcRazorCodeParser_CannotHaveModelAndInheritsKeyword, new Object[] {"model"}));
+			this.getContext().OnError(this._endInheritsLocation, String.format(MvcResources.MvcRazorCodeParser_CannotHaveModelAndInheritsKeyword, new Object[] {"model"}));
 		}
 	}
 	protected void ModelDirective()
@@ -40,7 +38,7 @@ public class MvcJavaRazorCodeParser extends JavaCodeParser
 				(a)->this.CreateModelCodeGenerator(a));
 		if (this._modelStatementFound)
 		{
-			this.getContext().OnError(currentLocation, String.format(CultureInfo.CurrentCulture, MvcResources.MvcRazorCodeParser_OnlyOneModelStatementIsAllowed, new Object[] {"model"}));
+			this.getContext().OnError(currentLocation, String.format(MvcResources.MvcRazorCodeParser_OnlyOneModelStatementIsAllowed, new Object[] {"model"}));
 		}
 		this._modelStatementFound = true;
 		this.CheckForInheritsAndModelStatements();

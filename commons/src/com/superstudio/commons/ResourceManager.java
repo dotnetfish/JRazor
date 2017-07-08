@@ -1,6 +1,7 @@
 package com.superstudio.commons;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -48,7 +49,7 @@ public class ResourceManager {
 		}
 	}
 
-	public String GetString(String string, CultureInfo resourceCulture) {
+	public String GetString(String string, Locale locale) {
 		// TODO Auto-generated method stub
 		//return resources.get("en").get(string);
 		return string;

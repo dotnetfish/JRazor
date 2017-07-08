@@ -4,6 +4,7 @@ import com.superstudio.commons.Encoding;
 import com.superstudio.commons.csharpbridge.StringHelper;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.file.Paths;
 
 public class TextWriter {
@@ -17,7 +18,8 @@ public class TextWriter {
 	
 	
 	public TextWriter(String fileName,String encoding) throws Exception{
-		if(!File.Exists(fileName)){
+		java.io.File file=new java.io.File(fileName);
+		if(! file.exists()){
 			try {
 				java.nio.file.Files.createFile(Paths.get(fileName));
 			} catch (IOException e) {
@@ -26,7 +28,7 @@ public class TextWriter {
 			}
 		}
 		writer=new OutputStreamWriter(new FileOutputStream(fileName),encoding);
-		this.encoding=Encoding.UTF8;
+		this.encoding= Encoding.UTF8;
 	}
 	
 	public TextWriter(String info ) throws FileNotFoundException{
