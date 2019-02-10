@@ -4,7 +4,6 @@ import com.superstudio.codedom.CodeLinePragma;
 import com.superstudio.codedom.CodeSnippetTypeMember;
 import com.superstudio.commons.Environment;
 import com.superstudio.commons.HashCodeCombiner;
-import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.razor.parser.syntaxTree.Block;
 import com.superstudio.web.razor.text.LocationTagged;
 import org.apache.commons.lang3.StringUtils;
@@ -54,7 +53,7 @@ public class HelperCodeGenerator extends BlockCodeGenerator {
 
 	@Override
 	public void generateStartBlockCode(Block target, CodeGeneratorContext context) throws Exception {
-		_writer = context.CreateCodeWriter();
+		_writer = context.createCodeWriter();
 
 
 		// methods are not converted

@@ -104,7 +104,7 @@ public abstract class MarkupRewriter extends ParserVisitor implements ISyntaxTre
 		//throw new NotImplementedException();
 	}
 
-	protected final void FillSpan(SpanBuilder builder, SourceLocation start, String content)
+	protected final void fillSpan(SpanBuilder builder, SourceLocation start, String content)
 	{
 		_markupSpanFactory.execute(builder, start, content);
 	}

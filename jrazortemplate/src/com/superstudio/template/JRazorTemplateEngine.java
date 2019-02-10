@@ -51,7 +51,7 @@ public class JRazorTemplateEngine implements AutoCloseable {
     public static void render(TemplateInfo template, TemplateDataDictionary templateData, Writer writer) throws Exception {
 
            HostContext host = HostContext.getCurrent();
-           RenderContext context = new RenderContext(host, template, null);
+           RenderContext context = new RenderContext(host, template);
 
          context.setWriter(writer);
            context.setTemplateData(templateData);
@@ -59,14 +59,14 @@ public class JRazorTemplateEngine implements AutoCloseable {
           //... prepare  parameters,which you can access them by @ViewBag.get("variantName")
 
         //  String result=engine.renderTemplate(context,"index","");
-           TemplateResult result = new TemplateResult();
+           TemplateResult result = new TemplateResult(context);
            result.setMasterName("");
-           result.setTemplateData(context.getTemplateData());
-           result.setTemplateName(template.getTemplateName());
-           result.setTempData(context.getTemplateData().getTemplateData());
-           result.setTemplateEngine(host.getTemplateEngineCollection());
-
-           result.execute(context);
+          // result.setTemplateData(context.getTemplateData());
+           //result.setTemplateName(template.getTemplateName());
+           //result.setTempData(context.getTemplateData().getTemplateData());
+           //result.setTemplateEngine(host.getTemplateEngineCollection());
+            result.execute(context);
+          // result.execute(context);
 
 
     }

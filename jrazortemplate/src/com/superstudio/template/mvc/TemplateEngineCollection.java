@@ -169,7 +169,7 @@ public class TemplateEngineCollection extends ArrayList<ITemplateEngine> {
 				try {
 					return e.findTemplate(renderContext, templateName, masterName, true);
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
+
 					e1.printStackTrace();
 					return null;
 				}

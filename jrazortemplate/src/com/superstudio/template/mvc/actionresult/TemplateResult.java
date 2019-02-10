@@ -10,6 +10,15 @@ import com.superstudio.template.mvc.context.RenderContext;
 public class TemplateResult extends TemplateResultBase {
 
 	private String masterName;
+	public TemplateResult(){
+
+	}
+
+	public TemplateResult(RenderContext context){
+		this.setTemplateData(context.getTemplateData());
+		this.setTemplateName(context.getTemplateInfo().getTemplateName());
+		this.setTempData(this.getTemplateData().getTemplateData());
+	}
 
 	public String getMasterName() {
 		return masterName == null ? "" : masterName;
@@ -26,7 +35,7 @@ public class TemplateResult extends TemplateResultBase {
 	long time=System.currentTimeMillis();
 		TemplateEngineResult result = getTemplateEngine().findTemplate(context, getTemplateName(), getMasterName());
 		long time2=System.currentTimeMillis();
-		CodeExecuteTimeStatistic.evalute(this.getClass().getName()+"findTemplate",time2-time);
+		CodeExecuteTimeStatistic.evalute(this.getClass().getName()+"-findTemplate",time2-time);
 		if (result.getTemplate() != null) {
 			return result;
 		}
@@ -44,4 +53,7 @@ public class TemplateResult extends TemplateResultBase {
 						new Object[] { getTemplateName(), locationsText }));
 	}
 
+	 //public void execute(){
+		//super.execute(this.getRenderContext());
+	//}
 }

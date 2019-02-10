@@ -94,7 +94,7 @@ public class RazorTemplateEngine {
 		// Construct the parser
 		RazorParser parser = createParser();
 		assert parser != null;
-		return parser.Parse(input);
+		return parser.parse(input);
 	}
 
 	public final GeneratorResults generateCode(ITextBuffer input) throws Exception {
@@ -187,14 +187,14 @@ public class RazorTemplateEngine {
 		// Run the parser
 		RazorParser parser = createParser();
 		assert parser != null;
-		ParserResults results = parser.Parse(input);
+		ParserResults results = parser.parse(input);
 
 		// Generate code
 		RazorCodeGenerator generator = createCodeGenerator(className, rootNamespace, sourceFileName);
 		generator.setDesignTimeMode(getHost().getDesignTimeMode());
 		generator.visit(results);
 
-		// Post process code
+		// post process code
 		getHost().postProcessGeneratedCode(generator.getContext());
 
 		// Extract design-time mappings

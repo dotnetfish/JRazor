@@ -20,7 +20,10 @@ import java.util.function.Predicate;
 
 
 
-public abstract class Tokenizer<TSymbol extends SymbolBase<TSymbolType>, TSymbolType> extends StateMachine<TSymbol> 
+/**
+ * @author cloudartisan
+ */
+public abstract class Tokenizer<TSymbol extends SymbolBase<TSymbolType>, TSymbolType> extends StateMachine<TSymbol>
 implements ITokenizer 
 {
 	
@@ -36,7 +39,7 @@ implements ITokenizer
 		setSource(new TextDocumentReader(source));
 		setBuffer(new StringBuilder());
 		setCurrentErrors(new java.util.ArrayList<RazorError>());
-		StartSymbol();
+		startSymbol();
 	}
 
 	private TextDocumentReader privateSource;
@@ -104,11 +107,12 @@ implements ITokenizer
 		privateCurrentStart = value;
 	}
 
-	public TSymbol nextSymbol()
+	@Override
+    public TSymbol nextSymbol()
 	{
-		// Post-Condition: Buffer should be empty at the start of next()
+		// post-Condition: Buffer should be empty at the start of next()
 		assert getBuffer().length() == 0;
-		StartSymbol();
+		startSymbol();
 
 		if (getEndOfFile())
 		{
@@ -116,13 +120,13 @@ implements ITokenizer
 		}
 		TSymbol sym = turn();
 
-		// Post-Condition: Buffer should be empty at the end of next()
+		// post-Condition: Buffer should be empty at the end of next()
 		assert getBuffer().length() == 0;
 
 		return sym;
 	}
 
-	public final void Reset()
+	public final void reset()
 	{
 		setCurrentState(getStartState());
 	}
@@ -130,10 +134,10 @@ implements ITokenizer
 	protected abstract TSymbol createSymbol(SourceLocation start, String content, TSymbolType type,
 											Iterable<RazorError> errors) throws ArgumentNullException;
 
-	protected final TSymbol Single(TSymbolType type) 
+	protected final TSymbol single(TSymbolType type)
 	{
-		TakeCurrent();
-		return EndSymbol(type);
+		takeCurrent();
+		return endSymbol(type);
 	}
 
 	protected final boolean TakeString(String input, boolean caseSensitive)
@@ -148,24 +152,24 @@ implements ITokenizer
 		}
 		while (!getEndOfFile() && position < input.length() && charFilter.apply(getCurrentCharacter()) == charFilter.apply(input.charAt(position++)))
 		{
-			TakeCurrent();
+			takeCurrent();
 		}
 		return position == input.length();
 	}
 
-	protected final void StartSymbol()
+	protected final void startSymbol()
 	{
 		getBuffer().delete(0,getBuffer().length());
 		setCurrentStart(getCurrentLocation().clone());
 		getCurrentErrors().clear();
 	}
 
-	protected final TSymbol EndSymbol(TSymbolType type) 
+	protected final TSymbol endSymbol(TSymbolType type)
 	{
-		return EndSymbol(getCurrentStart().clone(), type);
+		return endSymbol(getCurrentStart().clone(), type);
 	}
 
-	protected final TSymbol EndSymbol(SourceLocation start, TSymbolType type) 
+	protected final TSymbol endSymbol(SourceLocation start, TSymbolType type)
 	{
 		TSymbol sym = null;
 		if (getHaveContent())
@@ -177,11 +181,11 @@ implements ITokenizer
 				e.printStackTrace();
 			}
 		}
-		StartSymbol();
+		startSymbol();
 		return sym;
 	}
 
-	protected final void ResumeSymbol(TSymbol previous) throws Exception
+	protected final void resumeSymbol(TSymbol previous) throws Exception
 	{
 		// Verify the symbol can be resumed
 		if (previous.getStart().getAbsoluteIndex() + previous.getContent().length() != getCurrentStart().getAbsoluteIndex())
@@ -202,35 +206,35 @@ implements ITokenizer
 		getBuffer().append(newContent);
 	}
 
-	protected final boolean TakeUntil(Predicate<Character> predicate)
+	protected final boolean takeUntil(Predicate<Character> predicate)
 	{
 		// Take all the characters up to the end character
 		while (!getEndOfFile() && !predicate.test(getCurrentCharacter()))
 		{
-			TakeCurrent();
+			takeCurrent();
 		}
 
 		// Why did we end?
 		return !getEndOfFile();
 	}
 
-	protected final Predicate<Character> CharOrWhiteSpace(char character)
+	protected final Predicate<Character> charOrWhiteSpace(char character)
 	{
 
 		return c -> c == character || ParserHelpers.isWhitespace(c) || ParserHelpers.isNewLine(c);
 	}
 
-	protected final void TakeCurrent()
+	protected final void takeCurrent()
 	{
 		if (getEndOfFile())
 		{
 			return;
 		} // No-op
 		getBuffer().append(getCurrentCharacter());
-		MoveNext();
+		moveNext();
 	}
 
-	protected final void MoveNext()
+	protected final void moveNext()
 	{
 
 //#if //Debug
@@ -239,24 +243,24 @@ implements ITokenizer
 		getSource().read();
 	}
 
-	protected final boolean TakeAll(String expected, boolean caseSensitive)
+	protected final boolean takeAll(String expected, boolean caseSensitive)
 	{
-		return Lookahead(expected, true, caseSensitive);
+		return lookahead(expected, true, caseSensitive);
 	}
 
-	protected final boolean At(String expected, boolean caseSensitive)
+	protected final boolean at(String expected, boolean caseSensitive)
 	{
-		return Lookahead(expected, false, caseSensitive);
+		return lookahead(expected, false, caseSensitive);
 	}
 
-	protected final char Peek()
+	protected final char peek()
 	{
 
 //		using (LookaheadToken lookahead = Source.beginLookahead())
-		LookaheadToken lookahead = getSource().BeginLookahead();
+		LookaheadToken lookahead = getSource().beginLookahead();
 		try
 		{
-			MoveNext();
+			moveNext();
 			return getCurrentCharacter();
 		}
 		finally
@@ -265,27 +269,27 @@ implements ITokenizer
 		}
 	}
 
-	protected final StateResult AfterRazorCommentTransition() 
+	protected final StateResult afterRazorCommentTransition()
 	{
 		if (getCurrentCharacter() != '*')
 		{
 			// We've been moved since last time we were asked for a symbol... reset the state
 			return transition(getStartState());
 		}
-		AssertCurrent('*');
-		TakeCurrent();
-		return transition(EndSymbol(getRazorCommentStarType()), ()->RazorCommentBody());
+		assertCurrent('*');
+		takeCurrent();
+		return transition(endSymbol(getRazorCommentStarType()), ()-> razorCommentBody());
 	}
 
-	protected final StateResult RazorCommentBody() 
+	protected final StateResult razorCommentBody()
 	{
 
-		TakeUntil(c -> c == '*');
+		takeUntil(c -> c == '*');
 		if (getCurrentCharacter() == '*')
 		{
 			char star = getCurrentCharacter();
 			SourceLocation start = getCurrentLocation().clone();
-			MoveNext();
+			moveNext();
 			if (!getEndOfFile() && getCurrentCharacter() == '@')
 			{
 
@@ -294,21 +298,21 @@ implements ITokenizer
 					getBuffer().append(star);
 							// We've been moved since last time we were asked for a symbol... reset the state
 
-					return transition(EndSymbol(start, getRazorCommentStarType()), () ->
+					return transition(endSymbol(start, getRazorCommentStarType()), () ->
 					{
 						if (getCurrentCharacter() != '@')
 						{
 							return transition(getStartState());
 						}
-						TakeCurrent();
-						return transition(EndSymbol(getRazorCommentTransitionType()), getStartState());
+						takeCurrent();
+						return transition(endSymbol(getRazorCommentTransitionType()), getStartState());
 					}
 				   );
 				};
 
 				if (getHaveContent())
 				{
-					return transition(EndSymbol(getRazorCommentType()), next);
+					return transition(endSymbol(getRazorCommentType()), next);
 				}
 				else
 				{
@@ -321,10 +325,10 @@ implements ITokenizer
 				return stay();
 			}
 		}
-		return transition(EndSymbol(getRazorCommentType()), getStartState());
+		return transition(endSymbol(getRazorCommentType()), getStartState());
 	}
 
-	private boolean Lookahead(String expected, boolean takeIfMatch, boolean caseSensitive)
+	private boolean lookahead(String expected, boolean takeIfMatch, boolean caseSensitive)
 	{
 
 		Function<Character, Character> filter = c -> c;
@@ -348,12 +352,12 @@ implements ITokenizer
 
 
 //		using (LookaheadToken lookahead = Source.beginLookahead())
-		LookaheadToken lookahead = getSource().BeginLookahead();
+		LookaheadToken lookahead = getSource().beginLookahead();
 		try
 		{
 			for (int i = 0; i < expected.length(); i++)
 			{
-				if (filter.apply(getCurrentCharacter()) != filter.apply(expected.charAt(i)))
+				if (!filter.apply(getCurrentCharacter()).equals(filter.apply(expected.charAt(i))))
 				{
 					if (takeIfMatch)
 					{
@@ -367,11 +371,11 @@ implements ITokenizer
 				}
 				if (takeIfMatch)
 				{
-					TakeCurrent();
+					takeCurrent();
 				}
 				else
 				{
-					MoveNext();
+					moveNext();
 				}
 			}
 			if (takeIfMatch)
@@ -388,7 +392,7 @@ implements ITokenizer
 
 
 	//[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "This only occurs in Release builds, where this method is empty by design"), Conditional("//Debug")]
-	public final void AssertCurrent(char current)
+	public final void assertCurrent(char current)
 	{
 		//assert (getCurrentCharacter() == current, "CurrentCharacter Assumption violated", "Assumed that the current character would be {0}, but it is actually {1}", current, getCurrentCharacter());
 	}

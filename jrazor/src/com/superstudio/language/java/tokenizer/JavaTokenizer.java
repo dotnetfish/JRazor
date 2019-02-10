@@ -18,6 +18,8 @@ import java.util.function.Supplier;
 public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 {
 	private java.util.HashMap<Character, Supplier<JavaSymbolType>> _operatorHandlers;
+	private static final char BACKSLASH='\\';
+	private static final char ASTERISK ='*';
 
 	public JavaTokenizer(ITextDocument source) throws Exception
 	{
@@ -93,19 +95,19 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 		{
 			// CSharp Spec §2.3.1
 			boolean checkTwoCharNewline = getCurrentCharacter() == '\r';
-			TakeCurrent();
+			takeCurrent();
 			if (checkTwoCharNewline && getCurrentCharacter() == '\n')
 			{
-				TakeCurrent();
+				takeCurrent();
 			}
-			return stay(EndSymbol(JavaSymbolType.NewLine));
+			return stay(endSymbol(JavaSymbolType.NewLine));
 		}
 		else if (ParserHelpers.isWhitespace(getCurrentCharacter()))
 		{
 			// CSharp Spec §2.3.3
 
-			TakeUntil(c -> !ParserHelpers.isWhitespace(c));
-			return stay(EndSymbol(JavaSymbolType.WhiteSpace));
+			takeUntil(c -> !ParserHelpers.isWhitespace(c));
+			return stay(endSymbol(JavaSymbolType.WhiteSpace));
 		}
 		else if (JavaHelpers.isIdentifierStart(getCurrentCharacter()))
 		{
@@ -120,75 +122,75 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 			case '@':
 				return atSymbol();
 			case '\'':
-				TakeCurrent();
+				takeCurrent();
 
 				return transition(() -> quotedLiteral('\'', JavaSymbolType.CharacterLiteral));
 			case '"':
-				TakeCurrent();
+				takeCurrent();
 
 				return transition(() -> quotedLiteral('"', JavaSymbolType.StringLiteral));
 			case '.':
-				if (Character.isDigit(Peek()))
+				if (Character.isDigit(peek()))
 				{
 					return realLiteral();
 				}
-				return stay(Single(JavaSymbolType.Dot));
+				return stay(single(JavaSymbolType.Dot));
 			case '/':
-				TakeCurrent();
+				takeCurrent();
 				if (getCurrentCharacter() == '/')
 				{
-					TakeCurrent();
+					takeCurrent();
 					return singleLineComment();
 				}
-				else if (getCurrentCharacter() == '*')
+				else if (getCurrentCharacter() == ASTERISK)
 				{
-					TakeCurrent();
+					takeCurrent();
 					return transition(()-> blockComment());
 				}
 				else if (getCurrentCharacter() == '=')
 				{
-					TakeCurrent();
-					return stay(EndSymbol(JavaSymbolType.DivideAssign));
+					takeCurrent();
+					return stay(endSymbol(JavaSymbolType.DivideAssign));
 				}
 				else
 				{
-					return stay(EndSymbol(JavaSymbolType.Slash));
+					return stay(endSymbol(JavaSymbolType.Slash));
 				}
 			default:
-				return stay(EndSymbol(operator()));
+				return stay(endSymbol(operator()));
 		}
 	}
 
 	private StateResult atSymbol()
 	{
-		TakeCurrent();
+		takeCurrent();
 		if (getCurrentCharacter() == '"')
 		{
-			TakeCurrent();
+			takeCurrent();
 			return transition(()-> verbatimStringLiteral());
 		}
-		else if (getCurrentCharacter() == '*')
+		else if (getCurrentCharacter() == ASTERISK)
 		{
-			return transition(EndSymbol(JavaSymbolType.RazorCommentTransition), ()->AfterRazorCommentTransition());
+			return transition(endSymbol(JavaSymbolType.RazorCommentTransition), ()-> afterRazorCommentTransition());
 		}
 		else if (getCurrentCharacter() == '@')
 		{
 			// Could be escaped comment transition
 
-			return transition(EndSymbol(JavaSymbolType.Transition), () ->
+			return transition(endSymbol(JavaSymbolType.Transition), () ->
 			{
-				TakeCurrent();
-				return transition(EndSymbol(JavaSymbolType.Transition), ()->Data());
+				takeCurrent();
+				return transition(endSymbol(JavaSymbolType.Transition), ()->Data());
 			}
 		   );
 		}
-		return stay(EndSymbol(JavaSymbolType.Transition));
+		return stay(endSymbol(JavaSymbolType.Transition));
 	}
 
 	private JavaSymbolType operator()
 	{
 		char first = getCurrentCharacter();
-		TakeCurrent();
+		takeCurrent();
 		Supplier<JavaSymbolType> handler = null;
 		if ((handler = _operatorHandlers.get(first)) != null)
 		{
@@ -201,7 +203,7 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 	{
 		if (getCurrentCharacter() == '=')
 		{
-			TakeCurrent();
+			takeCurrent();
 			return JavaSymbolType.LessThanEqual;
 		}
 		return JavaSymbolType.LessThan;
@@ -211,7 +213,7 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 	{
 		if (getCurrentCharacter() == '=')
 		{
-			TakeCurrent();
+			takeCurrent();
 			return JavaSymbolType.GreaterThanEqual;
 		}
 		return JavaSymbolType.GreaterThan;
@@ -221,17 +223,17 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 	{
 		if (getCurrentCharacter() == '>')
 		{
-			TakeCurrent();
+			takeCurrent();
 			return JavaSymbolType.Arrow;
 		}
 		else if (getCurrentCharacter() == '-')
 		{
-			TakeCurrent();
+			takeCurrent();
 			return JavaSymbolType.Decrement;
 		}
 		else if (getCurrentCharacter() == '=')
 		{
-			TakeCurrent();
+			takeCurrent();
 			return JavaSymbolType.MinusAssign;
 		}
 		return JavaSymbolType.Minus;
@@ -244,7 +246,7 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 		{
 			if (getCurrentCharacter() == second)
 			{
-				TakeCurrent();
+				takeCurrent();
 				return typeIfBoth;
 			}
 			return typeIfOnlyFirst;
@@ -258,12 +260,12 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 		{
 			if (getCurrentCharacter() == option1)
 			{
-				TakeCurrent();
+				takeCurrent();
 				return typeIfOption1;
 			}
 			else if (getCurrentCharacter() == option2)
 			{
-				TakeCurrent();
+				takeCurrent();
 				return typeIfOption2;
 			}
 			return typeIfOnlyFirst;
@@ -273,13 +275,13 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 	private StateResult verbatimStringLiteral()
 	{
 
-		TakeUntil(c -> c == '"');
+		takeUntil(c -> c == '"');
 		if (getCurrentCharacter() == '"')
 		{
-			TakeCurrent();
+			takeCurrent();
 			if (getCurrentCharacter() == '"')
 			{
-				TakeCurrent();
+				takeCurrent();
 				// stay in the literal, this is an escaped "
 				return stay();
 			}
@@ -288,21 +290,21 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 		{
 			getCurrentErrors().add(new RazorError(RazorResources.getResource(RazorResources.ParseError_Unterminated_String_Literal), getCurrentStart().clone()));
 		}
-		return transition(EndSymbol(JavaSymbolType.StringLiteral), ()->Data());
+		return transition(endSymbol(JavaSymbolType.StringLiteral), ()->Data());
 	}
 
 	private StateResult quotedLiteral(char quote, JavaSymbolType literalType)
 	{
 
-		TakeUntil(c -> c == '\\' || c == quote || ParserHelpers.isNewLine(c));
-		if (getCurrentCharacter() == '\\')
+		takeUntil(c -> c == BACKSLASH || c == quote || ParserHelpers.isNewLine(c));
+		if (getCurrentCharacter() == BACKSLASH)
 		{
-			TakeCurrent(); // Take the '\'
+			takeCurrent(); // Take the '\'
 
 			// If the next char is the same quote that started this
-			if (getCurrentCharacter() == quote || getCurrentCharacter() == '\\')
+			if (getCurrentCharacter() == quote || getCurrentCharacter() == BACKSLASH)
 			{
-				TakeCurrent(); // Take it so that we don't prematurely end the literal.
+				takeCurrent(); // Take it so that we don't prematurely end the literal.
 			}
 			return stay();
 		}
@@ -312,45 +314,45 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 		}
 		else
 		{
-			TakeCurrent(); // No-op if at EOF
+			takeCurrent(); // No-op if at EOF
 		}
-		return transition(EndSymbol(literalType), ()->Data());
+		return transition(endSymbol(literalType), ()->Data());
 	}
 
-	// CSharp Spec §2.3.2
+
 	private StateResult blockComment()
 	{
 
-		TakeUntil(c -> c == '*');
+		takeUntil(c -> c == ASTERISK);
 		if (getEndOfFile())
 		{
 			getCurrentErrors().add(new RazorError(RazorResources.getResource(RazorResources.ParseError_BlockComment_Not_Terminated), getCurrentStart().clone()));
-			return transition(EndSymbol(JavaSymbolType.Comment), ()->Data());
+			return transition(endSymbol(JavaSymbolType.Comment), ()->Data());
 		}
-		if (getCurrentCharacter() == '*')
+		if (getCurrentCharacter() == ASTERISK)
 		{
-			TakeCurrent();
+			takeCurrent();
 			if (getCurrentCharacter() == '/')
 			{
-				TakeCurrent();
-				return transition(EndSymbol(JavaSymbolType.Comment), ()->Data());
+				takeCurrent();
+				return transition(endSymbol(JavaSymbolType.Comment), ()->Data());
 			}
 		}
 		return stay();
 	}
 
-	// CSharp Spec §2.3.2
+
 	private StateResult singleLineComment()
 	{
 
-		TakeUntil(c -> ParserHelpers.isNewLine(c));
-		return stay(EndSymbol(JavaSymbolType.Comment));
+		takeUntil(c -> ParserHelpers.isNewLine(c));
+		return stay(endSymbol(JavaSymbolType.Comment));
 	}
 
-	// CSharp Spec §2.4.4
+	
 	private StateResult numericLiteral()
 	{
-		if (TakeAll("0x", true))
+		if (takeAll("0x", true))
 		{
 			return hexLiteral();
 		}
@@ -363,16 +365,16 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 	private StateResult hexLiteral()
 	{
 
-		TakeUntil(c -> !ParserHelpers.isHexDigit(c));
+		takeUntil(c -> !ParserHelpers.isHexDigit(c));
 		takeIntegerSuffix();
-		return stay(EndSymbol(JavaSymbolType.IntegerLiteral));
+		return stay(endSymbol(JavaSymbolType.IntegerLiteral));
 	}
 
 	private StateResult decimalLiteral()
 	{
 
-		TakeUntil(c -> !Character.isDigit(c));
-		if (getCurrentCharacter() == '.' && Character.isDigit(Peek()))
+		takeUntil(c -> !Character.isDigit(c));
+		if (getCurrentCharacter() == '.' && Character.isDigit(peek()))
 		{
 			return realLiteral();
 		}
@@ -383,7 +385,7 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 		else
 		{
 			takeIntegerSuffix();
-			return stay(EndSymbol(JavaSymbolType.IntegerLiteral));
+			return stay(endSymbol(JavaSymbolType.IntegerLiteral));
 		}
 	}
 
@@ -391,29 +393,29 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 	{
 		if (getCurrentCharacter() == 'E' || getCurrentCharacter() == 'e')
 		{
-			TakeCurrent();
+			takeCurrent();
 			if (getCurrentCharacter() == '+' || getCurrentCharacter() == '-')
 			{
-				TakeCurrent();
+				takeCurrent();
 			}
 
-			TakeUntil(c -> !Character.isDigit(c));
+			takeUntil(c -> !Character.isDigit(c));
 		}
 		if (JavaHelpers.isRealLiteralSuffix(getCurrentCharacter()))
 		{
-			TakeCurrent();
+			takeCurrent();
 		}
-		return stay(EndSymbol(JavaSymbolType.RealLiteral));
+		return stay(endSymbol(JavaSymbolType.RealLiteral));
 	}
 
 
 	private StateResult realLiteral()
 	{
-		AssertCurrent('.');
-		TakeCurrent();
+		assertCurrent('.');
+		takeCurrent();
 		assert Character.isDigit(getCurrentCharacter());
 
-		TakeUntil(c -> !Character.isDigit(c));
+		takeUntil(c -> !Character.isDigit(c));
 		return realLiteralExponentPart();
 	}
 
@@ -421,18 +423,18 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 	{
 		if (Character.toLowerCase(getCurrentCharacter()) == 'u')
 		{
-			TakeCurrent();
+			takeCurrent();
 			if (Character.toLowerCase(getCurrentCharacter()) == 'l')
 			{
-				TakeCurrent();
+				takeCurrent();
 			}
 		}
 		else if (Character.toLowerCase(getCurrentCharacter()) == 'l')
 		{
-			TakeCurrent();
+			takeCurrent();
 			if (Character.toLowerCase(getCurrentCharacter()) == 'u')
 			{
-				TakeCurrent();
+				takeCurrent();
 			}
 		}
 	}
@@ -441,9 +443,9 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 	private StateResult identifier()
 	{
 		assert JavaHelpers.isIdentifierStart(getCurrentCharacter());
-		TakeCurrent();
+		takeCurrent();
 
-		TakeUntil(c -> !JavaHelpers.isIdentifierPart(c));
+		takeUntil(c -> !JavaHelpers.isIdentifierPart(c));
 		JavaSymbol sym = null;
 		if (getHaveContent())
 		{
@@ -464,7 +466,7 @@ public class JavaTokenizer extends Tokenizer<JavaSymbol, JavaSymbolType>
 			tempVar.setKeyword(kwd);
 			sym = tempVar;
 		}
-		StartSymbol();
+		startSymbol();
 		return stay(sym);
 	}
 }

@@ -71,7 +71,7 @@ public class JavaBuildManager {
 			GeneratorResults result = engine.GenerateCode(reader);
 
 			CodeDomProvider provider = JavaCodeProvider.createProvider("java");
-			String codePath = root + "WEB-INF/Templates/" + className + ".java";
+			String codePath = root + "WEB-INF/Templates/" + className + "_bak_.java";
 
 			TextWriter writer = new TextWriter(codePath, "UTF-8");
 			ICodeGenerator generator = provider.createGenerator(writer);
@@ -82,7 +82,7 @@ public class JavaBuildManager {
 			writer.flush();
 			writer.close();
         JavaBuilder builder = JavaBuilder.getInstance();
-        Class clazz=builder.compilePath(codePath,templatePath);
+        Class clazz=builder.compilePath(root + "WEB-INF/Templates/" + className + ".java",templatePath);
         return  clazz;
 
 	}

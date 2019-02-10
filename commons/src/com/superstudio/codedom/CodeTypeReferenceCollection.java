@@ -2,6 +2,9 @@ package com.superstudio.codedom;
 
 import java.io.Serializable;
 
+/**
+ * @author cloudartisan
+ */
 public class CodeTypeReferenceCollection extends CollectionBase implements Serializable
 {
 	public final CodeTypeReference getItem(int index)
@@ -19,30 +22,31 @@ public class CodeTypeReferenceCollection extends CollectionBase implements Seria
 
 	public CodeTypeReferenceCollection(CodeTypeReferenceCollection value)
 	{
-		this.AddRange(value);
+		this.addRange(value);
 	}
 
 	public CodeTypeReferenceCollection(CodeTypeReference[] value)
 	{
-		this.AddRange(value);
+		this.addRange(value);
 	}
 
-	public final int Add(CodeTypeReference value)
+	public final int add(CodeTypeReference value)
 	{
-		add(value);return size();
+		add(value);
+		return size();
 	}
 
-	public final void Add(String value)
+	public final void add(String value)
 	{
-		this.Add(new CodeTypeReference(value));
+		this.add(new CodeTypeReference(value));
 	}
 
-	public final void Add(java.lang.Class value)
+	public final void add(java.lang.Class value)
 	{
-		this.Add(new CodeTypeReference(value));
+		this.add(new CodeTypeReference(value));
 	}
 
-	public final void AddRange(CodeTypeReference[] value)
+	public final void addRange(CodeTypeReference[] value)
 	{
 		if (value == null)
 		{
@@ -50,11 +54,12 @@ public class CodeTypeReferenceCollection extends CollectionBase implements Seria
 		}
 		for (int i = 0; i < value.length; i++)
 		{
-			this.Add(value[i]);
+			this.add(value[i]);
 		}
+
 	}
 
-	public final void AddRange(CodeTypeReferenceCollection value)
+	public final void addRange(CodeTypeReferenceCollection value)
 	{
 		if (value == null)
 		{
@@ -63,32 +68,8 @@ public class CodeTypeReferenceCollection extends CollectionBase implements Seria
 		int count = value.size();
 		for (int i = 0; i < count; i++)
 		{
-			this.Add(value.getItem(i));
+			this.add(value.getItem(i));
 		}
 	}
 
-	public final boolean Contains(CodeTypeReference value)
-	{
-		return contains(value);
-	}
-
-	public final void CopyTo(CodeTypeReference[] array, int index)
-	{
-		copyTo(array,index);
-	}
-
-	/*public final int indexOf(CodeTypeReference value)
-	{
-		return super.List.indexOf(value);
-	}*/
-
-	public final void Insert(int index, CodeTypeReference value)
-	{
-		add(index,value);
-	}
-
-	public final void Remove(CodeTypeReference value)
-	{
-		remove(value);
-	}
 }

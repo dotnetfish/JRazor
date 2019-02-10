@@ -21,7 +21,7 @@ public class MvcJavaRazorCodeGenerator extends JavaRazorCodeGenerator
 	private void setBaseType(String modelTypeName)
 	{
 		CodeTypeReference value = new CodeTypeReference(super.getContext().getHost().getDefaultBaseClass() + "<" + modelTypeName + ">");
-		super.getContext().getGeneratedClass().getBaseTypes().Clear();
-		super.getContext().getGeneratedClass().getBaseTypes().Add(value);
+		super.getContext().getGeneratedClass().getBaseTypes().clear();
+		super.getContext().getGeneratedClass().getBaseTypes().add(value);
 	}
 }

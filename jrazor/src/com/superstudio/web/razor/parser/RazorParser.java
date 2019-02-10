@@ -78,8 +78,8 @@ public class RazorParser {
 		privateDesignTimeMode = value;
 	}
 
-	public void Parse(TextReader input, ParserVisitor visitor) throws Exception {
-		ParserResults results = ParseCore(new SeekableTextReader(input));
+	public void parse(TextReader input, ParserVisitor visitor) throws Exception {
+		ParserResults results = parseCore(new SeekableTextReader(input));
 
 		// Replay the results on the visitor
 		try {
@@ -90,17 +90,17 @@ public class RazorParser {
 		}
 	}
 
-	public ParserResults Parse(TextReader input) throws Exception {
-		return ParseCore(new SeekableTextReader(input));
+	public ParserResults parse(TextReader input) throws Exception {
+		return parseCore(new SeekableTextReader(input));
 	}
 
-	public ParserResults Parse(ITextDocument input) throws Exception {
-		return ParseCore(input);
+	public ParserResults parse(ITextDocument input) throws Exception {
+		return parseCore(input);
 	}
 
 	@Deprecated
-	public void Parse(LookaheadTextReader input, ParserVisitor visitor) throws Exception {
-		ParserResults results = ParseCore(new SeekableTextReader(input));
+	public void parse(LookaheadTextReader input, ParserVisitor visitor) throws Exception {
+		ParserResults results = parseCore(new SeekableTextReader(input));
 
 		// Replay the results on the visitor
 		try {
@@ -112,43 +112,43 @@ public class RazorParser {
 	}
 
 	@Deprecated
-	public ParserResults Parse(LookaheadTextReader input) throws Exception {
-		return ParseCore(new SeekableTextReader(input));
+	public ParserResults parse(LookaheadTextReader input) throws Exception {
+		return parseCore(new SeekableTextReader(input));
 	}
 	
-	public Runnable CreateParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback) {
-		return CreateParseTask(input, new CallbackVisitor(spanCallback, errorCallback));
+	public Runnable createParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback) {
+		return createParseTask(input, new CallbackVisitor(spanCallback, errorCallback));
 	}
 
-	public Runnable CreateParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
-			SynchronizationContext context) {
+	public Runnable createParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
+									SynchronizationContext context) {
 		CallbackVisitor tempVar = new CallbackVisitor(spanCallback, errorCallback);
 		tempVar.setSynchronizationContext(context);
-		return CreateParseTask(input, tempVar);
+		return createParseTask(input, tempVar);
 	}
 
-	public Runnable CreateParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
-			CancellationToken cancelToken) {
+	public Runnable createParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
+									CancellationToken cancelToken) {
 		CallbackVisitor tempVar = new CallbackVisitor(spanCallback, errorCallback);
 		tempVar.setCancelToken(cancelToken);
-		return CreateParseTask(input, tempVar);
+		return createParseTask(input, tempVar);
 	}
 
-	public Runnable CreateParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
-			SynchronizationContext context, CancellationToken cancelToken) {
+	public Runnable createParseTask(TextReader input, Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
+									SynchronizationContext context, CancellationToken cancelToken) {
 		CallbackVisitor tempVar = new CallbackVisitor(spanCallback, errorCallback);
 		tempVar.setSynchronizationContext(context);
 		tempVar.setCancelToken(cancelToken);
-		return CreateParseTask(input, tempVar);
+		return createParseTask(input, tempVar);
 	}
 
 
-		public Runnable CreateParseTask(TextReader input, ParserVisitor consumer) {
+		public Runnable createParseTask(TextReader input, ParserVisitor consumer) {
 
 		// methods are not converted
 			return () ->{
 				try {
-					Parse(input, consumer);
+					parse(input, consumer);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -157,7 +157,7 @@ public class RazorParser {
 
 	}
 
-	private ParserResults ParseCore(ITextDocument input) throws Exception  {
+	private ParserResults parseCore(ITextDocument input) throws Exception  {
 		// Setup the parser context
 		ParserContext tempVar = new ParserContext(input, getCodeParser(), getMarkupParser(), getMarkupParser());
 		tempVar.setDesignTimeMode(getDesignTimeMode());
@@ -167,21 +167,12 @@ public class RazorParser {
 		getCodeParser().setContext(context);
 
 		// Execute the parse
-		//try {
-			getMarkupParser().ParseDocument();
-			//getCodeParser().ParseDocument();
-	//	} catch (NotSupportedException e1) {
-			// TODO Auto-generated catch block
-		//	e1.printStackTrace();
-		//} catch (InvalidOperationException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		//}
 
-		// Get the result
+			getMarkupParser().parseDocument();
+
 		ParserResults results = null;
 		try {
-			results = context.CompleteParse();
+			results = context.completeParse();
 		} catch (InvalidOperationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -7,8 +7,6 @@ import com.superstudio.web.RazorResources;
 import com.superstudio.web.razor.parser.syntaxTree.SpanBuilder;
 import com.superstudio.web.razor.text.SourceLocation;
 
-import java.util.Locale;
-
 
 public abstract class ParserBase
 {
@@ -21,7 +19,7 @@ public abstract class ParserBase
 	public void setContext(ParserContext value)
 	{
 		_context = value;
-		_context.AssertOnOwnerTask();
+		_context.assertOnOwnerTask();
 	}
 
 	public boolean getIsMarkupParser()
@@ -35,9 +33,9 @@ public abstract class ParserBase
 
 	public abstract void parseBlock() throws InvalidOperationException ;
 
-	// Markup Parsers need the ParseDocument and parseSection methods since the markup parser is the first parser to hit the document
+	// Markup Parsers need the parseDocument and parseSection methods since the markup parser is the first parser to hit the document
 	// and the logic may be different than the parseBlock method.
-	public void ParseDocument() throws NotSupportedException, InvalidOperationException
+	public void parseDocument() throws NotSupportedException, InvalidOperationException
 	{
 		assert getIsMarkupParser();
 		throw new NotSupportedException(RazorResources.getResource(RazorResources.ParserIsNotAMarkupParser));

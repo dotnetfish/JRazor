@@ -21,6 +21,13 @@ public class HostBuilder {
         return this;
     }
 
+    public  HostBuilder useWebHost(){
+        this.host=new WebTemplateHost();
+        HostContext.initRequestContext(host);
+
+        return this;
+    }
+
     public HostBuilder useHost(HostContext host) {
         this.host = host;
         HostContext.initRequestContext(host);
@@ -44,7 +51,7 @@ build host
     /*
     使用文件监控自动编译更新模板
      */
-    public HostBuilder useAutoCompiler(String templateRoot) {
+    public HostBuilder autoCompile(String templateRoot) {
         // 监控目录
         String rootDir = templateRoot;
         // 轮询间隔 1 秒

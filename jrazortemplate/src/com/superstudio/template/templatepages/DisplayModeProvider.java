@@ -35,7 +35,7 @@ public final class DisplayModeProvider {
 	/**
 	 * Restricts the search for Display Info to Display Modes either equal to or
 	 * following the current Display Mode in Modes. For example, a page being
-	 * rendered in the Default Display Mode will not display Mobile partial
+	 * rendered in the getDefault Display Mode will not display Mobile partial
 	 * templates in order to achieve a consistent look and feel.
 	 */
 	private boolean RequireConsistentDisplayMode;

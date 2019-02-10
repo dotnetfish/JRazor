@@ -8,20 +8,20 @@ import com.superstudio.web.razor.RazorEngineHost;
 
 public class MvcJavaRazorCodeGenerator extends JavaRazorCodeGenerator
 {
-	//private static final String DefaultModelTypeName = "dynamic";
+	private static final String DefaultModelTypeName = "dynamic";
 	public MvcJavaRazorCodeGenerator(String className, String rootNamespaceName, String sourceFileName, RazorEngineHost host) throws Exception
 	{
 		super(className, rootNamespaceName, sourceFileName, host);
 		MvcWebPageRazorHost mvcWebPageRazorHost = (MvcWebPageRazorHost)((host instanceof MvcWebPageRazorHost) ? host : null);
 		if (mvcWebPageRazorHost != null && !mvcWebPageRazorHost.getIsSpecialPage())
 		{
-			this.setBaseType("dynamic");
+			this.setBaseType(DefaultModelTypeName);
 		}
 	}
 	private void setBaseType(String modelTypeName)
 	{
 		CodeTypeReference value = new CodeTypeReference(super.getContext().getHost().getDefaultBaseClass() + "<" + modelTypeName + ">");
-		super.getContext().getGeneratedClass().getBaseTypes().Clear();
-		super.getContext().getGeneratedClass().getBaseTypes().Add(value);
+		super.getContext().getGeneratedClass().getBaseTypes().clear();
+		super.getContext().getGeneratedClass().getBaseTypes().add(value);
 	}
 }

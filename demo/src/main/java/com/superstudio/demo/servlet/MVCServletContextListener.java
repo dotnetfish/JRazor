@@ -8,6 +8,7 @@ import com.superstudio.template.mvc.RazorTemplateEngine;
 import com.superstudio.template.mvc.context.HostContext;
 import com.superstudio.template.mvc.templateengine.TemplateEngines;
 import com.superstudio.web.HostBuilder;
+import com.superstudio.web.WebTemplateHost;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -25,8 +26,8 @@ public class MVCServletContextListener implements ServletContextListener {
 
         HostBuilder builder=new HostBuilder();
         WebTemplateHost templateHost=new WebTemplateHost();
-       HostContext host= builder.useHost(templateHost)
-               .useAutoCompiler(templateHost.mapPath("/web-inf/templates"))
+        builder.useWebHost()//builder.useHost(templateHost)
+               .autoCompile(templateHost.mapPath("/web-inf/templates"))
                .useTemplateEngine(new RazorTemplateEngine()).build();
 
     }

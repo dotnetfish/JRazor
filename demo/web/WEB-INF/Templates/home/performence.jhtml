@@ -6,26 +6,21 @@
 <head>
     <title>StockModel - JRazor</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
     <style type="text/css">
         body {
             color: #333333;
             line-height: 150%;
         }
-
         td {
             text-align: center;
         }
-
         thead {
             font-weight: bold;
             background-color: #C8FBAF;
         }
-
         .odd {
             background-color: #F3DEFB;
         }
-
         .even {
             background-color: #EFFFF8;
         }
@@ -47,16 +42,12 @@
     </tr>
     </thead>
     <tbody>
-    @{    int index=0;    String style="even"; }
+    @{    int index=0;  }
     @for(StockModel item : getModel()){
             <tr class="@(index%2==0?"odd":"even")">
             <td>@index</td><td>@item.getId()</td><td>@item.getCode()</td><td style="text-align: left;">@item.getName()</td>
             <td>@item.getPrice()</td><td >@(item.getRange())%</td><td>@(item.getAmount())</td>
-            @if(item.getGravity() >= 20) {
-            <td style="color: red;">@(item.getGravity())%</td>
-           } else {
-            <td style="color: blue;">@(item.getGravity())%</td>
-            }
+            <td style="color: @(item.getGravity()>=20?"red":"blue");">@(item.getGravity())%</td>
         </tr>
         index++;
     }

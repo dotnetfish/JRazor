@@ -36,8 +36,8 @@ public class CodeTypeDelegate extends CodeTypeDeclaration implements Serializabl
 	{
 		super.setTypeAttributes(TypeAttributes.forValue(super.getTypeAttributes().getValue() & ~(TypeAttributes.ClassSemanticsMask)));
 		super.setTypeAttributes(TypeAttributes.forValue(super.getTypeAttributes().getValue() | TypeAttributes.NotPublic));
-		super.getBaseTypes().Clear();
-		super.getBaseTypes().Add(new CodeTypeReference("System.Delegate"));
+		super.getBaseTypes().clear();
+		super.getBaseTypes().add(new CodeTypeReference("System.Delegate"));
 	}
 
 	public CodeTypeDelegate(String name)

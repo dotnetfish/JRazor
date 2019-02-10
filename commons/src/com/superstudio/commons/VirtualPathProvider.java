@@ -42,7 +42,7 @@ import java.nio.file.Paths;
 	// The path to the virtual file.
 	//
 	// 返回结果:
-	// A read-only System.IO.Stream object for the specified virtual file or
+	// A read-only javax.IO.Stream object for the specified virtual file or
 	// resource.
 	public static InputStream OpenFile(String virtualPath) throws FileNotFoundException {
 		return new FileInputStream(Paths.get(virtualPath).toAbsolutePath().toString());
@@ -101,13 +101,7 @@ import java.nio.file.Paths;
 				virtualPath.replace("~","").toLowerCase();
 	File file=new File(url);
 		Boolean result=file.exists();
-		//String relative
-		//Trace.WriteLine(url);
-		//Trace.WriteLine("----------------------------");
-		//Trace.writeLine(" virtualpath="+getClass().getResource("/").getPath().+ "  result="+result);
-		//Trace.writeLine(" virtualpath="+result+"  result"+Paths.get("./jua/WEB-INF/views/home/index.jhtml").toFile().exists());
-		//Trace.writeLine(" virtualpath=/jua/WEB-INF/views/home/index.jhtml  result"+Paths.get("/jua/WEB-INF/views/home/index.jhtml").toFile().exists());
-		
+
 		return result;
 	}
 
@@ -215,7 +209,7 @@ import java.nio.file.Paths;
 
 	//
 	// 摘要:
-	// Initializes the System.Web.Hosting.VirtualPathProvider instance.
+	// Initializes the VirtualPathProvider instance.
 	protected void Initialize() {
 
 	}

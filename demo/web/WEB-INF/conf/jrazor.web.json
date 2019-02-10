@@ -1,0 +1,9 @@
+{
+  "helpers":[
+    "com.superstudio.web.mvc",
+    "com.superstudio.web.templatePages",
+    "com.superstudio.web."
+  ],
+  "templateFactory":"",
+  "VirtualPathProvider":"com.superstudio.web.WebVirtualPathProvider"
+}

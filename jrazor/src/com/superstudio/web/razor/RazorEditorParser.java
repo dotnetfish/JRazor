@@ -291,7 +291,7 @@ protected void dispose(boolean disposing)
 			ex.printStackTrace();
 		}
 
-		////Debug.Assert(args != null, "Event arguments cannot be null");
+		////Debug.assertSymbol(args != null, "Event arguments cannot be null");
 		//TODO
 		ActionTwo<Object,DocumentParseCompleteEventArgs> handler = getDocumentParseComplete();
 		if (handler != null)
@@ -312,10 +312,10 @@ protected void dispose(boolean disposing)
 	//[Conditional("//Debug")]
 	private static void verifyFlagsAreValid(PartialParseResult result)
 	{
-		/*//Debug.Assert(result.HasFlag(PartialParseResult.Accepted) || result.HasFlag(PartialParseResult.Rejected), "Partial parse result does not have either of Accepted or Rejected flags set");
-		//Debug.Assert(result.HasFlag(PartialParseResult.Rejected) || !result.HasFlag(PartialParseResult.SpanContextChanged), "Partial parse result was Accepted AND had SpanContextChanged flag set");
-		//Debug.Assert(result.HasFlag(PartialParseResult.Rejected) || !result.HasFlag(PartialParseResult.AutoCompleteBlock), "Partial parse result was Accepted AND had AutoCompleteBlock flag set");
-		//Debug.Assert(result.HasFlag(PartialParseResult.Accepted) || !result.HasFlag(PartialParseResult.Provisional), "Partial parse result was Rejected AND had Provisional flag set");
+		/*//Debug.assertSymbol(result.HasFlag(PartialParseResult.Accepted) || result.HasFlag(PartialParseResult.Rejected), "Partial parse result does not have either of Accepted or Rejected flags set");
+		//Debug.assertSymbol(result.HasFlag(PartialParseResult.Rejected) || !result.HasFlag(PartialParseResult.SpanContextChanged), "Partial parse result was Accepted AND had SpanContextChanged flag set");
+		//Debug.assertSymbol(result.HasFlag(PartialParseResult.Rejected) || !result.HasFlag(PartialParseResult.AutoCompleteBlock), "Partial parse result was Accepted AND had AutoCompleteBlock flag set");
+		//Debug.assertSymbol(result.HasFlag(PartialParseResult.Accepted) || !result.HasFlag(PartialParseResult.Provisional), "Partial parse result was Rejected AND had Provisional flag set");
 */	}
 	@Override
 	public  void close(){

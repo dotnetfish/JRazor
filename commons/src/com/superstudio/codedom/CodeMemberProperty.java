@@ -60,7 +60,7 @@ public class CodeMemberProperty extends CodeTypeMember implements Serializable
 		this.hasGet = value;
 		if (!value)
 		{
-			this.getStatements.Clear();
+			this.getStatements.clear();
 		}
 	}
 
@@ -73,7 +73,7 @@ public class CodeMemberProperty extends CodeTypeMember implements Serializable
 		this.hasSet = value;
 		if (!value)
 		{
-			this.setStatements.Clear();
+			this.setStatements.clear();
 		}
 	}
 

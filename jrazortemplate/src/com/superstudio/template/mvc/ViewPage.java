@@ -169,7 +169,7 @@ public class TemplatePage extends Page implements ITemplateDataContainer
 		InitHelpers();
 
 		boolean createdSwitchWriter = false;
-		SwitchWriter switchWriter = (SwitchWriter)((templateContext.HttpContext.Response.Output instanceof SwitchWriter) ? templateContext.HttpContext.Response.Output : null);
+		SwitchWriter switchWriter = (SwitchWriter)((templateContext.HttpContext.Response.output instanceof SwitchWriter) ? templateContext.HttpContext.Response.output : null);
 
 		try
 		{

@@ -132,7 +132,7 @@ public final class GeneratedClassContext {
 		privateExecuteMethodName = value;
 	}
 
-	// Optional Items
+	// optional Items
 	private String privateBeginContextMethodName;
 
 	public String getBeginContextMethodName() {

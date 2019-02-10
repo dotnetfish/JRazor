@@ -21,7 +21,7 @@ public interface ITextBuffer
 			return ret;
 		}
 
-	default LookaheadToken BeginLookahead()
+	default LookaheadToken beginLookahead()
 		{
 			int start = getPosition();
 

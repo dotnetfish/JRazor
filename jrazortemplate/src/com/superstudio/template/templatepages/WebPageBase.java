@@ -1,6 +1,7 @@
 package com.superstudio.template.templatepages;
 
 
+import com.superstudio.commons.CodeExecuteTimeStatistic;
 import com.superstudio.commons.exception.ArgumentNullException;
 import com.superstudio.commons.exception.HttpException;
 import com.superstudio.template.mvc.context.HostContext;
@@ -226,8 +227,10 @@ public abstract class WebPageBase extends WebPageRenderingBase {
 		TemplateStack.push(getContext(), this);
 
 		try{	// get the developer-written code of the WebPage
-
+long start=System.currentTimeMillis();
 			execute();
+long end=System.currentTimeMillis();
+			CodeExecuteTimeStatistic.evalute("execute template script",end-start);
 
 
 		} finally {
@@ -520,12 +523,18 @@ return;
 	@Override
 	public void writeLiteral(Object value) throws IOException {
 
-			if (value == null || StringUtils.isBlank(value.toString())){
+			if (value == null){
 				return;
 			}
-		//	getOutput().
-
-			getOutput().write(value.toString());
+			if(value instanceof String){
+				getOutput().write((String)value);
+				return;
+			}
+			String val=value.toString();
+			if(StringUtils.isBlank(val)){
+				return;
+			}
+			getOutput().write(val);
 
 	}
 

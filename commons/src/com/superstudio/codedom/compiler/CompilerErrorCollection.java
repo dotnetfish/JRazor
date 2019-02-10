@@ -1,26 +1,30 @@
 package com.superstudio.codedom.compiler;
 
-import com.superstudio.codedom.CollectionBase;
+
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 
-public class CompilerErrorCollection extends CollectionBase implements Serializable {
+/**
+ * @author cloudartisan
+ */
+public class CompilerErrorCollection extends ArrayList<CompilerError> implements Serializable {
 	public final CompilerError getItem(int index) {
-		return (CompilerError) get(index);
+		return get(index);
 	}
 
 	public final void setItem(int index, CompilerError value) {
 		add(index, value);
 	}
 
-	public final boolean getHasErrors() throws IOException {
+	public final boolean hasErrors() throws IOException {
 		if (super.size() > 0) {
-			Iterator enumerator = super.iterator();
+			Iterator<CompilerError> enumerator = super.iterator();
 			try {
 				while (enumerator.hasNext()) {
-					if (!((CompilerError) enumerator.next()).getIsWarning()) {
+					if (!( enumerator.next()).getIsWarning()) {
 						return true;
 					}
 				}
@@ -68,9 +72,10 @@ public class CompilerErrorCollection extends CollectionBase implements Serializa
 		this.addAll(value);
 	}
 
-	public final int add(CompilerError value) {
-		add(value);
-		return size();
+	@Override
+	public final boolean add(CompilerError value) {
+		return add(value);
+		//return size();
 	}
 
 	public final void addAll(CompilerError[] value) {
@@ -80,6 +85,7 @@ public class CompilerErrorCollection extends CollectionBase implements Serializa
 		for (int i = 0; i < value.length; i++) {
 			this.add(value[i]);
 		}
+		this.addAll(value);
 	}
 
 	public final void addAll(CompilerErrorCollection value) {
@@ -100,15 +106,14 @@ public class CompilerErrorCollection extends CollectionBase implements Serializa
 		subList(index, size() - index - 1).toArray(array);
 	}
 
+
 	/*
-	 * public final int indexOf(CompilerError value) { return
-	 * super.List.indexOf(value); }
-	 */
 	public final void insert(int index, CompilerError value) {
 		add(index, value);
 	}
+*/
+	/*public final void remove(CompilerError value) {
 
-	public final void remove(CompilerError value) {
 		remove(value);
-	}
+	}*/
 }

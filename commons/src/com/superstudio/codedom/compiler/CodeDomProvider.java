@@ -1,15 +1,13 @@
 package com.superstudio.codedom.compiler;
 
 import com.superstudio.codedom.*;
-import com.superstudio.commons.SR;
+import com.superstudio.commons.Resource;
 import com.superstudio.commons.TypeConverter;
 import com.superstudio.commons.TypeDescriptor;
 import com.superstudio.commons.exception.ConfigurationErrorsException;
 import com.superstudio.commons.io.TextWriter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Map;
 
 public abstract class CodeDomProvider  {
 
@@ -20,14 +18,13 @@ public abstract class CodeDomProvider  {
 	public LanguageOptions getLanguageOptions() {
 		return LanguageOptions.None;
 	}
-
-	public static CodeDomProvider createProvider(String language, Map<String, String> providerOptions)
+/*public static CodeDomProvider createProvider(String language, Map<String, String> providerOptions)
 			throws ClassNotFoundException, ConfigurationErrorsException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		return CodeDomProvider.getCompilerInfo(language).CreateProvider(providerOptions);
 
-	}
+	}*/
 
 	public static CodeDomProvider createProvider(String language) throws ClassNotFoundException,
 			ConfigurationErrorsException, InstantiationException, IllegalAccessException {
@@ -131,7 +128,7 @@ public abstract class CodeDomProvider  {
 
 	public void generateCodeFromMember(CodeTypeMember member, TextWriter writer, CodeGeneratorOptions options)
 			throws Exception {
-		throw new UnsupportedOperationException(SR.GetString("NotSupported_CodeDomAPI"));
+		throw new UnsupportedOperationException(Resource.getString("NotSupported_CodeDomAPI"));
 	}
 
 /*	public CodeCompileUnit parse(TextReader codeStream) {
@@ -141,7 +138,7 @@ public abstract class CodeDomProvider  {
 	private ICodeCompiler createCompilerHelper() {
 		ICodeCompiler expr_06 = this.createCompiler();
 		if (expr_06 == null) {
-			throw new UnsupportedOperationException(SR.GetString("NotSupported_CodeDomAPI"));
+			throw new UnsupportedOperationException(Resource.getString("NotSupported_CodeDomAPI"));
 		}
 		return expr_06;
 	}
@@ -149,7 +146,7 @@ public abstract class CodeDomProvider  {
 	private ICodeGenerator createGeneratorHelper() {
 		ICodeGenerator expr_06 = this.createGenerator();
 		if (expr_06 == null) {
-			throw new UnsupportedOperationException(SR.GetString("NotSupported_CodeDomAPI"));
+			throw new UnsupportedOperationException(Resource.getString("NotSupported_CodeDomAPI"));
 		}
 		return expr_06;
 	}
@@ -157,7 +154,7 @@ public abstract class CodeDomProvider  {
 	/*private ICodeParser CreateParserHelper() {
 		ICodeParser expr_06 = this.CreateParser();
 		if (expr_06 == null) {
-			throw new UnsupportedOperationException(SR.GetString("NotSupported_CodeDomAPI"));
+			throw new UnsupportedOperationException(Resource.getString("NotSupported_CodeDomAPI"));
 		}
 		return expr_06;
 	}*/

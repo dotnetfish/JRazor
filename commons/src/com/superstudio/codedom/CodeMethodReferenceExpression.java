@@ -1,5 +1,8 @@
 package com.superstudio.codedom;
 import java.io.Serializable;
+/**
+ * @author cloudartisan
+ */
 public class CodeMethodReferenceExpression extends CodeExpression implements Serializable
 {
 	private CodeExpression targetObject;
@@ -55,7 +58,7 @@ public class CodeMethodReferenceExpression extends CodeExpression implements Ser
 		this.setMethodName(methodName);
 		if (typeParameters != null && typeParameters.length != 0)
 		{
-			this.getTypeArguments().AddRange(typeParameters);
+			this.getTypeArguments().addRange(typeParameters);
 		}
 	}
 }

@@ -4,9 +4,7 @@ import com.superstudio.web.razor.text.ITextDocument;
 import com.superstudio.web.razor.tokenizer.symbols.SymbolBase;
 
 
-
-//[SuppressMessage("Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes", Justification = "all generic parameters are required")]
-public class TokenizerView<TTokenizer extends Tokenizer<TSymbol , TSymbolType>, 
+public class TokenizerView<TTokenizer extends Tokenizer<TSymbol , TSymbolType>,
 TSymbol extends SymbolBase<TSymbolType>, TSymbolType>
 {
 	public TokenizerView(TTokenizer tokenizer)
@@ -66,6 +64,6 @@ TSymbol extends SymbolBase<TSymbolType>, TSymbolType>
 		getSource().setPosition(getSource().getPosition() - symbol.getContent().length());
 		setCurrent(null);
 		setEndOfFile(getSource().getPosition() >= getSource().getLength());
-		getTokenizer().Reset();
+		getTokenizer().reset();
 	}
 }

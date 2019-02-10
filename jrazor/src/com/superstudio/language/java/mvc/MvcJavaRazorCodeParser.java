@@ -22,7 +22,7 @@ public class MvcJavaRazorCodeParser extends JavaCodeParser
 	@Override
 	protected void inheritsDirective()
 	{
-		super.AcceptAndMoveNext();
+		super.acceptAndMoveNext();
 		this._endInheritsLocation = new SourceLocation(super.getCurrentLocation());
 		super.inheritsDirectiveCore();
 		this.checkForInheritsAndModelStatements();
@@ -32,13 +32,13 @@ public class MvcJavaRazorCodeParser extends JavaCodeParser
 	{
 		if (this._modelStatementFound && this._endInheritsLocation != null)
 		{
-			this.getContext().OnError(this._endInheritsLocation, String.format(MvcResources.MvcRazorCodeParser_CannotHaveModelAndInheritsKeyword, new Object[] {"model"}));
+			this.getContext().onError(this._endInheritsLocation, String.format(MvcResources.MvcRazorCodeParser_CannotHaveModelAndInheritsKeyword, new Object[] {"model"}));
 		}
 	}
 
 	protected void modelDirective()
 	{
-		super.AcceptAndMoveNext();
+		super.acceptAndMoveNext();
 		SourceLocation currentLocation = super.getCurrentLocation();
 		MessageFormat formattor=new MessageFormat("", Locale.getDefault());
 		super.baseTypeDirective(
@@ -46,7 +46,7 @@ public class MvcJavaRazorCodeParser extends JavaCodeParser
 				(a)->this.createModelCodeGenerator(a));
 		if (this._modelStatementFound)
 		{
-			this.getContext().OnError(currentLocation,
+			this.getContext().onError(currentLocation,
 					formattor.format(MvcResources.MvcRazorCodeParser_OnlyOneModelStatementIsAllowed, new Object[] {"model"}));
 		}
 		this._modelStatementFound = true;

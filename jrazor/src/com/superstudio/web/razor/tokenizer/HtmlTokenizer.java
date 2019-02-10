@@ -21,13 +21,13 @@ public class HtmlTokenizer extends Tokenizer<HtmlSymbol, HtmlSymbolType>
 	public HtmlTokenizer(ITextDocument source) throws Exception
 	{
 		super(source);
-		setCurrentState(()->Data());
+		setCurrentState(()-> data());
 	}
 
 	@Override
 	protected State getStartState()
 	{
-		return ()->Data();
+		return ()-> data();
 	}
 
 	@Override
@@ -52,20 +52,22 @@ public class HtmlTokenizer extends Tokenizer<HtmlSymbol, HtmlSymbolType>
 	public static Iterable<HtmlSymbol> tokenize(String content) throws Exception
 	{
 		SeekableTextReader reader = new SeekableTextReader(content);
-		final HtmlTokenizer  tok=new HtmlTokenizer(reader);
+		final HtmlTokenizer  tokenizer=new HtmlTokenizer(reader);
 		
 		//if(tok==null)return Collections.emptyList();
 		
 		return new Iterable<HtmlSymbol>(){
-			//private final SeekableTextReader reader = new SeekableTextReader(content);
 			@Override
 			public Iterator<HtmlSymbol> iterator() {
 					return new Iterator<HtmlSymbol>(){
 					private HtmlSymbol current=null;
 					@Override
 					public boolean hasNext() {
-						boolean result=(current = tok.nextSymbol()) != null;
-						if(!result)reader.close();
+						boolean result=(current = tokenizer.nextSymbol()) != null;
+						if(!result) {
+							reader.close();
+
+						}
 						return result;
 					}
 
@@ -78,154 +80,141 @@ public class HtmlTokenizer extends Tokenizer<HtmlSymbol, HtmlSymbolType>
 			}
 			
 		};
-		/*
-		try
-		{
-			HtmlTokenizer tok = new HtmlTokenizer(reader);
-			HtmlSymbol sym;
-			while ((sym = (HtmlSymbol) tok.nextSymbol()) != null)
-			{
 
-				yield return sym;
-			}
-		}
-		finally
-		{
-			reader.dispose();
-		}*/
 	}
 
-	protected HtmlSymbol createSymbol(SourceLocation start, String content, HtmlSymbolType type,
-									  Iterable<RazorError> errors) throws ArgumentNullException
+	@Override
+    protected HtmlSymbol createSymbol(SourceLocation start, String content, HtmlSymbolType type,
+                                      Iterable<RazorError> errors) throws ArgumentNullException
 	{
 		return new HtmlSymbol(start, content, type, errors);
 	}
 
 	// http://dev.w3.org/html5/spec/Overview.html#data-state
-	private StateResult Data()
+	private StateResult data()
 	{
 		if (ParserHelpers.isWhitespace(getCurrentCharacter()))
 		{
-			return stay(Whitespace());
+			return stay(whitespace());
 		}
 		else if (ParserHelpers.isNewLine(getCurrentCharacter()))
 		{
-			return stay(Newline());
+			return stay(newline());
 		}
 		else if (getCurrentCharacter() == '@')
 		{
-			TakeCurrent();
+			takeCurrent();
 			if (getCurrentCharacter() == '*')
 			{
-				return transition(EndSymbol(HtmlSymbolType.RazorCommentTransition), ()->AfterRazorCommentTransition());
+				return transition(endSymbol(HtmlSymbolType.RazorCommentTransition), ()-> afterRazorCommentTransition());
 			}
 			else if (getCurrentCharacter() == '@')
 			{
 				// Could be escaped comment transition
 
-				return transition(EndSymbol(HtmlSymbolType.Transition), () ->
+				return transition(endSymbol(HtmlSymbolType.Transition), () ->
 				{
-					TakeCurrent();
-					return transition(EndSymbol(HtmlSymbolType.Transition), ()->Data());
+					takeCurrent();
+					return transition(endSymbol(HtmlSymbolType.Transition), ()-> data());
 				}
 			   );
 			}
-			return stay(EndSymbol(HtmlSymbolType.Transition));
+			return stay(endSymbol(HtmlSymbolType.Transition));
 		}
-		else if (AtSymbol())
+		else if (atSymbol())
 		{
-			return stay(Symbol());
+			return stay(symbol());
 		}
 		else
 		{
-			return transition(()->Text());
+			return transition(()-> text());
 		}
 	}
 
-	private StateResult Text()
+	private StateResult text()
 	{
 		char prev = '\0';
-		while (!getEndOfFile() && !ParserHelpers.isWhitespaceOrNewLine(getCurrentCharacter()) && !AtSymbol())
+		while (!getEndOfFile() && !ParserHelpers.isWhitespaceOrNewLine(getCurrentCharacter()) && !atSymbol())
 		{
 			prev = getCurrentCharacter();
-			TakeCurrent();
+			takeCurrent();
 		}
 
 		if (getCurrentCharacter() == '@')
 		{
-			char next = Peek();
+			char next = peek();
 			if (ParserHelpers.isLetterOrDecimalDigit(prev) && ParserHelpers.isLetterOrDecimalDigit(next))
 			{
-				TakeCurrent(); // Take the "@"
-				return stay(); // stay in the Text state
+				takeCurrent(); // Take the "@"
+				return stay(); // stay in the text state
 			}
 		}
 
-		// Output the Text token and return to the Data state to tokenize the next character (if there is one)
-		return transition(EndSymbol(HtmlSymbolType.Text), ()->Data());
+		// output the text token and return to the data state to tokenize the next character (if there is one)
+		return transition(endSymbol(HtmlSymbolType.Text), ()-> data());
 	}
 
-	private HtmlSymbol Symbol()
+	private HtmlSymbol symbol()
 	{
-		assert AtSymbol();
+		assert atSymbol();
 		char sym = getCurrentCharacter();
-		TakeCurrent();
+		takeCurrent();
 		switch (sym)
 		{
 			case '<':
-				return EndSymbol(HtmlSymbolType.OpenAngle);
+				return endSymbol(HtmlSymbolType.OpenAngle);
 			case '!':
-				return EndSymbol(HtmlSymbolType.Bang);
+				return endSymbol(HtmlSymbolType.Bang);
 			case '/':
-				return EndSymbol(HtmlSymbolType.Solidus);
+				return endSymbol(HtmlSymbolType.Solidus);
 			case '?':
-				return EndSymbol(HtmlSymbolType.QuestionMark);
+				return endSymbol(HtmlSymbolType.QuestionMark);
 			case '[':
-				return EndSymbol(HtmlSymbolType.LeftBracket);
+				return endSymbol(HtmlSymbolType.LeftBracket);
 			case '>':
-				return EndSymbol(HtmlSymbolType.CloseAngle);
+				return endSymbol(HtmlSymbolType.CloseAngle);
 			case ']':
-				return EndSymbol(HtmlSymbolType.RightBracket);
+				return endSymbol(HtmlSymbolType.RightBracket);
 			case '=':
-				return EndSymbol(HtmlSymbolType.Equals);
+				return endSymbol(HtmlSymbolType.Equals);
 			case '"':
-				return EndSymbol(HtmlSymbolType.DoubleQuote);
+				return endSymbol(HtmlSymbolType.DoubleQuote);
 			case '\'':
-				return EndSymbol(HtmlSymbolType.SingleQuote);
+				return endSymbol(HtmlSymbolType.SingleQuote);
 			case '-':
 				assert getCurrentCharacter() == '-';
-				TakeCurrent();
-				return EndSymbol(HtmlSymbolType.DoubleHyphen);
+				takeCurrent();
+				return endSymbol(HtmlSymbolType.DoubleHyphen);
 			default:
 				////Debug.Fail("Unexpected symbol!");
-				return EndSymbol(HtmlSymbolType.Unknown);
+				return endSymbol(HtmlSymbolType.Unknown);
 		}
 	}
 
-	private HtmlSymbol Whitespace()
+	private HtmlSymbol whitespace()
 	{
 		while (ParserHelpers.isWhitespace(getCurrentCharacter()))
 		{
-			TakeCurrent();
+			takeCurrent();
 		}
-		return EndSymbol(HtmlSymbolType.WhiteSpace);
+		return endSymbol(HtmlSymbolType.WhiteSpace);
 	}
 
-	private HtmlSymbol Newline()
+	private HtmlSymbol newline()
 	{
 		assert ParserHelpers.isNewLine(getCurrentCharacter());
 		// CSharp Spec §2.3.1
 		boolean checkTwoCharNewline = getCurrentCharacter() == '\r';
-		TakeCurrent();
+		takeCurrent();
 		if (checkTwoCharNewline && getCurrentCharacter() == '\n')
 		{
-			TakeCurrent();
+			takeCurrent();
 		}
-		return EndSymbol(HtmlSymbolType.NewLine);
+		return endSymbol(HtmlSymbolType.NewLine);
 	}
 
-	private boolean AtSymbol()
+	private boolean atSymbol()
 	{
-		return getCurrentCharacter() == '<' || getCurrentCharacter() == '<' || getCurrentCharacter() == '!' || getCurrentCharacter() == '/' || getCurrentCharacter() == '?' || getCurrentCharacter() == '[' || getCurrentCharacter() == '>' || getCurrentCharacter() == ']' || getCurrentCharacter() == '=' || getCurrentCharacter() == '"' || getCurrentCharacter() == '\'' || getCurrentCharacter() == '@' || (getCurrentCharacter() == '-' && Peek() == '-');
+		return getCurrentCharacter() == '<' || getCurrentCharacter() == '<' || getCurrentCharacter() == '!' || getCurrentCharacter() == '/' || getCurrentCharacter() == '?' || getCurrentCharacter() == '[' || getCurrentCharacter() == '>' || getCurrentCharacter() == ']' || getCurrentCharacter() == '=' || getCurrentCharacter() == '"' || getCurrentCharacter() == '\'' || getCurrentCharacter() == '@' || (getCurrentCharacter() == '-' && peek() == '-');
 	}
 }

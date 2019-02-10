@@ -1,7 +1,7 @@
 package com.superstudio.language.java;
 
 import com.superstudio.commons.ITypeDescriptorContext;
-import com.superstudio.commons.SR;
+import com.superstudio.commons.Resource;
 import com.superstudio.commons.TypeConverter;
 import com.superstudio.commons.exception.ArgumentNullException;
 
@@ -46,7 +46,7 @@ abstract class JavaModifierAttributeConverter extends TypeConverter {
 					return this.getNames()[i];
 				}
 			}
-			return SR.GetString("toStringUnknown");
+			return Resource.getString("toStringUnknown");
 		}
 		return super.convertTo(context, culture, value, destinationType);
 	}

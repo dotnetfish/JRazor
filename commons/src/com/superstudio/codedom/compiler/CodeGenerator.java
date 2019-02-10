@@ -1,7 +1,7 @@
 package com.superstudio.codedom.compiler;
 
 import com.superstudio.codedom.*;
-import com.superstudio.commons.SR;
+import com.superstudio.commons.Resource;
 import com.superstudio.commons.TypeAttributes;
 import com.superstudio.commons.io.TextWriter;
 
@@ -228,7 +228,7 @@ public abstract class CodeGenerator implements ICodeGenerator {
     public final void generateCodeFromType(CodeTypeDeclaration e, TextWriter w, CodeGeneratorOptions o) throws FileNotFoundException {
         boolean flag = false;
         if (this.output != null && w != this.output.getInnerWriter()) {
-            throw new IllegalStateException(SR.GetString("CodeGenOutputWriter"));
+            throw new IllegalStateException(Resource.getString("CodeGenOutputWriter"));
         }
         if (this.output == null) {
             flag = true;
@@ -250,7 +250,7 @@ public abstract class CodeGenerator implements ICodeGenerator {
     public final void generateCodeFromExpression(CodeExpression e, TextWriter w, CodeGeneratorOptions o) throws Exception {
         boolean flag = false;
         if (this.output != null && w != this.output.getInnerWriter()) {
-            throw new IllegalStateException(SR.GetString("CodeGenOutputWriter"));
+            throw new IllegalStateException(Resource.getString("CodeGenOutputWriter"));
         }
         if (this.output == null) {
             flag = true;
@@ -270,7 +270,7 @@ public abstract class CodeGenerator implements ICodeGenerator {
     public final void generateCodeFromCompileUnit(CodeCompileUnit e, TextWriter w, CodeGeneratorOptions o) throws Exception {
         boolean flag = false;
         if (this.output != null && w != this.output.getInnerWriter()) {
-            throw new IllegalStateException(SR.GetString("CodeGenOutputWriter"));
+            throw new IllegalStateException(Resource.getString("CodeGenOutputWriter"));
         }
         if (this.output == null) {
             flag = true;
@@ -294,7 +294,7 @@ public abstract class CodeGenerator implements ICodeGenerator {
     public final void generateCodeFromNamespace(CodeNamespace e, TextWriter w, CodeGeneratorOptions o) throws Exception {
         boolean flag = false;
         if (this.output != null && w != this.output.getInnerWriter()) {
-            throw new IllegalStateException(SR.GetString("CodeGenOutputWriter"));
+            throw new IllegalStateException(Resource.getString("CodeGenOutputWriter"));
         }
         if (this.output == null) {
             flag = true;
@@ -311,11 +311,12 @@ public abstract class CodeGenerator implements ICodeGenerator {
         }
     }
 
+    @Override
     public final void generateCodeFromStatement(CodeStatement e, TextWriter w, CodeGeneratorOptions o)
             throws Exception {
         boolean flag = false;
         if (this.output != null && w != this.output.getInnerWriter()) {
-            throw new IllegalStateException(SR.GetString("CodeGenOutputWriter"));
+            throw new IllegalStateException(Resource.getString("CodeGenOutputWriter"));
         }
         if (this.output == null) {
             flag = true;
@@ -334,7 +335,7 @@ public abstract class CodeGenerator implements ICodeGenerator {
 
     public void generateCodeFromMember(CodeTypeMember member, TextWriter writer, CodeGeneratorOptions options) throws Exception {
         if (this.output != null) {
-            throw new IllegalStateException(SR.GetString("CodeGenReentrance"));
+            throw new IllegalStateException(Resource.getString("CodeGenReentrance"));
         }
         this.options = ((options == null) ? new CodeGeneratorOptions() : options);
         this.output = new IndentedTextWriter(writer, this.options.getIndentString());
@@ -534,7 +535,7 @@ public abstract class CodeGenerator implements ICodeGenerator {
         if (e == null) {
             throw new IllegalArgumentException("e");
         }
-        //throw new IllegalArgumentException(SR.GetString("InvalidElementType", new Object[] {e.getClass().getName()}), "e");
+        //throw new IllegalArgumentException(Resource.getString("InvalidElementType", new Object[] {e.getClass().getName()}), "e");
     }
 
     private void generateFields(CodeTypeDeclaration e) throws Exception {
@@ -761,7 +762,7 @@ public abstract class CodeGenerator implements ICodeGenerator {
             this.generateGotoStatement((CodeGotoStatement) e);
         } else {
             if (!(e instanceof CodeLabeledStatement)) {
-                //throw new IllegalArgumentException(SR.GetString("InvalidElementType", new Object[] {e.getClass().getName()}), "e");
+                //throw new IllegalArgumentException(Resource.getString("InvalidElementType", new Object[] {e.getClass().getName()}), "e");
             }
             this.generateLabeledStatement((CodeLabeledStatement) e);
         }
@@ -1181,7 +1182,7 @@ public abstract class CodeGenerator implements ICodeGenerator {
             return;
         }
         if (!(e.getValue() instanceof Boolean)) {
-            throw new IllegalArgumentException(SR.GetString("InvalidPrimitiveType", new Object[]{e.getValue().getClass().toString()}));
+            throw new IllegalArgumentException(Resource.getString("InvalidPrimitiveType", new Object[]{e.getValue().getClass().toString()}));
         }
         if ((boolean) e.getValue()) {
             this.output.write("true");
@@ -1232,7 +1233,7 @@ public abstract class CodeGenerator implements ICodeGenerator {
 
     protected void generateCommentStatement(CodeCommentStatement e) {
         if (e.getComment() == null) {
-            //throw new IllegalArgumentException(SR.GetString("Argument_NullComment", new Object[] {"e"}), "e");
+            //throw new IllegalArgumentException(Resource.getString("Argument_NullComment", new Object[] {"e"}), "e");
         }
         this.generateComment(e.getComment());
     }
@@ -1319,7 +1320,7 @@ public abstract class CodeGenerator implements ICodeGenerator {
 
     public void validateIdentifier(String value) {
         if (!this.isValidIdentifier(value)) {
-            throw new IllegalArgumentException(SR.GetString("InvalidIdentifier", new Object[]{value}));
+            throw new IllegalArgumentException(Resource.getString("InvalidIdentifier", new Object[]{value}));
         }
     }
 
@@ -1349,33 +1350,35 @@ public abstract class CodeGenerator implements ICodeGenerator {
         while (i < value.length()) {
             char c = value.charAt(i);
             switch (Character.getType(c)) {
-                case Character.UPPERCASE_LETTER://UppercaseLetter:
-                case Character.LOWERCASE_LETTER://LowercaseLetter:
-                case Character.TITLECASE_LETTER://TitlecaseLetter:
-                case Character.MODIFIER_LETTER://ModifierLetter:
-                case Character.OTHER_LETTER://OtherLetter:
-                case Character.LETTER_NUMBER://LetterNumber:
+
+                case Character.UPPERCASE_LETTER:
+
+                case Character.LOWERCASE_LETTER:
+                case Character.TITLECASE_LETTER:
+                case Character.MODIFIER_LETTER:
+                case Character.OTHER_LETTER:
+                case Character.LETTER_NUMBER:
                     flag = false;
                     break;
-                case Character.NON_SPACING_MARK://NonSpacingMark:
-                case Character.COMBINING_SPACING_MARK://SpacingCombiningMark:
-                case Character.DECIMAL_DIGIT_NUMBER://DecimalDigitNumber:
-                case Character.CONNECTOR_PUNCTUATION://ConnectorPunctuation:
+                case Character.NON_SPACING_MARK:
+                case Character.COMBINING_SPACING_MARK:
+                case Character.DECIMAL_DIGIT_NUMBER:
+                case Character.CONNECTOR_PUNCTUATION:
                     if (flag && c != '_') {
                         return false;
                     }
                     flag = false;
                     break;
                 default:
-                case Character.ENCLOSING_MARK://EnclosingMark:
-                case Character.OTHER_NUMBER://OtherNumber:
-                case Character.SPACE_SEPARATOR://SpaceSeparator:
-                case Character.LINE_SEPARATOR://LineSeparator:
-                case Character.PARAGRAPH_SEPARATOR://ParagraphSeparator:
-                case Character.CONTROL://Control:
-                case Character.FORMAT://Format:
-                case Character.SURROGATE://Surrogate:
-                case Character.PRIVATE_USE://PrivateUse:
+                case Character.ENCLOSING_MARK:
+                case Character.OTHER_NUMBER:
+                case Character.SPACE_SEPARATOR:
+                case Character.LINE_SEPARATOR:
+                case Character.PARAGRAPH_SEPARATOR:
+                case Character.CONTROL:
+                case Character.FORMAT:
+                case Character.SURROGATE:
+                case Character.PRIVATE_USE:
                     MutilReturn<Boolean,Boolean> isSpecialTypeChar=CodeGenerator.isSpecialTypeChar(c, flag);
                     tempVar=!isTypeName || !isSpecialTypeChar.gettReturn();
                     flag = isSpecialTypeChar.gettRef();

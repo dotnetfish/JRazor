@@ -4,6 +4,12 @@ package com.superstudio.template.mvc.context;
  * Created by kenqu on 2015/11/19.
  */
 public class TemplateInfo {
+    public TemplateInfo(){
+
+    }
+    public TemplateInfo(String virtualPath){
+
+    }
     private String templateName;
 
     private String templateCategory;

@@ -25,12 +25,11 @@ public class CallbackVisitor extends ParserVisitor {
 	}
 
 	public CallbackVisitor(Consumer<Span> spanCallback, Consumer<RazorError> errorCallback) {
-		// TODO TASK: Lambda expressions and anonymous methods are not converted
-		//
+
 		this(spanCallback, errorCallback, (t) -> {
 		} , (t) -> {
 		});
-		// {
+
 	}
 
 	public CallbackVisitor(Consumer<Span> spanCallback, Consumer<RazorError> errorCallback,
@@ -53,10 +52,10 @@ public class CallbackVisitor extends ParserVisitor {
 
 	private SynchronizationContext synchronizationContext;
 
-	/*public SynchronizationContext getSynchronizationContext() {
+	public SynchronizationContext getSynchronizationContext() {
 		return synchronizationContext;
 	}
-*/
+
 	public void setSynchronizationContext(SynchronizationContext context) {
 		synchronizationContext = context;
 	}
@@ -88,8 +87,6 @@ public class CallbackVisitor extends ParserVisitor {
 	@Override
 	public void onComplete() throws Exception {
 		super.onComplete();
-
-		// methods are not converted
 		raiseCallback(synchronizationContext, null, (t) -> {
 			_completeCallback.run();
 		});
@@ -100,7 +97,7 @@ public class CallbackVisitor extends ParserVisitor {
 			if (syncContext != null) {
 
 				// anonymous methods are not converted
-				syncContext.Post(state -> callback.accept((T) state), param);
+				syncContext.post(state -> callback.accept((T) state), param);
 			} else {
 				callback.accept(param);
 			}

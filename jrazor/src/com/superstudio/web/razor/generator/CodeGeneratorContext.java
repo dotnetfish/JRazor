@@ -16,8 +16,11 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 
+/**
+ * @author cloudartisan
+ */
 public class CodeGeneratorContext {
-	private static final String DesignTimeHelperMethodName = "__RazorDesignTimeHelpers__";
+	private static final String DESIGN_TIME_HELPER_METHOD_NAME = "__RazorDesignTimeHelpers__";
 
 	private int _nextDesignTimePragmaId = 1;
 	private boolean _expressionHelperVariableWriten;
@@ -28,10 +31,12 @@ public class CodeGeneratorContext {
 		setExpressionRenderingMode(ExpressionRenderingMode.WriteToOutput);
 	}
 
-	// Internal/Private state. Technically consumers might want to use some of
-	// these but they can implement them independently if necessary.
-	// It's way safer to make them internal for now, especially with the code
-	// generator stuff in a bit of flux.
+	/**
+	 * Internal/Private state. Technically consumers might want to use some of
+	 * these but they can implement them independently if necessary.
+	 * It's way safer to make them internal for now, especially with the code
+	 * generator stuff in a bit of flux.
+	 */
 	private ExpressionRenderingMode privateExpressionRenderingMode = ExpressionRenderingMode.forValue(0);
 
 	public final ExpressionRenderingMode getExpressionRenderingMode() {
@@ -183,7 +188,7 @@ public class CodeGeneratorContext {
 	public final void addDesignTimeHelperStatement(CodeSnippetStatement statement) {
 		if (_designTimeHelperMethod == null) {
 			CodeMemberMethod tempVar = new CodeMemberMethod();
-			tempVar.setName(DesignTimeHelperMethodName);
+			tempVar.setName(DESIGN_TIME_HELPER_METHOD_NAME);
 			tempVar.setAttributes( MemberAttributes.forValue(MemberAttributes.Private));
 			_designTimeHelperMethod = tempVar;
 			_designTimeHelperMethod.getStatements()
@@ -246,8 +251,8 @@ public class CodeGeneratorContext {
 
 			// pad the output as necessary
 			int start = _currentBuffer.getBuilder().length();
-			if (_currentBuffer.GeneratedCodeStart != null) {
-				start = _currentBuffer.GeneratedCodeStart;
+			if (_currentBuffer.generatedcodestart != null) {
+				start = _currentBuffer.generatedcodestart;
 			}
 
 			int paddingLength = 0; // unused, in this case there is enough
@@ -261,7 +266,7 @@ public class CodeGeneratorContext {
 					sourceSpan, start, tempRef_paddingLength);
 			
 			//paddingLength = tempRef_paddingLength.getRefObj();
-			_currentBuffer.GeneratedCodeStart = start + (padded.length() - _currentBuffer.getBuilder().length());
+			_currentBuffer.generatedcodestart = start + (padded.length() - _currentBuffer.getBuilder().length());
 			_currentBuffer.getBuilder().delete(0, _currentBuffer.getBuilder().length());
 			_currentBuffer.getBuilder().append(padded);
 		}
@@ -281,8 +286,8 @@ public class CodeGeneratorContext {
 			CodeLinePragma pragma = null;
 			if (_currentBuffer.getLinePragmaSpan() != null) {
 				int start = _currentBuffer.getBuilder().length();
-				if (_currentBuffer.GeneratedCodeStart != null) {
-					start = _currentBuffer.GeneratedCodeStart;
+				if (_currentBuffer.generatedcodestart != null) {
+					start = _currentBuffer.generatedcodestart;
 				}
 				int len = _currentBuffer.getBuilder().length() - start;
 				if (_currentBuffer.CodeLength != null) {
@@ -330,7 +335,7 @@ public class CodeGeneratorContext {
 
 	public final void addContextCall(Span contentSpan, String methodName, boolean isLiteral) {
 
-		/*addStatement(buildCodeString(cw -> {
+		addStatement(buildCodeString(cw -> {
 			cw.writeStartMethodInvoke(methodName);
 			if (!StringUtils.isBlank(getTargetWriterName())) {
 				cw.writeSnippet(getTargetWriterName());
@@ -350,10 +355,10 @@ public class CodeGeneratorContext {
 			cw.writeSnippet((new Boolean(isLiteral)).toString().toLowerCase());
 			cw.writeEndMethodInvoke();
 			cw.writeEndStatement();
-		}));*/
+		}));
 	}
 
-	public final CodeWriter CreateCodeWriter() {
+	public final CodeWriter createCodeWriter() {
 		assert getCodeWriterFactory() != null;
 		if (getCodeWriterFactory() == null) {
 			// return null;
@@ -382,24 +387,24 @@ final String buildCodeString(Consumer<CodeWriter> action) {
 
 	private static class StatementBuffer {
 		private StringBuilder builder = new StringBuilder();
-		private Integer GeneratedCodeStart=0;
+		private Integer generatedcodestart =0;
 		private Integer CodeLength;
 		private Span linePragmaSpan;
 
 		public final void Reset() {
 			builder.delete(0, builder.length());
-			GeneratedCodeStart = 0;
+			generatedcodestart = 0;
 			CodeLength = 0;
 			setLinePragmaSpan(null);
 		}
 
 		public final void MarkStart() {
-			GeneratedCodeStart = builder.length();
+			generatedcodestart = builder.length();
 		}
 
 		public final void MarkEnd() {
 
-			CodeLength = builder.length() - GeneratedCodeStart;
+			CodeLength = builder.length() - generatedcodestart;
 		}
 
 		public Span getLinePragmaSpan() {

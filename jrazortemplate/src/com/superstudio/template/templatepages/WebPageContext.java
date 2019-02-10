@@ -88,7 +88,7 @@ public class WebPageContext
 	{
 		if (_validation == null)
 		{
-			Debug.Assert(getHttpContext() != null, "HttpContext must be initalized for Validation to work.");
+			Debug.assertSymbol(getHttpContext() != null, "HttpContext must be initalized for Validation to work.");
 			_validation = new ValidationHelper(getHttpContext(), getModelState());
 		}
 		return _validation;

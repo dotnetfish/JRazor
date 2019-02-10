@@ -14,7 +14,7 @@ public class WebRazorHostFactory {
 	private static java.util.concurrent.ConcurrentHashMap<String, Supplier<WebRazorHostFactory>> _factories = new java.util.concurrent.ConcurrentHashMap<String, Supplier<WebRazorHostFactory>>();
 	public static Function<String, java.lang.Class> TypeFactory = (type) -> {
 		try {
-			return WebRazorHostFactory.defaultTypeFactory(type);
+			return defaultTypeFactory(type);
 		} catch (Exception ex) {
 			return null;
 		}

@@ -57,7 +57,7 @@ public class JavaCodeProvider extends CodeDomProvider
 		}
 		if (type == TypeAttributes.class)
 		{
-			return JavaTypeAttributeConverter.Default();
+			return JavaTypeAttributeConverter.getDefault();
 		}
 		return super.getConverter(type);
 	}

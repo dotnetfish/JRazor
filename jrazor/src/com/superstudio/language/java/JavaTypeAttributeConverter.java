@@ -2,13 +2,16 @@ package com.superstudio.language.java;
 
 import com.superstudio.commons.TypeAttributes;
 
+/**
+ * @author cloudartisan
+ */
 public class JavaTypeAttributeConverter extends JavaModifierAttributeConverter {
 
 	private static String[] names;
 	private static Object[] values;
 	private static JavaTypeAttributeConverter defaultConverter;
 
-	public static JavaTypeAttributeConverter Default() {
+	public static JavaTypeAttributeConverter getDefault() {
 
 		if (JavaTypeAttributeConverter.defaultConverter == null) {
 			JavaTypeAttributeConverter.defaultConverter = new JavaTypeAttributeConverter();
@@ -17,6 +20,7 @@ public class JavaTypeAttributeConverter extends JavaModifierAttributeConverter {
 
 	}
 
+	@Override
 	protected String[] getNames() {
 
 		if (JavaTypeAttributeConverter.names == null) {
@@ -26,7 +30,7 @@ public class JavaTypeAttributeConverter extends JavaModifierAttributeConverter {
 
 	}
 
-	// @Override
+	@Override
 	protected Object[] getValues() {
 
 		if (JavaTypeAttributeConverter.values == null) {
@@ -39,7 +43,7 @@ public class JavaTypeAttributeConverter extends JavaModifierAttributeConverter {
 
 	}
 
-	// @Override
+	@Override
 	protected Object getDefaultValue() {
 
 		return TypeAttributes.NotPublic;

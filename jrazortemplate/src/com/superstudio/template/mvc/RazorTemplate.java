@@ -1,5 +1,6 @@
 package com.superstudio.template.mvc;
 
+import com.superstudio.commons.CodeExecuteTimeStatistic;
 import com.superstudio.commons.MvcResources;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.template.mvc.context.RenderContext;
@@ -126,13 +127,14 @@ public class RazorTemplate extends BuildManagerCompiledTemplate {
 			startPage = startPageLookup.invoke(webTemplatePage, RazorTemplateEngine.TemplateStartFileName,
 					getTemplateStartFileExtensions());
 		}
-
+long stattime=System.currentTimeMillis();
 		webTemplatePage.executePageHierarchy(
 				new WebPageContext(templateContext.getHttpContext(),
 						null,
 						null), writer,
 				startPage);
-
+		long end=System.currentTimeMillis();
+		CodeExecuteTimeStatistic.evalute("webTemplatePage.executePageHierarchy",end-stattime);
 
 	}
 

@@ -1,6 +1,5 @@
 package com.superstudio.web.razor.parser;
 
-import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.csharpbridge.action.ActionThree;
 import com.superstudio.web.razor.parser.syntaxTree.*;
 import com.superstudio.web.razor.text.*;
@@ -48,7 +47,7 @@ public class WhiteSpaceRewriter extends MarkupRewriter
 
 	//public override void visitSpan(Span span)
 	//{
-	//    //Debug.Assert(_blocks.Count > 0);
+	//    //Debug.assertSymbol(_blocks.Count > 0);
 	//    _blocks.peek().Children.add(span);
 	//}
 
@@ -71,7 +70,7 @@ public class WhiteSpaceRewriter extends MarkupRewriter
 			// add this node to the parent
 			SpanBuilder builder = new SpanBuilder(ws);
 			builder.clearSymbols();
-			FillSpan(builder, ws.getStart(), ws.getContent());
+			fillSpan(builder, ws.getStart(), ws.getContent());
 			parent.getChildren().add(builder.build());
 
 			// remove the old whitespace node

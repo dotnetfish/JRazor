@@ -39,14 +39,14 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			 throw new
 			InvalidOperationException(RazorResources.getResource(RazorResources.Parser_Context_Not_Set));
 		}
-		try( AutoCloseable	disposable= PushSpanConfig((t) -> defaultMarkupSpan(t))) {
+		try( AutoCloseable	disposable= pushSpanConfig((t) -> defaultMarkupSpan(t))) {
 
 			try(AutoCloseable	disposable2=getContext().startBlock(BlockType.Markup)) {
 				if (!nextToken()) {
 					return;
 				}
 
-				AcceptWhile(IsSpacingToken(true));
+				acceptWhile(IsSpacingToken(true));
 
 				if (getCurrentSymbol().getType() == HtmlSymbolType.OpenAngle) {
 					// "<" -> Implicit Tag Block
@@ -58,25 +58,25 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 					}
 				} else if (getCurrentSymbol().getType() == HtmlSymbolType.Transition) {
 					// "@" -> Explicit Tag/single Line Block OR Template
-					Output(SpanKind.Markup);
+					output(SpanKind.Markup);
 
 					// Definitely have a transition span
-					Assert(HtmlSymbolType.Transition);
-					AcceptAndMoveNext();
+					assertSymbol(HtmlSymbolType.Transition);
+					acceptAndMoveNext();
 					getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.None);
 					getSpan().setCodeGenerator(SpanCodeGenerator.Null);
-					Output(SpanKind.Transition);
-					if (At(HtmlSymbolType.Transition)) {
+					output(SpanKind.Transition);
+					if (at(HtmlSymbolType.Transition)) {
 						getSpan().setCodeGenerator(SpanCodeGenerator.Null);
-						AcceptAndMoveNext();
-						Output(SpanKind.MetaCode);
+						acceptAndMoveNext();
+						output(SpanKind.MetaCode);
 					}
 					afterTransition();
 				} else {
-					getContext().OnError(getCurrentSymbol().getStart(),
+					getContext().onError(getCurrentSymbol().getStart(),
 							RazorResources.getResource(RazorResources.ParseError_MarkupBlock_Must_Start_With_Tag));
 				}
-				Output(SpanKind.Markup);
+				output(SpanKind.Markup);
 			}catch (Exception ex){
 				ex.printStackTrace();
 			}
@@ -104,11 +104,11 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 			// The first part (left) is added to this span and we return a
 			// MetaCode span
-			Accept(split.getItem1());
+			accept(split.getItem1());
 			getSpan().setCodeGenerator(SpanCodeGenerator.Null);
-			Output(SpanKind.MetaCode);
+			output(SpanKind.MetaCode);
 			if (split.getItem2() != null) {
-				Accept(split.getItem2());
+				accept(split.getItem2());
 			}
 			nextToken();
 			singleLineMarkup();
@@ -128,14 +128,14 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		boolean old = getContext().getWhiteSpaceIsSignificantToAncestorBlock();
 		getContext().setWhiteSpaceIsSignificantToAncestorBlock(true);
 		getSpan().setEditHandler(new SingleLineMarkupEditHandler(p -> getLanguage().tokenizeString(p)));
-		SkipToAndParseCode(HtmlSymbolType.NewLine);
+		skipToAndParseCode(HtmlSymbolType.NewLine);
 		if (!getEndOfFile() && getCurrentSymbol().getType() == HtmlSymbolType.NewLine) {
-			AcceptAndMoveNext();
+			acceptAndMoveNext();
 			getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.None);
 		}
 		putCurrentBack();
 		getContext().setWhiteSpaceIsSignificantToAncestorBlock(old);
-		Output(SpanKind.Markup);
+		output(SpanKind.Markup);
 	}
 
 	private void tagBlock(java.util.Stack<Tuple<HtmlSymbol, SourceLocation>> tags) throws ArgumentNullException {
@@ -143,17 +143,17 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		List<String> str = null;
 		boolean complete = false;
 		do {
-			SkipToAndParseCode(HtmlSymbolType.OpenAngle);
+			skipToAndParseCode(HtmlSymbolType.OpenAngle);
 			if (getEndOfFile()) {
 				EndTagBlock(tags, true);
 			} else {
 				_bufferedOpenAngle = null;
 				_lastTagStart = getCurrentLocation().clone();
-				Assert(HtmlSymbolType.OpenAngle);
+				assertSymbol(HtmlSymbolType.OpenAngle);
 				_bufferedOpenAngle = getCurrentSymbol();
 				SourceLocation tagStart = getCurrentLocation().clone();
 				if (!nextToken()) {
-					Accept(_bufferedOpenAngle);
+					accept(_bufferedOpenAngle);
 					EndTagBlock(tags, false);
 				} else {
 					complete = afterTagStart(tagStart, tags);
@@ -172,11 +172,11 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				return endTag(tagStart, tags);
 			case Bang:
 				// Comment!
-				Accept(_bufferedOpenAngle);
+				accept(_bufferedOpenAngle);
 				return bangTag();
 			case QuestionMark:
 				// XML PI？
-				Accept(_bufferedOpenAngle);
+				accept(_bufferedOpenAngle);
 				return xmlPI();
 			default:
 				// start Tag
@@ -184,32 +184,32 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			}
 		}
 		if (tags.empty()) {
-			getContext().OnError(getCurrentLocation().clone(), RazorResources.getResource(RazorResources.ParseError_OuterTagMissingName));
+			getContext().onError(getCurrentLocation().clone(), RazorResources.getResource(RazorResources.ParseError_OuterTagMissingName));
 		}
 		return false;
 	}
 
 	private boolean xmlPI() {
 		// accept "?"
-		Assert(HtmlSymbolType.QuestionMark);
-		AcceptAndMoveNext();
+		assertSymbol(HtmlSymbolType.QuestionMark);
+		acceptAndMoveNext();
 		return AcceptUntilAll(HtmlSymbolType.QuestionMark, HtmlSymbolType.CloseAngle);
 	}
 
 	private boolean bangTag() {
 		// accept "!"
-		Assert(HtmlSymbolType.Bang);
+		assertSymbol(HtmlSymbolType.Bang);
 
-		if (AcceptAndMoveNext()) {
+		if (acceptAndMoveNext()) {
 			if (getCurrentSymbol().getType() == HtmlSymbolType.DoubleHyphen) {
-				AcceptAndMoveNext();
+				acceptAndMoveNext();
 				return AcceptUntilAll(HtmlSymbolType.DoubleHyphen, HtmlSymbolType.CloseAngle);
 			} else if (getCurrentSymbol().getType() == HtmlSymbolType.LeftBracket) {
-				if (AcceptAndMoveNext()) {
+				if (acceptAndMoveNext()) {
 					return cdata();
 				}
 			} else {
-				AcceptAndMoveNext();
+				acceptAndMoveNext();
 				return AcceptUntilAll(HtmlSymbolType.CloseAngle);
 			}
 		}
@@ -220,7 +220,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 	private boolean cdata() {
 		if (getCurrentSymbol().getType() == HtmlSymbolType.Text && StringUtils
 				.equalsIgnoreCase(getCurrentSymbol().getContent(), "cdata")) {
-			if (AcceptAndMoveNext()) {
+			if (acceptAndMoveNext()) {
 				if (getCurrentSymbol().getType() == HtmlSymbolType.LeftBracket) {
 					return AcceptUntilAll(HtmlSymbolType.RightBracket, HtmlSymbolType.RightBracket,
 							HtmlSymbolType.CloseAngle);
@@ -233,52 +233,52 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 	private boolean endTag(SourceLocation tagStart, java.util.Stack<Tuple<HtmlSymbol, SourceLocation>> tags) {
 		// accept "/" and move next
-		Assert(HtmlSymbolType.Solidus);
+		assertSymbol(HtmlSymbolType.Solidus);
 		HtmlSymbol solidus = getCurrentSymbol();
 		if (!nextToken()) {
-			Accept(_bufferedOpenAngle);
-			Accept(solidus);
+			accept(_bufferedOpenAngle);
+			accept(solidus);
 			return false;
 		} else {
 			String tagName = "";
-			if (At(HtmlSymbolType.Text)) {
+			if (at(HtmlSymbolType.Text)) {
 				tagName = getCurrentSymbol().getContent();
 			}
 			boolean matched = RemoveTag(tags, tagName, tagStart);
 
 			if (tags.empty() && StringUtils.equalsIgnoreCase(tagName, SyntaxConstants.TextTagName) && matched) {
-				Output(SpanKind.Markup);
+				output(SpanKind.Markup);
 				return endTextTag(solidus);
 			}
-			Accept(_bufferedOpenAngle);
-			Accept(solidus);
+			accept(_bufferedOpenAngle);
+			accept(solidus);
 
-			AcceptUntil(HtmlSymbolType.CloseAngle);
+			acceptUntil(HtmlSymbolType.CloseAngle);
 
 			// accept the ">"
-			return Optional(HtmlSymbolType.CloseAngle);
+			return optional(HtmlSymbolType.CloseAngle);
 		}
 	}
 
 	private boolean endTextTag(HtmlSymbol solidus) {
 		SourceLocation start = _bufferedOpenAngle.getStart().clone();
 
-		Accept(_bufferedOpenAngle);
-		Accept(solidus);
+		accept(_bufferedOpenAngle);
+		accept(solidus);
 
-		Assert(HtmlSymbolType.Text);
-		AcceptAndMoveNext();
+		assertSymbol(HtmlSymbolType.Text);
+		acceptAndMoveNext();
 
-		boolean seenCloseAngle = Optional(HtmlSymbolType.CloseAngle);
+		boolean seenCloseAngle = optional(HtmlSymbolType.CloseAngle);
 
 		if (!seenCloseAngle) {
-			getContext().OnError(start, RazorResources.getResource(RazorResources.ParseError_TextTagCannotContainAttributes));
+			getContext().onError(start, RazorResources.getResource(RazorResources.ParseError_TextTagCannotContainAttributes));
 		} else {
 			getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.None);
 		}
 
 		getSpan().setCodeGenerator(SpanCodeGenerator.Null);
-		Output(SpanKind.Transition);
+		output(SpanKind.Transition);
 		return seenCloseAngle;
 	}
 
@@ -289,7 +289,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 	}
 
 	private void tagContent() {
-		if (!At(HtmlSymbolType.WhiteSpace)) {
+		if (!at(HtmlSymbolType.WhiteSpace)) {
 			// We should be right after the tag name, so if there's no
 			// whitespace, something is wrong
 			RecoverToEndOfTag();
@@ -302,14 +302,14 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 	}
 
 	private boolean isEndOfTag() {
-		if (At(HtmlSymbolType.Solidus)) {
-			if (NextIs(HtmlSymbolType.CloseAngle)) {
+		if (at(HtmlSymbolType.Solidus)) {
+			if (nextIs(HtmlSymbolType.CloseAngle)) {
 				return true;
 			} else {
-				AcceptAndMoveNext();
+				acceptAndMoveNext();
 			}
 		}
-		return At(HtmlSymbolType.CloseAngle) || At(HtmlSymbolType.OpenAngle);
+		return at(HtmlSymbolType.CloseAngle) || at(HtmlSymbolType.OpenAngle);
 	}
 
 	private void beforeAttribute() {
@@ -317,12 +317,12 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		// Capture whitespace
 
 		// methods are not converted
-		List<HtmlSymbol> whitespace = ReadWhile(
+		List<HtmlSymbol> whitespace = readWhile(
 				sym -> sym.getType() == HtmlSymbolType.WhiteSpace || sym.getType() == HtmlSymbolType.NewLine);
 
-		if (At(HtmlSymbolType.Transition)) {
+		if (at(HtmlSymbolType.Transition)) {
 			// transition outside of attribute value -> Switch to recovery mode
-			Accept(whitespace);
+			accept(whitespace);
 			RecoverToEndOfTag();
 			return;
 		}
@@ -331,29 +331,29 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		// read the 'name' (i.e. read until the '=' or whitespace/newline)
 
 		List<HtmlSymbol> name = Collections.emptyList();
-		if (At(HtmlSymbolType.Text)) {
+		if (at(HtmlSymbolType.Text)) {
 
 			// methods are not converted
-			name = ReadWhile(sym -> sym.getType() != HtmlSymbolType.WhiteSpace
+			name = readWhile(sym -> sym.getType() != HtmlSymbolType.WhiteSpace
 					&& sym.getType() != HtmlSymbolType.NewLine && sym.getType() != HtmlSymbolType.Equals
 					&& sym.getType() != HtmlSymbolType.CloseAngle && sym.getType() != HtmlSymbolType.OpenAngle
-					&& (sym.getType() != HtmlSymbolType.Solidus || !NextIs(HtmlSymbolType.CloseAngle)));
+					&& (sym.getType() != HtmlSymbolType.Solidus || !nextIs(HtmlSymbolType.CloseAngle)));
 		} else {
 			// Unexpected character in tag, enter recovery
-			Accept(whitespace);
+			accept(whitespace);
 			RecoverToEndOfTag();
 			return;
 		}
 
-		if (!At(HtmlSymbolType.Equals)) {
+		if (!at(HtmlSymbolType.Equals)) {
 			// Saw a space or newline after the name, so just skip this
 			// attribute and continue around the loop
-			Accept(whitespace);
-			Accept(name);
+			accept(whitespace);
+			accept(name);
 			return;
 		}
 
-		Output(SpanKind.Markup);
+		output(SpanKind.Markup);
 
 		// start a new markup block for the attribute
 		try(AutoCloseable	disposable= getContext().startBlock(BlockType.Markup)) {
@@ -371,14 +371,14 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		boolean attributeCanBeConditional = !StringUtils.startsWithIgnoreCase(name.getValue(), "data-");
 
 		// accept the whitespace and name
-		Accept(whitespace);
-		Accept(nameSymbols);
-		Assert(HtmlSymbolType.Equals); // We should be at "="
-		AcceptAndMoveNext();
+		accept(whitespace);
+		accept(nameSymbols);
+		assertSymbol(HtmlSymbolType.Equals); // We should be at "="
+		acceptAndMoveNext();
 		HtmlSymbolType quote = HtmlSymbolType.Unknown;
-		if (At(HtmlSymbolType.SingleQuote) || At(HtmlSymbolType.DoubleQuote)) {
+		if (at(HtmlSymbolType.SingleQuote) || at(HtmlSymbolType.DoubleQuote)) {
 			quote = getCurrentSymbol().getType();
-			AcceptAndMoveNext();
+			acceptAndMoveNext();
 		}
 
 		// We now have the prefix: (i.e. ' foo="')
@@ -387,7 +387,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		if (attributeCanBeConditional) {
 			// The block code generator will render the prefix
 			getSpan().setCodeGenerator(SpanCodeGenerator.Null);
-			Output(SpanKind.Markup);
+			output(SpanKind.Markup);
 
 			// read the values
 			while (!getEndOfFile() && !isEndOfAttributeValue(quote, getCurrentSymbol())) {
@@ -396,9 +396,9 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 			// Capture the suffix
 			LocationTagged<String> suffix = new LocationTagged<String>("", getCurrentLocation().clone());
-			if (quote != HtmlSymbolType.Unknown && At(quote)) {
+			if (quote != HtmlSymbolType.Unknown && at(quote)) {
 				suffix = getCurrentSymbol().getLocationTaggedContent();
-				AcceptAndMoveNext();
+				acceptAndMoveNext();
 			}
 
 			if (getSpan().getSymbols().size() > 0) {
@@ -410,7 +410,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 																	// render
 																	// the
 																	// suffix
-				Output(SpanKind.Markup);
+				output(SpanKind.Markup);
 			}
 
 			// create the block code generator
@@ -420,11 +420,11 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 			// methods are not converted
 			final HtmlSymbolType quoteTemp=quote;
-			SkipToAndParseCode(sym -> isEndOfAttributeValue(quoteTemp, sym));
+			skipToAndParseCode(sym -> isEndOfAttributeValue(quoteTemp, sym));
 			if (quote != HtmlSymbolType.Unknown) {
-				Optional(quote);
+				optional(quote);
 			}
-			Output(SpanKind.Markup);
+			output(SpanKind.Markup);
 		}
 	}
 
@@ -432,15 +432,15 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		SourceLocation prefixStart = getCurrentLocation().clone();
 
 		// methods are not converted
-		List<HtmlSymbol> prefix = ReadWhile(
+		List<HtmlSymbol> prefix = readWhile(
 				sym -> sym.getType() == HtmlSymbolType.WhiteSpace || sym.getType() == HtmlSymbolType.NewLine);
-		Accept(prefix);
+		accept(prefix);
 
-		if (At(HtmlSymbolType.Transition)) {
+		if (at(HtmlSymbolType.Transition)) {
 			SourceLocation valueStart = getCurrentLocation().clone();
 			putCurrentBack();
 
-			// Output the prefix but as a null-span.
+			// output the prefix but as a null-span.
 			// DynamicAttributeBlockCodeGenerator will render it
 			getSpan().setCodeGenerator(SpanCodeGenerator.Null);
 
@@ -454,8 +454,8 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			} catch (Exception ex){
 				ex.printStackTrace();
 			}
-		} else if (At(HtmlSymbolType.Text) && getCurrentSymbol().getContent().length() > 0
-				&& getCurrentSymbol().getContent().charAt(0) == '~' && NextIs(HtmlSymbolType.Solidus)) {
+		} else if (at(HtmlSymbolType.Text) && getCurrentSymbol().getContent().length() > 0
+				&& getCurrentSymbol().getContent().charAt(0) == '~' && nextIs(HtmlSymbolType.Solidus)) {
 			// Virtual Path value
 			SourceLocation valueStart = getCurrentLocation().clone();
 			virtualPath();
@@ -471,17 +471,17 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			// This condition checks for the end of the attribute value (it
 			// repeats some of the checks above but for now that's ok)
 		
-			List<HtmlSymbol> value = ReadWhile(
+			List<HtmlSymbol> value = readWhile(
 					sym -> sym.getType() != HtmlSymbolType.WhiteSpace
 							&& sym.getType() != HtmlSymbolType.NewLine
 							&& sym.getType() != HtmlSymbolType.Transition
 							&& !isEndOfAttributeValue(quote, sym));
-			Accept(value);
+			accept(value);
 			getSpan().setCodeGenerator(LiteralAttributeCodeGenerator.create(
 					ISymbol.getContent(prefix,prefixStart),
 					ISymbol.getContent(value, prefixStart)));
 		}
-		Output(SpanKind.Markup);
+		output(SpanKind.Markup);
 	}
 
 	private boolean isEndOfAttributeValue(HtmlSymbolType quote, HtmlSymbol sym) {
@@ -501,30 +501,30 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		// Also we need to detect "/" and ">"
 		return sym.getType() == HtmlSymbolType.DoubleQuote || sym.getType() == HtmlSymbolType.SingleQuote
 				|| sym.getType() == HtmlSymbolType.OpenAngle || sym.getType() == HtmlSymbolType.Equals
-				|| (sym.getType() == HtmlSymbolType.Solidus && NextIs(HtmlSymbolType.CloseAngle))
+				|| (sym.getType() == HtmlSymbolType.Solidus && nextIs(HtmlSymbolType.CloseAngle))
 				|| sym.getType() == HtmlSymbolType.CloseAngle || sym.getType() == HtmlSymbolType.WhiteSpace
 				|| sym.getType() == HtmlSymbolType.NewLine;
 	}
 
 	private void virtualPath() {
-		Assert(HtmlSymbolType.Text);
+		assertSymbol(HtmlSymbolType.Text);
 		assert getCurrentSymbol().getContent().length() > 0 && getCurrentSymbol().getContent().charAt(0) == '~';
 
 		// parse until a transition symbol, whitespace, newline or quote. We
 		// support only a fairly minimal subset of Virtual Paths
-		AcceptUntil(HtmlSymbolType.Transition, HtmlSymbolType.WhiteSpace, HtmlSymbolType.NewLine,
+		acceptUntil(HtmlSymbolType.Transition, HtmlSymbolType.WhiteSpace, HtmlSymbolType.NewLine,
 				HtmlSymbolType.SingleQuote, HtmlSymbolType.DoubleQuote);
 
-		// Output a Virtual Path span
+		// output a Virtual Path span
 		getSpan().getEditHandler().setEditorHints(EditorHints.VirtualPath);
 	}
 
 	private void RecoverToEndOfTag() {
 		// accept until ">", "/" or "<", but parse code
 		while (!getEndOfFile()) {
-			SkipToAndParseCode((p) -> isTagRecoveryStopPoint(p));
+			skipToAndParseCode((p) -> isTagRecoveryStopPoint(p));
 			if (!getEndOfFile()) {
-				EnsureCurrent();
+				ensureCurrent();
 				switch (getCurrentSymbol().getType()) {
 				case SingleQuote:
 				case DoubleQuote:
@@ -538,7 +538,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 					// End of tag
 					return;
 				default:
-					AcceptAndMoveNext();
+					acceptAndMoveNext();
 					break;
 				}
 			}
@@ -547,22 +547,22 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 	private void ParseQuoted() {
 		HtmlSymbolType type = getCurrentSymbol().getType();
-		AcceptAndMoveNext();
+		acceptAndMoveNext();
 		ParseQuoted(type);
 	}
 
 	private void ParseQuoted(HtmlSymbolType type) {
-		SkipToAndParseCode(type);
+		skipToAndParseCode(type);
 		if (!getEndOfFile()) {
-			Assert(type);
-			AcceptAndMoveNext();
+			assertSymbol(type);
+			acceptAndMoveNext();
 		}
 	}
 
 	private boolean StartTag(java.util.Stack<Tuple<HtmlSymbol, SourceLocation>> tags) throws ArgumentNullException {
 		// If we're at text, it's the name, otherwise the name is ""
 		HtmlSymbol tagName;
-		if (At(HtmlSymbolType.Text)) {
+		if (at(HtmlSymbolType.Text)) {
 			tagName = getCurrentSymbol();
 		} else {
 			tagName = new HtmlSymbol(getCurrentLocation().clone(), "", HtmlSymbolType.Unknown);
@@ -572,42 +572,42 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 		if (tags.empty() && StringUtils.equalsIgnoreCase(tag.getItem1().getContent(),
 				SyntaxConstants.TextTagName)) {
-			Output(SpanKind.Markup);
+			output(SpanKind.Markup);
 			getSpan().setCodeGenerator(SpanCodeGenerator.Null);
 
-			Accept(_bufferedOpenAngle);
-			Assert(HtmlSymbolType.Text);
+			accept(_bufferedOpenAngle);
+			assertSymbol(HtmlSymbolType.Text);
 
-			AcceptAndMoveNext();
+			acceptAndMoveNext();
 
 			int bookmark = getCurrentLocation().getAbsoluteIndex();
-			Iterable<HtmlSymbol> tokens = ReadWhile(IsSpacingToken(true));
-			boolean empty = At(HtmlSymbolType.Solidus);
+			Iterable<HtmlSymbol> tokens = readWhile(IsSpacingToken(true));
+			boolean empty = at(HtmlSymbolType.Solidus);
 			if (empty) {
-				Accept(tokens);
-				Assert(HtmlSymbolType.Solidus);
-				AcceptAndMoveNext();
+				accept(tokens);
+				assertSymbol(HtmlSymbolType.Solidus);
+				acceptAndMoveNext();
 				bookmark = getCurrentLocation().getAbsoluteIndex();
-				tokens = ReadWhile(IsSpacingToken(true));
+				tokens = readWhile(IsSpacingToken(true));
 			}
 
-			if (!Optional(HtmlSymbolType.CloseAngle)) {
+			if (!optional(HtmlSymbolType.CloseAngle)) {
 				getContext().getSource().setPosition(bookmark);
 				nextToken();
-				getContext().OnError(tag.getItem2(), RazorResources.getResource(RazorResources.ParseError_TextTagCannotContainAttributes));
+				getContext().onError(tag.getItem2(), RazorResources.getResource(RazorResources.ParseError_TextTagCannotContainAttributes));
 			} else {
-				Accept(tokens);
+				accept(tokens);
 				getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.None);
 			}
 
 			if (!empty) {
 				tags.push(tag);
 			}
-			Output(SpanKind.Transition);
+			output(SpanKind.Transition);
 			return true;
 		}
-		Accept(_bufferedOpenAngle);
-		Optional(HtmlSymbolType.Text);
+		accept(_bufferedOpenAngle);
+		optional(HtmlSymbolType.Text);
 		return RestOfTag(tag, tags);
 	}
 
@@ -617,21 +617,21 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 		// We are now at a possible end of the tag
 		// Found '<', so we just abort this tag.
-		if (At(HtmlSymbolType.OpenAngle)) {
+		if (at(HtmlSymbolType.OpenAngle)) {
 			return false;
 		}
 
-		boolean isEmpty = At(HtmlSymbolType.Solidus);
+		boolean isEmpty = at(HtmlSymbolType.Solidus);
 		// Found a solidus, so don't accept it but DON'T push the tag to the
 		// stack
 		if (isEmpty) {
-			AcceptAndMoveNext();
+			acceptAndMoveNext();
 		}
 
 		// Check for the '>' to determine if the tag is finished
-		boolean seenClose = Optional(HtmlSymbolType.CloseAngle);
+		boolean seenClose = optional(HtmlSymbolType.CloseAngle);
 		if (!seenClose) {
-			getContext().OnError(tag.getItem2(), RazorResources.getResource(RazorResources.ParseError_UnfinishedTag),
+			getContext().onError(tag.getItem2(), RazorResources.getResource(RazorResources.ParseError_UnfinishedTag),
 					tag.getItem1().getContent());
 		} else {
 			if (!isEmpty) {
@@ -647,33 +647,33 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 					int bookmark = getCurrentLocation().getAbsoluteIndex();
 
 					// Skip whitespace
-					Iterable<HtmlSymbol> ws = ReadWhile(IsSpacingToken(true));
+					Iterable<HtmlSymbol> ws = readWhile(IsSpacingToken(true));
 
 					// Open Angle
-					if (At(HtmlSymbolType.OpenAngle) && NextIs(HtmlSymbolType.Solidus)) {
+					if (at(HtmlSymbolType.OpenAngle) && nextIs(HtmlSymbolType.Solidus)) {
 						HtmlSymbol openAngle = getCurrentSymbol();
 						nextToken();
-						Assert(HtmlSymbolType.Solidus);
+						assertSymbol(HtmlSymbolType.Solidus);
 						HtmlSymbol solidus = getCurrentSymbol();
 						nextToken();
-						if (At(HtmlSymbolType.Text) && StringUtils.equalsIgnoreCase(getCurrentSymbol().getContent(),
+						if (at(HtmlSymbolType.Text) && StringUtils.equalsIgnoreCase(getCurrentSymbol().getContent(),
 								tagName)) {
 							// accept up to here
-							Accept(ws);
-							Accept(openAngle);
-							Accept(solidus);
-							AcceptAndMoveNext();
+							accept(ws);
+							accept(openAngle);
+							accept(solidus);
+							acceptAndMoveNext();
 
 							// accept to '>', '<' or EOF
-							AcceptUntil(HtmlSymbolType.CloseAngle, HtmlSymbolType.OpenAngle);
+							acceptUntil(HtmlSymbolType.CloseAngle, HtmlSymbolType.OpenAngle);
 							// accept the '>' if we saw it. And if we do see it,
 							// we're complete
-							return Optional(HtmlSymbolType.CloseAngle);
+							return optional(HtmlSymbolType.CloseAngle);
 						} // at(HtmlSymbolType.Text) &&
 							// String.Equals(CurrentSymbol.Content, tagName,
 							// StringComparison.OrdinalIgnoreCase)
 					} // at(HtmlSymbolType.OpenAngle) &&
-						// NextIs(HtmlSymbolType.Solidus)
+						// nextIs(HtmlSymbolType.Solidus)
 
 					// Go back to the bookmark and just finish this tag at the
 					// close angle
@@ -694,18 +694,18 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		// Special case for <script>: Skip to end of script tag and parse code
 		boolean seenEndScript = false;
 		while (!seenEndScript && !getEndOfFile()) {
-			SkipToAndParseCode(HtmlSymbolType.OpenAngle);
+			skipToAndParseCode(HtmlSymbolType.OpenAngle);
 			SourceLocation tagStart = getCurrentLocation().clone();
-			AcceptAndMoveNext();
-			AcceptWhile(HtmlSymbolType.WhiteSpace);
-			if (Optional(HtmlSymbolType.Solidus)) {
-				AcceptWhile(HtmlSymbolType.WhiteSpace);
-				if (At(HtmlSymbolType.Text) && StringUtils.equalsIgnoreCase(getCurrentSymbol().getContent(), "script"
+			acceptAndMoveNext();
+			acceptWhile(HtmlSymbolType.WhiteSpace);
+			if (optional(HtmlSymbolType.Solidus)) {
+				acceptWhile(HtmlSymbolType.WhiteSpace);
+				if (at(HtmlSymbolType.Text) && StringUtils.equalsIgnoreCase(getCurrentSymbol().getContent(), "script"
 						)) {
 					// </script!
-					SkipToAndParseCode(HtmlSymbolType.CloseAngle);
-					if (!Optional(HtmlSymbolType.CloseAngle)) {
-						getContext().OnError(tagStart,
+					skipToAndParseCode(HtmlSymbolType.CloseAngle);
+					if (!optional(HtmlSymbolType.CloseAngle)) {
+						getContext().onError(tagStart,
 								RazorResources.getResource(RazorResources.ParseError_UnfinishedTag), "script");
 					}
 					seenEndScript = true;
@@ -716,8 +716,8 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 	private boolean AcceptUntilAll(HtmlSymbolType... endSequence) {
 		while (!getEndOfFile()) {
-			SkipToAndParseCode(endSequence[0]);
-			if (AcceptAll(endSequence)) {
+			skipToAndParseCode(endSequence[0]);
+			if (acceptAll(endSequence)) {
 				return true;
 			}
 		}
@@ -738,11 +738,11 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			}
 		}
 		if (currentTag != null) {
-			getContext().OnError(currentTag.getItem2(),
+			getContext().onError(currentTag.getItem2(),
 					RazorResources.getResource(RazorResources.ParseError_MissingEndTag),
 					currentTag.getItem1().getContent());
 		} else {
-			getContext().OnError(tagStart, RazorResources.getResource(RazorResources.ParseError_UnexpectedEndTag), tagName);
+			getContext().onError(tagStart, RazorResources.getResource(RazorResources.ParseError_UnexpectedEndTag), tagName);
 		}
 		return false;
 	}
@@ -755,46 +755,46 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				tags.pop();
 			}
 			Tuple<HtmlSymbol, SourceLocation> tag = tags.pop();
-			getContext().OnError(tag.getItem2(), RazorResources.getResource(RazorResources.ParseError_MissingEndTag),
+			getContext().onError(tag.getItem2(), RazorResources.getResource(RazorResources.ParseError_MissingEndTag),
 					tag.getItem1().getContent());
 		} else if (complete) {
 			getSpan().getEditHandler().setAcceptedCharacters(AcceptedCharacters.None);
 		}
 		tags.clear();
 		if (!getContext().getDesignTimeMode()) {
-			AcceptWhile(HtmlSymbolType.WhiteSpace);
+			acceptWhile(HtmlSymbolType.WhiteSpace);
 			if (!getEndOfFile() && getCurrentSymbol().getType() == HtmlSymbolType.NewLine) {
-				AcceptAndMoveNext();
+				acceptAndMoveNext();
 			}
 		} else if (getSpan().getEditHandler().getAcceptedCharacters() == AcceptedCharacters.Any) {
-			AcceptWhile(HtmlSymbolType.WhiteSpace);
-			Optional(HtmlSymbolType.NewLine);
+			acceptWhile(HtmlSymbolType.WhiteSpace);
+			optional(HtmlSymbolType.NewLine);
 		}
 		putCurrentBack();
 
 		if (!complete) {
-			AddMarkerSymbolIfNecessary();
+			addMarkerSymbolIfNecessary();
 		}
-		Output(SpanKind.Markup);
+		output(SpanKind.Markup);
 	}
 
 	@Override
-	public void ParseDocument() throws InvalidOperationException {
+	public void parseDocument() throws InvalidOperationException {
 		if (getContext() == null) {
 			throw new InvalidOperationException(RazorResources.getResource(RazorResources.Parser_Context_Not_Set));
 		}
 
 
-		try(AutoCloseable spanConfig =PushSpanConfig((p) -> defaultMarkupSpan(p))) {
+		try(AutoCloseable spanConfig = pushSpanConfig((p) -> defaultMarkupSpan(p))) {
 
 			try(AutoCloseable dispose=getContext().startBlock(BlockType.Markup)) {
 				nextToken();
 				while (!getEndOfFile()) {
-					SkipToAndParseCode(HtmlSymbolType.OpenAngle);
+					skipToAndParseCode(HtmlSymbolType.OpenAngle);
 					ScanTagInDocumentContext();
 				}
-				AddMarkerSymbolIfNecessary();
-				Output(SpanKind.Markup);
+				addMarkerSymbolIfNecessary();
+				output(SpanKind.Markup);
 			} catch (Exception ex){
 				ex.printStackTrace();
 			}
@@ -811,20 +811,20 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 	 * @return A boolean indicating if we scanned at least one tag.
 	 */
 	private boolean ScanTagInDocumentContext() {
-		if (Optional(HtmlSymbolType.OpenAngle)) {
-			if (At(HtmlSymbolType.Bang)) {
+		if (optional(HtmlSymbolType.OpenAngle)) {
+			if (at(HtmlSymbolType.Bang)) {
 				bangTag();
 				return true;
-			} else if (At(HtmlSymbolType.QuestionMark)) {
+			} else if (at(HtmlSymbolType.QuestionMark)) {
 				xmlPI();
 				return true;
-			} else if (!At(HtmlSymbolType.Solidus)) {
-				boolean scriptTag = At(HtmlSymbolType.Text) && StringUtils
+			} else if (!at(HtmlSymbolType.Solidus)) {
+				boolean scriptTag = at(HtmlSymbolType.Text) && StringUtils
 						.equalsIgnoreCase(getCurrentSymbol().getContent(), "script");
-				Optional(HtmlSymbolType.Text);
+				optional(HtmlSymbolType.Text);
 				tagContent(); // parse the tag, don't care about the content
-				Optional(HtmlSymbolType.Solidus);
-				Optional(HtmlSymbolType.CloseAngle);
+				optional(HtmlSymbolType.Solidus);
+				optional(HtmlSymbolType.CloseAngle);
 				if (scriptTag) {
 					SkipToEndScriptAndParseCode();
 				}
@@ -861,40 +861,44 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 
 	@Override
 	protected void outputSpanBeforeRazorComment() {
-		Output(SpanKind.Markup);
+		output(SpanKind.Markup);
 	}
 
-	protected final void SkipToAndParseCode(HtmlSymbolType type) {
+	protected final void skipToAndParseCode(HtmlSymbolType type) {
 		
-		SkipToAndParseCode(sym -> sym.getType() == type);
+		skipToAndParseCode(sym -> sym.getType() == type);
 	}
 
-	protected final void SkipToAndParseCode(Predicate<HtmlSymbol> condition) {
+    /**
+     * 条件满足前忽略字符，并转换成代码输出
+     * @param condition 结束跳转符判断条件，前置条件Predicate<HtmlSymbol>
+     */
+	protected final void skipToAndParseCode(Predicate<HtmlSymbol> condition) {
 		HtmlSymbol last = null;
 		boolean startOfLine = false;
 		while (!getEndOfFile() && !condition.test(getCurrentSymbol())) {
-			if (At(HtmlSymbolType.NewLine)) {
+			if (at(HtmlSymbolType.NewLine)) {
 				if (last != null) {
-					Accept(last);
+					accept(last);
 				}
 
 				// Mark the start of a new line
 				startOfLine = true;
 				last = null;
-				AcceptAndMoveNext();
-			} else if (At(HtmlSymbolType.Transition)) {
+				acceptAndMoveNext();
+			} else if (at(HtmlSymbolType.Transition)) {
 				HtmlSymbol transition = getCurrentSymbol();
 				nextToken();
-				if (At(HtmlSymbolType.Transition)) {
+				if (at(HtmlSymbolType.Transition)) {
 					if (last != null) {
-						Accept(last);
+						accept(last);
 						last = null;
 					}
-					Output(SpanKind.Markup);
-					Accept(transition);
+					output(SpanKind.Markup);
+					accept(transition);
 					getSpan().setCodeGenerator(SpanCodeGenerator.Null);
-					Output(SpanKind.Markup);
-					AcceptAndMoveNext();
+					output(SpanKind.Markup);
+					acceptAndMoveNext();
 					continue; // while
 				} else {
 					if (!getEndOfFile()) {
@@ -913,28 +917,28 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 						last = null;
 					} else {
 						// accept last
-						Accept(last);
+						accept(last);
 						last = null;
 					}
 				}
 
 				OtherParserBlock();
-			} else if (At(HtmlSymbolType.RazorCommentTransition)) {
+			} else if (at(HtmlSymbolType.RazorCommentTransition)) {
 				if (last != null) {
-					Accept(last);
+					accept(last);
 					last = null;
 				}
-				AddMarkerSymbolIfNecessary();
-				Output(SpanKind.Markup);
-				RazorComment();
+				addMarkerSymbolIfNecessary();
+				output(SpanKind.Markup);
+				razorComment();
 			} else {
 				// As long as we see whitespace, we're still at the "start" of
 				// the line
-				startOfLine &= At(HtmlSymbolType.WhiteSpace);
+				startOfLine &= at(HtmlSymbolType.WhiteSpace);
 
 				// If there's a last token, accept it
 				if (last != null) {
-					Accept(last);
+					accept(last);
 					last = null;
 				}
 
@@ -945,7 +949,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		}
 
 		if (last != null) {
-			Accept(last);
+			accept(last);
 		}
 	}
 
@@ -956,13 +960,13 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 	}
 
 	private void OtherParserBlock() {
-		AddMarkerSymbolIfNecessary();
-		Output(SpanKind.Markup);
+		addMarkerSymbolIfNecessary();
+		output(SpanKind.Markup);
 
-		try (AutoCloseable disposable=PushSpanConfig()){
-			getContext().SwitchActiveParser();
+		try (AutoCloseable disposable= pushSpanConfig()){
+			getContext().switchActiveParser();
 			getContext().getCodeParser().parseBlock();
-			getContext().SwitchActiveParser();
+			getContext().switchActiveParser();
 		} catch (Exception ex){
 			ex.printStackTrace();
 		}
@@ -989,7 +993,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		}
 
 
-		try (AutoCloseable	disposable=PushSpanConfig((p) -> defaultMarkupSpan(p))){
+		try (AutoCloseable	disposable= pushSpanConfig((p) -> defaultMarkupSpan(p))){
 			// using (Context.startBlock(BlockType.Markup))
 			AutoCloseable	disposable2=getContext().startBlock(BlockType.Markup);
 			try {
@@ -1000,8 +1004,8 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				} else {
 					NestingSection(nestingSequences);
 				}
-				AddMarkerSymbolIfNecessary();
-				Output(SpanKind.Markup);
+				addMarkerSymbolIfNecessary();
+				output(SpanKind.Markup);
 			} catch (Exception ex){
 					ex.printStackTrace();
 			}
@@ -1014,7 +1018,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		do {
 
 			// methods are not converted
-			SkipToAndParseCode(sym -> sym.getType() == HtmlSymbolType.OpenAngle || AtEnd(nestingSequenceComponents));
+			skipToAndParseCode(sym -> sym.getType() == HtmlSymbolType.OpenAngle || AtEnd(nestingSequenceComponents));
 			ScanTagInDocumentContext();
 			if (!getEndOfFile() && AtEnd(nestingSequenceComponents)) {
 				break;
@@ -1029,12 +1033,12 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		while (nesting > 0 && !getEndOfFile()) {
 
 			// methods are not converted
-			SkipToAndParseCode(
+			skipToAndParseCode(
 					sym -> sym.getType() == HtmlSymbolType.Text || sym.getType() == HtmlSymbolType.OpenAngle);
-			if (At(HtmlSymbolType.Text)) {
+			if (at(HtmlSymbolType.Text)) {
 				nesting += ProcessTextToken(nestingSequences, nesting);
 				if (getCurrentSymbol() != null) {
-					AcceptAndMoveNext();
+					acceptAndMoveNext();
 				} else if (nesting > 0) {
 					nextToken();
 				}
@@ -1052,7 +1056,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 	}
 
 	private boolean AtEnd(String[] nestingSequenceComponents) {
-		EnsureCurrent();
+		ensureCurrent();
 		//StringUtils.equals(getCurrentSymbol().getContent(),nestingSequenceComponents)
 		if (stringEquals(getCurrentSymbol().getContent(), nestingSequenceComponents[0])) {
 			int bookmark = getCurrentSymbol().getStart().getAbsoluteIndex();
@@ -1111,7 +1115,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				// accept the first chunk (up to the nesting sequence we just
 				// saw)
 				if (!StringUtils.isBlank(preSequence.getContent())) {
-					Accept(preSequence);
+					accept(preSequence);
 				}
 
 				if (currentNesting + retIfMatched == 0) {
@@ -1124,7 +1128,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				} else {
 					// This isn't the end of the last nesting sequence, accept
 					// the token and keep going
-					Accept(sequenceToken);
+					accept(sequenceToken);
 
 					// Position at the start of the postSequence symbol
 					if (postSequence != null) {

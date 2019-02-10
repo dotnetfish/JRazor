@@ -21,7 +21,7 @@ public class TypeMemberCodeGenerator extends SpanCodeGenerator
 		String paddedCode = CodeGeneratorPaddingHelper.pad(context.getHost(), generatedCode, target, tempRef_paddingCharCount);
 		paddingCharCount = tempRef_paddingCharCount.getRefObj();
 
-		//Contract.Assert(paddingCharCount > 0);
+		//Contract.assertSymbol(paddingCharCount > 0);
 
 		CodeSnippetTypeMember tempVar = new CodeSnippetTypeMember(paddedCode);
 		tempVar.setLinePragma(context.generateLinePragma(target, paddingCharCount));

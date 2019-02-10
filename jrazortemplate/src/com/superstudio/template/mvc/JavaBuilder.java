@@ -99,8 +99,8 @@ String fullClassName="JRazor." +  ParserHelpers
             JavaClassObject jco = fileManager.getJavaClassObject();
             DynamicClassLoader dynamicClassLoader = new DynamicClassLoader(this.parentClassLoader);
             Class clazz = dynamicClassLoader.loadClass(fullClassName,jco);
-             File file=new File(codePath);
-            file.delete();
+           /*  File file=new File(codePath);
+            file.delete();*/
             return clazz;
         } else {
             String error = "";

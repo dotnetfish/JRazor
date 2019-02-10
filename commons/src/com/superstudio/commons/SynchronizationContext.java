@@ -4,9 +4,9 @@ import java.util.function.Consumer;
 
 public class SynchronizationContext {
 
-	public void Post(Consumer<?> callBack, Object state) {
-		// TODO Auto-generated method stub
-		 
+	public void post(Consumer<Object> callBack, Object state) {
+
+		 callBack.accept(state);
 	}
 
 }

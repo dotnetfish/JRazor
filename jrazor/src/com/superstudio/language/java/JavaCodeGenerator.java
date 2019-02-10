@@ -3,7 +3,7 @@ package com.superstudio.language.java;
 import com.superstudio.codedom.*;
 import com.superstudio.codedom.compiler.*;
 import com.superstudio.commons.FixedStringLookup;
-import com.superstudio.commons.SR;
+import com.superstudio.commons.Resource;
 import com.superstudio.commons.TypeAttributes;
 import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.commons.exception.ArgumentException;
@@ -371,7 +371,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	public void generateCodeFromMember(CodeTypeMember member, TextWriter writer, CodeGeneratorOptions options)
 			throws Exception {
 		if (this.output != null) {
-			throw new Exception(SR.GetString("CodeGenReentrance"));
+			throw new Exception(Resource.getString("CodeGenReentrance"));
 		}
 		this.options = ((options == null) ? new CodeGeneratorOptions() : options);
 		this.output = new IndentedTextWriter(writer, this.options.getIndentString());
@@ -619,7 +619,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 														} else {
 															if (!(e instanceof CodeLabeledStatement)) {
 
-																throw new ArgumentException(SR.GetString(
+																throw new ArgumentException(Resource.getString(
 																		"InvalidElementType",
 																		new Object[] { e.getClass().getName() }), "e");
 
@@ -766,7 +766,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		 */
 		if (!(e.getValue() instanceof Boolean)) {
 
-			  throw new ArgumentException(SR.GetString("InvalidPrimitiveType",
+			  throw new ArgumentException(Resource.getString("InvalidPrimitiveType",
 			  new Object[] { e.getValue().getClass().getName() }));
 
 		}
@@ -936,7 +936,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	private void generateCommentStatement(CodeCommentStatement e) throws Exception {
 		if (e.getComment() == null) {
 
-			throw new ArgumentException(SR.GetString("Argument_NullComment", new Object[] { "e" }), "e");
+			throw new ArgumentException(Resource.getString("Argument_NullComment", new Object[] { "e" }), "e");
 		}
 		this.generateComment(e.getComment());
 	}
@@ -1234,7 +1234,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 			throw new ArgumentNullException("e");
 		}
 
-		throw new ArgumentException(SR.GetString("InvalidElementType", new Object[] { e.getClass().getName() }), "e");
+		throw new ArgumentException(Resource.getString("InvalidElementType", new Object[] { e.getClass().getName() }), "e");
 
 	}
 
@@ -2288,19 +2288,19 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 		this.output.writeLine("//------------------------------------------------------------------------------");
 		this.output.write("// <");
-		this.output.writeLine(SR.GetString("AutoGen_Comment_Line1"));
+		this.output.writeLine(Resource.getString("AutoGen_Comment_Line1"));
 		this.output.write("//     ");
-		this.output.writeLine(SR.GetString("AutoGen_Comment_Line2"));
+		this.output.writeLine(Resource.getString("AutoGen_Comment_Line2"));
 		this.output.write("//     ");
-		this.output.write(SR.GetString("AutoGen_Comment_Line3"));
+		this.output.write(Resource.getString("AutoGen_Comment_Line3"));
 		//this.output.writeLine(Environment.Version.toString());
 		this.output.writeLine("//");
 		this.output.write("//     ");
-		this.output.writeLine(SR.GetString("AutoGen_Comment_Line4"));
+		this.output.writeLine(Resource.getString("AutoGen_Comment_Line4"));
 		this.output.write("//     ");
-		this.output.writeLine(SR.GetString("AutoGen_Comment_Line5"));
+		this.output.writeLine(Resource.getString("AutoGen_Comment_Line5"));
 		this.output.write("// </");
-		this.output.writeLine(SR.GetString("AutoGen_Comment_Line1"));
+		this.output.writeLine(Resource.getString("AutoGen_Comment_Line1"));
 		this.output.writeLine("//------------------------------------------------------------------------------");
 		this.output.writeLine("");
 		// SortedList sortedList = new SortedList(StringComparer.Ordinal);
@@ -2509,7 +2509,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	@Override
 	public void validateIdentifier(String value) throws ArgumentException {
 		if (!this.isValidIdentifier(value)) {
-			throw new ArgumentException(SR.GetString("InvalidIdentifier", new Object[] { value }));
+			throw new ArgumentException(Resource.getString("InvalidIdentifier", new Object[] { value }));
 		}
 	}
 
@@ -2728,358 +2728,12 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		this.output.writeLine(" {");
 	}
 
-	/*private CompilerResults fromFileBatch(CompilerParameters options, String[] fileNames) throws Exception {
-		if (options == null) {
-			// throw new ArgumentNullException("options");
-		}
-		if (fileNames == null) {
-			// throw new ArgumentNullException("fileNames");
-		}
-		// new
-		// SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Demand();
-		String file = null;
-		int num = 0;
-		CompilerResults compilerResults = new CompilerResults(options.getTempFiles());
-		// new
-		// SecurityPermission(SecurityPermissionFlag.ControlEvidence).Assert();
-		try {
-			compilerResults.setEvidence(options.getEvidence());
-		} finally {
-			// CodeAccessPermission.RevertAssert();
-		}
-		boolean flag = false;
-		if (options.getOutputAssembly() == null || options.getOutputAssembly().length() == 0) {
-			String fileExtension = options.getGenerateExecutable() ? "exe" : "dll";
-			options.setOutputAssembly(
-					compilerResults.getTempFiles().addExtension(fileExtension, !options.getGenerateInMemory()));
-			new FileStream(options.getOutputAssembly(), FileMode.Create, FileAccess.ReadWrite).close();
-			flag = true;
-		}
-		String text = "pdb";
-		// if (options.getCompilerOptions() != null && -1 !=
-		// Locale.InvariantCulture.CompareInfo.IndexOf(options.CompilerOptions,
-		// "/debug:pdbonly", CompareOptions.IgnoreCase))
-		if (options.getCompilerOptions() != null && true) {
-			compilerResults.getTempFiles().addExtension(text, true);
-		} else {
-			compilerResults.getTempFiles().addExtension(text);
-		}
-		String text2 = this.cmdArgsFromParameters(options) + " " + JavaCodeGenerator.joinStringArray(fileNames, " ");
-		String responseFileCmdArgs = this.getResponseFileCmdArgs(options, text2);
-		String trueArgs = null;
-		if (responseFileCmdArgs != null) {
-			trueArgs = text2;
-			text2 = responseFileCmdArgs;
-		}
-		RefObject<String> refFile = new RefObject<String>(file);
-		RefObject<Integer> refNum = new RefObject<Integer>(num);
-		this.compile(options, RedistVersionInfo.getCompilerPath(this.provOptions, this.getCompilerName()),
-				this.getCompilerName(), text2, refFile, refNum, trueArgs);
-		num = refNum.getRefObj();
-		file = refFile.getRefObj();
-		compilerResults.setNativeCompilerReturnValue(num);
-		if (num != 0 || options.getWarningLevel() > 0) {
-			String[] array = JavaCodeGenerator.readAllLines(file, Encoding.UTF8, FileShare.ReadWrite);
-			for (int i = 0; i < array.length; i++) {
-				String text3 = array[i];
-				compilerResults.getOutput().add(text3);
-				this.processCompilerOutputLine(compilerResults, text3);
-			}
-			if (num > 0 & flag) {
-				File.Delete(options.getOutputAssembly());
-			}
-		}
-		if (compilerResults.getErrors().getHasErrors() || !options.getGenerateInMemory()) {
-			compilerResults.setPathToAssembly(options.getOutputAssembly());
-			return compilerResults;
-		}
-		byte[] rawAssembly = File.ReadAllBytes(options.getOutputAssembly());
-		byte[] rawSymbolStore = null;
-		try {
-			String path = options.getTempFiles().getBasePath() + "." + text;
-			if (File.Exists(path)) {
-				rawSymbolStore = File.ReadAllBytes(path);
-			}
-		} catch (Exception e) {
-			rawSymbolStore = null;
-		}
-		// new
-		// SecurityPermission(SecurityPermissionFlag.ControlEvidence).Assert();
-		try {
-			compilerResults.setCompiledAssembly(Assembly.Load(rawAssembly, rawSymbolStore, options.getEvidence()));
-			// compilerResults.CompiledAssembly = Assembly.Load(rawAssembly,
-			// rawSymbolStore, options.Evidence);
-		} finally {
-			// CodeAccessPermission.RevertAssert();
-		}
-		return compilerResults;
-	}
-*/
-	/*private static String[] readAllLines(String file, String encoding, FileShare share)
-			throws Exception {
-		String[] result = null;
-		try (FileStream fileStream = File.Open(file, FileMode.Open, FileAccess.Read, share)) {
-			List<String> list = new ArrayList<String>();
-			try (StreamReader streamReader = new StreamReader(fileStream, encoding)) {
-				String item;
-				while ((item = streamReader.ReadLine()) != null) {
-					list.add(item);
-				}
-			}
-			result = list.toArray(result);
-		}
-		return result;
-	}*/
 
-	/*public CompilerResults compileAssemblyFromDom(CompilerParameters options, CodeCompileUnit e)
-			throws ArgumentNullException {
-		if (options == null) {
-			throw new ArgumentNullException("options");
-		}
-		CompilerResults result;
-		try {
-			result = this.fromDom(options, e);
-		} finally {
-			options.getTempFiles().safeDelete();
-		}
-		return result;
-	}
-*/
-	/*public CompilerResults compileAssemblyFromFile(CompilerParameters options, String fileName) throws Exception {
-		if (options == null) {
-			throw new ArgumentNullException("options");
-		}
-		CompilerResults result;
-		try {
-			result = this.fromFile(options, fileName);
-		} finally {
-			options.getTempFiles().safeDelete();
-		}
-		return result;
-	}
-
-	public CompilerResults compileAssemblyFromSource(CompilerParameters options, String source) throws Exception {
-		if (options == null) {
-			// throw new ArgumentNullException("options");
-		}
-		CompilerResults result;
-		try {
-			result = this.fromSource(options, source);
-		} finally {
-			options.getTempFiles().safeDelete();
-		}
-		return result;
-	}
-
-	public CompilerResults compileAssemblyFromSourceBatch(CompilerParameters options, String[] sources)
-			throws ArgumentNullException {
-		if (options == null) {
-			throw new ArgumentNullException("options");
-		}
-		CompilerResults result;
-		try {
-			result = this.fromSourceBatch(options, sources);
-		} finally {
-			options.getTempFiles().safeDelete();
-		}
-		return result;
-	}
-*/
-	/*public CompilerResults compileAssemblyFromFileBatch(CompilerParameters options, String[] fileNames)
-			throws Exception {
-		if (options == null) {
-			throw new ArgumentNullException("options");
-		}
-		if (fileNames == null) {
-			throw new ArgumentNullException("fileNames");
-		}
-		CompilerResults result;
-		try {
-			for (int i = 0; i < fileNames.length; i++) {
-				try (AutoCloseable closeable = File.OpenRead(fileNames[i])) {
-				}
-			}
-			result = this.fromFileBatch(options, fileNames);
-		} finally {
-			options.getTempFiles().safeDelete();
-		}
-		return result;
-	}*/
-
-	/*public CompilerResults compileAssemblyFromDomBatch(CompilerParameters options, CodeCompileUnit[] ea)
-			throws Exception {
-		if (options == null) {
-			throw new ArgumentNullException("options");
-		}
-		CompilerResults result;
-		try {
-			result = this.fromDomBatch(options, ea);
-		} finally {
-			options.getTempFiles().safeDelete();
-		}
-		return result;
-	}*/
-
-	/*void compile(CompilerParameters options, String compilerDirectory, String compilerExe, String arguments,
-				 RefObject<String> outputFile, RefObject<Integer> nativeReturnValue, String trueArgs) throws Exception {
-		String text = null;
-		outputFile.setRefObj(options.getTempFiles().addExtension("out"));
-		// RefObject<String> refObject = new RefObject<String>(outputFile);
-
-		String text2 = Path.Combine(compilerDirectory, compilerExe);
-		if (File.Exists(text2)) {
-			String trueCmdLine = null;
-			if (trueArgs != null) {
-				trueCmdLine = "\"" + text2 + "\" " + trueArgs;
-			}
-			RefObject<String> refText = new RefObject<String>(text);
-			nativeReturnValue.setRefObj(
-					(Executor.ExecWaitWithCapture(options.getSafeUserToken(), "\"" + text2 + "\" " + arguments,
-							Environment.CurrentDirectory, options.getTempFiles(), outputFile, refText, trueCmdLine)));
-			text = refText.getRefObj();
-			return;
-		}
-		throw new InvalidOperationException(SR.GetString("CompilerNotFound", new Object[] { text2 }));
-	}
-*/
-	/*private CompilerResults fromDom(CompilerParameters options, CodeCompileUnit e) throws ArgumentNullException {
-		if (options == null) {
-			throw new ArgumentNullException("options");
-		}
-		// new
-		// SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Demand();
-		return this.fromDomBatch(options, new CodeCompileUnit[] { e });
-	}
-*/
-/*
-	private CompilerResults fromFile(CompilerParameters options, String fileName) throws Exception {
-		if (options == null) {
-			throw new ArgumentNullException("options");
-		}
-		if (fileName == null) {
-			throw new ArgumentNullException("fileName");
-		}
-		// new
-		// SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Demand();
-		try (AutoCloseable stream = File.OpenRead(fileName)) {
-		}
-		return this.fromFileBatch(options, new String[] { fileName });
-	}
-*/
-
-	/*private CompilerResults fromSource(CompilerParameters options, String source) throws Exception {
-		if (options == null) {
-			// throw new ArgumentNullException("options");
-		}
-		// new
-		// SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Demand();
-		return this.fromSourceBatch(options, new String[] { source });
-	}
-*/
-	/*private CompilerResults fromDomBatch(CompilerParameters options, CodeCompileUnit[] ea) {
-		if (options == null) {
-			// throw new ArgumentNullException("options");
-		}
-		if (ea == null) {
-			// throw new ArgumentNullException("ea");
-		}
-		// new
-		// SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Demand();
-		String[] array = new String[ea.length];
-		CompilerResults result = null;
-		try {
-			// WindowsImpersonationContext impersonation =
-			// Executor.RevertImpersonation();
-			try {
-				for (int i = 0; i < ea.length; i++) {
-					if (ea[i] != null) {
-						this.resolveReferencedAssemblies(options, ea[i]);
-						array[i] = options.getTempFiles().addExtension(i + this.getFileExtension());
-						FileStream stream = new FileStream(array[i], FileMode.Create, FileAccess.Write, FileShare.Read);
-						try {
-							try (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8)) {
-								this.generateCodeFromCompileUnit(ea[i], streamWriter, this.options);
-								streamWriter.flush();
-							}
-						} finally {
-							stream.Close();
-						}
-					}
-				}
-				result = this.fromFileBatch(options, array);
-			} finally {
-				// Executor.ReImpersonate(impersonation);
-			}
-		} catch (Exception ex) {
-			// throw;
-		}
-		return result;
-	}
-*/
-
-
-	/*private CompilerResults fromSourceBatch(CompilerParameters options, String[] sources) throws ArgumentNullException {
-		if (options == null) {
-			throw new ArgumentNullException("options");
-		}
-		if (sources == null) {
-			throw new ArgumentNullException("sources");
-		}
-		// new
-		// SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Demand();
-		String[] array = new String[sources.length];
-		CompilerResults result = null;
-		try {
-			// WindowsImpersonationContext impersonation =
-			// Executor.RevertImpersonation();
-			try {
-				for (int i = 0; i < sources.length; i++) {
-					String text = options.getTempFiles().addExtension(i + this.getFileExtension());
-					FileStream stream = new FileStream(text, FileMode.Create, FileAccess.Write, FileShare.Read);
-					try {
-						try (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8)) {
-							streamWriter.write(sources[i]);
-							streamWriter.flush();
-						}
-					} finally {
-						stream.Close();
-					}
-					array[i] = text;
-				}
-				result = this.fromFileBatch(options, array);
-			} finally {
-				// Executor.ReImpersonate(impersonation);
-			}
-		} catch (Exception ex) {
-			// throw;
-		}
-		return result;
-	}
-*/
-	private static String joinStringArray(String[] sa, String separator) {
-		if (sa == null || sa.length == 0) {
-			return StringHelper.Empty;
-		}
-		if (sa.length == 1) {
-			return "\"" + sa[0] + "\"";
-		}
-		StringBuilder StringBuilder = new StringBuilder();
-		for (int i = 0; i < sa.length - 1; i++) {
-			StringBuilder.append("\"");
-			StringBuilder.append(sa[i]);
-			StringBuilder.append("\"");
-			StringBuilder.append(separator);
-		}
-		StringBuilder.append("\"");
-		StringBuilder.append(sa[sa.length - 1]);
-		StringBuilder.append("\"");
-		return StringBuilder.toString();
-	}
 
 	public void generateCodeFromType(CodeTypeDeclaration e, TextWriter w, CodeGeneratorOptions o) throws Exception {
 		boolean flag = false;
 		if (this.output != null && w != this.output.getInnerWriter()) {
-			throw new InvalidOperationException(SR.GetString("CodeGenOutputWriter"));
+			throw new InvalidOperationException(Resource.getString("CodeGenOutputWriter"));
 		}
 		if (this.output == null) {
 			flag = true;
@@ -3099,7 +2753,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	public void generateCodeFromExpression(CodeExpression e, TextWriter w, CodeGeneratorOptions o) throws Exception {
 		boolean flag = false;
 		if (this.output != null && w != this.output.getInnerWriter()) {
-			throw new InvalidOperationException(SR.GetString("CodeGenOutputWriter"));
+			throw new InvalidOperationException(Resource.getString("CodeGenOutputWriter"));
 		}
 		if (this.output == null) {
 			flag = true;
@@ -3119,7 +2773,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	public void generateCodeFromCompileUnit(CodeCompileUnit e, TextWriter w, CodeGeneratorOptions o) throws Exception {
 		boolean flag = false;
 		if (this.output != null && w != this.output.getInnerWriter()) {
-			throw new InvalidOperationException(SR.GetString("CodeGenOutputWriter"));
+			throw new InvalidOperationException(Resource.getString("CodeGenOutputWriter"));
 		}
 		if (this.output == null) {
 			flag = true;
@@ -3144,7 +2798,7 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 	public void generateCodeFromNamespace(CodeNamespace e, TextWriter w, CodeGeneratorOptions o) throws Exception {
 		boolean flag = false;
 		if (this.output != null && w != this.output.getInnerWriter()) {
-			throw new InvalidOperationException(SR.GetString("CodeGenOutputWriter"));
+			throw new InvalidOperationException(Resource.getString("CodeGenOutputWriter"));
 		}
 		if (this.output == null) {
 			flag = true;
@@ -3162,10 +2816,11 @@ public class JavaCodeGenerator implements ICodeCompiler, ICodeGenerator {
 		}
 	}
 
+	@Override
 	public void generateCodeFromStatement(CodeStatement e, TextWriter w, CodeGeneratorOptions o) throws Exception {
 		boolean flag = false;
 		if (this.output != null && w != this.output.getInnerWriter()) {
-			throw new InvalidOperationException(SR.GetString("CodeGenOutputWriter"));
+			throw new InvalidOperationException(Resource.getString("CodeGenOutputWriter"));
 		}
 		if (this.output == null) {
 			flag = true;

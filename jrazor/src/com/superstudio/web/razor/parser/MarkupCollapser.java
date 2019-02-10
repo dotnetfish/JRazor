@@ -36,7 +36,7 @@ public class MarkupCollapser extends MarkupRewriter
 		// Merge spans
 		parent.getChildren().remove(previous);
 		SpanBuilder merged = new SpanBuilder();
-		FillSpan(merged, previous.getStart(), previous.getContent() + span.getContent());
+		fillSpan(merged, previous.getStart(), previous.getContent() + span.getContent());
 		return merged.build();
 	}
 

@@ -1,6 +1,5 @@
 package com.superstudio.template.mvc.context;
 
-import com.superstudio.template.mvc.ControllerBase;
 import com.superstudio.template.mvc.TemplateContext;
 import com.superstudio.template.mvc.actionresult.TemplateDataDictionary;
 import com.superstudio.template.templatepages.DisplayModeProvider;
@@ -11,7 +10,7 @@ import java.util.HashMap;
 
 public class RenderContext {
 
-	private ControllerBase controller;
+	//private ControllerBase controller;
 	private HostContext httpContext;
 	private Boolean isChildAction;
 	private TemplateContext parentActionTemplateContext;
@@ -29,19 +28,19 @@ public class RenderContext {
 		this.setTemplateInfo(renderContext.getTemplateInfo());
 	}
 
-	public RenderContext(RequestContext requestContext, ControllerBase controller) {
+	public RenderContext(RequestContext requestContext) {
 		
 		this.requestContext=requestContext;
 		this.httpContext=new HostContext(requestContext.getContext());
-		this.controller=controller;
+		//this.controller=controller;
 		this.setTemplateInfo(requestContext.getTemplateInfo());
 	}
 
-	public RenderContext(HostContext httpContext, TemplateInfo templateInfo, ControllerBase controller) {
+	public RenderContext(HostContext httpContext, TemplateInfo templateInfo) {
 		this.httpContext=httpContext;
 		this.requestContext=new RequestContext(templateInfo,httpContext);
 		this.setTemplateInfo(templateInfo);
-		this.controller=controller;
+		//this.controller=controller;
 	}
 
 

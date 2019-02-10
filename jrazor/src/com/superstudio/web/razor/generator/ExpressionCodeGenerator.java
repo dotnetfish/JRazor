@@ -1,7 +1,6 @@
 package com.superstudio.web.razor.generator;
 
 import com.superstudio.commons.CollectionHelper;
-import com.superstudio.commons.csharpbridge.StringHelper;
 import com.superstudio.web.razor.parser.syntaxTree.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -75,7 +74,7 @@ public class ExpressionCodeGenerator extends HybridCodeGenerator {
 	@Override
 	public void generateCode(Span target, CodeGeneratorContext context) {
 		Span sourceSpan = null;
-		if (context.CreateCodeWriter().getSupportsMidStatementLinePragmas()
+		if (context.createCodeWriter().getSupportsMidStatementLinePragmas()
 				|| context.getExpressionRenderingMode() == ExpressionRenderingMode.WriteToOutput) {
 			sourceSpan = target;
 		}

@@ -93,11 +93,11 @@ public class CompilerError implements Serializable
 	@Override
 	public String toString()
 	{
-		MessageFormat formattor=new MessageFormat("", Locale.getDefault());
+		//MessageFormat formattor=new MessageFormat("", Locale.getDefault());
 		if (this.getFileName().length() > 0)
 		{
-			return formattor.format("%1$s(%2$s,%3$s) : %4$s %5$s: %6$s", new Object[] {this.getFileName(), this.getLine(), this.getColumn(), this.getIsWarning() ? "warning" : "error", this.getErrorNumber(), this.getErrorText()});
+			return MessageFormat.format("%1$s(%2$s,%3$s) : %4$s %5$s: %6$s", new Object[] {this.getFileName(), this.getLine(), this.getColumn(), this.getIsWarning() ? "warning" : "error", this.getErrorNumber(), this.getErrorText()});
 		}
-		return formattor.format( "%1$s %2$s: %3$s", new Object[] {this.getIsWarning() ? "warning" : "error", this.getErrorNumber(), this.getErrorText()});
+		return MessageFormat.format( "%1$s %2$s: %3$s", new Object[] {this.getIsWarning() ? "warning" : "error", this.getErrorNumber(), this.getErrorText()});
 	}
 }

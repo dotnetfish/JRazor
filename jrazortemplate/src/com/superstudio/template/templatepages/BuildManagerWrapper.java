@@ -107,7 +107,7 @@ public final class BuildManagerWrapper implements IVirtualPathFactory
 			// The cache could have evicted our results. In this case, we'll simply fall through to createInstanceFromVirtualPath
 			if (buildManagerResult != null)
 			{
-				//Debug.Assert(buildManagerResult.getExists() && buildManagerResult.getObjectFactory() != null, "This method must only be called if the file exists.");
+				//Debug.assertSymbol(buildManagerResult.getExists() && buildManagerResult.getObjectFactory() != null, "This method must only be called if the file exists.");
 				Object tempVar = buildManagerResult.getObjectFactory().createInstance();
 				return (T)tempVar;
 			}

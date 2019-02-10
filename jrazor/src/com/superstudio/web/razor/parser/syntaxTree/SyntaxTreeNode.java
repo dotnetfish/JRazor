@@ -56,7 +56,8 @@ public abstract class SyntaxTreeNode implements IEquatable<Object>
 	*/
 	public abstract boolean equivalentTo(SyntaxTreeNode node);
 	
-	public  boolean equals(Object obj,Object other){
+	@Override
+	public  boolean equals(Object obj, Object other){
 		return obj.equals(other);
 	}
 	

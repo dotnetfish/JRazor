@@ -3,86 +3,52 @@ package com.superstudio.codedom;
 import java.io.Serializable;
 
 
-public class CodeParameterDeclarationExpressionCollection extends CollectionBase implements Serializable
-{
-	public final CodeParameterDeclarationExpression getItem(int index)
-	{
-		return (CodeParameterDeclarationExpression)get(index);
+public class CodeParameterDeclarationExpressionCollection extends CollectionBase<CodeParameterDeclarationExpression> implements Serializable {
+	public final CodeParameterDeclarationExpression getItem(int index) {
+		return (CodeParameterDeclarationExpression) get(index);
 	}
-	public final void setItem(int index, CodeParameterDeclarationExpression value)
-	{
+
+	public final void setItem(int index, CodeParameterDeclarationExpression value) {
 		//set[index] = value;
-		add(index,value);
+		add(index, value);
 	}
 
-	public CodeParameterDeclarationExpressionCollection()
-	{
+	public CodeParameterDeclarationExpressionCollection() {
 	}
 
-	public CodeParameterDeclarationExpressionCollection(CodeParameterDeclarationExpressionCollection value)
-	{
-		this.AddRange(value);
+	public CodeParameterDeclarationExpressionCollection(CodeParameterDeclarationExpressionCollection value) {
+		this.addRange(value);
 	}
 
-	public CodeParameterDeclarationExpressionCollection(CodeParameterDeclarationExpression[] value)
-	{
-		this.AddRange(value);
+	public CodeParameterDeclarationExpressionCollection(CodeParameterDeclarationExpression[] value) {
+		this.addRange(value);
 	}
 
-	public final int Add(CodeParameterDeclarationExpression value)
-	{
-		add(value);return size();
-		//return super.List.add(value);
-	}
 
-	public final void AddRange(CodeParameterDeclarationExpression[] value)
-	{
-		if (value == null)
-		{
+
+	public final void addRange(CodeParameterDeclarationExpression[] value) {
+		if (value == null) {
 			throw new IllegalArgumentException("value");
 		}
-		for (int i = 0; i < value.length; i++)
-		{
-			this.Add(value[i]);
+		for (int i = 0; i < value.length; i++) {
+			this.add(value[i]);
 		}
 	}
 
-	public final void AddRange(CodeParameterDeclarationExpressionCollection value)
-	{
-		if (value == null)
-		{
+	public final void addRange(CodeParameterDeclarationExpressionCollection value) {
+		if (value == null) {
 			throw new IllegalArgumentException("value");
 		}
 		int count = value.size();
-		for (int i = 0; i < count; i++)
-		{
-			this.Add(value.getItem(i));
+		for (int i = 0; i < count; i++) {
+			this.add(value.getItem(i));
 		}
 	}
 
-	public final boolean Contains(CodeParameterDeclarationExpression value)
-	{
-		return contains(value);
-	}
 
-	public final void CopyTo(CodeParameterDeclarationExpression[] array, int index)
-	{
+	public final void copyto(CodeParameterDeclarationExpression[] array, int index) {
 		copyTo(array, index);
 	}
 
-	/*public final int indexOf(CodeParameterDeclarationExpression value)
-	{
-		return super.List.indexOf(value);
-	}*/
 
-	public final void Insert(int index, CodeParameterDeclarationExpression value)
-	{
-		//super.List.insert(index, value);
-		add(index,value);
-	}
-
-	public final void Remove(CodeParameterDeclarationExpression value)
-	{
-		remove(value);
-	}
 }

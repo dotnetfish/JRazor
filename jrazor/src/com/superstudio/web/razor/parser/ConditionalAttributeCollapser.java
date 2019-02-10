@@ -12,21 +12,26 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author zj-db0720
+ */
 public class ConditionalAttributeCollapser extends MarkupRewriter {
     public ConditionalAttributeCollapser(ActionThree<SpanBuilder, SourceLocation, String> markupSpanFactory)
             throws Exception {
         super(markupSpanFactory);
     }
 
+    @Override
     protected boolean canRewrite(Block block) {
-        IBlockCodeGenerator tempVar = block.getCodeGenerator();
-        AttributeBlockCodeGenerator gen = (AttributeBlockCodeGenerator) ((tempVar instanceof AttributeBlockCodeGenerator)
-                ? tempVar : null);
+        IBlockCodeGenerator codeGenerator = block.getCodeGenerator();
 
-        return gen != null && !block.getChildren().isEmpty()
+       return codeGenerator instanceof  AttributeBlockCodeGenerator  && !block.getChildren().isEmpty()
                 && block.getChildren().stream().allMatch(i -> isLiteralAttributeValue(i));
+
+
     }
 
+    @Override
     protected SyntaxTreeNode rewriteBlock(BlockBuilder parent, Block block) {
         // Collect the content of this node
         List<String> contentList = block.getChildren().stream().map(i -> {
@@ -46,7 +51,7 @@ public class ConditionalAttributeCollapser extends MarkupRewriter {
             return null;
         }));
         SourceLocation sourceLocation = block.getChildren().stream().findFirst().get().getStart();
-        FillSpan(span, sourceLocation, contents);
+        fillSpan(span, sourceLocation, contents);
         return span.build();
 
     }
@@ -55,14 +60,17 @@ public class ConditionalAttributeCollapser extends MarkupRewriter {
         if (node.getIsBlock()) {
             return false;
         }
-        Span span = (Span) ((node instanceof Span) ? node : null);
-        assert span != null;
 
-        ISpanCodeGenerator tempVar = span.getCodeGenerator();
-        LiteralAttributeCodeGenerator litGen = (LiteralAttributeCodeGenerator) ((tempVar instanceof LiteralAttributeCodeGenerator)
-                ? tempVar : null);
 
-        return span != null && ((litGen != null && litGen.getValueGenerator() == null)
+
+        assert node instanceof  Span;
+        Span span = (Span) node;
+
+        ISpanCodeGenerator codeGenerator = span.getCodeGenerator();
+        LiteralAttributeCodeGenerator litGen = (LiteralAttributeCodeGenerator) ((codeGenerator instanceof LiteralAttributeCodeGenerator)
+                ? codeGenerator : null);
+
+        return codeGenerator instanceof LiteralAttributeCodeGenerator && ((codeGenerator instanceof LiteralAttributeCodeGenerator && litGen.getValueGenerator() == null)
                 || span.getCodeGenerator() == SpanCodeGenerator.Null
                 || span.getCodeGenerator() instanceof MarkupCodeGenerator);
     }

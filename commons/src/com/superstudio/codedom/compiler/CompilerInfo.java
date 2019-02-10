@@ -3,8 +3,7 @@ package com.superstudio.codedom.compiler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-import com.superstudio.codedom.*;
-import com.superstudio.commons.SR;
+import com.superstudio.commons.Resource;
 import com.superstudio.commons.exception.ConfigurationErrorsException;
 
 public final class CompilerInfo
@@ -40,9 +39,9 @@ public final class CompilerInfo
 					{
 						if (this.configFileName == null)
 						{
-							throw new ConfigurationErrorsException(SR.GetString("Unable_To_Locate_Type", new Object[] {this._codeDomProviderTypeName, "", 0}));
+							throw new ConfigurationErrorsException(Resource.getString("Unable_To_Locate_Type", new Object[] {this._codeDomProviderTypeName, "", 0}));
 						}
-						//throw new ConfigurationErrorsException(SR.GetString("Unable_To_Locate_Type", new Object[] {this._codeDomProviderTypeName}), this.configFileName, this.configFileLineNumber);
+						//throw new ConfigurationErrorsException(Resource.getString("Unable_To_Locate_Type", new Object[] {this._codeDomProviderTypeName}), this.configFileName, this.configFileLineNumber);
 					}
 				}
 			}
@@ -110,9 +109,7 @@ public final class CompilerInfo
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//return (CodeDomProvider)Activator.createInstance(this.getCodeDomProviderType());
-		return (CodeDomProvider)this.getCodeDomProviderType().newInstance();
-		//return (CodeDomProvider)Class.forName(_codeDomProviderTypeName).newInstance();
+			return (CodeDomProvider)this.getCodeDomProviderType().newInstance();
 	}
 
 	public CodeDomProvider CreateProvider(Map<String, String> providerOptions) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, ConfigurationErrorsException
@@ -127,7 +124,7 @@ public final class CompilerInfo
 		{
 			return (CodeDomProvider)constructor.newInstance(providerOptions);
 		}
-		throw new IllegalStateException(SR.GetString("Provider_does_not_support_options", new Object[] {this.getCodeDomProviderType().toString()}));
+		throw new IllegalStateException(Resource.getString("Provider_does_not_support_options", new Object[] {this.getCodeDomProviderType().toString()}));
 	}
 
 	public CompilerParameters CreateDefaultCompilerParameters()

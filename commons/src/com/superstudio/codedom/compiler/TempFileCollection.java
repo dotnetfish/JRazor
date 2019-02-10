@@ -87,7 +87,7 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 	public final String addExtension(String fileExtension, boolean keepFile) throws Exception {
 		if (fileExtension == null || fileExtension.length() == 0) {
 			// throw new
-			// IllegalArgumentException(SR.GetString("InvalidNullEmptyArgument",
+			// IllegalArgumentException(Resource.getString("InvalidNullEmptyArgument",
 			// new Object[] {"fileExtension"}), "fileExtension");
 		}
 		String text = this.getBasePath() + "." + fileExtension;
@@ -98,12 +98,12 @@ public class TempFileCollection implements List, java.io.Closeable, Serializable
 	public final void addFile(String fileName, boolean keepFile) {
 		if (fileName == null || fileName.length() == 0) {
 			// throw new
-			// IllegalArgumentException(SR.GetString("InvalidNullEmptyArgument",
+			// IllegalArgumentException(Resource.getString("InvalidNullEmptyArgument",
 			// new Object[] {"fileName"}), "fileName");
 		}
 		if (this.files.get(fileName) != null) {
 			// throw new
-			// IllegalArgumentException(SR.GetString("DuplicateFileName", new
+			// IllegalArgumentException(Resource.getString("DuplicateFileName", new
 			// Object[] {fileName}), "fileName");
 		}
 		this.files.put(fileName, keepFile);

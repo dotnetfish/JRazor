@@ -176,7 +176,7 @@ public final CodeTypeReferenceOptions getOptions()
 			//java.lang.Class[] genericArguments = type.GetGenericArguments();
 			for (int i = 0; i < tparameters.length; i++)
 			{
-				this.getTypeArguments().Add(new CodeTypeReference(tparameters[i].getGenericDeclaration()));
+				this.getTypeArguments().add(new CodeTypeReference(tparameters[i].getGenericDeclaration()));
 			}
 			return;
 		}
@@ -284,7 +284,7 @@ public final CodeTypeReferenceOptions getOptions()
 			CodeTypeReference codeTypeReference = new CodeTypeReference(typeName.substring(0, num + 1), this.getOptions());
 			for (int j = 0; j < arrayList.size(); j++)
 			{
-				codeTypeReference.getTypeArguments().Add(arrayList.get(j));
+				codeTypeReference.getTypeArguments().add(arrayList.get(j));
 			}
 			while (queue.size() > 1)
 			{
@@ -298,7 +298,7 @@ public final CodeTypeReferenceOptions getOptions()
 		{
 			for (int k = 0; k < arrayList.size(); k++)
 			{
-				this.getTypeArguments().Add(arrayList.get(k));
+				this.getTypeArguments().add(arrayList.get(k));
 			}
 			this.baseType = typeName.substring(0, num + 1);
 		}
@@ -317,7 +317,7 @@ public final CodeTypeReferenceOptions getOptions()
 		this(typeName);
 		if (typeArguments != null && typeArguments.length != 0)
 		{
-			this.getTypeArguments().AddRange(typeArguments);
+			this.getTypeArguments().addRange(typeArguments);
 		}
 	}
 

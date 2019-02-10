@@ -102,7 +102,7 @@ public abstract class BuildManagerTemplateEngine extends VirtualPathProviderTemp
 		// When dealing with non-updateable precompiled templates, the template files may not exist on disk. The correct
 		// way to check for existence of a file in this case is by querying the BuildManager.
 		// For all other scenarios, checking for files on disk is faster and should suffice.
-		//Contract.Assert(_fileExistsCache != null);
+		//Contract.assertSymbol(_fileExistsCache != null);
 		return _fileExistsCache.fileExists(virtualPath) ;
 	}
 

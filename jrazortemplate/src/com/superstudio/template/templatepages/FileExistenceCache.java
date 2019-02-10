@@ -31,7 +31,7 @@ public class FileExistenceCache {
 
 	public FileExistenceCache(VirtualPathProvider virtualPathProvider, int milliSecondsBeforeReset) {
 		this(() -> virtualPathProvider, milliSecondsBeforeReset);
-		// Contract.Assert(virtualPathProvider != null);
+		// Contract.assertSymbol(virtualPathProvider != null);
 	}
 
 	public FileExistenceCache(Supplier<VirtualPathProvider> virtualPathProviderFunc) {
@@ -39,7 +39,7 @@ public class FileExistenceCache {
 	}
 
 	public FileExistenceCache(Supplier<VirtualPathProvider> virtualPathProviderFunc, int milliSecondsBeforeReset) {
-		// Contract.Assert(virtualPathProviderFunc != null);
+		// Contract.assertSymbol(virtualPathProviderFunc != null);
 
 		_virtualPathProviderFunc = virtualPathProviderFunc;
 		_virtualPathFileExists = path -> {

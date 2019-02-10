@@ -55,13 +55,13 @@ public class RazorResources {
 
 
     /**
-     * Looks up a localized string similar to The &quot;CancelBacktrack&quot; method can be called only while in a look-ahead process started with the &quot;BeginLookahead&quot; method..
+     * Looks up a localized string similar to The &quot;CancelBacktrack&quot; method can be called only while in a look-ahead process started with the &quot;beginLookahead&quot; method..
      */
     public static final String CancelBacktrack_Must_Be_Called_Within_Lookahead = "CancelBacktrack_Must_Be_Called_Within_Lookahead";
 
 
     /**
-     * Looks up a localized string similar to Cannot call CreateCodeWriter, a CodeWriter was not provided to the create method.
+     * Looks up a localized string similar to Cannot call createCodeWriter, a CodeWriter was not provided to the create method.
      */
     public static final String CreateCodeWriter_NoCodeWriter = "CreateCodeWriter_NoCodeWriter";
 
@@ -111,7 +111,7 @@ public class RazorResources {
     public static final String JavaSymbol_Whitespace = "JavaSymbol_Whitespace";
 
     /**
-     * Looks up a localized string similar to &quot;EndBlock&quot; was called without a matching call to &quot;StartBlock&quot;..
+     * Looks up a localized string similar to &quot;endBlock&quot; was called without a matching call to &quot;StartBlock&quot;..
      */
     public static final String EndBlock_Called_Without_Matching_StartBlock = "EndBlock_Called_Without_Matching_StartBlock";
 
@@ -196,7 +196,7 @@ public class RazorResources {
 
 
     /**
-     * Looks up a localized string similar to Expected &quot;{0}&quot;..
+     * Looks up a localized string similar to expected &quot;{0}&quot;..
      */
     public static final String ParseError_Expected_X = "ParseError_Expected_X";
 
@@ -232,13 +232,13 @@ public class RazorResources {
 
 
     /**
-     * Looks up a localized string similar to Expected a &quot;{0}&quot; after the helper name..
+     * Looks up a localized string similar to expected a &quot;{0}&quot; after the helper name..
      */
     public static final String ParseError_MissingCharAfterHelperName = "ParseError_MissingCharAfterHelperName";
 
 
     /**
-     * Looks up a localized string similar to Expected a &quot;{0}&quot; after the helper parameters..
+     * Looks up a localized string similar to expected a &quot;{0}&quot; after the helper parameters..
      */
     public static final String ParseError_MissingCharAfterHelperParameters = "ParseError_MissingCharAfterHelperParameters";
 
@@ -300,7 +300,7 @@ public class RazorResources {
 
 
     /**
-     * Looks up a localized string similar to Expected a &quot;{0}&quot; but found a &quot;{1}&quot;.  Block statements must be enclosed in &quot;{{&quot; and &quot;}}&quot;.  You cannot use single-statement control-flow statements in CSHTML pages. For example, the following is not allowed:
+     * Looks up a localized string similar to expected a &quot;{0}&quot; but found a &quot;{1}&quot;.  Block statements must be enclosed in &quot;{{&quot; and &quot;}}&quot;.  You cannot use single-statement control-flow statements in CSHTML pages. For example, the following is not allowed:
      *
      * @if(isLoggedIn) &lt;p&gt;Hello, @user&lt;/p&gt;
      * <p>
@@ -433,7 +433,7 @@ public class RazorResources {
 
 
     /**
-     * Looks up a localized string similar to Cannot complete action, the parser has finished. Only CompleteParse can be called to extract the final parser results after the parser has finished.
+     * Looks up a localized string similar to Cannot complete action, the parser has finished. Only completeParse can be called to extract the final parser results after the parser has finished.
      */
     public static final String ParserContext_ParseComplete = "ParserContext_ParseComplete";
 

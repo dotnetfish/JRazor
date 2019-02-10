@@ -5,19 +5,8 @@ import java.util.function.Predicate;
 
 public final class ParserHelpers {
 	public static boolean isNewLine(char value) {
-		return value == '\r' || value == '\n' || value == '\u0085' || value == '\u2028' || value == '\u2029'; // Paragraph
-																												// separator
-																												// -
-																												// Line
-																												// separator
-																												// -
-																												// next
-																												// Line
-																												// -
-																												// Linefeed
-																												// -
-																												// Carriage
-																												// return
+		return value == '\r' || value == '\n' || value == '\u0085' || value == '\u2028' || value == '\u2029';
+
 	}
 
 	public static boolean isNewLine(String value) {
@@ -30,8 +19,8 @@ public final class ParserHelpers {
 	
 	public static boolean isWhitespace(char value) {
 		return value == ' ' || value == '\f' || value == '\t' || value == '\u000B'
-				|| Character.getType(value) == Character.SPACE_SEPARATOR; // Vertical
-																							// Tab
+				|| Character.getType(value) == Character.SPACE_SEPARATOR;
+
 	}
 
 
