@@ -29,6 +29,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 
+/**
+ * @author cloudartisan
+ */
 public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlSymbol, HtmlSymbolType> {
 	private SourceLocation _lastTagStart = SourceLocation.Zero;
 	private HtmlSymbol _bufferedOpenAngle;
@@ -46,12 +49,12 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 					return;
 				}
 
-				acceptWhile(IsSpacingToken(true));
+				acceptWhile(isSpacingToken(true));
 
 				if (getCurrentSymbol().getType() == HtmlSymbolType.OpenAngle) {
 					// "<" -> Implicit Tag Block
 					try {
-						tagBlock(new java.util.Stack<Tuple<HtmlSymbol, SourceLocation>>());
+						tagBlock(new java.util.Stack<>());
 					} catch (ArgumentNullException e) {
 
 						e.printStackTrace();
@@ -145,7 +148,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		do {
 			skipToAndParseCode(HtmlSymbolType.OpenAngle);
 			if (getEndOfFile()) {
-				EndTagBlock(tags, true);
+				endTagBlock(tags, true);
 			} else {
 				_bufferedOpenAngle = null;
 				_lastTagStart = getCurrentLocation().clone();
@@ -154,14 +157,14 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				SourceLocation tagStart = getCurrentLocation().clone();
 				if (!nextToken()) {
 					accept(_bufferedOpenAngle);
-					EndTagBlock(tags, false);
+					endTagBlock(tags, false);
 				} else {
 					complete = afterTagStart(tagStart, tags);
 				}
 			}
 		} while (tags.size() > 0);
 
-		EndTagBlock(tags, complete);
+		endTagBlock(tags, complete);
 	}
 
 	private boolean afterTagStart(SourceLocation tagStart, java.util.Stack<Tuple<HtmlSymbol, SourceLocation>> tags) throws ArgumentNullException {
@@ -180,7 +183,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				return xmlPI();
 			default:
 				// start Tag
-				return StartTag(tags);
+				return startTag(tags);
 			}
 		}
 		if (tags.empty()) {
@@ -193,7 +196,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		// accept "?"
 		assertSymbol(HtmlSymbolType.QuestionMark);
 		acceptAndMoveNext();
-		return AcceptUntilAll(HtmlSymbolType.QuestionMark, HtmlSymbolType.CloseAngle);
+		return acceptUntilAll(HtmlSymbolType.QuestionMark, HtmlSymbolType.CloseAngle);
 	}
 
 	private boolean bangTag() {
@@ -203,14 +206,14 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		if (acceptAndMoveNext()) {
 			if (getCurrentSymbol().getType() == HtmlSymbolType.DoubleHyphen) {
 				acceptAndMoveNext();
-				return AcceptUntilAll(HtmlSymbolType.DoubleHyphen, HtmlSymbolType.CloseAngle);
+				return acceptUntilAll(HtmlSymbolType.DoubleHyphen, HtmlSymbolType.CloseAngle);
 			} else if (getCurrentSymbol().getType() == HtmlSymbolType.LeftBracket) {
 				if (acceptAndMoveNext()) {
 					return cdata();
 				}
 			} else {
 				acceptAndMoveNext();
-				return AcceptUntilAll(HtmlSymbolType.CloseAngle);
+				return acceptUntilAll(HtmlSymbolType.CloseAngle);
 			}
 		}
 
@@ -222,7 +225,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				.equalsIgnoreCase(getCurrentSymbol().getContent(), "cdata")) {
 			if (acceptAndMoveNext()) {
 				if (getCurrentSymbol().getType() == HtmlSymbolType.LeftBracket) {
-					return AcceptUntilAll(HtmlSymbolType.RightBracket, HtmlSymbolType.RightBracket,
+					return acceptUntilAll(HtmlSymbolType.RightBracket, HtmlSymbolType.RightBracket,
 							HtmlSymbolType.CloseAngle);
 				}
 			}
@@ -244,7 +247,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			if (at(HtmlSymbolType.Text)) {
 				tagName = getCurrentSymbol().getContent();
 			}
-			boolean matched = RemoveTag(tags, tagName, tagStart);
+			boolean matched = removeTag(tags, tagName, tagStart);
 
 			if (tags.empty() && StringUtils.equalsIgnoreCase(tagName, SyntaxConstants.TextTagName) && matched) {
 				output(SpanKind.Markup);
@@ -292,7 +295,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		if (!at(HtmlSymbolType.WhiteSpace)) {
 			// We should be right after the tag name, so if there's no
 			// whitespace, something is wrong
-			RecoverToEndOfTag();
+			recoverToEndOfTag();
 		} else {
 			// We are here ($): <tag$ foo="bar" biz="~/Baz" />
 			while (!getEndOfFile() && !isEndOfTag()) {
@@ -323,7 +326,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		if (at(HtmlSymbolType.Transition)) {
 			// transition outside of attribute value -> Switch to recovery mode
 			accept(whitespace);
-			RecoverToEndOfTag();
+			recoverToEndOfTag();
 			return;
 		}
 
@@ -341,7 +344,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		} else {
 			// Unexpected character in tag, enter recovery
 			accept(whitespace);
-			RecoverToEndOfTag();
+			recoverToEndOfTag();
 			return;
 		}
 
@@ -450,7 +453,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 						new DynamicAttributeBlockCodeGenerator(
 								ISymbol.getContent(prefix,prefixStart), valueStart));
 
-				OtherParserBlock();
+				otherParserBlock();
 			} catch (Exception ex){
 				ex.printStackTrace();
 			}
@@ -519,7 +522,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		getSpan().getEditHandler().setEditorHints(EditorHints.VirtualPath);
 	}
 
-	private void RecoverToEndOfTag() {
+	private void recoverToEndOfTag() {
 		// accept until ">", "/" or "<", but parse code
 		while (!getEndOfFile()) {
 			skipToAndParseCode((p) -> isTagRecoveryStopPoint(p));
@@ -528,7 +531,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				switch (getCurrentSymbol().getType()) {
 				case SingleQuote:
 				case DoubleQuote:
-					ParseQuoted();
+					parseQuoted();
 					break;
 				case OpenAngle:
 					// Another "<" means this tag is invalid.
@@ -545,13 +548,13 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		}
 	}
 
-	private void ParseQuoted() {
+	private void parseQuoted() {
 		HtmlSymbolType type = getCurrentSymbol().getType();
 		acceptAndMoveNext();
-		ParseQuoted(type);
+		parseQuoted(type);
 	}
 
-	private void ParseQuoted(HtmlSymbolType type) {
+	private void parseQuoted(HtmlSymbolType type) {
 		skipToAndParseCode(type);
 		if (!getEndOfFile()) {
 			assertSymbol(type);
@@ -559,7 +562,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		}
 	}
 
-	private boolean StartTag(java.util.Stack<Tuple<HtmlSymbol, SourceLocation>> tags) throws ArgumentNullException {
+	private boolean startTag(java.util.Stack<Tuple<HtmlSymbol, SourceLocation>> tags) throws ArgumentNullException {
 		// If we're at text, it's the name, otherwise the name is ""
 		HtmlSymbol tagName;
 		if (at(HtmlSymbolType.Text)) {
@@ -581,14 +584,14 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			acceptAndMoveNext();
 
 			int bookmark = getCurrentLocation().getAbsoluteIndex();
-			Iterable<HtmlSymbol> tokens = readWhile(IsSpacingToken(true));
+			Iterable<HtmlSymbol> tokens = readWhile(isSpacingToken(true));
 			boolean empty = at(HtmlSymbolType.Solidus);
 			if (empty) {
 				accept(tokens);
 				assertSymbol(HtmlSymbolType.Solidus);
 				acceptAndMoveNext();
 				bookmark = getCurrentLocation().getAbsoluteIndex();
-				tokens = readWhile(IsSpacingToken(true));
+				tokens = readWhile(isSpacingToken(true));
 			}
 
 			if (!optional(HtmlSymbolType.CloseAngle)) {
@@ -608,11 +611,11 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		}
 		accept(_bufferedOpenAngle);
 		optional(HtmlSymbolType.Text);
-		return RestOfTag(tag, tags);
+		return restOfTag(tag, tags);
 	}
 
-	private boolean RestOfTag(Tuple<HtmlSymbol, SourceLocation> tag,
-			java.util.Stack<Tuple<HtmlSymbol, SourceLocation>> tags) {
+	private boolean restOfTag(Tuple<HtmlSymbol, SourceLocation> tag,
+							  java.util.Stack<Tuple<HtmlSymbol, SourceLocation>> tags) {
 		tagContent();
 
 		// We are now at a possible end of the tag
@@ -647,7 +650,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 					int bookmark = getCurrentLocation().getAbsoluteIndex();
 
 					// Skip whitespace
-					Iterable<HtmlSymbol> ws = readWhile(IsSpacingToken(true));
+					Iterable<HtmlSymbol> ws = readWhile(isSpacingToken(true));
 
 					// Open Angle
 					if (at(HtmlSymbolType.OpenAngle) && nextIs(HtmlSymbolType.Solidus)) {
@@ -680,7 +683,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 					getContext().getSource().setPosition(bookmark);
 					nextToken();
 				} else if (StringUtils.equalsIgnoreCase(tagName, "script")) {
-					SkipToEndScriptAndParseCode();
+					skipToEndScriptAndParseCode();
 				} else {
 					// Push the tag on to the stack
 					tags.push(tag);
@@ -690,7 +693,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		return seenClose;
 	}
 
-	private void SkipToEndScriptAndParseCode() {
+	private void skipToEndScriptAndParseCode() {
 		// Special case for <script>: Skip to end of script tag and parse code
 		boolean seenEndScript = false;
 		while (!seenEndScript && !getEndOfFile()) {
@@ -714,7 +717,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		}
 	}
 
-	private boolean AcceptUntilAll(HtmlSymbolType... endSequence) {
+	private boolean acceptUntilAll(HtmlSymbolType... endSequence) {
 		while (!getEndOfFile()) {
 			skipToAndParseCode(endSequence[0]);
 			if (acceptAll(endSequence)) {
@@ -726,8 +729,8 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		return false;
 	}
 
-	private boolean RemoveTag(java.util.Stack<Tuple<HtmlSymbol, SourceLocation>> tags, String tagName,
-			SourceLocation tagStart) {
+	private boolean removeTag(java.util.Stack<Tuple<HtmlSymbol, SourceLocation>> tags, String tagName,
+							  SourceLocation tagStart) {
 		Tuple<HtmlSymbol, SourceLocation> currentTag = null;
 		while (tags.size() > 0) {
 			currentTag = tags.pop();
@@ -747,7 +750,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		return false;
 	}
 
-	private void EndTagBlock(java.util.Stack<Tuple<HtmlSymbol, SourceLocation>> tags, boolean complete) {
+	private void endTagBlock(java.util.Stack<Tuple<HtmlSymbol, SourceLocation>> tags, boolean complete) {
 		if (tags.size() > 0) {
 			// Ended because of EOF, not matching close tag. Throw error for
 			// last tag
@@ -791,7 +794,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				nextToken();
 				while (!getEndOfFile()) {
 					skipToAndParseCode(HtmlSymbolType.OpenAngle);
-					ScanTagInDocumentContext();
+					scanTagInDocumentContext();
 				}
 				addMarkerSymbolIfNecessary();
 				output(SpanKind.Markup);
@@ -810,7 +813,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 	 * 
 	 * @return A boolean indicating if we scanned at least one tag.
 	 */
-	private boolean ScanTagInDocumentContext() {
+	private boolean scanTagInDocumentContext() {
 		if (optional(HtmlSymbolType.OpenAngle)) {
 			if (at(HtmlSymbolType.Bang)) {
 				bangTag();
@@ -826,7 +829,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				optional(HtmlSymbolType.Solidus);
 				optional(HtmlSymbolType.CloseAngle);
 				if (scriptTag) {
-					SkipToEndScriptAndParseCode();
+					skipToEndScriptAndParseCode();
 				}
 				return true;
 			}
@@ -922,7 +925,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 					}
 				}
 
-				OtherParserBlock();
+				otherParserBlock();
 			} else if (at(HtmlSymbolType.RazorCommentTransition)) {
 				if (last != null) {
 					accept(last);
@@ -953,13 +956,13 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		}
 	}
 
-	protected static Predicate<HtmlSymbol> IsSpacingToken(boolean includeNewLines) {
+	protected static Predicate<HtmlSymbol> isSpacingToken(boolean includeNewLines) {
 		
 		return sym -> sym.getType() == HtmlSymbolType.WhiteSpace
 				|| (includeNewLines && sym.getType() == HtmlSymbolType.NewLine);
 	}
 
-	private void OtherParserBlock() {
+	private void otherParserBlock() {
 		addMarkerSymbolIfNecessary();
 		output(SpanKind.Markup);
 
@@ -1000,9 +1003,9 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 				nextToken();
 				setCaseSensitive(caseSensitive);
 				if (nestingSequences.getItem1() == null) {
-					NonNestingSection(nestingSequences.getItem2().split(""));
+					nonNestingSection(nestingSequences.getItem2().split(""));
 				} else {
-					NestingSection(nestingSequences);
+					nestingSection(nestingSequences);
 				}
 				addMarkerSymbolIfNecessary();
 				output(SpanKind.Markup);
@@ -1014,13 +1017,13 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		}
 	}
 
-	private void NonNestingSection(String[] nestingSequenceComponents) {
+	private void nonNestingSection(String[] nestingSequenceComponents) {
 		do {
 
 			// methods are not converted
-			skipToAndParseCode(sym -> sym.getType() == HtmlSymbolType.OpenAngle || AtEnd(nestingSequenceComponents));
-			ScanTagInDocumentContext();
-			if (!getEndOfFile() && AtEnd(nestingSequenceComponents)) {
+			skipToAndParseCode(sym -> sym.getType() == HtmlSymbolType.OpenAngle || atEnd(nestingSequenceComponents));
+			scanTagInDocumentContext();
+			if (!getEndOfFile() && atEnd(nestingSequenceComponents)) {
 				break;
 			}
 		} while (!getEndOfFile());
@@ -1028,7 +1031,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		putCurrentBack();
 	}
 
-	private void NestingSection(Tuple<String, String> nestingSequences) {
+	private void nestingSection(Tuple<String, String> nestingSequences) {
 		int nesting = 1;
 		while (nesting > 0 && !getEndOfFile()) {
 
@@ -1036,26 +1039,27 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 			skipToAndParseCode(
 					sym -> sym.getType() == HtmlSymbolType.Text || sym.getType() == HtmlSymbolType.OpenAngle);
 			if (at(HtmlSymbolType.Text)) {
-				nesting += ProcessTextToken(nestingSequences, nesting);
+				nesting += processTextToken(nestingSequences, nesting);
 				if (getCurrentSymbol() != null) {
 					acceptAndMoveNext();
 				} else if (nesting > 0) {
 					nextToken();
 				}
 			} else {
-				ScanTagInDocumentContext();
+				scanTagInDocumentContext();
 			}
 		}
 	}
 
 	private boolean stringEquals(String str,String strB){
-		if(getCaseSensitive())
+		if(getCaseSensitive()) {
 			return StringUtils.equals(str,strB);
+		}
 
 		return  StringUtils.equalsIgnoreCase(str,strB);
 	}
 
-	private boolean AtEnd(String[] nestingSequenceComponents) {
+	private boolean atEnd(String[] nestingSequenceComponents) {
 		ensureCurrent();
 		//StringUtils.equals(getCurrentSymbol().getContent(),nestingSequenceComponents)
 		if (stringEquals(getCurrentSymbol().getContent(), nestingSequenceComponents[0])) {
@@ -1066,7 +1070,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 						return false;
 					}
 					nextToken();
-					while (!getEndOfFile() && IsSpacingToken(true).test(getCurrentSymbol())) {
+					while (!getEndOfFile() && isSpacingToken(true).test(getCurrentSymbol())) {
 						nextToken();
 					}
 				}
@@ -1079,11 +1083,11 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		return false;
 	}
 
-	private int ProcessTextToken(Tuple<String, String> nestingSequences, int currentNesting) {
+	private int processTextToken(Tuple<String, String> nestingSequences, int currentNesting) {
 		for (int i = 0; i < getCurrentSymbol().getContent().length(); i++) {
-			int nestingDelta = HandleNestingSequence(nestingSequences.getItem1(), i, currentNesting, 1);
+			int nestingDelta = handleNestingSequence(nestingSequences.getItem1(), i, currentNesting, 1);
 			if (nestingDelta == 0) {
-				nestingDelta = HandleNestingSequence(nestingSequences.getItem2(), i, currentNesting, -1);
+				nestingDelta = handleNestingSequence(nestingSequences.getItem2(), i, currentNesting, -1);
 			}
 
 			if (nestingDelta != 0) {
@@ -1093,7 +1097,7 @@ public class HtmlMarkupParser extends TokenizerBackedParser<HtmlTokenizer, HtmlS
 		return 0;
 	}
 
-	private int HandleNestingSequence(String sequence, int position, int currentNesting, int retIfMatched) {
+	private int handleNestingSequence(String sequence, int position, int currentNesting, int retIfMatched) {
 		if (sequence != null && getCurrentSymbol().getContent().charAt(position) == sequence.charAt(0)
 				&& position + sequence.length() <= getCurrentSymbol().getContent().length()) {
 			String possibleStart = getCurrentSymbol().getContent().substring(position, position + sequence.length());

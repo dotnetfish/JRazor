@@ -205,17 +205,17 @@ public class ParserContext {
      *
      * @throws InvalidOperationException
      */
-    public final void endBlock() {
+    public final void endBlock()  {
         try {
             enusreNotTerminated();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
         assertOnOwnerTask();
 
         if (_blockStack.empty()) {
-            //throw new InvalidOperationException(RazorResources.getResource(RazorResources.EndBlock_Called_Without_Matching_StartBlock());
+            //throw new InvalidOperationException(RazorResources.getResource(RazorResources.EndBlock_Called_Without_Matching_StartBlock));
         }
         if (_blockStack.size() > 1) {
             BlockBuilder block = _blockStack.pop();
